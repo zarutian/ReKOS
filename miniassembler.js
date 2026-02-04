@@ -23,6 +23,12 @@ const assemble = (opts = {}) => {
   }
 
   const parse_number_or_lookup_symbol = (item) => {
+    if (typeof(item) != "string") {
+      if (typeof(item) == "function") {
+        return parse_number_or_lookup_symbol(item());
+      }
+      return item
+    }
     const t0 = hexdec_rexexp.test(item);
     const t1 = decimal_rexexp.test(item);
     const t2 = octal_regexp.test(item);
@@ -46,7 +52,53 @@ const assemble = (opts = {}) => {
         }
       }
     } else {
+      if (! opts.symbols.has(item)) {
+        const r = {};
+        const p = new Promise((resolver, rejector) => {
+          r.resolver = resolver;
+          r.rejector = rejector;
+        });
+        r.then = (callback, errback) => {
+          return p.then(callback, errback);
+        };
+        opts.symbols.set(item, r);
+      }
       return opts.symbols.get(item);
+    }
+  };
+  const define_symbol = (name, value) => {
+    switch (typeof(value)) {
+      case "number": // fallthrough
+      case "bigint":
+        if (opts.symbols.has(name)) {
+          const t0 = opts.symbols.get(name);
+          if (typeof(t0) == "object") {
+            if (t0.resolve != undefined) {
+              opts.symbols.set(name, value);
+              t0.resolve(value);
+              return;
+            } else {
+              throw new Error("no resolver");
+            }
+          } else {
+            throw new Error("symbol '".concat(name, "' is already defined as ", t0));
+          }
+        }
+        opts.symbols.set(name, value);
+        break;
+      case "function": // fallthrough
+      case "string":
+        define_symbol(name, parse_number_or_lookup_symbol(value));
+        break;
+      case "object":
+        if (value.then != undefined) {
+          value.then((resolved) => {
+            define_symbol(name, parse_number_or_lookup_symbol(resolved));
+          }, (err) => {
+            throw new Error("could not define symbol '".concat(name, "' as the .thenable value got smashed/rejected/broken"));
+          });
+        }
+        break;
     }
   };
 
