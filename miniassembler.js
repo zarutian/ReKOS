@@ -1,6 +1,8 @@
 
 "use strict";
 
+const whitespace_regexp = /^\s*$/;
+const textEncoder = new TextEncoder();
 const assemble = (opts = {}) => {
   if (opts.src == undefined) {
     throw new Error("no source given to assemble!");
@@ -34,19 +36,52 @@ const assemble = (opts = {}) => {
   }, { skip: 0, result: [] }).result;
   // get rid of comment lines
   const t003 = t002.filter((line) => (!line.startsWith("#"));
-  t003.forEach((line) => {
-    const fields = line.split(" ");
+  const t004 = (line) => {
+    const fields = line.split(" ").filter((word) => !whitespace_regexp.test(word));
+    var   incrmnt = 0;
     switch (fields[0].toLower()) {
       case ".org":
         opts.curr_addr = parse_number_or_lookup_symbol(fields[1]);
         break;
-      case ".dat":
+      case ".allot": // allot this much space
+        opts.curr_addr = incr(opts.curr_addr, parse_number_or_lookup_symbol(fields[1]));
         break;
-      case ".ascii":
-      case ".asciiz":
-      case ".asciic":
+      case ".dow": // data octoword
+        incrmnt += 16;
+        // fallthrough
+      case ".dqw": // data quadword
+        incrmnt += 8;
+        // fallthrough
+      case ".ddw": // data doubleword
+        incrmnt += 4;
+        // fallthrough
+      case ".dw": // data word
+        incrmnt += 2;
+        // fallthrough
+      case ".dhw": // data halfword
+        incrmnt += 1;
+        // fallthrough
+      case ".db": // data byte
+        fields.slice(1).forEach((word) => {
+          opts.img.set(opts.curr_addr, parse_number_or_lookup_symbol(word));
+          opts.curr_addr = incr(opts.curr_addr, incrmnt);
+        });
+        incrmnt = 0;
+        break;
+      case ".utf8":
+        const rest_of_line = line.slice(fields[0].length);
+        if (!(rest_of_line.startsWith('"') && rest_of_line.endsWith('"'))) {
+          throw new Error("utf8 strings must be enclosed within double quotes (\")");
+        }
+        textEncoder.encode(rest_of_line.slice(1, -1)).forEach((byte) => {
+          opts.img.set(opts.curr_addr, byte);
+          opts.curr_addr = incr(opts.curr_addr, 1);
+        });
+        break;
+        /*
       case ".zscii":
         throw new Error("yet to be implemented");
+        */
       case ":":
         define_symbol(fields[1], opts.curr_addr);
         break;
@@ -54,6 +89,7 @@ const assemble = (opts = {}) => {
         define_symbol(fields[1], parse_number_or_lookup_symbol(fields[2]));
         break;
     }
-  });
+  };
+  t003.forEach(t004);
   return;
 }
