@@ -53,6 +53,17 @@ CMDSEP     OFF
 #------------------------------------------------------------------
 #                     DEVICE STATEMENTS
 #------------------------------------------------------------------
-0000      SYSG    SYSGCONS
+# devnr   type    options
+  0000    SYSG    SYSGCONS
+  0009    3215-C  /
+  000A    1442    inputstack_01.txt    ascii
+  000C    3505    inputstack_02.txt    ascii
+  000D    3525    outputstack_tmp.txt  ascii
+  000E    1403    outputstack_01.txt   ascii append  cctape=legacy
+  
+  0100    3370    initial_program.fba_img
+  0101    3370    coredump.fba_img
 
+# network interface
+# 0400.4  CTCI    tun0   
 
