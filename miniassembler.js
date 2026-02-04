@@ -101,6 +101,14 @@ const assemble = (opts = {}) => {
         break;
     }
   };
+  const img_set = (addr, value, size) => {
+    while (size > 0) {
+      const valpart = (value >> (8n * (size - 1n))) & 0xFFn;
+      opts.img.set(addr, valpart);
+      addr = incr(addr, 1);
+      size -= 1;
+    }
+  };
 
   const t000 = opts.src.split("\n");
   // get rid of left whitespace
@@ -149,7 +157,24 @@ const assemble = (opts = {}) => {
         // fallthrough
       case ".db": // data byte
         fields.slice(1).forEach((word) => {
-          opts.img.set(opts.curr_addr, parse_number_or_lookup_symbol(word));
+          const t1 = parse_number_or_lookup_symbol(word);
+          const t2 = opts.curr_addr;
+          const t3 = incrmnt;
+          switch (typeof(t1)) {
+            case "number": // fallthrough
+            case "bigint":
+              img_set(opts.curr_addr, t1, incrmnt);
+              break;
+            case "object":
+              if (t1.then == undefined) {
+                throw new Error("non thenable!");
+              }
+              t1.then((resolved) => {
+                img_set(t2, resolved, t3);
+              }, (err) => {
+              });
+              break;
+          }
           opts.curr_addr = incr(opts.curr_addr, incrmnt);
         });
         incrmnt = 0;
@@ -174,7 +199,7 @@ const assemble = (opts = {}) => {
         if (lengd > 0xFFFF) {
           throw new Error("length of an counted utf8 string must not be greater than 0xFFFF");
         }
-        opts.img.set(opts.curr_addr, lengd);
+        img_set(opts.curr_addr, lengd, 2);
         opts.curr_addr = incr(opts.curr_addr, 2);
         bytes.forEach((byte) => {
           opts.img.set(opts.curr_addr, byte);
