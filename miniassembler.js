@@ -8,6 +8,46 @@ const      octal_regexp = /^\x30\x6F([0-7]|\x5F)*$/;
 const    quadral_regexp = /^\x30\x71([0-3]|\x5F)*$/;
 const     binary_regexp = /^\x30\x62(0|1|\x5F)*$/;
 const textEncoder = new TextEncoder();
+const makeThenable = () => {
+  const r = {};
+  const p = new Promise((resolver, rejector) => {
+    r.resolver = resolver;
+    r.rejector = rejector;
+  });
+  r.then = (callback, errback) => {
+    return p.then(callback, errback);
+  };
+};
+const incr = (a, b) => {
+  const ta = typeof(a);
+  const tb = typeof(b);
+  if (((ta == "number") || (ta == "bigint")) && ((tb == "number") || (tb == "bigint"))) {
+    return a + b;
+  }
+  if ((ta == "object") && ((tb == "number") || (tb == "bigint"))) {
+    if (ta.then == undefined) {
+      throw new Error("incremented is not a thenable, number, or bigint");
+    }
+    return ta.then((resolved_a) => incr(resolved_a, b));
+  }
+  if ((tb == "object") && ((ta == "number") || (ta == "bigint"))) {
+    if (tb.then == undefined) {
+      throw new Error("increment is not a thenable, number, or bigint");
+    }
+    return tb.then((resolved_b) => incr(a, resolved_b));
+  }
+  if ((ta == "object") && (tb == "object")) {
+    if (ta.then == undefined) {
+      throw new Error("incremented is not a thenable, number, or bigint");
+    }
+    if (tb.then == undefined) {
+      throw new Error("increment is not a thenable, number, or bigint");
+    }
+    return ta.then((resolved_a) => {
+      return tb.then((resolved_b) => incr(resolved_a, resolved_b));
+    });
+  }
+};
 const assemble = (opts = {}) => {
   if (opts.src == undefined) {
     throw new Error("no source given to assemble!");
@@ -53,15 +93,7 @@ const assemble = (opts = {}) => {
       }
     } else {
       if (! opts.symbols.has(item)) {
-        const r = {};
-        const p = new Promise((resolver, rejector) => {
-          r.resolver = resolver;
-          r.rejector = rejector;
-        });
-        r.then = (callback, errback) => {
-          return p.then(callback, errback);
-        };
-        opts.symbols.set(item, r);
+        opts.symbols.set(item, makeThenable());
       }
       return opts.symbols.get(item);
     }
