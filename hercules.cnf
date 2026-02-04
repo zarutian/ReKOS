@@ -1,0 +1,58 @@
+
+# see https://sdl-hercules-390.github.io/html/hercconf.html
+
+# bevause there are just too many juicy features in
+# that version of the architecture
+ARCHLVL z/Arch
+
+# whimsical sn
+CPUSERIAL  069420
+CPUMODEL   3090
+CPUVERID   FD
+LPARNAME   HERCULES
+LPARNUM    01
+CPUIDFMT   1
+MODEL      EMULATOR
+# because KeyKOS
+PLANT      KK
+MANUFACTURER HRC
+
+LOADPARM   xxxxxxxx
+
+# at this project start we want relatively small main storage
+MAINSIZE   16M
+XPNDSIZE   0
+# NUMCPU     4
+NUMCPU     1
+MAXCPU     8
+ENGINES    CP,CP,AP,IP
+
+SYSEPOCH   1900
+# because the Y2K bug was utterily stupid
+YROFFSET   0
+# UTC
+TZOFFSET   0000
+
+NETDEV     /dev/net/tun
+
+PANOPT     NAMEONLY RATE=FAST MSGCOLOR=DARK "TITLE=ReKOS z/Arch mainframe"
+LOGOPT     TIMESTAMP DATESTAMP
+
+CODEPAGE   819/500
+SYSGPORT   3278
+CONKPALV   (3,1,10)
+
+TIMERINT   DEFAULT
+TODDRAG    1.0
+DEVTMAX    8
+
+SHCMDOPT   disable  nodiag8
+DIAG8CMD   disable  noecho
+CMDSEP     OFF
+
+#------------------------------------------------------------------
+#                     DEVICE STATEMENTS
+#------------------------------------------------------------------
+0000      SYSG    SYSGCONS
+
+
