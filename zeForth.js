@@ -122,6 +122,15 @@ const src = `
   .dhw 0x41BB 0x0004 # LA GR11, 0x004 (GR11, 0)  datastack_ptr := datastack_ptr + 4
   .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)   jump to COMMON_TAIL1
 
+  : (SKZ)
+  .dhw (ibmz)
+                     # SKZ:
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
+  .dhw 0x121B        # LTR GR1, GR11             tmp1 := memory[datastack_ptr]   conditioncode updated
+  .dhw 0x4770 0x8000 # BC 0x7, 0x000 (0, GR8)    if tmp1 isnt zero then jump to NXT
+  .dhw 0x4199 0x0002 # LA GR9, 0x002 (GR9, 0)    instruction_ptr := instruction_pointer + 2
+  .dhw 0x47F0 0x800A # BC 0xF, 0x000 (0, GR8)    jump to NXT
+
 `
 const img = new Map();
 assemble({ src, img });
