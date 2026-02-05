@@ -1,5 +1,15 @@
 
 import { src as zeForth_src } from "./zeForth.js";
+import { assemble } from "./miniassembler.js";
+
+const symbols = new Map();
+const img_u8arr = new Uint8Array();
+const set_img = (address, byte) => {
+  img_u8arr.set([byte], address);
+};
+const img     = { set: set_img };
+
+assemble({ symbols, img, src: zeForth_src });
 
 let IPL_PSW = (symbols.get("COLDD_start") & 0x0000000000FFFFFFn);
     IPL_PSW = IPL_PSW | 0x0000001000000000n;
@@ -47,3 +57,7 @@ const src = `
   #   0x40 * 4 = 0x80 * 2 = 0x0100
   #   0x2000 / 0x200 = 0x20 / 0x02 = 0x10
 `;
+
+assemble({ symbols, img, src });
+
+// to impl: write img_u8arr to initial_program.fba_img
