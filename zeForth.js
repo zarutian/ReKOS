@@ -131,6 +131,22 @@ const src = `
   .dhw 0x4199 0x0002 # LA GR9, 0x002 (GR9, 0)    instruction_ptr := instruction_pointer + 2
   .dhw 0x47F0 0x800A # BC 0xF, 0x000 (0, GR8)    jump to NXT
 
+  : (>R)
+  .dhw (ibmz)
+                     # TO_R:
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B        # LR GR1,  GR11             tmp1 := memory[datastack_ptr]
+  .dhw 0x501C 0x0000 # ST GR1,  0x000 (GR12, 0)  memory[returnstack_pointer] := tmp1
+  .dhw 0x41CC 0x0004 # LA GR12, 0x004 (GR7, 0)   returnstack_pointer := returnstack_pointer + 4
+  .dhw 0x47F0 0x800A # BC 0xF,  0x000 (0, GR8)   jump to NXT
+
+  : (R>)
+  .dhw (ibmz)
+                     # R_FROM:
+  .dhw 0x5FC0 0x82F0 # SL GR12, 0x2F0 (0, GR8)   returnstack_ptr := returnstack_ptr - 4
+  .dhw 0x181C        # LR GR1,  GR12             tmp1 := memory[returnstack_ptr]
+  .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)   jump to COMMON_TAIL1
+
 `
 const img = new Map();
 assemble({ src, img });
