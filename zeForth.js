@@ -184,7 +184,24 @@ const src = `
   .dhw 0x0AFF        # SVC 0xFF                   keykos fork syscall
   .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)    jump to NXT
 
+  : (KALL)
+  .dhw (ibmz)
+                     # KALL:
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x187B        # LR GR7,  GR11              tmp7 := memory[datastack_ptr]       ctb
+  .dhw 0x1807        # LR GR0,  GR7               tmp0 := memory[tmp7]
+  .dhw 0x5810 0x7004 # L  GR1,  0x004 (0, GR7)    tmp1 := memory[tmp7 + 0x004]
+  .dhw 0x5820 0x7008 # L  GR2,  0x008 (0, GR7)    tmp2 := memory[tmp7 + 0x008]
+  .dhw 0x5830 0x700C # L  GR3,  0x00C (0, GR7)    tmp3 := memory[tmp7 + 0x00C]
+  .dhw 0x6820 0x7010 # LD FR2   0x010 (0, GR7)     fr2 := memory[tmp7 + 0x010]
+  .dhw 0x5840 0x7018 # L  GR4,  0x018 (0, GR7)    tmp4 := memory[tmp7 + 0x018]
+  .dhw 0x5850 0x701C # L  GR5,  0x01C (0, GR7)    tmp5 := memory[tmp7 + 0x01C]
+  .dhw 0x0AFD        # SVC 0xFD                   keykos call syscall
+  .dhw 0x5030 0x7020 # ST GR3,  0x020 (0, GR7)    memory[tmp7 + 0x020] := tmp3
+  .dhw 0x5010 0x7024 # ST GR1,  0x024 (0, GR7)    memory[tmp7 + 0x024] := tmp1
+  .dhw 0x5020 0x7028 # ST GR2,  0x028 (0, GR7)    memory[tmp7 + 0x028] := tmp2
+  .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)    jump to NXT
+
 `
-const img = new Map();
-assemble({ src, img });
+export { src };
 
