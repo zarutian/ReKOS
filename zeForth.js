@@ -239,6 +239,24 @@ const src = `
   .dhw 0x4212 0x0000 # STC GR1, 0x000 (GR2, 0)    memory[tmp2 - 3] := (tmp1 & 0xFF) | (memory[tmp2 - 3] & 0xFFFFFF00)
   .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)    jump to NXT
 
+  : (H@)
+  .dhw (ibmz)
+  : HALFCELL_FETCH_ibmz
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x182B        # LR GR2,  GR11              tmp2 := memory[datastack_ptr]  addr
+  .dhw 0x4812 0x0000 # LH GR1,  0x000 (GR2, 0)    tmp1 := memory[tmp2]
+  .dhw 0x5410 0x82F6 # N  GR1,  0x2F6 (0, GR8)    tmp1 := tmp1 & 0xFFFF   cancel out the sign extension
+  .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)    jump to COMMON_TAIL1
+
+  : (H!)
+  .dhw (ibmz)
+  : HALFCELL_STORE_ibmz
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x182B        # LR GR2,  GR11              tmp2 := memory[datastack_ptr]  addr
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B        # LR GR1,  GR11              tmp1 := memory[datastack_ptr]  halfcell
+  .dhw 0x4012 0x0000 # STH GR1, GR2               store the halfcell
+  .dhw 0x47F0 0c800A # BC 0xF,  0x00A (0, GR8)    jump to NXT
 
 `
 export { src };
