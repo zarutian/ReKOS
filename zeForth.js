@@ -33,7 +33,8 @@ const src = `
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
   .dhw 0x182B        # LR GR2,  GR11             tmp2 := memory[datastack_ptr]
   .dhw 0x1E12        # ALR GR1, GR2              tmp1 := (tmp1 + tmp2) & 0xFFFFFFFF
-  : COMMON_TAIL1
+  .org 0x2052
+                     # COMMON_TAIL1:
   .dhw 0x501B 0x0000 # ST GR1,  0x000 (GR11, 0)  memory[datastack_ptr] := tmp1
   .dhw 0x41BB 0x0004 # LA GR11, 0x004 (GR11, 0)  datastack_ptr := datastack_ptr + 4
   .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)   jump to NXT
@@ -70,6 +71,13 @@ const src = `
   .dhw 0x1612        # OR GR1,  GR2              tmp1 := tmp1 | tmp2
   .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)   jump to COMMON_TAIL1
 
+  : (1+)
+  .dhw (ibmz)
+                     # INCR:
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B        # LR GR1,  GR11             tmp1 := memory[datastack_ptr]
+  .dhw 0x4111 0x0001 # LA GR1,  0x001 (GR1, 0)   tmp1 := tmp1 + 1
+  .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)   jump to COMMON_TAIL1
 
 `
 const img = new Map();
