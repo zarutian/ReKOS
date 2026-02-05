@@ -48,6 +48,15 @@ const src = `
   .dhw 0x1412        # NR GR1,  GR2              tmp1 := tmp1 & tmp2
   .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)   jump to COMMON_TAIL1
 
+  : (XOR)
+  .dhw (ibmz)
+                     # XOR:
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B        # LR GR1,  GR11             tmp1 := memory[datastack_ptr]
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
+  .dhw 0x182B        # LR GR2,  GR11             tmp2 := memory[datastack_ptr]
+  .dhw 0x1712        # XR GR1,  GR2              tmp1 := tmp1 ^ tmp2
+  .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)   jump to COMMON_TAIL1
 
 `
 const img = new Map();
