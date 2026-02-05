@@ -34,7 +34,7 @@ const src = `
   .dhw 0x0200               # 0x000062  Block Size  512 byte
   .dw  0x000000000          # 0x000064  block offset of the extent  (in blocks)
   .dw  0x000000000          # 0x000068  relative displacement of start block (in blocks)
-  .dw  0x000000000          # 0x00006C  relative displacement of end block   (in blocks)
+  .dw  0x000010000          # 0x00006C  relative displacement of end block   (in blocks)
 
   .org 0x000070
   : params_for_Locate
