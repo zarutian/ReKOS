@@ -129,7 +129,7 @@ const src = `
   .dhw 0x121B        # LTR GR1, GR11             tmp1 := memory[datastack_ptr]   conditioncode updated
   .dhw 0x4770 0x8000 # BC 0x7, 0x000 (0, GR8)    if tmp1 isnt zero then jump to NXT
   .dhw 0x4199 0x0002 # LA GR9, 0x002 (GR9, 0)    instruction_ptr := instruction_pointer + 2
-  .dhw 0x47F0 0x800A # BC 0xF, 0x000 (0, GR8)    jump to NXT
+  .dhw 0x47F0 0x800A # BC 0xF, 0x00A (0, GR8)    jump to NXT
 
   : (>R)
   .dhw (ibmz)
@@ -138,7 +138,7 @@ const src = `
   .dhw 0x181B        # LR GR1,  GR11             tmp1 := memory[datastack_ptr]
   .dhw 0x501C 0x0000 # ST GR1,  0x000 (GR12, 0)  memory[returnstack_pointer] := tmp1
   .dhw 0x41CC 0x0004 # LA GR12, 0x004 (GR7, 0)   returnstack_pointer := returnstack_pointer + 4
-  .dhw 0x47F0 0x800A # BC 0xF,  0x000 (0, GR8)   jump to NXT
+  .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)   jump to NXT
 
   : (R>)
   .dhw (ibmz)
@@ -152,7 +152,7 @@ const src = `
                      # EXIT:
   .dhw 0x5FC0 0x82F0 # SL GR12, 0x2F0 (0, GR8)   returnstack_ptr := returnstack_ptr - 4
   .dhw 0x189C        # LR GR9,  GR12             instr_ptr := memory[returnstack_ptr]
-  .dhw 0x47F0 0x800A # BC 0xF,  0x000 (0, GR8)   jump to NXT
+  .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)   jump to NXT
 
   : (EXT)
   .dhw (ibmz)
@@ -197,6 +197,24 @@ const src = `
   .dhw 0x5840 0x7018 # L  GR4,  0x018 (0, GR7)    tmp4 := memory[tmp7 + 0x018]
   .dhw 0x5850 0x701C # L  GR5,  0x01C (0, GR7)    tmp5 := memory[tmp7 + 0x01C]
   .dhw 0x0AFD        # SVC 0xFD                   keykos call syscall
+  .dhw 0x5030 0x7020 # ST GR3,  0x020 (0, GR7)    memory[tmp7 + 0x020] := tmp3
+  .dhw 0x5010 0x7024 # ST GR1,  0x024 (0, GR7)    memory[tmp7 + 0x024] := tmp1
+  .dhw 0x5020 0x7028 # ST GR2,  0x028 (0, GR7)    memory[tmp7 + 0x028] := tmp2
+  .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)    jump to NXT
+
+  : (KRET)
+  .dhw (ibmz)
+                     # KRET:
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x187B        # LR GR7,  GR11              tmp7 := memory[datastack_ptr]       ctb
+  .dhw 0x1807        # LR GR0,  GR7               tmp0 := memory[tmp7]
+  .dhw 0x5810 0x7004 # L  GR1,  0x004 (0, GR7)    tmp1 := memory[tmp7 + 0x004]
+  .dhw 0x5820 0x7008 # L  GR2,  0x008 (0, GR7)    tmp2 := memory[tmp7 + 0x008]
+  .dhw 0x5830 0x700C # L  GR3,  0x00C (0, GR7)    tmp3 := memory[tmp7 + 0x00C]
+  .dhw 0x6820 0x7010 # LD FR2   0x010 (0, GR7)     fr2 := memory[tmp7 + 0x010]
+  .dhw 0x5840 0x7018 # L  GR4,  0x018 (0, GR7)    tmp4 := memory[tmp7 + 0x018]
+  .dhw 0x5850 0x701C # L  GR5,  0x01C (0, GR7)    tmp5 := memory[tmp7 + 0x01C]
+  .dhw 0x0AFE        # SVC 0xFE                   keykos return syscall
   .dhw 0x5030 0x7020 # ST GR3,  0x020 (0, GR7)    memory[tmp7 + 0x020] := tmp3
   .dhw 0x5010 0x7024 # ST GR1,  0x024 (0, GR7)    memory[tmp7 + 0x024] := tmp1
   .dhw 0x5020 0x7028 # ST GR2,  0x028 (0, GR7)    memory[tmp7 + 0x028] := tmp2
