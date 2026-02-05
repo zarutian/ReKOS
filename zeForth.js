@@ -79,6 +79,14 @@ const src = `
   .dhw 0x4111 0x0001 # LA GR1,  0x001 (GR1, 0)   tmp1 := tmp1 + 1
   .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)   jump to COMMON_TAIL1
 
+  : (@)
+  .dhw (ibmz)
+                     # FETCH:
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
+  .dhw 0x182B        # LR GR2,  GR11             tmp2 := memory[datastack_ptr]
+  .dhw 0x1812        # LR GR1,  GR2              tmp1 := memory[tmp2]
+  .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)   jump to COMMON_TAIL1
+
 `
 const img = new Map();
 assemble({ src, img });
