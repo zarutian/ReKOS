@@ -258,6 +258,26 @@ const src = `
   .dhw 0x4012 0x0000 # STH GR1, GR2               store the halfcell
   .dhw 0x47F0 0c800A # BC 0xF,  0x00A (0, GR8)    jump to NXT
 
+  : (-)
+  .dhw (ibmz)
+  : MINUS_ibmz
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x182B        # LR GR2,  GR11              tmp2 := memory[datastack_ptr]  addr
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B        # LR GR1,  GR11
+  : COMMON_TAIL2_ibmz
+  .dhw 0x1F12        # SLR GR1, GR2
+  .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)    jump to COMMON_TAIL1
+
+  : (1-)
+  .dhw (ibmz)
+  : DECR_ibmz
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B        # LR GR1,  GR11              tmp1 := memory[datastack_ptr]
+  .dhw 0x1722        # XR GR2,  GR2               tmp2 := 0
+  .dhw 0x4122 0x0001 # LA GR2,  0x001 (GR2, 0)    tmp2 := 1
+  .dhw 0x47F0 0x8254 # BC 0xF,  0x254 (0, GR8)    jump to COMMON_TAIL2
+
 `
 export { src };
 
