@@ -171,6 +171,19 @@ const src = `
   .dhw 0x509C 0x0000 # ST GR9,  0x000 (GR12, 0)   memory[returnstack_ptr] := instruction_ptr
   .dhw 0x41CC 0x0004 # LA GR12, 0x004 (GR12, 0)   returnstack_ptr := returnstack_ptr + 4
   .dhw 0x47F0 0d8000 # BC 0xF,  0x000 (0, GR13)   jump to trap handling code
+
+  : (KFORK)
+  .dhw (ibmz)
+                     # KFORK:
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x187B        # LR GR7,  GR11              tmp7 := memory[datastack_ptr]       ctb
+  .dhw 0x1807        # LR GR0,  GR7               tmp0 := memory[tmp7]
+  .dhw 0x5810 0x7004 # L  GR1,  0x004 (0, GR7)    tmp1 := memory[tmp7 + 0x004]
+  .dhw 0x5820 0x7008 # L  GR2,  0x008 (0, GR7)    tmp2 := memory[tmp7 + 0x008]
+  .dhw 0x5830 0x700C # L  GR3,  0x00C (0, GR7)    tmp3 := memory[tmp7 + 0x00C]
+  .dhw 0x0AFF        # SVC 0xFF                   keykos fork syscall
+  .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)    jump to NXT
+
 `
 const img = new Map();
 assemble({ src, img });
