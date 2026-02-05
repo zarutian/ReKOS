@@ -188,7 +188,13 @@ const assemble = (opts = {}) => {
         incrmnt += 1;
         // fallthrough
       case ".db": // data byte
+        let line_done = false;
         fields.slice(1).forEach((word) => {
+          if (word == "#") { line_done = true; }
+          if (line_done) { return; }
+          if (word == "\\#") {
+            word = "#";
+          }
           const t1 = parse_number_or_lookup_symbol(word);
           const t2 = opts.curr_addr;
           const t3 = incrmnt;
