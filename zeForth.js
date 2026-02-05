@@ -6,7 +6,7 @@ const src = `
   .dhw 0x1788        # XR  GR8, GR8              gr8 := 0
   .dhw 0x4188 0x0200 # LA  GR8, 0x200 (GR8, 0)   gr8 := 0x200
   .dhw 0x8980 0x0004 # SLL GR8, 0x004            gr8 := gr8 << 4
-  : NXT
+  : NXT_ibmz
   .dhw 0x48A9 0x0000 # LH GR10, 0x000 (GR9, 0)   instr := memory[instr_ptr]
   .dhw 0x4199 0x0002 # LA GR9,  0x002 (GR9, 0)   incr instr_ptr by halfcell (2 bytes)
   .dhw 0x5410 0x82F6 # N  GR1,  0x2F6 (0, GR8)   tmp1 := tmp1 & 0xFFFF  cancel out the sign extension
@@ -27,21 +27,21 @@ const src = `
 
   : (PLUS)
   .dhw (ibmz)
-                     # PLUS:
+  : PLUS_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
   .dhw 0x181B        # LR GR1,  GR11             tmp1 := memory[datastack_ptr]
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
   .dhw 0x182B        # LR GR2,  GR11             tmp2 := memory[datastack_ptr]
   .dhw 0x1E12        # ALR GR1, GR2              tmp1 := (tmp1 + tmp2) & 0xFFFFFFFF
   .org 0x2052
-                     # COMMON_TAIL1:
+  : COMMON_TAIL1_ibmz
   .dhw 0x501B 0x0000 # ST GR1,  0x000 (GR11, 0)  memory[datastack_ptr] := tmp1
   .dhw 0x41BB 0x0004 # LA GR11, 0x004 (GR11, 0)  datastack_ptr := datastack_ptr + 4
   .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)   jump to NXT
 
   : (AND)
   .dhw (ibmz)
-                     # AND:
+  : AND_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
   .dhw 0x181B        # LR GR1,  GR11             tmp1 := memory[datastack_ptr]
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
@@ -51,7 +51,7 @@ const src = `
 
   : (XOR)
   .dhw (ibmz)
-                     # XOR:
+  : XOR_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
   .dhw 0x181B        # LR GR1,  GR11             tmp1 := memory[datastack_ptr]
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
@@ -61,7 +61,7 @@ const src = `
 
   : (1LBR)
   .dhw (ibmz)
-                     # ONELBR:
+  : ONELBR_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
   .dhw 0x181B        # LR GR1,  GR11             tmp1 := memory[datastack_ptr]
   .dhw 0x1722        # XR GR2,  GR2              tmp2 := 0
@@ -73,7 +73,7 @@ const src = `
 
   : (1+)
   .dhw (ibmz)
-                     # INCR:
+  : INCR_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
   .dhw 0x181B        # LR GR1,  GR11             tmp1 := memory[datastack_ptr]
   .dhw 0x4111 0x0001 # LA GR1,  0x001 (GR1, 0)   tmp1 := tmp1 + 1
@@ -81,7 +81,7 @@ const src = `
 
   : (@)
   .dhw (ibmz)
-                     # FETCH:
+  : FETCH_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
   .dhw 0x182B        # LR GR2,  GR11             tmp2 := memory[datastack_ptr]
   .dhw 0x1812        # LR GR1,  GR2              tmp1 := memory[tmp2]
@@ -89,7 +89,7 @@ const src = `
 
   : (!)
   .dhw (ibmz)
-                     # STORE:
+  : STORE_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
   .dhw 0x181B        # LR GR1,  GR11             tmp1 := memory[datastack_ptr]
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
@@ -99,7 +99,7 @@ const src = `
 
   : (DUP)
   .dhw (ibmz)
-                     # DUP:
+  : DUP_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
   .dhw 0x181B        # LR GR1,  GR11             tmp1 := memory[datastack_ptr]
   .dhw 0x41BB 0x0004 # LA GR11, 0x004 (GR11, 0)  datastack_ptr := datastack_ptr + 4
@@ -107,13 +107,13 @@ const src = `
 
   : (DROP)
   .dhw (ibmz)
-                     # DROP:
+  : DROP_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
   .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)   jump to NXT
 
   : (SWAP)
   .dhw (ibmz)
-                     # SWAP:
+  : SWAP_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
   .dhw 0x182B        # LR GR2,  GR11             tmp2 := memory[datastack_ptr]
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
@@ -124,7 +124,7 @@ const src = `
 
   : (SKZ)
   .dhw (ibmz)
-                     # SKZ:
+  : SKZ_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
   .dhw 0x121B        # LTR GR1, GR11             tmp1 := memory[datastack_ptr]   conditioncode updated
   .dhw 0x4770 0x8000 # BC 0x7, 0x000 (0, GR8)    if tmp1 isnt zero then jump to NXT
@@ -133,7 +133,7 @@ const src = `
 
   : (>R)
   .dhw (ibmz)
-                     # TO_R:
+  : TO_R_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
   .dhw 0x181B        # LR GR1,  GR11             tmp1 := memory[datastack_ptr]
   .dhw 0x501C 0x0000 # ST GR1,  0x000 (GR12, 0)  memory[returnstack_pointer] := tmp1
@@ -142,39 +142,39 @@ const src = `
 
   : (R>)
   .dhw (ibmz)
-                     # R_FROM:
+  : R_FROM_ibmz
   .dhw 0x5FC0 0x82F0 # SL GR12, 0x2F0 (0, GR8)   returnstack_ptr := returnstack_ptr - 4
   .dhw 0x181C        # LR GR1,  GR12             tmp1 := memory[returnstack_ptr]
   .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)   jump to COMMON_TAIL1
 
   : (EXIT)
   .dhw (ibmz)
-                     # EXIT:
+  : EXIT_ibmz
   .dhw 0x5FC0 0x82F0 # SL GR12, 0x2F0 (0, GR8)   returnstack_ptr := returnstack_ptr - 4
   .dhw 0x189C        # LR GR9,  GR12             instr_ptr := memory[returnstack_ptr]
   .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)   jump to NXT
 
   : (EXT)
   .dhw (ibmz)
-                     # EXT:
+  : EXT_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
   .dhw 0x181B        # LR GR1,  GR11              tmp1 := memory[datastack_ptr]
   .dhw 0x5910 0x8384 # C  GR1,  0x384 (0, GR8)    compare tmp1 to 'IBMe'
   .dhw 0x4770 0x8160 # BC 0x7,  0x160 (0, GR8)    if tmp1 != 'KK' then jump to ext_trapvectoring
-                     # jump2ibmz:
+  : jump2ibmz
   .dhw 0x5FC0 0x82F0 # SL GR12, 0x04A (0, GR8)    returnstack_ptr := returnstack_ptr - 4
   .dhw 0x181C        # LR GR1,  GR12              tmp1 := memory[returnstack_ptr]
   .dhw 0x07F1        # BCR 0xF, GR1               jump to where tmp1 points to
-                     # ext_trapvectoring:
+  : ext_trapvectoring
   .dhw 0x41BB 0x0004 # LA GR11, 0x004 (GR11, 0)   datastack_ptr := datastack_ptr + 4
-                     # trapvector:
+  : trapvector
   .dhw 0x509C 0x0000 # ST GR9,  0x000 (GR12, 0)   memory[returnstack_ptr] := instruction_ptr
   .dhw 0x41CC 0x0004 # LA GR12, 0x004 (GR12, 0)   returnstack_ptr := returnstack_ptr + 4
   .dhw 0x47F0 0d8000 # BC 0xF,  0x000 (0, GR13)   jump to trap handling code
 
   : (KFORK)
   .dhw (ibmz)
-                     # KFORK:
+  : KFORK_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
   .dhw 0x187B        # LR GR7,  GR11              tmp7 := memory[datastack_ptr]       ctb
   .dhw 0x1807        # LR GR0,  GR7               tmp0 := memory[tmp7]
@@ -186,7 +186,7 @@ const src = `
 
   : (KALL)
   .dhw (ibmz)
-                     # KALL:
+  : KALL_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
   .dhw 0x187B        # LR GR7,  GR11              tmp7 := memory[datastack_ptr]       ctb
   .dhw 0x1807        # LR GR0,  GR7               tmp0 := memory[tmp7]
@@ -204,7 +204,7 @@ const src = `
 
   : (KRET)
   .dhw (ibmz)
-                     # KRET:
+  : KRET_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
   .dhw 0x187B        # LR GR7,  GR11              tmp7 := memory[datastack_ptr]       ctb
   .dhw 0x1807        # LR GR0,  GR7               tmp0 := memory[tmp7]
@@ -222,7 +222,7 @@ const src = `
 
   : (C@)
   .dhw (ibmz)
-                     # CHAR_FETCH:
+  : CHAR_FETCH_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
   .dhw 0x182B        # LR GR2,  GR11              tmp2 := memory[datastack_ptr]  addr
   .dhw 0x1711        # XR GR1,  GR1               tmp1 := 0
@@ -231,7 +231,7 @@ const src = `
 
   : (C!)
   .dhw (ibmz)
-                     # CHAR_STORE:
+  : CHAR_STORE_ibmz
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
   .dhw 0x182B        # LR GR2,  GR11              tmp2 := memory[datastack_ptr]  addr
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
