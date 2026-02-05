@@ -220,6 +220,26 @@ const src = `
   .dhw 0x5020 0x7028 # ST GR2,  0x028 (0, GR7)    memory[tmp7 + 0x028] := tmp2
   .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)    jump to NXT
 
+  : (C@)
+  .dhw (ibmz)
+                     # CHAR_FETCH:
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x182B        # LR GR2,  GR11              tmp2 := memory[datastack_ptr]  addr
+  .dhw 0x1711        # XR GR1,  GR1               tmp1 := 0
+  .dhw 0x4312 0x0000 # IC GR1,  0x000 (GR2, 0)    tmp1 := memory[tmp2 - 3] & 0xFF
+  .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)    jump to COMMON_TAIL1
+
+  : (C!)
+  .dhw (ibmz)
+                     # CHAR_STORE:
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x182B        # LR GR2,  GR11              tmp2 := memory[datastack_ptr]  addr
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B        # LR GR1,  GR11              tmp1 := memory[datastack_ptr]  char
+  .dhw 0x4212 0x0000 # STC GR1, 0x000 (GR2, 0)    memory[tmp2 - 3] := (tmp1 & 0xFF) | (memory[tmp2 - 3] & 0xFFFFFF00)
+  .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)    jump to NXT
+
+
 `
 export { src };
 
