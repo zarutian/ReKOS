@@ -1,0 +1,36 @@
+# see https://sdl-hercules-390.github.io/html/hercinst.html#operating
+* Automated startup and Initial Program Load
+
+# todo: lookup the exact syntax of abs and ipl commands
+#       currently just guessing
+
+# tbd
+#   address data
+abs 000000  xxxxxxxxxxxxxxxxx
+#                  Initial  Program Status Word (short format)
+abs 000008  xxxxxxxxxxxxxxxxx
+#                  IPL Channel Control Word
+
+ipl 0100
+pause 5
+start
+
+# Run for 4 hours then stop and exit the hercules emulator
+pause 900
+pause 900
+pause 900
+pause 900
+pause 900
+pause 900
+pause 900
+pause 900
+pause 900
+pause 900
+pause 900
+pause 900
+pause 900
+pause 900
+pause 900
+pause 900
+stopall
+exit
