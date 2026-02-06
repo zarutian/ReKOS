@@ -659,6 +659,17 @@ const src = `
   : 0x1F
   .dhw (CONST)
   .dw 0x0000_001F
+  : <<>_model
+  # ( u count -- u<<>count )
+  .dhw 0x1F & >R # ( u ) R:( count )
+  .dhw (JMP)
+  .dhw <<>_L1
+  : <<>_L0
+  .dhw 1<<>
+  : <<>_L1
+  .dhw (NEXT)
+  .dhw <<>_L0
+  .dhw EXIT
 `
 export { src };
 
