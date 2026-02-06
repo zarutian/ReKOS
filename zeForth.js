@@ -298,6 +298,7 @@ const src = `
   .dhw 0x1C21        # MR GR2,  GR1               xxx: possibly a bug here as the MultiplyRegister instruction
                      #                                 specifies as a destination a register pair GR2 and GR3
                      #                                 need to zero out GR2 beforehand? if so do it with XR GR2, GR2
+                     #                                 After consulting IBM Z PoOPs  GR2 does not need to be zeroed out.
   : COMMON_TAIL3_ibmz
   .dhw 0x502B 0x0000 # ST GR2,  0x000 (GR11, 0)   memory[datastack_ptr] := tmp2    reminder or upper half of product
   .dhw 0x41BB 0x0004 # LA GR11, 0x004 (GR11, 0)   datastack_ptr := datastack_ptr + 4
