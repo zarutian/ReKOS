@@ -607,7 +607,24 @@ const src = `
   : 2DUP
   # ( a b -- a b a b )
   .dhw OVER OVER EXIT
-  
+  : (CONST)
+  # ( -- datum )
+  .dhw R>       # ( raddr ) R:( )
+  .dhw @        # ( datum )
+  .dhw EXIT
+  : 0xFFFFFFFF
+  : TRUE
+  .dhw (CONST)
+  .dw  0xFFFF_FFFF
+  : INVERT
+  # ( datum -- datumb )
+  .dhw 0xFFFFFFFF XOR EXIT
+  : NEGATE
+  # ( n -- -n )
+  .dhw INVERT 1+ EXIT
+  : 1-_model
+  # ( u -- u-1 )
+  .dhw NEGATE 1+ NEGATE EXIT
 `
 export { src };
 
