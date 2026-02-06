@@ -1,7 +1,34 @@
 const src = `
 
   #  fcpu32/16 ( cell is 32bit, instr is 16bit )
-  #
+  
+  .def NOP     0x0000
+  .def +       0x0001
+  .def PLUS    +
+  .def &       0x0002
+  .def AND     &
+  .def ^       0x0003
+  .def XOR     ^
+  .def 1<<>    0x0004
+  .def ONELBR  1<<>
+  .def 1+      0x0005
+  .def INCR    1+
+  .def @       0x0006
+  .def FETCH   @
+  .def !       0x0007
+  .def STORE   !
+  .def DUP     0x0008
+  .def DROP    0x0009
+  .def SWAP    0x000A
+  .def SKZ     0x000B
+  # SKip if Zero
+  .def >R      0x000C
+  .def TO_R    >R
+  .def R>      0x000D
+  .def R_FROM  R>
+  .def EXT     0x000E
+  .def EXIT    0x000F
+  
   # IBMz  fcpu32/16
   # GR0   tmp0
   # GR1   tmp1
