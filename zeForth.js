@@ -520,13 +520,32 @@ const src = `
 
   : (R@)
   .dhw (ibmz)
+  # R_AT:
   : R@_ibmz
   .dhw 0x5FC0 0x82F0 # SL GR12, 0x2F0 (0, GR8)    returnstack_ptr := returnstack_ptr - 4
   .dhw 0x181C        # LR GR1,  GR12              tmp1 := memory[returnstack_ptr]
   .dhw 0x41CC 0x0004 # LA GR12, 0x004 (GR12, 0)   returnstack_ptr := returnstack_ptr + 4
   .dhw 0x47F0 0x8052 # BC 0xF,  0x052             jump to COMMON_TAIL1
 
-  
+  : ((BRZ))
+  .dhw (ibmz)
+  # BRZERO:
+  : (BRZ)_ibmz
+  .dhw 0x4829 0x0000 # LH GR2,  0x000 (GR9, 0)    tmp2 := memory[instr_ptr]
+  .dhw 0x5420 0x82F6 # N  GR2,  0x2F6 (0, GR8)    tmp2 := tmp2 & 0xFFFF   cancel out the sign extension
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B        # LR GR1,  GR11              tmp1 := memory[instr_ptr]
+  .dhw 0x1733        # XR GR3,  GR3               tmp3 := 0
+  .dhw 0x1913        # CR GR1,  GR3               compare tmp1 to tmp3
+  .dhw 0x4780 0x83C6 # BC 0x8,  0x3C6 (0, GR8)    if equal the jump to BRZERO_L0
+  : COMMON_TAIL4_ibmz
+  .dhw 0x4199 0x0002 # LA GR9,  0x002 (GR9, 0)    instr_ptr := instr_ptr + 2
+  .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)    jump to NXT
+  # BRZERO_L0:
+  .dhw 0x1799        # XR GR9,  GR9               instr_ptr := 0
+  .dhw 0x1792        # XR GR9,  GR2               instr_ptr := tmp2
+  .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)    jump to NXT
+
 `
 export { src };
 
