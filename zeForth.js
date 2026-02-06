@@ -18,7 +18,7 @@ const src = `
   .dhw 0x41CC 0x0004 # LA GR12, 0x004 (GR12, 0)  incr returnstack_ptr by 4
   .dhw 0x1799        # XR GR9,  GR9              zero out instr_ptr ...
   .dhw 0x179A        # XR GR9,  GR10             instr_ptr := instr
-  .dhw 0x47F0 0x8000 # BC 0xF,  0x000 (0, GR8)   jump to NXT
+  .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)   jump to NXT
   .dhw 0x1711        # XR GR1,  GR1              zero out tmp1
   .dhw 0x171A        # XR GR1,  GR10             tmp1 := instr
   .dhw 0x8910 0x0001 # SLL GR1, 1 (0, 0)         tmp1 := tmp1 << 1
