@@ -643,6 +643,22 @@ const src = `
   .dhw 2+       # ( raddr+2 )
   .dhw >R       # ( ) R:( raddr+4 )
   .dhw EXIT
+  : 1   
+  # ( -- 1 )
+  .dhw (CONST)
+  .dw  0x0000_0001
+  : 0x7FFFFFFF
+  # ( -- datum )
+  .dhw (CONST)
+  .dw  0x7FFF_FFFF
+  : 1<<
+  # ( u -- u<<1 )
+  : 2*
+  # ( u -- u*2 )
+  .dhw 0x7FFFFFFF & 1<<> EXIT
+  : 0x1F
+  .dhw (CONST)
+  .dw 0x0000_001F
 `
 export { src };
 
