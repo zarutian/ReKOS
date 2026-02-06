@@ -251,7 +251,7 @@ const assemble = (opts = {}) => {
       case ":":
         define_symbol(fields[1], opts.curr_addr);
         break;
-      case "def":
+      case ".def":
         define_symbol(fields[1], parse_number_or_lookup_symbol(fields[2]));
         break;
     }
