@@ -589,6 +589,25 @@ const src = `
   .dhw R>    # ( a a b ) R:( )
   .dhw SWAP  # ( a b a )
   .dhw EXIT
+  : (BRZ)_model
+  # ( cond -- )
+  .dhw R>    # ( cond raddr )  R:( )
+  .dhw SWAP  # ( raddr cond )  R:( )
+  .dhw >R    # ( raddr )       R:( cond )
+  .dhw DUP   # ( raddr raddr )
+  .dhw H@    # ( raddr dest )
+  .dhw SWAP  # ( dest raddr )
+  .dhw 2+    # ( dest raddr+2 ) R:( cond )
+  .dhw R>    # ( dest raddr+2 cond ) R:( cond )
+  .dhw ?:    # ( addr )
+  : EXEC 
+  # ( addr -- )
+  .dhw >R    # ( ) R:( addr )
+  .dhw EXIT  #
+  : 2DUP
+  # ( a b -- a b a b )
+  .dhw OVER OVER EXIT
+  
 `
 export { src };
 
