@@ -1,5 +1,24 @@
 const src = `
 
+  #  fcpu32/16 ( cell is 32bit, instr is 16bit )
+  #
+  # IBMz  fcpu32/16
+  # GR0   tmp0
+  # GR1   tmp1
+  # GR2   tmp2
+  # GR3   tmp3
+  # GR4   tmp4
+  # GR5   tmp5
+  # GR6   tmp6    
+  # GR7   tmp7
+  # GR8   ibmz_start       used in ibmz code for easier jumps and constants accesses
+  # GR9   instruction_ptr
+  # GR10  instruction
+  # GR11  datastack_ptr    (usually 0x00FDxx)
+  # GR12  returnstack_ptr  (usually 0x00FExx)
+  # GR13  ext_traphandler
+
+
   # looks like its save to start here in main storage
   .org 0x2000
   : __start
