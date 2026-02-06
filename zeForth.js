@@ -479,6 +479,37 @@ const src = `
   .dhw (BRZ)_ibmz
   .dhw (NEXT)_ibmz
   .dhw R@_ibmz
+  .dhw TRANSLATE_ibmz
+  .dhw trapvector  # instrtrap for 0x25
+  .dhw trapvector  # instrtrap for 0x26
+  .dhw trapvector  # instrtrap for 0x27
+  .dhw trapvector  # instrtrap for 0x28
+  .dhw trapvector  # instrtrap for 0x29
+  .dhw trapvector  # instrtrap for 0x2A
+  .dhw trapvector  # instrtrap for 0x2B
+  .dhw trapvector  # instrtrap for 0x2C
+  .dhw trapvector  # instrtrap for 0x2D
+  .dhw trapvector  # instrtrap for 0x2E
+  .dhw trapvector  # instrtrap for 0x2F
+  .dhw trapvector  # instrtrap for 0x30
+  .dhw trapvector  # instrtrap for 0x31
+  .dhw trapvector  # instrtrap for 0x32
+  .dhw trapvector  # instrtrap for 0x33
+  .dhw trapvector  # instrtrap for 0x34
+  .dhw trapvector  # instrtrap for 0x35
+  .dhw trapvector  # instrtrap for 0x36
+  .dhw trapvector  # instrtrap for 0x37
+  .dhw trapvector  # instrtrap for 0x38
+  .dhw trapvector  # instrtrap for 0x39
+  .dhw trapvector  # instrtrap for 0x3A
+  .dhw trapvector  # instrtrap for 0x3B
+  .dhw trapvector  # instrtrap for 0x3C
+  .dhw trapvector  # instrtrap for 0x3D
+  .dhw trapvector  # instrtrap for 0x3E
+  .dhw trapvector  # instrtrap for 0x3F
+  : IBMe
+  .dhw (CONST)
+  .dhw 0x4942 0x4D65 # 'IBMe'
 `
 export { src };
 
