@@ -340,6 +340,19 @@ const src = `
   .dhw 0x8810 0x2000 # SRL GR1, 0x000 (0, GR2)
   .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)    jump to COMMON_TAIL1
 
+  : 4
+  .dhw (CONST)
+  .org 0x22F0
+  .dw 0x0000_0004    #  4       \ note: also refered to in ibmz code
+  : 0xFFFF
+  .dhw (CONST)
+  .org 0x22F6
+  .dw 0x0000_FFFF    #  0xFFFF  \ note: also refered to in ibmz code
+  : 0xFFC0
+  .dhw (CONST)
+  .org 0x22FC
+  .dw 0x0000_FFC0    #  0xFFC0  \ note: also refered to in ibmz code
+
 `
 export { src };
 
