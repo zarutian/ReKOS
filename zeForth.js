@@ -510,6 +510,23 @@ const src = `
   : IBMe
   .dhw (CONST)
   .dhw 0x4942 0x4D65 # 'IBMe'
+
+  : ((JMP))
+  .dhw (ibmz)
+  : (JMP)_ibmz
+  .dhw 0x4899 0x0000 # LH GR9,  0x000 (GR9, 0)    instr_ptr := memory[instr_ptr]
+  .dhw 0x5490 0x82F6 # N  GR9,  0x2F6 (0, GR8)    instr_ptr := instr_ptr & 0xFFFF   cancel out the sign extension
+  .dhw 0x47F0 0x8000 # BC 0xF,  0x000 (0, GR8)    jump to NXT
+
+  : (R@)
+  .dhw (ibmz)
+  : R@_ibmz
+  .dhw 0x5FC0 0x82F0 # SL GR12, 0x2F0 (0, GR8)    returnstack_ptr := returnstack_ptr - 4
+  .dhw 0x181C        # LR GR1,  GR12              tmp1 := memory[returnstack_ptr]
+  .dhw 0x41CC 0x0004 # LA GR12, 0x004 (GR12, 0)   returnstack_ptr := returnstack_ptr + 4
+  .dhw 0x47F0 0x8052 # BC 0xF,  0x052             jump to COMMON_TAIL1
+
+  
 `
 export { src };
 
