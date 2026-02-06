@@ -320,6 +320,26 @@ const src = `
   .dhw 0x1D21        # DR GR2,  GR1               divide
   .dhw 0x47F0 0x8290 # BC 0xF,  0x290 (0, GR8)    jump to COMMON_TAIL3
 
+  : (<<)
+  .dhw (ibmz)
+  : LSHIFT_ibmz
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x182B        # LR GR2,  GR11
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B        # LR GR1,  GR11
+  .dhw 0x8910 0x2000 # SLL GR1, 0x000 (0, GR2)
+  .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)    jump to COMMON_TAIL1
+
+  : (>>)
+  .dhw (ibmz)
+  : RSHIFT_ibmz
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x182B        # LR GR2,  GR11
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B        # LR GR1,  GR11
+  .dhw 0x8810 0x2000 # SRL GR1, 0x000 (0, GR2)
+  .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)    jump to COMMON_TAIL1
+
 `
 export { src };
 
