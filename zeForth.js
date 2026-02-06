@@ -28,6 +28,7 @@ const src = `
   .def R_FROM          R>
   .def EXT             0x000E
   .def EXIT            0x000F
+  .def ;               EXIT
   # above is fcpu16 compatible
   .def C@              0x0010
   .def CHAR_FETCH      C@
@@ -561,6 +562,23 @@ const src = `
   .dhw 0x41CC 0x0004 # LA GR12, 0x004 (GR12, 0)   returnstack_ptr := returnstack_ptr + 4
   .dhw 0x47F0 0x838A # BC 0xF,  0x38A (0, GR8)    jump to DOJMP
 
+  : 31
+  .dhw (CONST)
+  .dw  0x0000_001F
+  : 31>>
+  .dhw 31 >> ;       # semicolon here is EXIT
+
+  .org 0x2400
+  : (JMP)_model
+  .dhw R> H@
+  : (EXIT)_model
+  .dhw EXIT
+  : 4+
+  .dhw 1+
+  : 3+
+  .dhw 1+
+  : 2+
+  .dhw 1+ 1+ EXIT
 `
 export { src };
 
