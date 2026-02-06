@@ -6,6 +6,7 @@ const src = `
   .dhw 0x1788        # XR  GR8, GR8              gr8 := 0
   .dhw 0x4188 0x0200 # LA  GR8, 0x200 (GR8, 0)   gr8 := 0x200
   .dhw 0x8980 0x0004 # SLL GR8, 0x004            gr8 := gr8 << 4
+  : NOP_ibmz
   : NXT_ibmz
   .dhw 0x48A9 0x0000 # LH GR10, 0x000 (GR9, 0)   instr := memory[instr_ptr]
   .dhw 0x4199 0x0002 # LA GR9,  0x002 (GR9, 0)   incr instr_ptr by halfcell (2 bytes)
@@ -353,6 +354,25 @@ const src = `
   .org 0x22FC
   .dw 0x0000_FFC0    #  0xFFC0  \ note: also refered to in ibmz code
 
+  .org 0x2300
+  : fcpu_opcode_jmptbl
+  .dhw (VAR)
+  .dhw NOP_ibmz
+  .dhw PLUS_ibmz
+  .dhw AND_ibmz
+  .dhw XOR_ibmz
+  .dhw ONELBR_ibmz
+  .dhw INCR_ibmz
+  .dhw FETCH_ibmz
+  .dhw STORE_ibmz
+  .dhw DUP_ibmz
+  .dhw DROP_ibmz
+  .dhw SWAP_ibmz
+  .dhw SKZ_ibmz
+  .dhw TO_R_ibmz
+  .dhw R_FROM_ibmz
+  .dhw EXT_ibmz
+  .dhw EXIT_ibmz
 `
 export { src };
 
