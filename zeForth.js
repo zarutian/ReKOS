@@ -457,6 +457,28 @@ const src = `
   .dhw R_FROM_ibmz
   .dhw EXT_ibmz
   .dhw EXIT_ibmz
+  # above is fcpu16 compatible
+  .dhw CHAR_FETCH_ibmz
+  .dhw CHAR_STORE_ibmz
+  .dhw HALFCELL_FETCH_ibmz
+  .dhw HALFCELL_STORE_ibmz
+  .dhw MINUS_ibmz
+  .dhw DECR_ibmz
+  .dhw LBR_ibmz
+  .dhw RBR_ibmz
+  .dhw LSHIFT_ibmz
+  .dhw RSHIFT_ibmz
+  .dhw DIVMOD_ibmz
+  .dhw OR_ibmz
+  .dhw MULTIPLY_ibmz
+  .dhw KALL_ibmz
+  .dhw KRET_ibmz
+  .dhw KFORK_ibmz
+  #
+  .dhw (JMP)_ibmz
+  .dhw (BRZ)_ibmz
+  .dhw (NEXT)_ibmz
+  .dhw R@_ibmz
 `
 export { src };
 
