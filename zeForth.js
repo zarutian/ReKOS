@@ -625,6 +625,24 @@ const src = `
   : 1-_model
   # ( u -- u-1 )
   .dhw NEGATE 1+ NEGATE EXIT
+  : (NEXT)_model
+  # ( ) R:( count raddr -- )
+  .dhw R>       # ( raddr ) R:( count )
+  .dhw R>       # ( raddr count ) R:( )
+  .dhw DUP      # ( raddr count count )
+  .dhw (BRZ)    # ( raddr count )
+  .dhw (NEXT)_model_L0
+  .dhw 1-       # ( raddr count-1 )
+  .dhw >R       # ( raddr ) R:( count-1 )
+  .dhw H@       # ( dest )  R:( count-1 )
+  .dhw >R       # ( ) R:( count-1 dest )
+  .dhw EXIT
+  : (NEXT)_model_L0
+  # ( raddr 0 )
+  .dhw DROP     # ( raddr )
+  .dhw 2+       # ( raddr+2 )
+  .dhw >R       # ( ) R:( raddr+4 )
+  .dhw EXIT
 `
 export { src };
 
