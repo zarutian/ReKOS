@@ -305,6 +305,20 @@ const src = `
   .dhw 0x41BB 0x0004 # LA GR11, 0x004 (GR11, 0)   datastack_ptr := datastack_ptr + 4
   .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)    jump to NXT
 
+  : (/%)
+  .dhw (ibmz)
+  : DIVMOD_ibmz
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B        # LR GR1,  GR11              tmp1 := memory[datastack_ptr]   divisor
+  .dhw 0x1722        # XR GR2,  GR2               tmp2 := 0
+  .dhw 0x1733        # XR GR3,  GR3               tmp3 := 0
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x1912        # CR GR1,  GR2               tmp1 compared to tmp2
+  .dhw 0x4780 0x8290 # BC 0x8,  0x290 (0, GR8)    if equal then jump to COMMON_TAIL3
+  .dhw 0x183B        # LR GR3,  GR11              tmp3 := memory[datastack_ptr]   dividend
+  .dhw 0x1D21        # DR GR2,  GR1               divide
+  .dhw 0x47F0 0x8290 # BC 0xF,  0x290 (0, GR8)    jump to COMMON_TAIL3
+
 `
 export { src };
 
