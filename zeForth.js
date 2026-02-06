@@ -278,6 +278,33 @@ const src = `
   .dhw 0x4122 0x0001 # LA GR2,  0x001 (GR2, 0)    tmp2 := 1
   .dhw 0x47F0 0x8254 # BC 0xF,  0x254 (0, GR8)    jump to COMMON_TAIL2
 
+  : (OR)
+  .dhw (ibmz)
+  : OR_ibmz
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B        # LR GR1,  GR11              tmp1 := TOS
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x182B        # LR GR2,  GR11              tmp2 := NOS
+  .dhw 0x1612        # OR GR1,  GR2               tmp1 := tmp1 | tmp2
+  .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)    jump to COMMON_TAIL1
+
+  : (*)
+  .dhw (ibmz)
+  : MULTIPLY_ibmz
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B        # LR GR1,  GR11              tmp1 := TOS
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x183B        # LR GR3,  GR11              tmp3 := NOS
+  .dhw 0x1C21        # MR GR2,  GR1               xxx: possibly a bug here as the MultiplyRegister instruction
+                     #                                 specifies as a destination a register pair GR2 and GR3
+                     #                                 need to zero out GR2 beforehand? if so do it with XR GR2, GR2
+  : COMMON_TAIL3_ibmz
+  .dhw 0x502B 0x0000 # ST GR2,  0x000 (GR11, 0)   memory[datastack_ptr] := tmp2    reminder or upper half of product
+  .dhw 0x41BB 0x0004 # LA GR11, 0x004 (GR11, 0)   datastack_ptr := datastack_ptr + 4
+  .dhw 0x503B 0x0000 # ST GR3,  0x000 (GR11, 0)   memory[datastack_ptr] := tmp3    quotent  or lower half of product
+  .dhw 0x41BB 0x0004 # LA GR11, 0x004 (GR11, 0)   datastack_ptr := datastack_ptr + 4
+  .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)    jump to NXT
+
 `
 export { src };
 
