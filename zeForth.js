@@ -579,6 +579,16 @@ const src = `
   .dhw 1+
   : 2+
   .dhw 1+ 1+ EXIT
+  : ?: 
+  # ( alt conseq cond -- alt | conseq )
+  .dhw SKZ SWAP DROP EXIT
+  : OVER
+  # ( a b -- a b a )
+  .dhw >R    # ( a )     R:( b )
+  .dhw DUP   # ( a a )   R:( b )
+  .dhw R>    # ( a a b ) R:( )
+  .dhw SWAP  # ( a b a )
+  .dhw EXIT
 `
 export { src };
 
