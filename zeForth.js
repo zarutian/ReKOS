@@ -546,6 +546,21 @@ const src = `
   .dhw 0x1792        # XR GR9,  GR2               instr_ptr := tmp2
   .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)    jump to NXT
 
+  : ((NEXT))
+  .dhw (ibmz)
+  # DONEXT:
+  : (NEXT)_ibmz
+  .dhw 0x5FC0 0x82F0 # SL GR12, 0x2F0 (0, GR8)    returnstack_ptr := returnstack_ptr - 4
+  .dhw 0x181C        # LR GR1,  GR12              tmp1 := memory[returnstack_ptr]
+  .dhw 0x1722        # XR GR2,  GR2               tmp2 := 0
+  .dhw 0x1912        # CR GR1,  GR2               compare tmp1 to tmp2
+  .dhw 0x4780 0x83BE # BC 0x8,  0x3BE (0, GR8)    if equal then jump to COMMON_TAIL4
+  .dhw 0x4122 0x0001 # LA GR2,  0x001 (GR2, 0)    tmp2 := 1
+  .dhw 0x1F12        # SLR GR1, GR2               tmp1 := tmp1 - tmp2
+  .dhw 0x501C 0x0000 # ST GR1,  0x000 (GR12, 0)   memory[returnstack_ptr] := tmp1
+  .dhw 0x41CC 0x0004 # LA GR12, 0x004 (GR12, 0)   returnstack_ptr := returnstack_ptr + 4
+  .dhw 0x47F0 0x838A # BC 0xF,  0x38A (0, GR8)    jump to DOJMP
+
 `
 export { src };
 
