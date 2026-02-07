@@ -717,6 +717,22 @@ const src = `
   : OR_model
   # ( a b -- a|b )
   .dhw INVERT SWAP INVERT NAND EXIT
+
+  : make_mask
+               # ( nrOfBits -- mask )
+  .dhw 0x1F    # ( nrOfBits 0x1F )
+  .dhw &       # ( nrOfBits )
+  .dhw 1       # ( nrOfBits 1 )
+  .dhw SWAP    # ( 1 nrOfBits )
+  .dhw >R      # ( 1 ) R:( nrOfBits )
+  .dhw (JMP) make_mask_L1
+  : make_mask_L0
+  .dhw DUP     # ( datum datum ) R:( count )
+  .dhw 1<<>    # ( datum atumd )
+  .dhw OR      # ( datum )
+  : make_mask_L1
+  .dhw (NEXT) make_mask_L0
+  .dhw EXIT
 `
 export { src };
 
