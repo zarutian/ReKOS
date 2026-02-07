@@ -800,6 +800,28 @@ const src = `
   .dhw !         # ( )
   .dhw EXIT
 
+  : CMOVE_modelA
+  # ( src dest len -- src )
+  .dhw >R        # ( src dest ) R:( len )
+  .dhw (JMP)     # ( src dest ) R:( len )
+  .dhw CMOVE_modelA_L1
+  : CMOVE_modelA_L0
+  .dhw OVER      # ( src dest src ) R:( len )
+  .dhw C@_model  # ( src dest char ) R:( len )
+  .dhw OVER      # ( src dest char dest ) R:( len )
+  .dhw C!_model  # ( src dest ) R:( len )
+  .dhw 1+        # ( src dest+1 ) R:( len )
+  .dhw SWAP      # ( dest+1 src ) R:( len )
+  .dhw 1+        # ( dest+1 src+1 ) R:( len )
+  .dhw SWAP      # ( src+1 dest+1 )
+  : CMOVE_modelA_L1
+  .dhw (NEXT) CMOVE_modelA_L0
+  : 2DROP
+  .dhw DROP
+  : 1DROP
+  .dhw DROP
+  .dhw EXIT
+
   ########
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
@@ -839,7 +861,7 @@ const src = `
   : console_TX!
   # ( char -- )
   .dhw TerminalOutputBuffer C!
-  .dhw TerminalOutputBuffet 1
+  .dhw TerminalOutputBuffer 1
   .dhw (JMP) console_TX!_common
   
 `
