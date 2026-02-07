@@ -733,6 +733,51 @@ const src = `
   : make_mask_L1
   .dhw (NEXT) make_mask_L0
   .dhw EXIT
+
+
+
+  #######
+  # There seems to be no spefic documentation on 
+  # how you CCW a console printer-keyboard combo
+  # so I am just assuming you just Write (CCW opcode 0x01) to it
+  # probably in EBDIC, which means we need an ASCII to EBDIC TRANSLATE
+ 
+  : TOB
+  : TerminalOutputBuffer
+  .dhw (CONST)
+  .dw  0x0000_FB00  # because in KeyKos zeForth domains page at 0x00Fxxx is W/R
+
+  : console_devicenr
+  .dhw (CONST)
+  .dw 0x0000_0009
+  
+  : console_TX!_chars
+  # ( char_addr length -- )
+  .dhw 2DUP TerminalOutputBuffer CMOVE  # ( caddr len )
+  .dhw NIP  TerminalOutputBuffer SWAP   # ( TOB_addr len )
+  : console_TX!_common
+  .dhw 2DUP EBDIC2ASCII_table TRANSLATE # ( TOB_addr len )
+  .dhw SWAP                             # ( len TOB_addr )
+  .dhw (LIT_w)                          # ( len TOB_addr mask )
+  .dw  0x00FFFFFF
+  .dhw &                                # ( len TOB_addr&mask )
+  .dhw (LIT_w)                          # ( len TOB_addr&mask WRITE_CCW )
+  .dw  0x01000000
+  .dhw OR                               # ( len CCW1 )
+  .dhw TerminalOutputBuffer 8 - !       # ( len )
+  .dhw 0xFFFF &                         # ( len&mask )
+  .dhw TerminalOutputBuffer 4 - !       # ( )
+  .dhw TerminalOutputBuffer 8 -         # ( CCW1_addr )
+  .dhw console_devicenr IBMz_SIO        # ( condition_code )
+  .dhw DROP
+  .dhw EXIT
+  
+  : console_TX!
+  # ( char -- )
+  .dhw TerminalOutputBuffer C!
+  .dhw TerminalOutputBuffet 1
+  .dhw (JMP) console_TX!_common
+  
 `
 export { src };
 
