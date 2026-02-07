@@ -772,6 +772,14 @@ const src = `
   .dhw &         # ( datum )
   .dhw EXIT
 
+  : 24
+  .dhw (CONST)
+  .dw  0x0000_0018 # 24
+
+  : C@_model
+  # ( addr -- char )
+  .dhw @ 24 >>_model EXIT
+
   #######
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
