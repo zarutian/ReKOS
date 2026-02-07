@@ -855,7 +855,23 @@ const src = `
   .dhw CMOVE_modelA
   .dhw EXIT
 
-  ########
+  : CMOVE
+  : CMOVE_ibmz
+  # ( src dest len -- )
+  .dhw (ibmz)
+  .dhw 0x5FB0 0x82D8 # SL GR11, 0x2D8 (0, GR8)   datastack_ptr := datastack_ptr - 4
+  .dhw 0x183B        # LR GR3,  GR11             tmp3 := memory[datastack_ptr]   len
+  .dhw 0x5FB0 0x82D8 # SL GR11, 0x2D8 (0, GR8)   datastack_ptr := datastack_ptr - 4
+  .dhw 0x182B        # LR GR2,  GR11             tmp2 := memory[datastack_ptr]   dest
+  .dhw 0x5FB0 0x82D8 # SL GR11, 0x2D8 (0, GR8)   datastack_ptr := datastack_ptr - 4
+  .dhw 0x184B        # LR GR4,  GR11             tmp4 := memory[datastack_ptr]   src
+  .dhw 0x1755        # XR GR5,  GR5              tmp5 := 0
+  .dhw 0x1753        # XR GR5,  GR3              tmp5 := tmp4 ^ tmp3   effectively tmp5 := tmp3
+  .dhw 0x0E24        # MVCL GR2, GR4             move the datablock
+  .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)   jump to NXT
+
+
+  #########
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
   # so I am just assuming you just Write (CCW opcode 0x01) to it
