@@ -55,7 +55,7 @@ CMDSEP     OFF
 #------------------------------------------------------------------
 # devnr   type    options
   0000    SYSG    SYSGCONS
-  0009    1052-C  /
+  0009    3215-C  /
   000A    1442    inputstack_01.txt    ascii
   000C    3505    inputstack_02.txt    ascii
   000D    3525    outputstack_tmp.txt  ascii
