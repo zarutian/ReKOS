@@ -734,6 +734,19 @@ const src = `
   .dhw (NEXT) make_mask_L0
   .dhw EXIT
 
+  : <<_model 
+  # ( u count -- u<<count )
+  .dhw 0x1F      # ( u count 0x1F )
+  .dhw &         # ( u count )
+  .dhw DUP       # ( u count count )
+  .dhw >R        # ( u count ) R:( count )
+  .dhw make_mask # ( u maskb ) R:( count )
+  .dhw INVERT    # ( u mask ) R:( count )
+  .dhw SWAP      # ( mask u ) R:( count )
+  .dhw R>        # ( mask u count ) R:( )
+  .dhw <<>       # ( mask datum )
+  .dhw &         # ( datum )
+  .dhw EXIT
 
 
   #######
