@@ -758,6 +758,20 @@ const src = `
   .dhw +
   .dhw EXIT
 
+  : >>_model 
+  # ( u count -- u>>count )
+  .dhw DUP       # ( u count count )
+  .dhw >R        # ( u count ) R:( count )
+  .dhw make_mask # ( u mask )
+  .dhw SWAP      # ( mask u )
+  .dhw 0x1F      # ( mask u 0x1F )
+  .dhw 1+        # ( mask u 0x20 ) R:( count )
+  .dhw R>        # ( mask u 0x20 count ) R:( )
+  .dhw -_model   # ( mask u new_count )
+  .dhw <<>_model # ( mask datum )
+  .dhw &         # ( datum )
+  .dhw EXIT
+
   #######
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
