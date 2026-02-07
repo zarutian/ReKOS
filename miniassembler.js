@@ -133,6 +133,9 @@ const assemble = (opts = {}) => {
         break;
     }
   };
+  const undefine_symbol = (name) => {
+    opts.symbols.delete(name);
+  };
   const img_set = (addr, value, size) => {
     while (size > 0) {
       const valpart = (value >> (8n * (size - 1n))) & 0xFFn;
@@ -254,6 +257,8 @@ const assemble = (opts = {}) => {
       case ".def":
         define_symbol(fields[1], parse_number_or_lookup_symbol(fields[2]));
         break;
+      case ".undef":
+        undefine_symbol(fields[1]);
     }
   };
   t003.forEach(t004);
