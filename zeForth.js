@@ -748,6 +748,15 @@ const src = `
   .dhw &         # ( datum )
   .dhw EXIT
 
+  : 0xFF
+  .dhw (CONST)
+  .dw  0x0000_00FF
+  
+  : -_model
+  # ( a b -- a-b )
+  .dhw NEGATE   ( a -b )
+  .dhw +
+  .dhw EXIT
 
   #######
   # There seems to be no spefic documentation on 
