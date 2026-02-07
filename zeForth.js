@@ -573,15 +573,18 @@ const src = `
   .dhw R> H@
   : (EXIT)_model
   .dhw EXIT
+  
   : 4+
   .dhw 1+
   : 3+
   .dhw 1+
   : 2+
   .dhw 1+ 1+ EXIT
+  
   : ?: 
   # ( alt conseq cond -- alt | conseq )
   .dhw SKZ SWAP DROP EXIT
+  
   : OVER
   # ( a b -- a b a )
   .dhw >R    # ( a )     R:( b )
@@ -589,6 +592,7 @@ const src = `
   .dhw R>    # ( a a b ) R:( )
   .dhw SWAP  # ( a b a )
   .dhw EXIT
+  
   : (BRZ)_model
   # ( cond -- )
   .dhw R>    # ( cond raddr )  R:( )
@@ -604,27 +608,34 @@ const src = `
   # ( addr -- )
   .dhw >R    # ( ) R:( addr )
   .dhw EXIT  #
+  
   : 2DUP
   # ( a b -- a b a b )
   .dhw OVER OVER EXIT
+  
   : (CONST)
   # ( -- datum )
   .dhw R>       # ( raddr ) R:( )
   .dhw @        # ( datum )
   .dhw EXIT
+  
   : 0xFFFFFFFF
   : TRUE
   .dhw (CONST)
   .dw  0xFFFF_FFFF
+  
   : INVERT
   # ( datum -- datumb )
   .dhw 0xFFFFFFFF XOR EXIT
+  
   : NEGATE
   # ( n -- -n )
   .dhw INVERT 1+ EXIT
+  
   : 1-_model
   # ( u -- u-1 )
   .dhw NEGATE 1+ NEGATE EXIT
+  
   : (NEXT)_model
   # ( ) R:( count raddr -- )
   .dhw R>       # ( raddr ) R:( count )
@@ -643,22 +654,27 @@ const src = `
   .dhw 2+       # ( raddr+2 )
   .dhw >R       # ( ) R:( raddr+4 )
   .dhw EXIT
+  
   : 1   
   # ( -- 1 )
   .dhw (CONST)
   .dw  0x0000_0001
+  
   : 0x7FFFFFFF
   # ( -- datum )
   .dhw (CONST)
   .dw  0x7FFF_FFFF
+  
   : 1<<
   # ( u -- u<<1 )
   : 2*
   # ( u -- u*2 )
   .dhw 0x7FFFFFFF & 1<<> EXIT
+  
   : 0x1F
   .dhw (CONST)
   .dw 0x0000_001F
+  
   : <<>_model
   # ( u count -- u<<>count )
   .dhw 0x1F & >R # ( u ) R:( count )
@@ -670,11 +686,30 @@ const src = `
   .dhw (NEXT)
   .dhw <<>_L0
   .dhw EXIT
+  
   : (ibmz)
   # ( ... -- ... ) R:( raddr -- )
   # registers GR8 to GR14 must be preserved or handled correctly
   # suggest to re enter NXT at GR8 + 0x00A
   .dhw IBMe EXT EXIT
+
+  : <<>_ibmz_model
+  # ( u count -- u<<>count )
+  .dhw (ibmz)
+  # LBR:
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
+  .dhw 0x182B        # LR GR2,  GR11             tmp2 := memory[datastack_ptr]
+  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B        # LR GR1,  GR11             tmp1 := memory[datastack_ptr]
+  .dhw 0x183B        # LR GR3,  GR11             tmp3 := tmp1
+  .dhw 0x8910 0x2000 # SLL GR1, 0x000 (0, GR2)   tmp1 := tmp1 << tmp2
+  .dhw 0x1744        # XR GR4,  GR4              tmp4 := 0
+  .dhw 0x4144 0x0020 # LA GR4,  0x020 (GR4, 0)   tmp4 := 32
+  .dhw 0x5F42 0x0000 # SL GR4,  0x000 (GR2, 0)   tmp4 := tmp4 - tmp2
+  .dhw 0x8830 0x4000 # SRL GR3, 0x000 (0, GR4)   tmp3 := tmp3 >> tmp4
+  .dhw 0x1613        # OR GR1,  GR3
+  .dhw 47F0 8052 # BC 0xF,  0x052 (0, GR8)   jump to COMMON_TAIL1
+
 `
 export { src };
 
