@@ -62,6 +62,12 @@ const assemble = (opts = {}) => {
     opts.img = new Map();
   }
 
+  if (!opts.symbols.has("《HERE》")) {
+    opts.symbols.set("《HERE》", () => {
+      return opts.curr_addr;
+    });
+  }
+
   const parse_number_or_lookup_symbol = (item) => {
     if (typeof(item) != "string") {
       if (typeof(item) == "function") {
