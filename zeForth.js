@@ -935,6 +935,14 @@ const src = `
   .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)    jump to NXT
   .dhw 0xDC00 0x1000 0x2000 # TR 0x0 (1, GR1), 0x0, (GR2)   TRANSLATE
 
+  : 16<<>
+  .dhw 8<<>
+  : 8<<>
+  .dhw 4<<>
+  : 4<<>
+  .dhw 2<<>
+  : 2<<>
+  .dhw 1<<> 1<<> EXIT
 
   ###########
   # There seems to be no spefic documentation on 
