@@ -902,6 +902,40 @@ const src = `
   .dhw 2DROP
   .dhw EXIT
 
+  : TRANSLATE
+  : TRANSLATE_ibmz
+  # ( ptr len tbl -- )
+  .dhw (ibmz)
+  .dhw 0x5FB0 0x8xxx # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x182B        # LR GR2,  GR11              tmp2 := tbl
+  .dhw 0x5FB0 0x8xxx # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x183B        # LR GR3,  GR11              tmp3 := len
+  .dhw 0x5FB0 0x8xxx # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B        # LR GR1,  GR11              tmp1 := ptr
+  .dhw 0x1744        # XR GR4,  GR4               tmp4 := 0
+  .dhw 0x1934        # CR GR3,  GR4
+  .dhw 0x4780 0x8000 # BC 0x8,  0x000 (0, GR8)    jump to NXT iff tmp3 == 0
+  .dhw 0x4144 0x0001 # LA GR4,  0x001 (GR4, 0)    tmp4 := tmp4 + 1
+  .dhw 0x1F34        # SLR GR3, GR4               tmp3 := tmp3 - tmp4
+  .dhw 0x4430 0x8672 # EX GR3,  0x672 (0, GR8)    execute the TRANSLATE instruction from 0x2672
+  .dhw 0x4133 0x0001 # LA GR3,  0x001 (0, GR3)    tmp3 := tmp3 + 1
+  .dhw 0x1744        # XR GR4,  GR4               tmp4 := 0
+  .dhw 0x4144 0x00FF # LA GR4,  0x0FF (GR4, 0)    tmp4 := 0xFF
+  .dhw 0x1743        # XR GR4,  GR3               tmp4 := tmp4 ^ tmp3
+  .dhw 0x4114 0x0000 # LA GR1,  0x000 (GR4, 0)    tmp1 := tmp1 + tmp4
+  .dhw 0x8830 0x0008 # SRL GR3, 0x008 (0, 0)      tmp3 := tmp3 >> 8
+  .dhw 0x1744        # XR GR4,  GR4
+  .dhw 0x1934        # CR GR3,  GR4
+  .dhw 0x4780 0x8000 # BC 0x8,  0x000 (0, GR8)    jump to NXT iff tmp3 == 0
+  .dhw 0x1744        # XR GR4,  GR4               tmp4 := 0
+  .dhw 0x4144 0x00FF # LA GR4,  0x0FF (GR4, 0)    tmp4 := 0xFF
+  .dhw 0x4440 0x8672 # EX GR4,  0x672 (0, GR8)    execute the TRANSLATE instruction from 0x2672
+  .dhw 0x4111 0x0100 # LA GR1,  0x100 (GR1, 0)    tmp1 := tmp1 + 0x100
+  .dhw 0x4630 0x8662 # BCT GR3  0x662 (0, GR8)    downcount tmp3 until zero and jump if tmp3 isnt zero
+  .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)    jump to NXT
+  .dhw 0xDC00 0x1000 0x2000 # TR 0x0 (1, GR1), 0x0, (GR2)   TRANSLATE
+
+
   ###########
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
