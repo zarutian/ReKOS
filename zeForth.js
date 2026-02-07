@@ -246,7 +246,7 @@ const src = `
   .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
   .dhw 0x181B        # LR GR1,  GR11              tmp1 := memory[datastack_ptr]
   .dhw 0x5910 0x8384 # C  GR1,  0x384 (0, GR8)    compare tmp1 to 'IBMe'
-  .dhw 0x4770 0x8160 # BC 0x7,  0x160 (0, GR8)    if tmp1 != 'KK' then jump to ext_trapvectoring
+  .dhw 0x4770 0x8160 # BC 0x7,  0x160 (0, GR8)    if tmp1 != 'IBMe' then jump to ext_trapvectoring
   : jump2ibmz
   .dhw 0x5FC0 0x82F0 # SL GR12, 0x04A (0, GR8)    returnstack_ptr := returnstack_ptr - 4
   .dhw 0x181C        # LR GR1,  GR12              tmp1 := memory[returnstack_ptr]
@@ -670,6 +670,11 @@ const src = `
   .dhw (NEXT)
   .dhw <<>_L0
   .dhw EXIT
+  : (ibmz)
+  # ( ... -- ... ) R:( raddr -- )
+  # registers GR8 to GR14 must be preserved or handled correctly
+  # suggest to re enter NXT at GR8 + 0x00A
+  .dhw IBMe EXT EXIT
 `
 export { src };
 
