@@ -710,6 +710,13 @@ const src = `
   .dhw 0x1613        # OR GR1,  GR3
   .dhw 47F0 8052 # BC 0xF,  0x052 (0, GR8)   jump to COMMON_TAIL1
 
+  : NAND
+  # ( a b -- c )
+  .dhw & INVERT EXIT
+
+  : OR_model
+  # ( a b -- a|b )
+  .dhw INVERT SWAP INVERT NAND EXIT
 `
 export { src };
 
