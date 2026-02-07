@@ -822,6 +822,39 @@ const src = `
   .dhw DROP
   .dhw EXIT
 
+  : 2
+  .dhw (CONST)
+  .dw  0x0000_0002 # 2
+
+  : CMOVE_modelB
+                # ( src dest len -- )
+  .dhw DUP      # ( src dest len len )
+  .dhw 2
+  .dhw 1+       # ( src dest len len 3 )
+  .dhw &        # ( src dest len n )
+  .dhw >R       # ( src dest len ) R:( n )
+  .dhw 2        # ( src dest len 2 )
+  .dhw >>       # ( src dest len/4 )
+  .dhw >R       # ( src dest ) R:( n len/4 )
+  .dhw (JMP)
+  .dhw CMOVE_modelB_L1
+  : CMOVE_modelB_L0
+                # ( src dest ) R:( n len/4 )
+  .dhw OVER     # ( src dest src )
+  .dhw @        # ( src dest cell )
+  .dhw OVER     # ( src dest cell dest )
+  .dhw !        # ( src dest )
+  .dhw 4+       # ( src dest+4 )
+  .dhw SWAP     # ( dest+4 src )
+  .dhw 4+       # ( dest+4 src+4 )
+  .dhw SWAP     # ( src+4 dest+4 )
+  : CMOVE_modelB_L1
+  .dhw (NEXT) CMOVE_modelB_L0
+                # ( src+(len/4) dest+(len/4) ) R:( n )
+  .dhw R>       # ( src+(len/4) dest+(len/4) n )
+  .dhw CMOVE_modelA
+  .dhw EXIT
+
   ########
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
