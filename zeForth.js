@@ -944,7 +944,29 @@ const src = `
   : 2<<>
   .dhw 1<<> 1<<> EXIT
 
-  ###########
+  : H@_model
+  # ( addr -- halfcell )
+  .dhw @        # ( cell )
+  .dhw 16<<>    # ( llce )
+  .dhw 0xFFFF   # ( llce mask )
+  .dhw &        # (   ce )
+  .dhw EXIT
+
+  : H!_model
+  # ( halfcell addr -- )
+  .dhw SWAP     # ( addr halfcell )
+  .dhw 0xFFFF   # ( addr halfcell 0xFFFF )
+  .dhw &        # ( addr halfcell )
+  .dhw 16<<>    # ( addr cellhalf )
+  .dhw OVER     # ( addr cellhalf addr )
+  .dhw @        # ( addr cellhalf origcell )
+  .dhw 0xFFFF   # ( addr cellhalf origcell )
+  .dhw OR_model # ( addr updated )
+  .dhw SWAP     # ( updated addr )
+  .dhw !        # ( )
+  .dhw EXIT
+
+  ############
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
   # so I am just assuming you just Write (CCW opcode 0x01) to it
