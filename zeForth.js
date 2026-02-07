@@ -870,8 +870,15 @@ const src = `
   .dhw 0x0E24        # MVCL GR2, GR4             move the datablock
   .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)   jump to NXT
 
+  : ROT
+  # ( a b c -- b c a )
+  .dhw >R       # ( a b ) R:( c )
+  .dhw SWAP     # ( b a ) R:( c )
+  .dhw R>       # ( b a c ) R:( )
+  .dhw SWAP     # ( b c a )
+  .dhw EXIT
 
-  #########
+  ##########
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
   # so I am just assuming you just Write (CCW opcode 0x01) to it
