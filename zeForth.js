@@ -878,7 +878,31 @@ const src = `
   .dhw SWAP     # ( b c a )
   .dhw EXIT
 
-  ##########
+  : TRANSLATE_model ( ptr len tbl -- )
+  .dhw SWAP     # ( ptr tbl len )
+  .dhw >R       # ( ptr tbl ) R:( len )
+  .dhw (JMP)    # ( ptr tbl ) R:( len )
+  .dhw TRANSLATE_model_L1
+  : TRANSLATE_model_L0
+  .dhw OVER     # ( ptr tbl ptr ) R:( len )
+  .dhw C@_model # ( ptr tbl idx ) R:( len )
+  .dhw OVER     # ( ptr tbl idx tbl ) R:( len )
+  .dhw +        # ( ptr tbl idx+tbl ) R:( len )
+  .dhw C@_model # ( ptr tbl char ) R:( len )
+  .dhw ROT      # ( tbl char ptr ) R:( len )
+  .dhw DUP      # ( tbl char ptr ptr ) R:( len )
+  .dhw >R       # ( tbl char ptr ) R:( len ptr )
+  .dhw C!_model # ( tbl ) R:( len ptr )
+  .dhw R>       # ( tbl ptr ) R:( len )
+  .dhw 1+       # ( tbl ptr+1 ) R:( len )
+  .dhw SWAP     # ( ptr+1 tbl ) R:( len )
+  : TRANSLATE_model_L1
+  .dhw (NEXT)
+  .dhw TRANSLATE_model_L0
+  .dhw 2DROP
+  .dhw EXIT
+
+  ###########
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
   # so I am just assuming you just Write (CCW opcode 0x01) to it
