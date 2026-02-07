@@ -780,7 +780,27 @@ const src = `
   # ( addr -- char )
   .dhw @ 24 >>_model EXIT
 
-  #######
+  : C!_model
+  # ( char addr -- )
+  .dhw SWAP      # ( addr char )
+  .dhw 0xFF      # ( addr char 0xFF )
+  .dhw &         # ( addr char
+  .dhw OVER      # ( addr char addr )
+  .dhw @         # ( addr char cell )
+  .dhw 0xFF      # ( addr char cell 0xFF )
+  .dhw 24        # ( addr char cell 0xFF 24 )
+  .dhw <<_model  # ( addr char cell 0xFF000000 )
+  .dhw INVERT    # ( addr char cell 0x00FFFFFF )
+  .dhw &         # ( addr char masked )
+  .dhw SWAP      # ( addr masked char )
+  .dhw 24        # ( addr masked char 24 )
+  .dhw <<_model  # ( addr masked char<<24 )
+  .dhw OR_model  # ( addr new_datum )
+  .dhw SWAP      # ( new_datum addr )
+  .dhw !         # ( )
+  .dhw EXIT
+
+  ########
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
   # so I am just assuming you just Write (CCW opcode 0x01) to it
