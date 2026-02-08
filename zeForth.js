@@ -1019,7 +1019,11 @@ const src = `
   .dhw (CONST)
   .dw  0x0000_0003
 
-  ############
+  : (VAR)
+  .dhw R> EXIT
+
+
+  ################
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
   # so I am just assuming you just Write (CCW opcode 0x01) to it
