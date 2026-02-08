@@ -1256,6 +1256,12 @@ const src = `
   .dhw !     # ( )
   .dhw EXIT
 
+
+  : UserVarArea_init
+  .dhw UZERO (LIT)
+  .dw  0x0000_FA00
+  .dhw 64 CMOVE EXIT
+
   : COLDD
   .dhw (ibmz)
   ########################
@@ -1292,6 +1298,24 @@ const src = `
   .dhw 0x5890 0x83F8 # L   GR9,  0x3F8 (GR8, 0)  gr9  := COLD_boot
   .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)   jump to NXT
 
+  : COLD_boot
+  .dhw UserVarArea_init
+  . merkill
+  
+  : COLD_boot2
+  .dhw NL EMIT
+  .dhw ."
+  .utf8_hwc "ReKOS Version 0.1"
+  .dhw NL EMIT
+  .utf8_hwc "  To boot type 'boot' without quotes and then press ENTER or PROCEED"
+  .dhw NL EMIT
+  .dhw ."
+  .utf8_hwc "  To get further help type 'help' without quotes and then press ENTER or PROCEED"
+  .dhw NL EMIT
+  .dhw ."
+  .utf8_hwc "  Note: If you are using the hercules-390 console you need to enter / in front of every line to interact with ReKOS"
+  .dhw NL EMIT NL EMIT
+  .dhw QUIT
 
   
   ########################
