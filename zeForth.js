@@ -577,8 +577,12 @@ const src = `
   : 31
   .dhw (CONST)
   .dw  0x0000_001F
-  : 31>>
-  .dhw 31 >> ;       # semicolon here is EXIT
+
+  .org 0x23F6
+  : COLD_vector
+  .dhw (CONST)
+  : COLD_vector_ibmz
+  .dw COLD_boot
 
   .org 0x2400
   : (JMP)_model
@@ -592,6 +596,9 @@ const src = `
   .dhw 1+
   : 2+
   .dhw 1+ 1+ EXIT
+
+  : 31>>
+  .dhw 31 >> EXIT
   
   : ?: 
   # ( alt conseq cond -- alt | conseq )
@@ -1248,8 +1255,46 @@ const src = `
   .dhw !     # ( Du addr )
   .dhw !     # ( )
   .dhw EXIT
+
+  : COLDD
+  .dhw (ibmz)
+  ########################
+  # Cold start  ibmz (z/Arch or z390 code)
+  # (Re)start PSW points here
+  : COLDD_start
+  # zero out the z390 General Registers
+  .dhw 0x1700        # XR GR0, GR0
+  .dhw 0x1711        # XR GR1, GR1
+  .dhw 0x1722        # XR GR2, GR2
+  .dhw 0x1733        # XR GR3, GR3
+  .dhw 0x1744        # XR GR4, GR4
+  .dhw 0x1755        # XR GR5, GR5
+  .dhw 0x1766        # XR GR6, GR6
+  .dhw 0x1777        # XR GR7, GR7
+  .dhw 0x1788        # XR GR8, GR8
+  .dhw 0x1799        # XR GR9, GR9
+  .dhw 0x17AA        # XR GR10, GR10
+  .dhw 0x17BB        # XR GR11, GR11
+  .dhw 0x17CC        # XR GR12, GR12
+  .dhw 0x17DD        # XR GR13, GR13
+  .dhw 0x17EE        # XR GR14, GR14
+  .dhw 0x17FF        # XR GR15, GR15
+  # ibmz_start := 0x00002000
+  .dhw 0x4188 0x0200 # LA  GR8, 0x200 (GR8, 0)   gr8 := 0x200
+  .dhw 0x8980 0x0004 # SLL GR8, 0x004            gr8 := gr8 << 4
+  # datastack_ptr := 0x0000FD00
+  .dhw 0x41BB 0x0FD0 # LA  GR11, 0xFD0 (GR11, 0) gr11 := 0xFD0
+  .dhw 0x89B0 0x0004 # SLL GR11, 0x004           gr11 := gr11 << 4
+  # returnstack_ptr := 0x000FE00
+  .dhw 0x41CC 0x0FE0 # LA  GR12, 0xFE0 (GR12, 0) gr12 := 0xFE0
+  .dhw 0x89C0 0x0004 # SLL GR12, 0x004           gr12 := gr12 << 4
+  # instruction_ptr := COLD_boot
+  .dhw 0x5890 0x83F8 # L   GR9,  0x3F8 (GR8, 0)  gr9  := COLD_boot
+  .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)   jump to NXT
+
+
   
-  ################
+  ########################
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
   # so I am just assuming you just Write (CCW opcode 0x01) to it
