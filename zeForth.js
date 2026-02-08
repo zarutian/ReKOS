@@ -1169,6 +1169,26 @@ const src = `
   : 3DROP
   .dhw DROP 2DROP EXIT
 
+  : FILL
+  # ( caddr count char -- )
+  .dhw OVER   # ( caddr count char count )
+  .dhw (BRZ)  # ( caddr count char )
+  .dhw 3DROP
+  .dhw ROT    # ( count char caddr )
+  .dhw 2DUP   # ( count char caddr char caddr )
+  .dhw C!     # ( count char caddr )
+  .dhw ROT    # ( char caddr count )
+  .dhw 1-     # ( char caddr count-1 )
+  .dhw DUP    # ( char caddr count-1 count-1 )
+  .dhw (BRZ)  # ( char caddr count-1 )
+  .dhw 3DROP
+  .dhw ROT    # ( caddr count-1 char )
+  .dhw DROP   # ( caddr count-1 )
+  .dhw SWAP   # ( count-1 caddr )
+  .dhw DUP    # ( count-1 caddr caddr )
+  .dhw 1+     # ( count-1 caddr caddr+1 )
+  .dhw ROT    # ( caddr caddr+1 countz1 )
+  .dhw (JMP) CMOVE
   
   ################
   # There seems to be no spefic documentation on 
