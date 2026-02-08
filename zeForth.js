@@ -1109,6 +1109,30 @@ const src = `
   .dhw STORE      # ( )
   .dhw EXIT
 
+  : OVER3
+  # ( a b c d - a b c d a )
+  .dhw >R      # ( a b c ) R:( d )
+  .dhw ROT     # ( b c a ) R:( d )
+  .dhw DUP     # ( b c a a ) R:( d )
+  .dhw >R      # ( b c a ) R:( d a )
+  .dhw -ROT    # ( a b c )
+  .dhw R>      # ( a b c a ) R:( d )
+  .dhw R>      # ( a b c a d ) R:( )
+  .dhw SWAP    # ( a b c d a )
+  .dhw EXIT
+
+  : NIP
+  # ( a b -- b )
+  .dhw SWAP       # ( b a )
+  .dhw DROP       # ( b )
+  .dhw EXIT
+
+  : TUCK
+  # ( a b -- b a b )
+  .dhw SWAP       # ( b a )
+  .dhw OVER       # ( b a b )
+  .dhw EXIT
+
   ################
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
