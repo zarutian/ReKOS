@@ -978,6 +978,26 @@ const src = `
   .dhw !        # ( )
   .dhw EXIT
 
+  : 0xF 
+  .dhw (CONST)
+  .dw  0x0000_000F
+
+  : -ROT
+  # ( b c a -- a b c )
+  .dhw ROT    # ( c a b )
+  .dhw ROT    # ( a b c )
+  .dhw EXIT
+
+  : R@_model
+  # ( -- a ) R:( a raddr -- a )  \ controlflow returns to raddr
+  .dhw R>     # ( raddr ) R:( a )
+  .dhw R>     # ( raddr a ) R:( )
+  .dhw DUP    # ( raddr a a )
+  .dhw >R     # ( raddr a ) R:( a )
+  .dhw SWAP   # ( a raddr ) R:( a )
+  .dhw >R     # ( a ) R:( a raddr )
+  .dhw EXIT
+
   ############
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
