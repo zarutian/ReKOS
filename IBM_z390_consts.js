@@ -18,6 +18,11 @@ const src = `
   .def IBMz__Monitor_Class_Number_addr             0x0094
   .def IBMz__PER_Code_addr                         0x0096
   .def IBMz__PER_Address_addr                      0x0098
+  .def IBMz__Exception_Access_Identification_addr  0x00A0
+  .def IBMz__PER_Access_Identification_addr        0x00A1
+  .def IBMz__Operand_AccessyIdentification_addr    0x00A2
+  .def IBMz__Store_Status_Architectural_ModeyIdentification_addr  0x00A3
+  
 
 `;
 export { src }
