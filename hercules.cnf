@@ -39,7 +39,7 @@ PANOPT     NAMEONLY RATE=FAST MSGCOLOR=DARK "TITLE=ReKOS z/Arch mainframe"
 LOGOPT     TIMESTAMP DATESTAMP
 
 CODEPAGE   819/500
-SYSGPORT   3278
+# SYSGPORT   3278
 CONKPALV   (3,1,10)
 
 TIMERINT   DEFAULT
@@ -54,7 +54,7 @@ CMDSEP     OFF
 #                     DEVICE STATEMENTS
 #------------------------------------------------------------------
 # devnr   type    options
-  0000    SYSG    SYSGCONS
+#  0000    SYSG    SYSGCONS
   0009    3215-C  /
   000A    1442    inputstack_01.txt    ascii
   000C    3505    inputstack_02.txt    ascii
