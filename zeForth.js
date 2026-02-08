@@ -84,6 +84,18 @@ const src = `
   # GR12  returnstack_ptr  (usually 0x00FExx)
   # GR13  ext_traphandler
 
+  # layout of the 0x00Fxxx page:
+  #
+  # 0xF000-0xF9FF  Various Domain spefic variables
+  # 0xFAxx  User Variables
+  # 0xFBxx  Buffers
+  #     00-4F  Terminal Output Buffer
+  #     50-9F  Terminal Input  Buffer
+  #     A0-FF  PAD
+  # 0xFCxx  Call Transfer Block, for KFORK, KALL, and KRET
+  # 0xFDxx  Datastack,   64 items deep (due to cell being 4 bytes)
+  # 0xFExx  Returnstack, 64 items - || - || - || - || - || - || -
+  # 0xFFxx  TBD
 
   # looks like its save to start here in main storage
   .org 0x2000
