@@ -1189,6 +1189,32 @@ const src = `
   .dhw 1+     # ( count-1 caddr caddr+1 )
   .dhw ROT    # ( caddr caddr+1 countz1 )
   .dhw (JMP) CMOVE
+
+  : 0x7FFFFFFF&
+  .dhw 0x7FFFFFFF & EXIT
+  
+  : UM+
+  # ( a b -- sum carry )
+  .dhw 2DUP   # ( a b a b )
+  .dhw 0x7FFFFFFF&
+  .dhw SWAP
+  .dhw 0x7FFFFFFF&
+  .dhw +      # ( a b sum1 )
+  .dhw -ROT   # ( sum1 a b )
+  .dhw 31>>   # ( sum1 a b>>31 )
+  .dhw SWAP   # ( sum1 b>>31 a )
+  .dhw 31>>   # ( sum1 b>>31 a>>31 )
+  .dhw +      # ( sum1 sum2 )
+  .dhw 1 <>>  # ( sum1 sum2<>>1 )
+  .dhw DUP    # ( sum1 sum2<>>1 sum2<>>1 )
+  .dhw 0x80000000
+  .dhw &      # ( sum1 sum2<>>1 s )
+  .dhw ROT    # ( sum2<>>1 s sum1 )
+  .dhw OR     # ( sum2<>>1 sum )
+  .dhw SWAP   # ( sum sum2<>>1 )
+  .dhw 1      # ( sum sum2<>>1 1 )
+  .dhw &      # ( sum carry )
+  .dhw EXIT
   
   ################
   # There seems to be no spefic documentation on 
