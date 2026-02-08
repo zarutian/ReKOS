@@ -1215,6 +1215,39 @@ const src = `
   .dhw 1      # ( sum sum2<>>1 1 )
   .dhw &      # ( sum carry )
   .dhw EXIT
+
+  : D+n 
+  # ( Du Dl increment -- Du+c Dl+n )
+  .dhw UM+    # ( Du Dl+incr carry )
+  .dhw ROT    # ( Dl+incr carry Du )
+  .dhw +      # ( Dl+incr Du+C )
+  .dhw SWAP
+  .dhw EXIT
+
+  : D@
+  # ( addr -- Du Dl )
+  .dhw DUP    # ( addr addr )
+  .dhw @      # ( addr Du )
+  .dhw SWAP   # ( Du addr )
+  .dhw 4+     # ( Du addr+4 )
+  .dhw @      # ( Du Dl )
+  .dhw EXIT
+
+  : D+!
+  # ( incrment addr -- )
+  .dhw SWAP  # ( addr incr )
+  .dhw OVER  # ( addr incr addr )
+  .dhw D@    # ( addr incr 
+  .dhw ROT   # ( addr Du Dl incr )
+  .dhw D+n   # ( addr Du+c Dl+n )
+  .dhw ROT   # ( Du+C Dl+n addr )
+  : D!
+  .dhw SWAP  # ( Du addr Dl )
+  .dhw OVER  # ( Du addr Dl addr )
+  .dhw 4+    # ( Du addr Dl addr+4 )
+  .dhw !     # ( Du addr )
+  .dhw !     # ( )
+  .dhw EXIT
   
   ################
   # There seems to be no spefic documentation on 
