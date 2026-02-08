@@ -1150,6 +1150,26 @@ const src = `
   # ( a b -- bool )
   .dhw - 0< INVERT EXIT
 
+  : MIN
+  # ( a b -- a | b )
+  .dhw 2DUP
+  .dhw SWAP  # ( a b b a )
+  .dhw <     # ( a b bool )
+  .dhw (JMP) ?:
+
+  : MAX
+  # ( a b -- a | b )
+  .dhw 2DUP  # ( a b a b )
+  .dhw <     # ( a b bool )
+  .dhw (JMP) ?:
+
+  : KT+1
+  .dhw KT 1+ EXIT
+
+  : 3DROP
+  .dhw DROP 2DROP EXIT
+
+  
   ################
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
