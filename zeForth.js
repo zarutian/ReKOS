@@ -1066,6 +1066,20 @@ const src = `
   .dhw (CONST) 0x0000 0x0007
   : 9
   .dhw (CONST) 0x0000 0x0009
+  : 10
+  : 0xA
+  .dhw (CONST) 0x0000 0x000A
+  : 5
+  .dhw (CONST) 0x0000 0x0005
+  : 14
+  : 0xE
+  .dhw (CONST) 0x0000 0x000E
+  : 11
+  : 0xB
+  .dhw (CONST) 0x0000 0x000B
+  : 13
+  : 0xD
+  .dhw (CONST) 0x0000 0x000D
 
   ################
   # There seems to be no spefic documentation on 
