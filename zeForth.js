@@ -998,6 +998,27 @@ const src = `
   .dhw >R     # ( a ) R:( a raddr )
   .dhw EXIT
 
+  : CLEANBOOL
+  # ( dirty -- clean )
+  .dhw (BRZ) FALSE  # aka 0x00000000
+  .dhw (JMP) TRUE   # aka 0xFFFFFFFF
+  
+  : 0
+  : FALSE
+  .dhw (CONST)
+  .dw  0x0000_0000 # 0
+  
+  : =
+  # ( a b -- T | F )
+  .dhw ^         # aka XOR
+  .dhw CLEANBOOL
+  .dhw INVERT
+  .dhw EXIT
+  
+  : 3
+  .dhw (CONST)
+  .dw  0x0000_0003
+
   ############
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
