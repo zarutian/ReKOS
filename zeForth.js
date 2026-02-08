@@ -1081,6 +1081,34 @@ const src = `
   : 0xD
   .dhw (CONST) 0x0000 0x000D
 
+  : 0=
+  .dhw 0 = EXIT
+
+  : 3DUP
+  # ( a b c -- a b c a b c )
+  .dhw >R     # ( a b ) R:( c )
+  .dhw 2DUP   # ( a b a b ) R:( c )
+  .dhw R@     # ( a b a b c ) R:( c )
+  .dhw -ROT   # ( a b c a b ) R:( c )
+  .dhw R>     # ( a b c a b c ) R:( )
+  .dhw EXIT
+
+  : 3C!
+  # ( 3bytes addr -- )
+  .dhw 1-         # ( 3bytes addr-1 )
+  .dhw SWAP       # ( addr-1 3bytes )
+  .dhw 0xFFFFFF   # ( addr-1 3bytes 0xFFFFFF )
+  .dhw &          # ( addr-1 3bytes_masked )
+  .dhw OVER       # ( addr-1 3bytes_masked addr-1 )
+  .dhw @          # ( addr-1 3bytes_masked cell )
+  .dhw 0xFFFFFF   # ( addr-1 3bytes_masked cell 0xFFFFFF )
+  .dhw INVERT     # ( addr-1 3bytes_masked cell 0xFF000000 )
+  .dhw &          # ( addr-1 3bytes_masked cell_masked )
+  .dhw OR         # ( addr-1 masked )
+  .dhw SWAP       # ( masked addr-1 )
+  .dhw STORE      # ( )
+  .dhw EXIT
+
   ################
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
