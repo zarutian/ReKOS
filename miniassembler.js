@@ -80,7 +80,7 @@ const assemble = (opts = {}) => {
     const t2 = octal_regexp.test(item);
     const t3 = quadral_regexp.test(item);
     const t4 = binary_regexp.test(item);
-    const t5 = opts.symbols.has(item);
+    const t5 = opts.symbols.has(item) && !opts.symbols.has("《NO_SYM_LOOKUP》");
     if ( (t0 || t1 || t2 || t3 || t4) && !t5 ) {
       const base = ({ x: 16, d: 10, o: 8, q: 4, b: 2})[item.at(1)];
       const num  = item.slice(2).split("").filter((char) => (char != "_")).join("");
