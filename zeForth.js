@@ -1133,6 +1133,23 @@ const src = `
   .dhw OVER       # ( b a b )
   .dhw EXIT
 
+  : CELL*
+  : 4* 
+  : 2<<
+  .dhw 2 << EXIT
+
+  : 4/
+  : 2>>
+  .dhw 2 >> EXIT
+
+  : 0<
+  # ( n -- bool )
+  .dhw 0x80000000 & (JMP) CLEANBOOL
+
+  : < 
+  # ( a b -- bool )
+  .dhw - 0< INVERT EXIT
+
   ################
   # There seems to be no spefic documentation on 
   # how you CCW a console printer-keyboard combo
