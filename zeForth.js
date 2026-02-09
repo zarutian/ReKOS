@@ -84,7 +84,7 @@ const src = `
   # GR12  returnstack_ptr  (usually 0x00FExx)
   # GR13  ext_traphandler
 
-  # layout of the 0x00Fxxx page:
+  # layout of the 0x00Fxxx USER_VARS page:
   #
   # 0xF000-0xF9FF  Various Domain spefic variables
   # 0xFA00-0xFA3F  User Variables
@@ -101,6 +101,7 @@ const src = `
   # 0xFDxx  Datastack,   64 items deep (due to cell being 4 bytes)
   # 0xFExx  Returnstack, 64 items - || - || - || - || - || - || -
   # 0xFFxx  TBD: General Registers (and other registers) save area
+  # 0xFFFC  Pointer to USER_VAR of Next (or Prev) Task
 
   # looks like its save to start here in main storage
   .org 0x2000
@@ -1277,6 +1278,42 @@ const src = `
   .dw  0x0000_FA00
   .dhw 64 CMOVE EXIT
 
+  : (USER_PTR@)
+  .dhw (IBMz)
+  .dhw 0x1711        # XR GR1, GR1
+  .dhw 0x1717        # XR GR1, GR7
+  .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (GR8)        jump to COMMON_TAIL1
+
+  : (USER_VAR)
+  # ( -- addr )
+  .dhw R> @ (USER_PTR@) + EXIT
+
+  # tbd
+  # : TASK_SWITCH_TO_NEXT_TASK
+  # .dhw (IBMz)
+  # .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
+  # .dhw 0x181B        # LR GR1,  GR11             tmp1 := memory[datastack_ptr]
+  # .dhw 0x900F 0x7F00 # STM GR0, GR15, 0xF00 (GR7)  ESA/390 mode. See instruction STMG for z/Arch mode
+  # : TASK_SWITCH_TO_NEXT_TASK_ibm390
+  
+
+  : IO_interrupt_handler_addr
+  .dhw (VAR)
+  : IO_interrupt_handler_ibm390
+  # IO New PSW (REALADDR: 0x78) points here, disables interrupts
+  .dhw 0x900F 0x7F00 # STM GR0, GR15, 0xF00 (GR7)  ESA/390 mode. See instruction STMG for z/Arch mode
+  .dhw 0x1711        # XR  GR1,  GR1             gr1 := 0
+  .dhw 0x1717        # XR  GR1,  GR7             gr1 := gr7
+  .dhw 0x1777        # XR  GR7,  GR7             gr7 := 0
+  .dhw 0x4177 0x0xxx # LA  GR7, 0x___ (GR7, 0)   gr7 := 0x___
+  .dhw 0x8970 0x0004 # SLL GR7, 0x004            gr7 := gr8 << 4
+  .dhw 0x501B 0x0000 # ST GR1,  0xFFC (GR7, 0)   memory[gr7 + 0xFFC] := gr1
+  .dhw 0x980F 0x7F00 # LM  GR0, GR15, 0xF00 (GR7)  ESA/390 mode. See instruction LMG for z/Arch mode
+  .dhw 0x47F0 0x800A # BC 0xF,  0x00A (GR8)        jump to NXT
+
+
+  
+
   : COLDD
   .dhw (ibmz)
   ########################
@@ -1343,7 +1380,7 @@ const src = `
  
   : TOB
   : TerminalOutputBuffer
-  .dhw (USER_VALUE)
+  .dhw (USER_VAR)
   .dw  0x0000_0B00  # because in KeyKos zeForth domains page at 0x00Fxxx is W/R
 
   : console_devicenr
