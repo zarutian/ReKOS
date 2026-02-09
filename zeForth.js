@@ -1256,6 +1256,16 @@ const src = `
   .dhw !     # ( )
   .dhw EXIT
 
+  # : 8+
+  .dhw 4+ 4+ EXIT
+  
+  : RDROP
+  # R:( a raddr -- raddr )
+  .dhw R>      # ( raddr ) R:( a )
+  .dhw R>      # ( raddr a ) R:( )
+  .dhw DROP    # ( raddr ) R:( )
+  .dhw >R      # ( ) R:( raddr )
+  .dhw EXIT
 
   : UserVarArea_init
   .dhw UZERO (LIT)
