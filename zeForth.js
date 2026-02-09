@@ -93,7 +93,10 @@ const src = `
   # 0xFBxx  Buffers
   #     00-4F  Terminal Output Buffer
   #     50-9F  Terminal Input  Buffer
-  #     A0-FF  PAD
+  #     A0     Terminal Input  Buffer length
+  #     A1       flag byte: set to 0xFF if console_RX? is requesting input and TIB is empty
+  #     A2-AF  TBD
+  #     B0-FF  PAD
   # 0xFCxx  Call Transfer Block, for KFORK, KALL, and KRET
   # 0xFDxx  Datastack,   64 items deep (due to cell being 4 bytes)
   # 0xFExx  Returnstack, 64 items - || - || - || - || - || - || -
