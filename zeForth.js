@@ -76,26 +76,26 @@ const src = `
   # GR4   tmp4
   # GR5   tmp5
   # GR6   tmp6    
-  # GR7   tmp7  tbd: point to User Area?
+  # GR7   tmp7
   # GR8   ibmz_start       used in ibmz code for easier jumps and constants accesses
   # GR9   instruction_ptr
   # GR10  instruction
   # GR11  datastack_ptr    (usually 0x00FDxx)
   # GR12  returnstack_ptr  (usually 0x00FExx)
-  # GR13  ext_traphandler
+  # GR13  user_vars_ptr
 
   # layout of the 0x00Fxxx USER_VARS page:
   #
   # 0xF000-0xF9FF  Various Domain spefic variables
   # 0xFA00-0xFA3F  User Variables
-  # 0xFA40-0xFA7F  TBD
+  # 0xFA40-0xFA7B  TBD
+  # 0xFA7C-0xFA7F  ext_traphandler_ptr
   # 0xFA80-0xFAFF  TBD: Channel Program?
   # 0xFBxx  Buffers
   #     00-4F  Terminal Output Buffer
-  #     50-9F  Terminal Input  Buffer
-  #     A0     Terminal Input  Buffer length
-  #     A1       flag byte: set to 0xFF if console_RX? is requesting input and TIB is empty
-  #     A2-AF  TBD
+  #     50-9F  Raw Terminal Input  Buffer
+  #     A0     Raw Terminal Input  Buffer length
+  #     A1-AF  TBD
   #     B0-FF  PAD
   # 0xFCxx  Call Transfer Block, for KFORK, KALL, and KRET
   # 0xFDxx  Datastack,   64 items deep (due to cell being 4 bytes)
@@ -117,6 +117,7 @@ const src = `
   .dhw 0x5810 0x82FC # L  GR1,  0x2FC (0, GR8)   tmp1 := 0xFFC0
   .dhw 0x141A        # NR GR1,  GR10             tmp1 := tmp1 & instr
   .dhw 0x4780 0x8030 # BC 8,    0x030 (0, GR8)   jump if result was zero
+  : DOCALL_ibmz
   .dhw 0x509C 0x0000 # ST GR9,  0x000 (GR12, 0)  push instr_ptr onto returnstack
   .dhw 0x41CC 0x0004 # LA GR12, 0x004 (GR12, 0)  incr returnstack_ptr by 4
   .dhw 0x1799        # XR GR9,  GR9              zero out instr_ptr ...
@@ -274,7 +275,8 @@ const src = `
   : trapvector
   .dhw 0x509C 0x0000 # ST GR9,  0x000 (GR12, 0)   memory[returnstack_ptr] := instruction_ptr
   .dhw 0x41CC 0x0004 # LA GR12, 0x004 (GR12, 0)   returnstack_ptr := returnstack_ptr + 4
-  .dhw 0x47F0 0d8000 # BC 0xF,  0x000 (0, GR13)   jump to trap handling code
+  .dhw 0x48AD 0x0000 # LH GR10, 0xA7E (GR13, 0)   instr := memory[user_vars_ptr + 0xA7E]
+  .dhw 0x47F0 0x8___ # BC 0xF,  0x___ (0, GR8)    jump to DOCALL_ibmz
 
   : (KFORK)
   .dhw (ibmz)
