@@ -436,28 +436,27 @@ const src = `
   .dhw 0x8910 0x2000 # SLL GR1, 0x000 (0, GR2)
   .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)    jump to COMMON_TAIL1
 
-  merkill3
   : (>>)
   .dhw (ibmz)
   : RSHIFT_ibmz
-  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x5FB0 0x8___ # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
   .dhw 0x182B        # LR GR2,  GR11
-  .dhw 0x5FB0 0x82F0 # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x5FB0 0x8___ # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
   .dhw 0x181B        # LR GR1,  GR11
   .dhw 0x8810 0x2000 # SRL GR1, 0x000 (0, GR2)
   .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (0, GR8)    jump to COMMON_TAIL1
 
   : 4
   .dhw (CONST)
-  .org 0x22F0
+  : 4_ibmz
   .dw 0x0000_0004    #  4       \ note: also refered to in ibmz code
   : 0xFFFF
   .dhw (CONST)
-  .org 0x22F6
+  : 0xFFFF_ibmz
   .dw 0x0000_FFFF    #  0xFFFF  \ note: also refered to in ibmz code
   : 0xFFC0
   .dhw (CONST)
-  .org 0x22FC
+  : 0xFFC0_ibmz
   .dw 0x0000_FFC0    #  0xFFC0  \ note: also refered to in ibmz code
 
   .org 0x2300
@@ -1417,6 +1416,17 @@ const src = `
   .dhw TerminalOutputBuffer 1
   .dhw (JMP) console_TX!_common
   
-`
-export { src };
+`;
+
+const asm = (opts) => {
+  opts.assemble(opts);
+  opts.symbols.set()
+  // hugmyndin er sú að búa til teiknin
+  //   4_rci      útfrá teikn 4_ibmz
+  //   0xFFFF_rci             0xFFFF_ibmz
+  //  osfv
+  //  með því að OG-a uppsprettu teikn gildi með 0x0FFF
+  //  og EÐA-inn 0x8000
+};
+export { src, asm };
 
