@@ -76,7 +76,7 @@ const src = `
   # GR4   tmp4
   # GR5   tmp5
   # GR6   tmp6    
-  # GR7   tmp7
+  # GR7   tmp7  tbd: point to User Area?
   # GR8   ibmz_start       used in ibmz code for easier jumps and constants accesses
   # GR9   instruction_ptr
   # GR10  instruction
@@ -87,7 +87,9 @@ const src = `
   # layout of the 0x00Fxxx page:
   #
   # 0xF000-0xF9FF  Various Domain spefic variables
-  # 0xFAxx  User Variables
+  # 0xFA00-0xFA3F  User Variables
+  # 0xFA40-0xFA7F  TBD
+  # 0xFA80-0xFAFF  TBD: Channel Program?
   # 0xFBxx  Buffers
   #     00-4F  Terminal Output Buffer
   #     50-9F  Terminal Input  Buffer
@@ -95,7 +97,7 @@ const src = `
   # 0xFCxx  Call Transfer Block, for KFORK, KALL, and KRET
   # 0xFDxx  Datastack,   64 items deep (due to cell being 4 bytes)
   # 0xFExx  Returnstack, 64 items - || - || - || - || - || - || -
-  # 0xFFxx  TBD
+  # 0xFFxx  TBD: General Registers (and other registers) save area
 
   # looks like its save to start here in main storage
   .org 0x2000
@@ -1306,6 +1308,8 @@ const src = `
   .dhw 0x89C0 0x0004 # SLL GR12, 0x004           gr12 := gr12 << 4
   # instruction_ptr := COLD_boot
   .dhw 0x5890 0x83F8 # L   GR9,  0x3F8 (GR8, 0)  gr9  := COLD_boot
+  # usr_ptr := 0x0000F000
+  .dhw 0x4177 0x0F00 # LA  GR7,  0xF00 (GR7, 0)  gr7  := 0x0000F000
   .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)   jump to NXT
 
   : COLD_boot
@@ -1336,12 +1340,12 @@ const src = `
  
   : TOB
   : TerminalOutputBuffer
-  .dhw (CONST)
-  .dw  0x0000_FB00  # because in KeyKos zeForth domains page at 0x00Fxxx is W/R
+  .dhw (USER_VALUE)
+  .dw  0x0000_0B00  # because in KeyKos zeForth domains page at 0x00Fxxx is W/R
 
   : console_devicenr
   .dhw (CONST)
-  .dw 0x0000_0009
+  .dw  0x0000_0009
   
   : console_TX!_chars
   # ( char_addr length -- )
