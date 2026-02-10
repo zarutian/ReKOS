@@ -68,6 +68,37 @@ const assemble = (opts = {}) => {
     });
   }
 
+  const is_a_number = (item) => {
+    const t0 = hexdec_rexexp.test(item);
+    const t1 = decimal_rexexp.test(item);
+    const t2 = octal_regexp.test(item);
+    const t3 = quadral_regexp.test(item);
+    const t4 = binary_regexp.test(item);
+    return (t0 || t1 || t2 || t3 || t4);
+  }
+  const parse_a_number = (item) => {
+    const base = ({ x: 16, d: 10, o: 8, q: 4, b: 2})[item.at(1)];
+    const num  = item.slice(2).split("").filter((char) => (char != "_")).join("");
+    if (item.length > 10) {
+      return Number.parseInt(num, base);
+    } else {
+      if ( !t1 && !t3 ) {
+        return BigInt(item.split("").filter((char) => (char != "_")).join(""));
+      } else {
+        let result = 0n;
+        num.split("").forEach((char) => {
+          result = (result * base) + BigInt(Number.parseInt(char, base));
+        });
+        return result;
+      }
+    }
+  }
+  const lookup_symbol = (item) => {
+    if (! opts.symbols.has(item)) {
+      opts.symbols.set(item, makeThenable());
+    }
+    return opts.symbols.get(item);
+  };
   const parse_number_or_lookup_symbol = (item) => {
     if (typeof(item) != "string") {
       if (typeof(item) == "function") {
@@ -75,33 +106,11 @@ const assemble = (opts = {}) => {
       }
       return item
     }
-    const t0 = hexdec_rexexp.test(item);
-    const t1 = decimal_rexexp.test(item);
-    const t2 = octal_regexp.test(item);
-    const t3 = quadral_regexp.test(item);
-    const t4 = binary_regexp.test(item);
     const t5 = opts.symbols.has(item) && !opts.symbols.has("《NO_SYM_LOOKUP》");
-    if ( (t0 || t1 || t2 || t3 || t4) && !t5 ) {
-      const base = ({ x: 16, d: 10, o: 8, q: 4, b: 2})[item.at(1)];
-      const num  = item.slice(2).split("").filter((char) => (char != "_")).join("");
-      if (item.length > 10) {
-        return Number.parseInt(num, base);
-      } else {
-        if ( !t1 && !t3 ) {
-          return BigInt(item.split("").filter((char) => (char != "_")).join(""));
-        } else {
-          let result = 0n;
-          num.split("").forEach((char) => {
-            result = (result * base) + BigInt(Number.parseInt(char, base));
-          });
-          return result;
-        }
-      }
+    if (is_a_number(item) && !t5 ) {
+      return parse_a_number(item);
     } else {
-      if (! opts.symbols.has(item)) {
-        opts.symbols.set(item, makeThenable());
-      }
-      return opts.symbols.get(item);
+      return lookup_symbol(item);
     }
   };
   const define_symbol = (name, value) => {
@@ -149,6 +158,44 @@ const assemble = (opts = {}) => {
       addr = incr(addr, 1);
       size -= 1;
     }
+  };
+  const evaluate = (expr_fields) => {
+    const stack = [];
+    expr_fields.forEach((item, idx, arr) => {
+      if (is_a_number(item)) {
+        stack.push(parse_a_number(item);
+        return;
+      }
+      if (item.startsWith("lookup(") && item.endsWith(")")) {
+        stack.push(lookup_symbol(item.slice(7, -1)));
+        return
+      }
+      switch (item) {
+        // probably need to add more operators
+        case "+":
+          {
+            const b = stack.pop();
+            const a = stack.pop();
+            stack.push(incr(a, b));
+          }
+          return;
+        case "|":
+          {
+            const b = stack.pop();
+            const a = stack.pop();
+            stack.push(or(a, b));
+          }
+          return;
+        case "&":
+          {
+            const b = stack.pop();
+            const a = stack.pop();
+            stack.push(and(a, b));
+          }
+          return;
+      }
+    });
+    return stack.pop();
   };
 
   const t000 = opts.src.split("\n");
@@ -226,8 +273,49 @@ const assemble = (opts = {}) => {
         });
         incrmnt = 0;
         break;
+      case ".dow_calc": // data octoword
+        incrmnt += 16;
+        // fallthrough
+      case ".dqw_calc": // data quadword
+        incrmnt += 8;
+        // fallthrough
+      case ".ddw_calc": // data doubleword
+        incrmnt += 4;
+        // fallthrough
+      case ".dw_calc": // data word
+        incrmnt += 2;
+        // fallthrough
+      case ".dhw_calc": // data halfword
+        incrmnt += 1;
+        // fallthrough
+      case ".db_calc": // data byte
+        // const rest_of_line = line.slice(fields[0].length).trimStart();
+        const t1 = evaluate(fields.slice(1));
+        const t2 = opts.curr_addr;
+        const t3 = incrmnt;
+        switch (typeof(t1)) {
+          case "number": // fallthrough
+          case "bigint":
+            img_set(opts.curr_addr, t1, incrmnt);
+            break;
+          case "object":
+            if (Array.isArray(value)) {
+              // to be implemented/útfært
+            }
+            if (t1.then == undefined) {
+              throw new Error("non thenable!");
+            }
+            t1.then((resolved) => {
+              img_set(t2, resolved, t3);
+            }, (err) => {
+            });
+            break;
+        }
+        opts.curr_addr = incr(opts.curr_addr, incrmnt);
+        incrmnt = 0;
+        break;
       case ".utf8":
-        const rest_of_line = line.slice(fields[0].length);
+        const rest_of_line = line.slice(fields[0].length).trimStart();
         if (!(rest_of_line.startsWith('"') && rest_of_line.endsWith('"'))) {
           throw new Error("utf8 strings must be enclosed within double quotes (\")");
         }
