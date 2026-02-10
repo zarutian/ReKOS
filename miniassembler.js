@@ -351,6 +351,9 @@ const assemble = (opts = {}) => {
       case ".def":
         define_symbol(fields[1], parse_number_or_lookup_symbol(fields[2]));
         break;
+      case ".def_calc":
+        define_symbol(fields[1], evaluate(fields.slice(2)));
+        break;
       case ".undef":
         undefine_symbol(fields[1]);
     }
