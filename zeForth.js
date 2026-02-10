@@ -969,10 +969,11 @@ const src = `
   .dhw 0x4780 NXT_ibmz_instrprt        # BC 0x8,  0x000 (0, GR8)    jump to NXT iff tmp3 == 0
   .dhw 0x1744                          # XR GR4,  GR4               tmp4 := 0
   .dhw 0x4144 0x00FF                   # LA GR4,  0x0FF (GR4, 0)    tmp4 := 0xFF
+  : TRANSLATE_L0_ibmz
   .dhw 0x4440 EXECUTE_instr_ibmz_instr # EX GR4,  0x672 (0, GR8)    execute the TRANSLATE instruction from 0x2672
   .dhw 0x4111 0x0100                   # LA GR1,  0x100 (GR1, 0)    tmp1 := tmp1 + 0x100
-  .dhw 0x4630 0x8662                   # BCT GR3  0x662 (0, GR8)    downcount tmp3 until zero and jump if tmp3 isnt zero
-  .dhw 0x47F0 NXT_ibmz_instrprt        # BC 0xF,  0x00A (0, GR8)    jump to NXT
+  .dhw 0x4630 TRANSLATE_L0_ibmz_instrptr # BCT GR3  0x662 (0, GR8)    downcount tmp3 until zero and jump if tmp3 isnt zero
+  .dhw 0x47F0 NXT_ibmz_instrprt          # BC 0xF,  0x00A (0, GR8)    jump to NXT
   : TRANSLATE_instr_ibmz
   .dhw 0xDC00 0x1000 0x2000            # TR 0x0 (1, GR1), 0x0, (GR2)   TRANSLATE
 
