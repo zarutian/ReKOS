@@ -1298,8 +1298,8 @@ const src = `
   : (USER_PTR@)
   .dhw (IBMz)
   .dhw 0x1711        # XR GR1, GR1
-  .dhw 0x1717        # XR GR1, GR7
-  .dhw 0x47F0 0x8052 # BC 0xF,  0x052 (GR8)        jump to COMMON_TAIL1
+  .dhw 0x171D        # XR GR1, GR13
+  .dhw 0x47F0 COMMON_TAIL1_ibmz_instrprt # BC 0xF,  0x052 (GR8)        jump to COMMON_TAIL1
 
   : (USER_VAR)
   # ( -- addr )
@@ -1320,16 +1320,18 @@ const src = `
   # IO New PSW (REALADDR: 0x78) points here, disables interrupts
   .dhw 0x900F 0x7F00 # STM GR0, GR15, 0xF00 (GR7)  ESA/390 mode. See instruction STMG for z/Arch mode
   .dhw 0x1711        # XR  GR1,  GR1             gr1 := 0
-  .dhw 0x1717        # XR  GR1,  GR7             gr1 := gr7
-  .dhw 0x1777        # XR  GR7,  GR7             gr7 := 0
-  .dhw 0x4177 0x0xxx # LA  GR7, 0x___ (GR7, 0)   gr7 := 0x___
-  .dhw 0x8970 0x0004 # SLL GR7, 0x004            gr7 := gr8 << 4
-  .dhw 0x501B 0x0000 # ST GR1,  0xFFC (GR7, 0)   memory[gr7 + 0xFFC] := gr1
+  .dhw 0x171D        # XR  GR1,  GR13            gr1 := gr13
+  .dhw 0x17DD        # XR  GR13,  GR13           gr13 := 0
+  .dhw 0x41DD 0x0xxx # LA  GR13, 0x___ (GR13, 0) gr13 := 0x___  tbd: where does the USER_VARS page for IO interrupt handling task live?
+  .dhw 0x89D0 0x0004 # SLL GR13, 0x004            gr13 := gr8 << 4
+  .dhw 0x501D 0x0000 # ST GR1,  0xFFC (GR13, 0)   memory[gr7 + 0xFFC] := gr1
   .dhw 0x980F 0x7F00 # LM  GR0, GR15, 0xF00 (GR7)  ESA/390 mode. See instruction LMG for z/Arch mode
-  .dhw 0x47F0 0x800A # BC 0xF,  0x00A (GR8)        jump to NXT
+  .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)        jump to NXT
 
-
+  : IO_interrupt_handler_task
+  # fcpu32/16 instruction pointer for task points here when IO interrupts happen
   
+  .dhw (JMP) IO_interrupt_handler_task # the task is an endless loop
 
   : COLDD
   .dhw (ibmz)
