@@ -1316,7 +1316,6 @@ const src = `
   .dhw 0x900F 0x0180 # STM GR0, GR15, 0x180 (0)  ESA/390 mode. See instruction STMG for z/Arch mode
   .dhw 0x41DD 0x0xxx # LA  GR13, 0x___ (GR13, 0) gr13 := 0x___  tbd: where does the USER_VARS page for IO interrupt handling task live?
   .dhw 0x89D0 0x0004 # SLL GR13, 0x004            gr13 := gr8 << 4
-  .dhw 0x501D 0x0000 # ST GR1,  0xFFC (GR13, 0)   memory[gr7 + 0xFFC] := gr1
   .dhw 0x980F 0xDF00 # LM  GR0, GR15, 0xF00 (GR13)  ESA/390 mode. See instruction LMG for z/Arch mode
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)        jump to NXT
 
@@ -1371,6 +1370,16 @@ const src = `
   #   I am musing on if I should have a mapping of a SubChan to Task_ptr
   #   This enables Task pending on a SubChannel interrupt
   #   When such interrupt occurs the store the IRB (max 24 cells) in that tasks USER_VARS at offset 0xFB0
+
+  : External_interrupt_handler
+  .dhw (VAR)
+  : External_interrupt_handler_ibm390
+  # External interrupt New PSW (REALADR: 0x58) points here.
+    .dhw 0x900F 0x0180 # STM GR0, GR15, 0x180 (0)  ESA/390 mode. See instruction STMG for z/Arch mode
+  .dhw 0x41DD 0x0xxx # LA  GR13, 0x___ (GR13, 0) gr13 := 0x___  tbd: where does the USER_VARS page for External interrupt handling task live?
+  .dhw 0x89D0 0x0004 # SLL GR13, 0x004            gr13 := gr8 << 4
+  .dhw 0x980F 0xDF00 # LM  GR0, GR15, 0xF00 (GR13)  ESA/390 mode. See instruction LMG for z/Arch mode
+  .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)        jump to NXT
 
   : COLDD
   .dhw (ibmz)
@@ -1462,7 +1471,7 @@ const src = `
   .dhw 0xFFFF &                         # ( len&mask )
   .dhw TerminalOutputBuffer 4 - !       # ( )
   .dhw TerminalOutputBuffer 8 -         # ( CCW1_addr )
-  .dhw console_devicenr IBMz_SIO        # ( condition_code )
+  .dhw console_devicenr IO_StartSubChan # ( condition_code )
   .dhw DROP
   .dhw EXIT
   
