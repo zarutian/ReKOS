@@ -103,6 +103,18 @@ const src = `
   # 0xFFxx  TBD: General Registers (and other registers) save area
   # 0xFFFC  Pointer to USER_VAR of Next (or Prev) Task
 
+  # Memory layout (all addresses are absolute and real unless otherwise noted)
+  # 0x000000-0x001FFF  IBM z/Arch or ESA/390 spefic hardcoded addresses
+  # 0x002000-0x00EFFF  zeForth
+  # 0x00F000-0x00FFFF  USER_VARS page for main zeForth console task
+  # 0x010000-0x010FFF  USER_VARS page for IO interrupt handler task
+  # 0x011000-0x011FFF  USER_VARS page for External interrupt handler task
+  # 0x012000-0x012FFF  USER_VARS page for Program  interrupt handler task (pagefaults, floating point calcfaults, and such)
+  # 0x013000-0x013FFF  USER_VARS page for SuperVisorCall interrupt handler task (syscalls handler)
+  # 0x014000-0x014FFF  USER_VARS page for the Migrator task
+  #
+  # 0x020000-0x05FFFF  IO SubChannel interrupt dispatch table (indexed by halfcell SubChan id)
+  # 0x060000-          TBD: KK Item space?
 
   .def_calc NXT_ibmz_instrprt     lookup(NXT_ibmz)    0x0FFF & 0x8000 | 
   .def_calc 0xFFFF_ibmz_instrprt  lookup(0xFFFF_ibmz) 0x0FFF & 0x8000 |
