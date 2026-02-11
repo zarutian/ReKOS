@@ -1305,33 +1305,49 @@ const src = `
   # ( -- addr )
   .dhw R> @ (USER_PTR@) + EXIT
 
-  # tbd
-  # : TASK_SWITCH_TO_NEXT_TASK
-  # .dhw (IBMz)
-  # .dhw 0x5FB0 4_ibmz_instrprt # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
-  # .dhw 0x181B        # LR GR1,  GR11             tmp1 := memory[datastack_ptr]
-  # .dhw 0x900F 0x7F00 # STM GR0, GR15, 0xF00 (GR7)  ESA/390 mode. See instruction STMG for z/Arch mode
-  # : TASK_SWITCH_TO_NEXT_TASK_ibm390
-  
+  : IO_Interruption_Code
+  .dhw (CONST)
+  .dw  0x000000B8
 
   : IO_interrupt_handler_addr
   .dhw (VAR)
   : IO_interrupt_handler_ibm390
   # IO New PSW (REALADDR: 0x78) points here, disables interrupts
-  .dhw 0x900F 0x7F00 # STM GR0, GR15, 0xF00 (GR7)  ESA/390 mode. See instruction STMG for z/Arch mode
-  .dhw 0x1711        # XR  GR1,  GR1             gr1 := 0
-  .dhw 0x171D        # XR  GR1,  GR13            gr1 := gr13
-  .dhw 0x17DD        # XR  GR13,  GR13           gr13 := 0
+  .dhw 0x900F 0x0180 # STM GR0, GR15, 0x180 (0)  ESA/390 mode. See instruction STMG for z/Arch mode
   .dhw 0x41DD 0x0xxx # LA  GR13, 0x___ (GR13, 0) gr13 := 0x___  tbd: where does the USER_VARS page for IO interrupt handling task live?
   .dhw 0x89D0 0x0004 # SLL GR13, 0x004            gr13 := gr8 << 4
   .dhw 0x501D 0x0000 # ST GR1,  0xFFC (GR13, 0)   memory[gr7 + 0xFFC] := gr1
-  .dhw 0x980F 0x7F00 # LM  GR0, GR15, 0xF00 (GR7)  ESA/390 mode. See instruction LMG for z/Arch mode
+  .dhw 0x980F 0xDF00 # LM  GR0, GR15, 0xF00 (GR7)  ESA/390 mode. See instruction LMG for z/Arch mode
+  .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)        jump to NXT
+
+  : IO_TestSubChan
+  # ( SubChan IRB_addr -- ConditionCode )
+  .dhw (IBMz)
+  .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x182B                   # LR GR2,  GR11              tmp2 := IRB_addr
+  .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B                   # LR GR1,  GR11              gr1 := tmp1 := SubChan
+  .dhw 0xB235 0x2000            # TSCH 0 (GR2)               TestSubCHannel stores the InterruptRequestBlock
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)        jump to NXT
 
   : IO_interrupt_handler_task
   # fcpu32/16 instruction pointer for task points here when IO interrupts happen
+  .dhw (LIT)
+  .dhw_calc 0x0180
+  .dhw (USER_PTR@) (LIT)
+  .dhw_calc 0x0F00
+  .dhw + 64 CMOVE              # copy saved GeneralRegisters for safe keeping
+  .dhw IO_Interruption_Code @  # get which SubChannel was the cause
+  .dhw DUP
+  .dhw (USER_PTR@) 24 0 FILL   # zero out where Interrupt Request Block goes
+  .dhw (USER_PTR@) IO_TestSubChan
   
   .dhw (JMP) IO_interrupt_handler_task # the task is an endless loop
+
+  # 2026-02-11T00:20 Zarutian:
+  #   I am musing on if I should have a mapping of a SubChan to Task_ptr
+  #   This enables Task pending on a SubChannel interrupt
+  #   When such interrupt occurs the store the IRB (max 24 cells) in that tasks USER_VARS at offset 0xFB0 (TBD)
 
   : COLDD
   .dhw (ibmz)
