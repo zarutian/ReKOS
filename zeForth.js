@@ -101,7 +101,8 @@ const src = `
   # 0xFDxx  Datastack,   64 items deep (due to cell being 4 bytes)
   # 0xFExx  Returnstack, 64 items - || - || - || - || - || - || -
   # 0xFFxx  TBD: General Registers (and other registers) save area
-  # 0xFFFC  Pointer to USER_VAR of Next (or Prev) Task
+  # 0xFFF8  Pointer to USER_VAR page of Prev Task
+  # 0xFFFC  Pointer to USER_VAR page of Next Task
 
   # Memory layout (all addresses are absolute and real unless otherwise noted)
   # 0x000000-0x001FFF  IBM z/Arch or ESA/390 spefic hardcoded addresses
@@ -1332,9 +1333,7 @@ const src = `
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)        jump to NXT
 
   : IO_return_from_interrupt
-  .dhw (USER_PTR@) (LIT)
-  .dhw_calc 0x0F00
-  .dhw +
+  .dhw (USER_PTR@)
   .dhw (IBMz)
   .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
   .dhw 0x181B                   # LR GR1,  GR11              gr1 := stored General Registers
@@ -1359,9 +1358,7 @@ const src = `
   # fcpu32/16 instruction pointer for task points here when IO interrupts happen
   .dhw (LIT)
   .dhw_calc 0x0180
-  .dhw (USER_PTR@) (LIT)
-  .dhw_calc 0x0F00
-  .dhw + 64 CMOVE              # copy saved GeneralRegisters for safe keeping
+  .dhw (USER_PTR@) 64 CMOVE    # copy saved GeneralRegisters for safe keeping
   .dhw IO_Interruption_Code @  # get which SubChannel was the cause
   .dhw DUP
   .dhw 1+
@@ -1382,16 +1379,47 @@ const src = `
   #   I am musing on if I should have a mapping of a SubChan to Task_ptr
   #   This enables Task pending on a SubChannel interrupt
   #   When such interrupt occurs the store the IRB (max 24 cells) in that tasks USER_VARS at offset 0xFB0
+  #
+  # 2026-02-12T12:47 Zarutian:
+  #   Task switching is, for now, basic preemptive round robin except for interrupt handler tasks
+  #   Happens at 100 Hz or every 10 milliseconds per the CPU Timer
+
+  : External_Interruption_Code
+  # its is a halfword, so use H@
+  .dhw (CONST)
+  .dw  0x00000086
 
   : External_interrupt_handler
   .dhw (VAR)
   : External_interrupt_handler_ibm390
   # External interrupt New PSW (REALADR: 0x58) points here.
-    .dhw 0x900F 0x0180 # STM GR0, GR15, 0x180 (0)  ESA/390 mode. See instruction STMG for z/Arch mode
+  .dhw 0x900F 0x0180 # STM GR0, GR15, 0x180 (0)  ESA/390 mode. See instruction STMG for z/Arch mode
   .dhw 0x41DD 0x0xxx # LA  GR13, 0x___ (GR13, 0) gr13 := 0x___  tbd: where does the USER_VARS page for External interrupt handling task live?
   .dhw 0x89D0 0x0004 # SLL GR13, 0x004            gr13 := gr8 << 4
   .dhw 0x980F 0xDF00 # LM  GR0, GR15, 0xF00 (GR13)  ESA/390 mode. See instruction LMG for z/Arch mode
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)        jump to NXT
+
+  : External_return_from_interrupt
+  .dhw (USER_PTR@)
+  .dhw (IBMz)
+  .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B                   # LR GR1,  GR11              gr1 := stored General Registers
+  .dhw 0x980F 0x1000            # LM  GR0, GR15, 0x000 (GR1) ESA/390 mode. See instruction LMG for z/Arch mode
+  .dhw 0x8200 0x0018            # LPSW 0x0018 (GR0)          Load the interrupted PSW into the PSW register
+  
+  : External_interrupt_handler_task
+  # fcpu32/16 instruction pointer for task points here when External interrupts happen
+  .dhw (LIT)
+  .dw_calc 0x00000180
+  .dhw (USER_PTR@) 64 CMOVE    # copy saved GeneralRegisters for safe keeping
+  .dhw External_Interruption_Code H@ # ( interruption_code )
+
+  .dhw External_return_from_interrupt
+  .dhw (JMP) External_interrupt_handler_task
+
+  : global__current_task
+  .dhw (VAR)
+  .dw  0x0000F000 # the bootup/main task
 
   : COLDD
   .dhw (ibmz)
