@@ -1389,6 +1389,10 @@ const src = `
   .dhw (CONST)
   .dw  0x00000086
 
+  : External_Interrupt_Code_CPU_Timer
+  .dhw (CONST)
+  .dhw 0x1005
+
   : External_interrupt_handler
   .dhw (VAR)
   : External_interrupt_handler_ibm390
@@ -1413,13 +1417,52 @@ const src = `
   .dw_calc 0x00000180
   .dhw (USER_PTR@) 64 CMOVE    # copy saved GeneralRegisters for safe keeping
   .dhw External_Interruption_Code H@ # ( interruption_code )
-
+  .dhw DUP
+  .dhw External_Interrupt_Code_CPU_Timer
+  .dhw =                       # ( interruption_code cpu_timer? )
+  .dhw (BRZ)
+  .dhw External_interrupt_handler_task_L0
+  .dhw DROP
+  .dhw (USER_PTR@)
+  .dhw global__current_task @  # ( extint_task_ptr task_USER_VARS_ptr )
+  .dhw 0x0F00 + 64 CMOVE       # save the interupted task General Registers
+  .dhw External_interrupt_old_PSW D@
+  .dhw global__current_task @  # ( Old_PSW_u Old_PSW_l task_USER_VARS_ptr )
+  .dhw 0x0FF0 + D@             # ( )
+  .dhw global__current_task @  #
+  .dhw 0x0FFC + @              #
+  .dhw global__current_task !  # next task is now current task
+  .dhw global__current_task @  #
+  .dhw 0x0F00 +                #
+  .dhw (USER_PTR@) 64 CMOVE
+  .dhw global__current_task @  #
+  .dhw 0x0FF0 +
+  .dhw External_interrupt_old_PSW
+  .dhw 8 CMOVE                 #
+  .dhw 10millisecond_in_TOD_Clock_units
+  .dhw CPU_Timer!
+  .dhw External_return_from_interrupt
+  : External_interrupt_handler_task_L0
+  
   .dhw External_return_from_interrupt
   .dhw (JMP) External_interrupt_handler_task
 
   : global__current_task
   .dhw (VAR)
   .dw  0x0000F000 # the bootup/main task
+
+  : CPU_Timer!
+  # ( doublecell_addr )
+  .dhw (IBMz)
+  .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B                   # LR GR1,  GR11              gr1 := stored General Registers
+  .dhw 0xB208 1000              # SPT 0 (GR1)                CPU_Timer := memory_dw[gr1]
+  .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)       jump to NXT
+  
+  : 10millisecond_in_TOD_Clock_units
+  .dhw (CONST)
+  # .ddw 0x0000_0000_003E_8000 # 1 ms
+  .ddw_calc 0x0038_8000 0d10 *
 
   : COLDD
   .dhw (ibmz)
