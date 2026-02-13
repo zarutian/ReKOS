@@ -1383,6 +1383,16 @@ const src = `
   # 2026-02-12T12:47 Zarutian:
   #   Task switching is, for now, basic preemptive round robin except for interrupt handler tasks
   #   Happens at 100 Hz or every 10 milliseconds per the CPU Timer
+  #
+  # 2026-02-13T12:20 Zarutian:
+  #   In a Multiprocessing (IBM term) setup, each CPU has its own entry in the
+  #   global__current_task table
+  #
+  #   Each KK Domain process runs inside of a Domain runner task.
+  #   (There are more Domains than processes)
+  #   Each KFORK spawns a new Domain runner task or, if max_domain_tasks is reach, waits for one to become
+  #   available.
+  #   Each KRET to a non-returning key, such as a DataKey (KK term) terminates a Domain runner task
 
   : External_Interruption_Code
   # its is a halfword, so use H@
@@ -1447,12 +1457,23 @@ const src = `
   .dhw External_return_from_interrupt
   .dhw (JMP) External_interrupt_handler_task
 
+  : CPU_address
+  # ( -- cpu_address )
+  # cpu_address is a halfcell (16 bits)
+  .dhw (IBMz)
+  .dhw 0x1711                   # XR GR1, GR1
+  .dhw 0x501B 0x0000            # ST GR1,  0x000 (GR11, 0)  memory[datastack_ptr] := tmp1
+  .dhw 0x41BB 0x0002            # LA GR11, 0x002 (GR11, 0)  datastack_ptr := datastack_ptr + 2
+  .dhw 0xB212 0xB000            # STAP 0x000 (GR11)
+  .dhw 0x41BB 0x0002            # LA GR11, 0x002 (GR11, 0)  datastack_ptr := datastack_ptr + 2
+  .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)       jump to NXT
+
   : global__current_task
   .dhw (VAR)
   .dw  0x0000F000 # the bootup/main task
 
   : CPU_Timer!
-  # ( doublecell_addr )
+  # ( doublecell_addr -- )
   .dhw (IBMz)
   .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
   .dhw 0x181B                   # LR GR1,  GR11              gr1 := stored General Registers
@@ -1460,7 +1481,7 @@ const src = `
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)       jump to NXT
   
   : 10millisecond_in_TOD_Clock_units
-  .dhw (CONST)
+  .dhw (VAR)
   # .ddw 0x0000_0000_003E_8000 # 1 ms
   .ddw_calc 0x0038_8000 0d10 *
 
