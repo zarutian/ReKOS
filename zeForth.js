@@ -1449,6 +1449,7 @@ const src = `
   .dhw 0x0FF0 +
   .dhw External_interrupt_old_PSW
   .dhw 8 CMOVE                 #
+  # tbi: DAT control registers and such need to be saved and restored too.
   .dhw 10millisecond_in_TOD_Clock_units
   .dhw CPU_Timer!
   .dhw External_return_from_interrupt
@@ -1473,17 +1474,32 @@ const src = `
   .dw  0x0000F000 # the bootup/main task
 
   : CPU_Timer!
-  # ( doublecell_addr -- )
+  # ( Du Dl -- )
   .dhw (IBMz)
   .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
-  .dhw 0x181B                   # LR GR1,  GR11              gr1 := stored General Registers
-  .dhw 0xB208 1000              # SPT 0 (GR1)                CPU_Timer := memory_dw[gr1]
+  .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0xB208 B000              # SPT 0 (GR111)              CPU_Timer := datastack
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)       jump to NXT
   
   : 10millisecond_in_TOD_Clock_units
-  .dhw (VAR)
+  .dhw (CONST_D)
   # .ddw 0x0000_0000_003E_8000 # 1 ms
   .ddw_calc 0x0038_8000 0d10 *
+
+  : enable_external_interrupts
+  # ( PSWu PSWl -- PSWu' PSWl' )
+  .dhw SWAP 1 24 << OR SWAP EXIT
+
+  : disable_external_interrupts
+  # ( PSWu PSWl -- PSWu' PSWl' )
+  .dhw SWAP 1 24 << INVERT & SWAP EXIT
+
+  : enable_IO_interrupts
+  # ( PSWu PSWl -- PSWu' PSWl' )
+  .dhw SWAP 2 24 << OR SWAP EXIT
+
+  : disable_IO_interrupts
+  .dhw SWAP 2 24 << INVERT & SWAP EXIT
 
   : COLDD
   .dhw (ibmz)
