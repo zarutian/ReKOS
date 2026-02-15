@@ -1499,10 +1499,30 @@ const src = `
   .dhw SWAP 2 24 << OR SWAP EXIT
 
   : disable_IO_interrupts
+  # ( PSWu PSWl -- PSWu' PSWl' )
   .dhw SWAP 2 24 << INVERT & SWAP EXIT
 
+  : control_registers!
+  # store into control registers
+  # ( ptr -- )
+  .dhw (IBMz)
+  .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x___ (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B                   # LR GR1,  GR11              gr1 := ptr
+  .dhw 0xB70F 0x1000            # LCTL CR0, CR15, 0 (GR1)    ESA/390 mode. See LCTLG for z/Arch
+  .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)       jump to NXT
+
+  : control_registers@
+  # fetch from control registers
+  # ( ptr -- )
+  .dhw (IBMz)
+  .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x___ (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B                   # LR GR1,  GR11              gr1 := ptr
+  .dhw 0xB60F 0x1000            # STCTL CR0, CR15, 0 (GR1)   ESA/390 mode. See STCTG for z/Arch
+  .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)       jump to NXT
+
+
   : COLDD
-  .dhw (ibmz)
+  .dhw (IBMz)
   ########################
   # Cold start  ibmz (z/Arch or z390 code)
   # (Re)start PSW points here
@@ -1537,7 +1557,7 @@ const src = `
   .dhw 0x5890 0x83F8 # L   GR9,  0x3F8 (GR8, 0)  gr9  := COLD_boot
   # usr_ptr := 0x0000F000
   .dhw 0x4177 0x0F00 # LA  GR7,  0xF00 (GR7, 0)  gr7  := 0x0000F000
-  .dhw 0x47F0 0x800A # BC 0xF,  0x00A (0, GR8)   jump to NXT
+  .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)       jump to NXT
 
   : COLD_boot
   .dhw UserVarArea_init
