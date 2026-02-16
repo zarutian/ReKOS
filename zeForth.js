@@ -1440,6 +1440,9 @@ const src = `
   .dhw global__current_task @  # ( Old_PSW_u Old_PSW_l task_USER_VARS_ptr )
   .dhw 0x0FF0 + D@             # ( )
   .dhw global__current_task @  #
+  .dhw 0x0F00 64 + +           #
+  .dhw control_registers@
+  .dhw global__current_task @  #
   .dhw 0x0FFC + @              #
   .dhw global__current_task !  # next task is now current task
   .dhw global__current_task @  #
@@ -1449,7 +1452,9 @@ const src = `
   .dhw 0x0FF0 +
   .dhw External_interrupt_old_PSW
   .dhw 8 CMOVE                 #
-  # tbi: DAT control registers and such need to be saved and restored too.
+  .dhw global__current_task @  #
+  .dhw 0x0F00 64 + +           #
+  .dhw control_registers!      #
   .dhw 10millisecond_in_TOD_Clock_units
   .dhw CPU_Timer!
   .dhw External_return_from_interrupt
