@@ -1673,7 +1673,8 @@ const src2 = `
   .dhw EXIT
 
   : Tcl_list_first_sub0
-  # ( addr len -- addr' )
+  # ( addr len -- bralvl brclvl inquote addr' )
+  # todo: incorporate last_bracer_char idea
   .dhw >R                  # ( addr ) R:( len )
   .dhw LIT_0     SWAP      # ( bralvl addr ) R:( len )
   .dhw LIT_0     SWAP      # ( bralvl brclvl addr ) R:( len )
@@ -1753,6 +1754,35 @@ const src2 = `
   .dhw INVERT (BRZ) 3DROP  # ( count addr len' remaining_len )
   .dhw >R + R> ROT 1+ -ROT # ( count+1 addr' remaining_len )
   .dhw (JMP) Tcl_list_length_L1
+
+  : Tcl_list_range
+  # ( addr len start_idx end_idx -- addr' len' )
+  .dhw >R >R               # ( addr len ) R:( end_idx start_idx )
+  .dhw LIT_0 -ROT          # ( idx addr len ) R:( end_idx start_idx )
+  : Tcl_list_range_L0
+  .dhw 2DUP Tcl_list_first # ( idx addr len addr len' ) R:( end_idx start_idx )
+  .dhw NIP  SWAP OVER -    # ( idx addr len' remaining_len ) R:( end_idx start_idx )
+  .dhw R@   SWAP >R -ROT   # ( idx start_idx addr len' ) R:( end_idx start_idx remaining_len )
+  .dhw >R >R OVER =        # ( idx idx=start? ) R:( end_idx start_idx remaining_len len' addr )
+  .dhw INVERT (BRZ) Tcl_list_range_L1 # ( idx ) R:( end_idx start_idx remaining_len len' addr )
+  .dhw 1+ R> R> + R>       # ( idx+1 addr' remaining_len ) R:( end_idx start_idx )
+  .dhw DUP 0<= INVERT (BRZ) Tcl_list_range_L0
+  .dhw RDROP RDROP ROT DROP EXIT # ( addr' 0 )
+  : Tcl_list_range_L1
+                           # ( idx ) R:( end_idx start_idx remaining_len len' addr )
+  .dhw R> RDROP R> RDROP   # ( idx addr remaining_len ) R:( end_idx )
+  .dhw OVER R> SWAP >R >R  # ( idx addr remaining_len ) R:( start_addr end_idx )
+  : Tcl_list_range_L2
+  .dhw 2DUP Tcl_list_first # ( idx addr len addr len' ) R:( start_addr end_idx )
+  .dhw NIP  SWAP OVER -    # ( idx addr len' remaining_len ) R:( start_addr end_idx )
+  merkill_tcl
+  
+
+  : Tcl_list_index
+  # ( addr len idx -- addr' len' )
+  .dhw DUP (JMP) Tcl_list_range
+
+  
 `;
 
 export { src };
