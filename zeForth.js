@@ -1651,6 +1651,92 @@ const src = `
   .dhw (JMP) console_TX!_common
   
 `;
+const src2 = `
+  # a bit unrelated but wanted to save this from a handwritten note.
+
+  : 3NIP
+  # ( a b c -- c )
+  .dhw >R 3DROP R> EXIT
+
+  : Tcl_list_first
+  # ( addr len -- addr len' )
+  # Takes an ASCII string and returns the first 'word' of it per Tcl parsing rules
+  # todo eventually: make an utf-8 version
+  .dhw SWAP TUCK           # ( addr addr len )
+  .dhw Tcl_list_first_sub0 # ( addr bralvl brclvl inquote addr' )
+  .dhw 2NIP                # ( addr addr' )
+  .dhw OVER MINUS          # ( addr len' )
+  .dhw EXIT
+
+  : Tcl_list_first_sub0
+  # ( addr len -- addr' )
+  .dhw >R                  # ( addr ) R:( len )
+  .dhw LIT_0     SWAP      # ( bralvl addr ) R:( len )
+  .dhw LIT_0     SWAP      # ( bralvl brclvl addr ) R:( len )
+  .dhw LIT_FALSE SWAP      # ( bralvl brclvl inquote addr ) R:( len )
+  .dhw (JMP) Tcl_list_first_sub0_L1
+  : Tcl_list_first_sub0_L0
+  .dhw DUP >R              # ( bralvl brclvl inquote addr ) R:( len addr )
+  .dhw C@                  # ( bralvl brclvl inquote char ) R:( len addr )
+  .dhw DUP LIT_'\\' =      # ( bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw INVERT              # ( bralvl brclvl inquote char ~flag ) R:( len addr )
+  .dhw (BRZ) Tcl_list_first_sub0_L2
+  .dhw DUP LIT_'"' =       # ( bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw (BRZ) Tcl_list_first_sub0_L3
+  .dhw SWAP INVERT SWAP    # ( bralvl brclvl inquote' char )
+  .dhw (JMP) Tcl_list_first_sub0_L2
+  : Tcl_list_first_sub0_L3
+  .dhw OVER
+  .dhw (BRZ) Tcl_list_first_sub0_L2
+  .dhw DUP LIT_'[' =       # ( bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw (BRZ) Tcl_list_first_sub0_L4
+  .dhw >R >R >R 1+ R> R> R>
+  .dhw (JMP) Tcl_list_first_sub0_L2
+  : Tcl_list_first_sub0_L4
+  .dhw DUP LIT_']' =       # ( bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw (BRZ) Tcl_list_first_sub0_L5
+  .dhw >R >R >R 1- R> R> R>
+  .dhw (JMP) Tcl_list_first_sub0_L2
+  : Tcl_list_first_sub0_L5
+  .dhw DUP LIT_'{' =       # ( bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw (BRZ) Tcl_list_first_sub0_L6
+  .dhw >R >R 1+ R> R>
+  .dhw (JMP) Tcl_list_first_sub0_L2
+  : Tcl_list_first_sub0_L6
+  .dhw DUP LIT_'}' =       # ( bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw (BRZ) Tcl_list_first_sub0_L7
+  .dhw >R >R 1- R> R>
+  .dhw (JMP) Tcl_list_first_sub0_L2
+  : Tcl_list_first_sub0_L7
+  .dhw DUP LIT_'\\n' =     # ( bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw SWAP >R SWAP DUP >R # ( bralvl brclvl flag inquote ) R:( len addr char inquote )
+  .dhw INVERT AND          # ( bralvl brclvl flag' ) R:( len addr char inquote )
+  .dhw >R 2DUP 0= SWAP 0=  # ( bralvl brclvl brclvl=0 bralvl=0 ) R:( len addr char inquote flag' )
+  .dhw AND R> AND          # ( bralvl brclvl flag" ) R:( len addr char inquote )
+  .dhw R> SWAP R> SWAP     # ( bralvl brclvl inquote char flag" ) R:( len addr )
+  .dhw (BRZ) Tcl_list_first_sub0_L2
+  .dhw DROP R> RDROP EXIT  # ( bralvl brclvl inquote addr' )
+  : Tcl_list_first_sub0_L2
+  .dhw DROP                # ( bralvl brclvl inquote ) R:( len addr )
+  .dhw R> 1+               # ( bralvl brclvl inquote addr+1 ) R:( len )
+  : Tcl_list_first_sub0_L1
+  .dhw (NEXT) Tcl_list_first_sub0_L0
+  .dhw EXIT                # ( bralvl brclvl inquote addr' )
+
+  : Tcl_info_is_complete
+  # ( addr len -- flag )
+  # Takes a string and tells if its 'complete' per Tcl parsing rules
+  # That is, if all the quotemarks, curly braces and brackets are balanced
+  .dhw 2DUP                # ( addr len addr len )
+  .dhw Tcl_list_first_sub0 # ( addr len bralvl brclvl inquote addr' )
+  .dhw >R INVERT SWAP 0= & # ( addr len bralvl flag ) R:( addr' )
+  .dhw SWAP 0= & R> SWAP   # ( addr len addr' flag ) R:( )
+  .dhw >R SWAP - = R> &    # ( flag )
+  .dhw EXIT
+
+  : Tcl_list_length
+  # ( addr len -- nrOfItems )
+`;
 
 export { src };
 
