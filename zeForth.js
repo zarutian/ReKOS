@@ -671,6 +671,13 @@ const src = `
   .dhw R>       # ( raddr ) R:( )
   .dhw @        # ( datum )
   .dhw EXIT
+
+  : (CONST_D)
+  # ( -- DatumU DatumL )
+  .dhw R> D@ EXIT
+
+  : (CONST_H)
+  .dhw R> H@ EXIT
   
   : 0xFFFFFFFF
   : TRUE
@@ -1473,6 +1480,23 @@ const src = `
   .dhw 0xB212 0xB000            # STAP 0x000 (GR11)
   .dhw 0x41BB 0x0002            # LA GR11, 0x002 (GR11, 0)  datastack_ptr := datastack_ptr + 2
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)       jump to NXT
+
+  : CPU_prefix!
+  # store into the cpu prefix register
+  # ( Prefix -- )
+  .dhw (IBMz)
+  .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0xB210 B000              # SPX 0 (GR11)
+  .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)       jump to NXT
+
+  : CPU_prefix@
+  # fetch from the cpu prefix register
+  # ( -- Prefix )
+  .dhw (IBMz)
+  .dhw 0xB211 B000              # STPX 0 (GR11)
+  .dhw 0x41BB 0x0004            # LA GR11, 0x004 (GR11, 0)   datastack_ptr := datastack_ptr + 4
+  .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)       jump to NXT
+
 
   : global__current_task
   .dhw (VAR)
