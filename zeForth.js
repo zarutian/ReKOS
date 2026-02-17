@@ -1775,14 +1775,24 @@ const src2 = `
   : Tcl_list_range_L2
   .dhw 2DUP Tcl_list_first # ( idx addr len addr len' ) R:( start_addr end_idx )
   .dhw NIP  SWAP OVER -    # ( idx addr len' remaining_len ) R:( start_addr end_idx )
-  merkill_tcl
-  
+  .dhw R@   SWAP >R -ROT   # ( idx end_idx addr len' ) R:( start_addr end_idx remaining_len )
+  .dhw >R >R OVER =        # ( idx idx=end? ) R:( start_addr end_idx remaining_len len' addr )
+  .dhw INVERT (BRZ) Tcl_list_range_L4 # ( idx ) R:( start_addr end_idx remaining_len len' addr )
+  .dhw 1+ R> R> + R>       # ( idx+1 addr' remaining_len ) R:( start_addr end_idx )
+  .dhw DUP 0<= INVERT (BRZ) Tcl_list_range_L2
+  : Tcl_list_range_L3
+  .dhw DROP                # ( idx   addr' ) R:( start_addr end_idx )
+  .dhw RDROP               # ( idx   addr' ) R:( start_addr )
+  .dhw NIP R> TUCK -       # ( start_addr len ) R:( )
+  .dhw EXIT
+  : Tcl_list_range_L4      # ( idx ) R:( start_addr end_idx remaining_len len' addr )
+  .dhw R> 2RDROP           # ( idx addr ) R:( start_addr end_idx )
+  .dhw (JMP) Tcl_list_range_L3
 
   : Tcl_list_index
   # ( addr len idx -- addr' len' )
   .dhw DUP (JMP) Tcl_list_range
 
-  
 `;
 
 export { src };
