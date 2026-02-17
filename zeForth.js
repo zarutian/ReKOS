@@ -1658,6 +1658,10 @@ const src2 = `
   # ( a b c -- c )
   .dhw >R 3DROP R> EXIT
 
+  : 0<=
+  # ( num -- flag )
+  .dhw DUP 0< SWAP 0= OR EXIT
+
   : Tcl_list_first
   # ( addr len -- addr len' )
   # Takes an ASCII string and returns the first 'word' of it per Tcl parsing rules
@@ -1723,7 +1727,7 @@ const src2 = `
   .dhw (NEXT) Tcl_list_first_sub0_L0
   .dhw EXIT                # ( bralvl brclvl inquote addr' )
 
-  : Tcl_info_is_complete
+  : Tcl_list_is_complete
   # ( addr len -- flag )
   # Takes a string and tells if its 'complete' per Tcl parsing rules
   # That is, if all the quotemarks, curly braces and brackets are balanced
@@ -1736,6 +1740,19 @@ const src2 = `
 
   : Tcl_list_length
   # ( addr len -- nrOfItems )
+  .dhw 2DUP Tcl_list_is_complete INVERT
+  .dhw (BRZ) Tcl_list_length_L0
+  .dhw 2DROP LIT_0 EXIT
+  : Tcl_list_length_L0
+  .dhw LIT_1 -ROT          # ( count addr len )
+  : Tcl_list_length_L1
+  .dhw 2DUP                # ( count addr len addr len )
+  .dhw Tcl_list_first NIP  # ( count addr len len' )
+  .dhw SWAP OVER -         # ( count addr len' remaining_len )
+  .dhw DUP 0<=             # ( count addr len' remaining_len flag )
+  .dhw INVERT (BRZ) 3DROP  # ( count addr len' remaining_len )
+  .dhw >R + R> ROT 1+ -ROT # ( count+1 addr' remaining_len )
+  .dhw (JMP) Tcl_list_length_L1
 `;
 
 export { src };
