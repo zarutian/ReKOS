@@ -1325,6 +1325,11 @@ const src = `
   # ( -- addr )
   .dhw R> @ (USER_PTR@) + EXIT
 
+  : BYE
+  .dhw .|"
+  .utf8_hwc " Quitting zeForth to where? \\n"
+  .dhw EXIT
+
   : IO_Interruption_Code
   .dhw (CONST)
   .dw  0x000000B8
