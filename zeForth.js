@@ -1666,6 +1666,23 @@ const src2 = `
   # ( -- ) R:( a b raddr -- raddr )
   .dhw R> RDROP RDROP >R EXIT
 
+  : 4DUP
+  # ( a b c d -- a b c d a b c d )
+  .dhw >R >R               # ( a b ) R:( d c )
+  .dhw 2DUP                # ( a b a b ) R:( d c )
+  .dhw R@ -ROT             # ( a b c a b ) R:( d c )
+  .dhw R> R> SWAP >R DUP   # ( a b c a b d d ) R:( c )
+  .dhw >R -ROT             # ( a b c d a b ) R:( c d )
+  .dhw R> R> SWAP EXIT     # ( a b c d a b c d ) R:( )
+
+  : 4DROP
+  # ( a b c d -- )
+  .dhw 2DROP 2DROP EXIT
+
+  : QROT
+  # ( a b c d -- b c d a )
+  .dhw >R ROT R> SWAP EXIT
+
   : Tcl_list_first
   # ( addr len -- addr len' )
   # Takes an ASCII string and returns the first 'word' of it per Tcl parsing rules
@@ -1714,34 +1731,45 @@ const src2 = `
   .dhw 1- R> R> R>         # ( bracer bralvl-1 brclvl inquote char ) R:( len addr )
   .dhw (JMP) Tcl_list_first_sub0_L2
   : Tcl_list_first_sub0_L5
-  .dhw DUP LIT_'{' =       # ( bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw DUP LIT_'{' =       # ( bracer bralvl brclvl inquote char flag ) R:( len addr )
   .dhw (BRZ) Tcl_list_first_sub0_L6
-  .dhw >R >R 1+ R> R>
+  .dhw >R >R 1+
+  .dhw >R >R DROP LIT_'{' R> R>
+  .dhw R> R>
   .dhw (JMP) Tcl_list_first_sub0_L2
   : Tcl_list_first_sub0_L6
-  .dhw DUP LIT_'}' =       # ( bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw DUP LIT_'}' =       # ( bracer bralvl brclvl inquote char flag ) R:( len addr )
   .dhw (BRZ) Tcl_list_first_sub0_L7
-  .dhw >R >R 1- R> R>
+  .dhw >R                  # ( bracer bralvl brclvl inquote ) R:( len addr char )
+  .dhw >R                  # ( bracer bralvl brclvl ) R:( len addr char inquote )
+  .dhw 1-                  # ( bracer bralvl brclvl-1 ) R:( len addr char inquote )
+  .dhw >R >R               # ( bracer ) R:( len addr char inquote brclvl-1 bralvl )
+  .dhw DUP LIT_'{' =       # ( bracer flag ) R:( len addr char inquote brclvl-1 bralvl )
+  .dhw INVERT (BRZ) Tcl_list_first_sub0_L8
+  .dhw R> R>
   .dhw (JMP) Tcl_list_first_sub0_L2
   : Tcl_list_first_sub0_L7
-  .dhw DUP LIT_'\\n' =     # ( bralvl brclvl inquote char flag ) R:( len addr )
-  .dhw SWAP >R SWAP DUP >R # ( bralvl brclvl flag inquote ) R:( len addr char inquote )
-  .dhw INVERT AND          # ( bralvl brclvl flag' ) R:( len addr char inquote )
-  .dhw >R 2DUP 0= SWAP 0=  # ( bralvl brclvl brclvl=0 bralvl=0 ) R:( len addr char inquote flag' )
-  .dhw AND R> AND          # ( bralvl brclvl flag" ) R:( len addr char inquote )
-  .dhw R> SWAP R> SWAP     # ( bralvl brclvl inquote char flag" ) R:( len addr )
+  .dhw DUP LIT_'\\n' =     # ( bracer bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw SWAP >R SWAP DUP >R # ( bracer bralvl brclvl flag inquote ) R:( len addr char inquote )
+  .dhw INVERT AND          # ( bracer bralvl brclvl flag' ) R:( len addr char inquote )
+  .dhw >R 2DUP 0= SWAP 0=  # ( bracer bralvl brclvl brclvl=0 bralvl=0 ) R:( len addr char inquote flag' )
+  .dhw AND R> AND          # ( bracer bralvl brclvl flag" ) R:( len addr char inquote )
+  .dhw R> SWAP R> SWAP     # ( bracer bralvl brclvl inquote char flag" ) R:( len addr )
   .dhw (BRZ) Tcl_list_first_sub0_L2
-  .dhw DROP R> RDROP EXIT  # ( bralvl brclvl inquote addr' )
+  .dhw DROP R> RDROP       # ( bracer bralvl brclvl inquote addr' )
+  .dhw >R >R >R >R DROP R> R> R> R> EXIT
   : Tcl_list_first_sub0_L2
-  .dhw DROP                # ( bralvl brclvl inquote ) R:( len addr )
-  .dhw R> 1+               # ( bralvl brclvl inquote addr+1 ) R:( len )
+  .dhw DROP                # ( bracer bralvl brclvl inquote ) R:( len addr )
+  .dhw R> 1+               # ( bracer bralvl brclvl inquote addr+1 ) R:( len )
   : Tcl_list_first_sub0_L1
   .dhw (NEXT) Tcl_list_first_sub0_L0
   .dhw EXIT                # ( bralvl brclvl inquote addr' )
   : Tcl_list_first_sub0_L8
                            # ( bracer ) R:( len addr char inquote brclvl bralvl )
   .dhw DROP                # ( ) R:( len addr char inquote brclvl bralvl )
-  merkill_tcl
+  .dhw R> R> R> R> DROP    # ( bralvl brclvl inquote ) R:( len addr )
+  .dhw R> R> DROP EXIT
+  
 
   : Tcl_list_is_complete
   # ( addr len -- flag )
@@ -1807,6 +1835,26 @@ const src2 = `
   : Tcl_list_index
   # ( addr len idx -- addr' len' )
   .dhw DUP (JMP) Tcl_list_range
+
+  : Tcl_simple_foreach
+  # ( addr len xt -- )
+  # xt ( idx addr' len' -- )
+  .dhw -ROT                # ( xt addr len )
+  .dhw LIT_0 -ROT          # ( xt idx addr len ) R:( )
+  : Tcl_simple_foreach_L0
+  .dhw DUP >R              # ( xt idx addr len ) R:( len )
+  .dhw Tcl_list_first      # ( xt idx addr len' ) R:( len )
+  .dhw 4DUP                # ( xt idx addr len' xt idx addr len' ) R:( len )
+  .dhw QROT                # ( xt idx addr len' idx addr len' xt ) R:( len )
+  .dhw EXECUTE             # ( xt idx addr len' ) R:( len )
+  .dhw DUP >R + R> R>      # ( xt idx addr' len' len ) R:( )
+  .dhw SWAP - DUP 0<=      # ( xt idx addr' len" flag )
+  .dhw INVERT (BRZ)        # ( xt idx addr' len" )
+  .dhw Tcl_simple_foreach_L1
+  .dhw >R >R 1+ R> R>      # ( xt idx+1 addr' len" )
+  .dhw (JMP) Tcl_simple_foreach_L0
+  : Tcl_simple_foreach_L1
+  .dhw (JMP) 4DROP
 
 `;
 
