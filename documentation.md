@@ -11,8 +11,8 @@ Various documentation links refered to:
 * [Copy of eForth_x86.asm](https://gist.github.com/zarutian/2fde8380eace3c3e7ab778dd9827d121)
 
 
-
+---
 * [ANSI escape codes that xterm understands](https://invisible-island.net/xterm/ctlseqs/ctlseqs.html)
 * [Tmux cheatsheet (eventually for KK Context Switches etc)](https://tmuxai.dev/tmux-cheat-sheet/)
-  
+* [Ncurses](https://invisible-island.net/ncurses/)
 
