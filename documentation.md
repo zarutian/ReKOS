@@ -15,6 +15,7 @@ Various documentation links refered to:
 * [ASCII table](https://www.asciitable.com/asciifull.gif)
 * [ANSI escape codes that xterm understands](https://invisible-island.net/xterm/ctlseqs/ctlseqs.html)
 * [xtermjs (for if/when a website is made)](http://xtermjs.org/)
+* [asciinema (for same website purposes)](https://asciinema.org/)
 * [Tmux cheatsheet (eventually for KK Context Switches etc)](https://tmuxai.dev/tmux-cheat-sheet/)
 * [Ncurses](https://invisible-island.net/ncurses/)
 * [Nifty 3d rendering to ASCII](https://alexharri.com/blog/ascii-rendering)
