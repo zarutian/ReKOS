@@ -1,5 +1,6 @@
 
 Various documentation links refered to:
+* [Scheduling in KeyKos](http://cap-lore.com/CapTheory/KK/m/137.html#supsched)
 * [Bitsavers copy of IBM 3880 manual](http://www.bitsavers.org/pdf/ibm/3880/GA26-1661-3_IBM_3880_Storage_Control_Description_May80.pdf)
 * [Bitsavers copy of IBM 370 PoOPs](http://www.bitsavers.org/pdf/ibm/370/princOps/)
 * [Copy of eForth_x86.asm](https://gist.github.com/zarutian/2fde8380eace3c3e7ab778dd9827d121)
