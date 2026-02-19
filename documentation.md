@@ -12,6 +12,7 @@ Various documentation links refered to:
 
 
 ---
+* [ASCII table](https://www.asciitable.com/asciifull.gif)
 * [ANSI escape codes that xterm understands](https://invisible-island.net/xterm/ctlseqs/ctlseqs.html)
 * [Tmux cheatsheet (eventually for KK Context Switches etc)](https://tmuxai.dev/tmux-cheat-sheet/)
 * [Ncurses](https://invisible-island.net/ncurses/)
