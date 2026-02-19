@@ -7,6 +7,7 @@ Various documentation links refered to:
 * [Bitsavers copy of IBM 3880 manual](http://www.bitsavers.org/pdf/ibm/3880/GA26-1661-3_IBM_3880_Storage_Control_Description_May80.pdf)
 * [Bitsavers copy of IBM 370 PoOPs](http://www.bitsavers.org/pdf/ibm/370/princOps/)
 * [Bitsavers copy of Channel-To-Channel-Adapter (used for Hercules Networking via TUNTAP on host)](http://www.bitsavers.org/pdf/ibm/370/CTCA/GA22-6983-0_Special_Feature_Description_Channel-to-Channel_Adapter_Mar72.pdf)
+* [Hercules ctcadpt.h]( https://github.com/SDL-Hercules-390/hyperion/blob/master/ctcadpt.h) for figuring out _how_ that net interface works
 * [Vendor mac address prefix list](https://gist.github.com/aallan/b4bb86db86079509e6159810ae9bd3e4)
 * [Copy of eForth_x86.asm](https://gist.github.com/zarutian/2fde8380eace3c3e7ab778dd9827d121)
 * [Hercules config docu](https://sdl-hercules-390.github.io/html/hercconf.html)
