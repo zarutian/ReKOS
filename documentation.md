@@ -14,6 +14,7 @@ Various documentation links refered to:
 
 ---
 * [ASCII table](https://www.asciitable.com/asciifull.gif)
+* [utf-8 rfc](https://www.rfc-editor.org/rfc/rfc3629) Go a bit further and just use following on first byte in a codepoint: `( byte -- byte_count ) INVERT CountLeadingZerosInByte`. This will support up to abd including seven bytes per codepoint.
 * [ANSI escape codes that xterm understands](https://invisible-island.net/xterm/ctlseqs/ctlseqs.html)
 * [xtermjs (for if/when a website is made)](http://xtermjs.org/)
 * [asciinema (for same website purposes)](https://asciinema.org/)
