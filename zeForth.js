@@ -1755,6 +1755,7 @@ const src2 = `
   .dhw (JMP) Tcl_list_first_sub0_L2
   : Tcl_list_first_sub0_L7
   .dhw DUP LIT_'\\n' =     # ( bracer bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw OVER BL = OR        # ( bracer bralvl brclvl inquote char flag ) R:( len addr )
   .dhw SWAP >R SWAP DUP >R # ( bracer bralvl brclvl flag inquote ) R:( len addr char inquote )
   .dhw INVERT AND          # ( bracer bralvl brclvl flag' ) R:( len addr char inquote )
   .dhw >R 2DUP 0= SWAP 0=  # ( bracer bralvl brclvl brclvl=0 bralvl=0 ) R:( len addr char inquote flag' )
