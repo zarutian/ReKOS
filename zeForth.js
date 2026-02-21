@@ -1403,6 +1403,27 @@ const src = `
   .dhw CPU_saved_state_CPU_Timer_zArch
   .dhw CPU_saved_state_CPU_Timer_390
   .dhw + D@ EXIT
+
+  : CPU_saved_state_CPU_Timer_D!
+  # ( TimerU TimerL CPU_ss_addr -- )
+  .dhw CPU_saved_state__sub0
+  .dhw CPU_saved_state_CPU_Timer_zArch
+  .dhw CPU_saved_state_CPU_Timer_390
+  .dhw + D! EXIT
+
+  : CPU_saved_state_Clock_comparator_D@
+  # ( CPU_ss_addr -- ccU ccL )
+  .dhw CPU_saved_state__sub0
+  .dhw CPU_saved_state_Clock_comparator_zArch
+  .dhw CPU_saved_state_Clock_comparator_390
+  .dhw + D@ EXIT
+
+  : CPU_saved_state_Clock_comparator_D!
+  # ( ccU ccL CPU_ss_addr -- )
+  .dhw CPU_saved_state__sub0
+  .dhw CPU_saved_state_Clock_comparator_zArch
+  .dhw CPU_saved_state_Clock_comparator_390
+  .dhw + D! EXIT
   
 
   : IO_Interruption_Code
