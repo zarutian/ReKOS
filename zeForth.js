@@ -67,6 +67,11 @@ const src = `
   .def (BRZ)           0x0021
   .def (NXT)           0x0022
   .def R@              0x0023
+  .def Q@_             0x0024
+  .def Q!_             0x0025
+  .def TRANSLATE_1T1   0x0026
+  .def TRANSLATE_1T2   0x0027
+  .def TRANSLATE_2T2   0x0028
   
   # IBMz  fcpu32/16
   # GR0   tmp0
@@ -1316,7 +1321,34 @@ const src = `
   .dhw !     # ( )
   .dhw EXIT
 
-  # : 8+
+  : UM/MOD
+  # ( udl udh u -- ur uq )
+  # Unsigned divide of a double by a single. Return mod and quotient.
+  .dhw DUP U<
+  .dhw (BRZ) UM/MOD_L4
+  .dhw NEGATE (LIT_H) 31 >R
+  : UM/MOD_L1
+  .dhw >R DUP U+
+  .dhw >R >R DUP U+
+  .dhw R> + DUP
+  .dhw R> R@ SWAP >R
+  .dhw U+ R> OR
+  .dhw (BRZ) UM/MOD_L2
+  .dhw >R DROP 1+ R>
+  .dhw (JMP) UM/MOD_L3
+  : UM/MOD_L2
+  .dhw DROP
+  : UM/MOD_L3
+  .dhw R>
+  .dhw (NEXT) UM/MOD_L1
+  .dhw DROP SWAP EXIT
+  : UM/MOD_L4
+  .dhw 3DROP
+  .dhw -1
+  .dhw DUP EXIT # overflow, return max
+
+
+  : 8+
   .dhw 4+ 4+ EXIT
   
   : RDROP
