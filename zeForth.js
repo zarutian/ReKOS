@@ -527,9 +527,9 @@ const src = `
   .dhw (BRZ)_ibmz
   .dhw (NEXT)_ibmz
   .dhw R@_ibmz
-  .dhw TRANSLATE_ibmz
-  .dhw trapvector  # instrtrap for 0x25
-  .dhw trapvector  # instrtrap for 0x26
+  .dhw trapvector  # Q@
+  .dhw trapvector  # Q!
+  .dhw TRANSLATE_ibmz 
   .dhw trapvector  # instrtrap for 0x27
   .dhw trapvector  # instrtrap for 0x28
   .dhw trapvector  # instrtrap for 0x29
@@ -1030,6 +1030,21 @@ const src = `
   .dhw !        # ( )
   .dhw EXIT
 
+  : Q@
+  # ( addr -- UU UL LU LL )
+  .dhw DUP >R   # ( addr ) R:( addr )
+  .dhw D@       # ( UU UL ) R:( addr )
+  .dhw R> 8+    # ( UU UL addr+8 ) R:( )
+  .dhw D@       # ( UU UL LU LL )
+  .dhw EXIT
+
+  : Q!
+  # ( UU UL LU LL addr -- )
+  .dhw DUP >R   # ( UU UL LU LL addr ) R:( addr )
+  .dhw 8+ D!    # ( UU UL ) R:( addr )
+  .dhw R> D!    # ( ) R:( )
+  .dhw EXIT
+
   : 0xF 
   .dhw (CONST)
   .dw  0x0000_000F
@@ -1424,7 +1439,14 @@ const src = `
   .dhw CPU_saved_state_Clock_comparator_zArch
   .dhw CPU_saved_state_Clock_comparator_390
   .dhw + D! EXIT
-  
+
+  : CPU_saved_state_PSW_Q@
+  # ( CPU_ss_addr -- PSW_UU PSW_UL PSW_LU PSW_LL )
+  .dhw CPU_saved_state_PSW + Q@ EXIT
+
+  : CPU_saved_state_PSW_Q!
+  # ( PSW_UU PSW_UL PSW_LU PSW_LL CPU_ss_addr -- )
+  .dhw CPU_saved_state_PSW + Q! EXIT
 
   : IO_Interruption_Code
   .dhw (CONST)
