@@ -1321,6 +1321,13 @@ const src = `
   .dhw !     # ( )
   .dhw EXIT
 
+  : ABS
+  # ( n -- n )
+  # Return the absolute value of n.
+  .dhw DUP 0<
+  .dhw SKZ NEGATE
+  .dhw EXIT
+
   : UM/MOD
   # ( udl udh u -- ur uq )
   # Unsigned divide of a double by a single. Return mod and quotient.
