@@ -1381,6 +1381,28 @@ const src = `
   .dhw CPU_saved_state_base_offset
   .dhw_calc 0d448
 
+  : CPU_saved_state__sub0
+  # ( CPU_ss_addr -- CPU_ss_addr ... ) R:( raddr --)
+  .dhw DUP                 # ( ss ss )
+  .dhw CPU_saved_state_PSW # ( ss ss off )
+  .dhw +                   # ( ss addr )
+  .dhw H@                  # ( ss halfcell )
+  .dhw 4>> 1&              # ( ss bit )  we want bit 12 as IBM counts them
+  .dhw 2*                  # ( ss bit<<1 )
+  .dhw R>                  # ( ss selection raddr )
+  .dhw DUP                 # ( ss selection raddr raddr )
+  .dhw 4+                  # ( ss selection raddr raddr+4 ) skip next two halfcells
+  .dhw >R                  # ( ss selection raddr ) R:( raddr+4 )
+  .dhw +                   # ( ss raddr+sel ) R:( raddr+4 )
+  .dhw >R                  # ( ss ) R:( raddr+4 raddr+sel )
+  .dhw EXIT
+  
+  : CPU_saved_state_CPU_Timer_D@
+  # ( CPU_ss_addr -- TimerU TimerL )
+  .dhw CPU_saved_state__sub0
+  .dhw CPU_saved_state_CPU_Timer_zArch
+  .dhw CPU_saved_state_CPU_Timer_390
+  .dhw + D@ EXIT
   
 
   : IO_Interruption_Code
