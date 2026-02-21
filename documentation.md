@@ -8,7 +8,6 @@ Various documentation links refered to:
 * [Bitsavers copy of IBM 370 PoOPs](http://www.bitsavers.org/pdf/ibm/370/princOps/)
 * [Bitsavers copy of Channel-To-Channel-Adapter (used for Hercules Networking via TUNTAP on host)](http://www.bitsavers.org/pdf/ibm/370/CTCA/GA22-6983-0_Special_Feature_Description_Channel-to-Channel_Adapter_Mar72.pdf)
 * [Hercules ctcadpt.h]( https://github.com/SDL-Hercules-390/hyperion/blob/master/ctcadpt.h) for figuring out _how_ that net interface works
-* [hercules ctc_ctci.c]( https://github.com/hercules-390/hyperion/blob/master/ctc_ctci.c)
 * [Vendor mac address prefix list](https://gist.github.com/aallan/b4bb86db86079509e6159810ae9bd3e4)
 * [TCP rfc9293](https://www.rfc-editor.org/rfc/rfc9293.txt)
 * [Copy of eForth_x86.asm](https://gist.github.com/zarutian/2fde8380eace3c3e7ab778dd9827d121)
