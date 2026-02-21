@@ -6,6 +6,7 @@ Various documentation links refered to:
 * [IBM z/Arch PoOPs](https://www.ibm.com/docs/en/module_1678991624569/pdf/SA22-7832-14.pdf)
 * [Bitsavers copy of IBM 3880 manual](http://www.bitsavers.org/pdf/ibm/3880/GA26-1661-3_IBM_3880_Storage_Control_Description_May80.pdf)
 * [Bitsavers copy of IBM 370 PoOPs](http://www.bitsavers.org/pdf/ibm/370/princOps/)
+* [Archive.org ibm360 console]( https://archive.org/details/bitsavers_ibm360fe20terand2150ConsoleFETOPJan69_5926345)
 * [Bitsavers copy of Channel-To-Channel-Adapter (used for Hercules Networking via TUNTAP on host)](http://www.bitsavers.org/pdf/ibm/370/CTCA/GA22-6983-0_Special_Feature_Description_Channel-to-Channel_Adapter_Mar72.pdf)
 * [Hercules ctcadpt.h]( https://github.com/SDL-Hercules-390/hyperion/blob/master/ctcadpt.h) for figuring out _how_ that net interface works
 * [Vendor mac address prefix list](https://gist.github.com/aallan/b4bb86db86079509e6159810ae9bd3e4)
