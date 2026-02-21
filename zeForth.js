@@ -1340,7 +1340,7 @@ const src = `
   # IO New PSW (REALADDR: 0x78) points here, disables interrupts
   .dhw 0x900F 0x0180 # STM GR0, GR15, 0x180 (0)  ESA/390 mode. See instruction STMG for z/Arch mode
   .dhw 0x41DD 0x0xxx # LA  GR13, 0x___ (GR13, 0) gr13 := 0x___  tbd: where does the USER_VARS page for IO interrupt handling task live?
-  .dhw 0x89D0 0x0004 # SLL GR13, 0x004            gr13 := gr8 << 4
+  .dhw 0x89D0 0x0004 # SLL GR13, 0x004           gr13 := gr13 << 4
   .dhw 0x980F 0xDF00 # LM  GR0, GR15, 0xF00 (GR13)  ESA/390 mode. See instruction LMG for z/Arch mode
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)        jump to NXT
 
@@ -1360,7 +1360,10 @@ const src = `
   .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
   .dhw 0x181B                   # LR GR1,  GR11              gr1 := tmp1 := SubChan
   .dhw 0xB235 0x2000            # TSCH 0 (GR2)               TestSubCHannel stores the InterruptRequestBlock
-  .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)        jump to NXT
+  : COMMON_TAIL5_ibmz
+  .dhw 0xB222 0x0010            # IPM GR1                    bits 34 and 35 (in 64 bit reg) is the condition code, we want them at 62 and 63
+  .dhw 0x8810 0x001C            # SRL GR1, 0x01C             gr1 := gr1 >> 0d28     63-35=28  0d28=0x1C
+  .dhw 0x47F0 COMMON_TAIL1_ibmz_instrprt # BC 0xF,  0x052 (GR8)        jump to COMMON_TAIL1
 
   : IO_task_subchan_interrupt_dispatch_tbl
   .dhw (USER_VAR)
