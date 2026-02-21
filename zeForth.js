@@ -1328,11 +1328,11 @@ const src = `
   .dhw (BRZ) UM/MOD_L4
   .dhw NEGATE (LIT_H) 31 >R
   : UM/MOD_L1
-  .dhw >R DUP U+
-  .dhw >R >R DUP U+
+  .dhw >R DUP UM+
+  .dhw >R >R DUP UM+
   .dhw R> + DUP
   .dhw R> R@ SWAP >R
-  .dhw U+ R> OR
+  .dhw UM+ R> OR
   .dhw (BRZ) UM/MOD_L2
   .dhw >R DROP 1+ R>
   .dhw (JMP) UM/MOD_L3
@@ -1363,6 +1363,61 @@ const src = `
   .dhw SWAP NEGATE SWAP
   : M/MOD_L3
   .dhw EXIT
+
+  : /%
+  : /MOD
+  # ( n n -- r q )
+  # Signed divide. Return mod and quotient.
+  .dhw OVER 0< SWAP M/MOD EXIT
+
+  : %
+  : MOD
+  # ( n n -- r )
+  # Signed divide. Return mod only.
+  .dhw /% DROP EXIT
+
+  : /
+  # ( n n -- q )
+  # Signed divide. Return quotient only.
+  .dhw /% NIP EXIT
+
+  : UM*
+  # ( u u -- ud )
+  # Unsigned multiply. Return double product.
+  .dhw 0 SWAP 31 >R
+  : UM*_L1
+  .dhw DUP UM+ >R >R
+  .dhw DUP UM+ R> + R>
+  .dhw (BRZ) UM*_L2
+  .dhw >R OVER UM+ R> +
+  : UM*_L2
+  .dhw (NEXT) UM*_L1
+  .dhw ROT DROP EXIT
+
+  : *
+  # ( n n -- n )
+  # Signed multiply. Return single product.
+  .dhw UM* DROP EXIT
+
+  : M*
+  # ( n n -- d )
+  # Signed multiply. Return double product.
+  .dhw DUP XOR 0< >R
+  .dhw ABS SWAP ABS UM*
+  .dhw R>
+  .dhw SKZ DNEGATE
+  .dhw EXIT
+
+  : */%
+  : */MOD
+  # ( n1 n2 n3 -- r q )
+  # Multiply n1 and n2, then divide by n3. Return mod and quotient.
+  .dhw >R M* R> M/MOD EXIT
+
+  : */
+  # ( n1 n2 n3 -- q )
+  # Multiply n1 by n2, then divide by n3. Return quotient only.
+  .dhw */% NIP EXIT
 
   : 8+
   .dhw 4+ 4+ EXIT
