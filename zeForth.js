@@ -86,9 +86,10 @@ const src = `
 
   # layout of the 0x00Fxxx USER_VARS page:
   #
-  # 0xF000-0xF9FF  Various Domain spefic variables
+  # 0xF000-0xF7FF  Various Domain spefic variables
+  # 0xF800-0xF9FF  CPU state save area. See figs 4-30 and 4-31 in z/Arch PoOPs
   # 0xFA00-0xFA3F  User Variables
-  # 0xFA40-0xFA7B  TBD
+  # 0xFA40-0xFA7B  More User variables? tbd
   # 0xFA7C-0xFA7F  ext_traphandler_ptr
   # 0xFA80-0xFAFF  TBD: Channel Program?
   # 0xFBxx  Buffers
@@ -100,7 +101,7 @@ const src = `
   # 0xFCxx  Call Transfer Block, for KFORK, KALL, and KRET
   # 0xFDxx  Datastack,   64 items deep (due to cell being 4 bytes)
   # 0xFExx  Returnstack, 64 items - || - || - || - || - || - || -
-  # 0xFFxx  TBD: General Registers (and other registers) save area
+  # 0xFFxx  Scratchpad? tbd
   # 0xFFF8  Pointer to USER_VAR page of Prev Task
   # 0xFFFC  Pointer to USER_VAR page of Next Task
 
@@ -126,8 +127,9 @@ const src = `
   .def_calc COMMON_TAIL2_ibmz_instrprt  lookup(COMMON_TAIL2_ibmz)  0x0FFF & 0x8000 |
   .def_calc COMMON_TAIL3_ibmz_instrprt  lookup(COMMON_TAIL3_ibmz)  0x0FFF & 0x8000 |
   .def_calc COMMON_TAIL4_ibmz_instrprt  lookup(COMMON_TAIL4_ibmz)  0x0FFF & 0x8000 |
+  .def_calc COMMON_TAIL5_ibmz_instrprt  lookup(COMMON_TAIL5_ibmz)  0x0FFF & 0x8000 |
   
-  # looks like its save to start here in main storage
+  # looks like its safe to start here in main storage
   .org 0x2000
   : __start
   .dhw 0x1788        # XR  GR8, GR8              gr8 := 0
@@ -1330,6 +1332,57 @@ const src = `
   .utf8_hwc " Quitting zeForth to where? \\n"
   .dhw EXIT
 
+
+  : CPU_saved_state_base
+  # ( -- offset )
+  .dhw (CONST_H) 0x800
+
+  : CPU_saved_state_base_offset
+  # ( -- offset ) R:( client_raddr raddr -- )
+  .dhw CPU_saved_state_base R> H@ + EXIT
+
+  : CPU_saved_state_CPU_Timer_390
+  # ( -- offset )
+  .dhw CPU_saved_state_base_offset
+  .dhw_calc 0d216
+
+  : CPU_saved_state_Clock_comparator_390
+  # ( -- offset )
+  .dhw CPU_saved_state_base_offset
+  .dhw_calc 0d224
+
+  : CPU_saved_state_PSW
+  # ( -- offset )   its at same offset both in ESA/390 and z/Arch
+  .dhw CPU_saved_state_base_offset
+  .dhw_calc 0d256
+
+  : CPU_saved_state_Prefix_390
+  # ( -- offset )
+  .dhw CPU_saved_state_base_offset
+  .dhw_calc 0d264
+
+  : CPU_saved_state_AR_390
+  # ( -- offset )
+  .dhw CPU_saved_state_base_offset
+  .dhw_calc 0d288
+
+  : CPU_saved_state_FPR_390
+  # ( -- offset )
+  .dhw CPU_saved_state_base_offset
+  .dhw_calc 0d352
+
+  : CPU_saved_state_GR_390
+  # ( -- offset )
+  .dhw CPU_saved_state_base_offset
+  .dhw_calc 0d384
+
+  : CPU_saved_state_CR_390
+  # ( -- offset )
+  .dhw CPU_saved_state_base_offset
+  .dhw_calc 0d448
+
+  
+
   : IO_Interruption_Code
   .dhw (CONST)
   .dw  0x000000B8
@@ -1341,7 +1394,9 @@ const src = `
   .dhw 0x900F 0x0180 # STM GR0, GR15, 0x180 (0)  ESA/390 mode. See instruction STMG for z/Arch mode
   .dhw 0x41DD 0x0xxx # LA  GR13, 0x___ (GR13, 0) gr13 := 0x___  tbd: where does the USER_VARS page for IO interrupt handling task live?
   .dhw 0x89D0 0x0004 # SLL GR13, 0x004           gr13 := gr13 << 4
-  .dhw 0x980F 0xDF00 # LM  GR0, GR15, 0xF00 (GR13)  ESA/390 mode. See instruction LMG for z/Arch mode
+  .dhw 0x980F 0xD980 # LM  GR0, GR15, 0x980 (GR13)  ESA/390 mode. See instruction LMG for z/Arch mode. 
+                     #                              Note there is different offset for z/Arch.
+                     #                              0d384 = 0x180    0x800 + 0x180 = 0x980
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)        jump to NXT
 
   : IO_return_from_interrupt
@@ -1431,7 +1486,7 @@ const src = `
   .dhw 0x900F 0x0180 # STM GR0, GR15, 0x180 (0)  ESA/390 mode. See instruction STMG for z/Arch mode
   .dhw 0x41DD 0x0xxx # LA  GR13, 0x___ (GR13, 0) gr13 := 0x___  tbd: where does the USER_VARS page for External interrupt handling task live?
   .dhw 0x89D0 0x0004 # SLL GR13, 0x004            gr13 := gr8 << 4
-  .dhw 0x980F 0xDF00 # LM  GR0, GR15, 0xF00 (GR13)  ESA/390 mode. See instruction LMG for z/Arch mode
+  .dhw 0x980F 0xD980 # LM  GR0, GR15, 0x980 (GR13)  ESA/390 mode. See instruction LMG for z/Arch mode
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)        jump to NXT
 
   : External_return_from_interrupt
@@ -1456,10 +1511,10 @@ const src = `
   .dhw DROP
   .dhw (USER_PTR@)
   .dhw global__current_task @  # ( extint_task_ptr task_USER_VARS_ptr )
-  .dhw 0x0F00 + 64 CMOVE       # save the interupted task General Registers
+  .dhw 0x0980 CMOVE            # save the interupted task General Registers
   .dhw External_interrupt_old_PSW D@
   .dhw global__current_task @  # ( Old_PSW_u Old_PSW_l task_USER_VARS_ptr )
-  .dhw 0x0FF0 + D@             # ( )
+  .dhw 0x0900 + D!             # ( )
   .dhw global__current_task @  #
   .dhw 0x0F00 64 + +           #
   .dhw control_registers@
