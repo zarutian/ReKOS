@@ -1347,6 +1347,22 @@ const src = `
   .dhw -1
   .dhw DUP EXIT # overflow, return max
 
+  : M/MOD
+  # ( d n -- r q )
+  # Signed floored divide of double by single. Return mod and quotient.
+  .dhw DUP 0< DUP >R
+  .dhw (BRZ) M/MOD_L1
+  .dhw NEGATE >R DNEGATE R>
+  : M/MOD_L1
+  .dhw >R DUP 0<
+  .dhw (BRZ) M/MOD_L2
+  .dhw R@ +
+  : M/MOD_L2
+  .dhw R> UM/MOD R>
+  .dhw (BRZ) M/MOD_L3
+  .dhw SWAP NEGATE SWAP
+  : M/MOD_L3
+  .dhw EXIT
 
   : 8+
   .dhw 4+ 4+ EXIT
