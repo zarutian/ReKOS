@@ -21,6 +21,7 @@ Various documentation links refered to:
 * [Tmux cheatsheet (eventually for KK Context Switches etc)](https://tmuxai.dev/tmux-cheat-sheet/)
 * [Ncurses](https://invisible-island.net/ncurses/)
 * [Nifty 3d rendering to ASCII](https://alexharri.com/blog/ascii-rendering)
+* [SSH rfc4251](https://www.rfc-editor.org/rfc/rfc4251.txt)
 ---
 
 * [QubesOs Networking](https://doc.qubes-os.org/en/latest/developer/system/networking.html)
