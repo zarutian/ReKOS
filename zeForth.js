@@ -1408,6 +1408,12 @@ const src = `
   #   Each KFORK spawns a new Domain runner task or, if max_domain_tasks is reach, waits for one to become
   #   available.
   #   Each KRET to a non-returning key, such as a DataKey (KK term) terminates a Domain runner task
+  #
+  # 2026-02-21T02:06 Zarutian:
+  #   Been musing on the Task layout for storing a CPU's state.
+  #   I am thinking of just stealing IBMs layout as written out by Store Status at Address
+  #   See Figures 4-30 and 4-31 in the z/Arch PoOPs.
+  #   Restriction is that it takes 512 bytes and if done via the CPU SIGNAL mechanism must start on 512 alignment
 
   : External_Interruption_Code
   # its is a halfword, so use H@
