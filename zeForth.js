@@ -1218,6 +1218,15 @@ const src = `
   # ( n -- bool )
   .dhw 0x80000000 & (JMP) CLEANBOOL
 
+  : U<
+  # ( u u -- t )
+  # Unsigned compare of top two items.
+  .dhw 2DUP XOR 0<
+  .dhw (BRZ) U<_L1
+  .dhw SWAP DROP 0< EXIT
+  : U<_L1
+  .dhw MINUS 0< EXIT
+
   : < 
   # ( a b -- bool )
   .dhw - 0< INVERT EXIT
