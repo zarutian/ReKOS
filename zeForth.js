@@ -753,7 +753,8 @@ const src = `
   .dhw (NEXT)
   .dhw <<>_L0
   .dhw EXIT
-  
+
+  : (IBMz)
   : (ibmz)
   # ( ... -- ... ) R:( raddr -- )
   # registers GR8 to GR14 must be preserved or handled correctly
@@ -1225,7 +1226,7 @@ const src = `
   .dhw (BRZ) U<_L1
   .dhw SWAP DROP 0< EXIT
   : U<_L1
-  .dhw MINUS 0< EXIT
+  .dhw - 0< EXIT
 
   : < 
   # ( a b -- bool )
@@ -1243,6 +1244,12 @@ const src = `
   .dhw 2DUP  # ( a b a b )
   .dhw <     # ( a b bool )
   .dhw (JMP) ?:
+
+  : WITHIN
+  # ( u ul uh -- t )
+  # Return true if u is within the range of ul and uh.
+  .dhw OVER - >R  # ul <= u < uh
+  .dhw - R> U< EXIT
 
   : KT+1
   .dhw KT 1+ EXIT
