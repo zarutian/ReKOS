@@ -659,6 +659,24 @@ const src = `
   .dhw 0x18CB                   # LR GR12,  GR11             tmp1 := memory[instr_ptr]
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (0, GR8)    jump to NXT
 
+  : SP@
+  # ( -- a )
+  # Push the current data stack pointer.
+  .dhw (IBMz)
+  : SP@_ibmz
+  .dhw 0x1712 # XR GR1, GR1
+  .dhw 0x171B # XR GR1, GR11
+  .dhw 0x47F0 COMMON_TAIL1_ibmz_instrprt # BC 0xF,  0x052             jump to COMMON_TAIL1
+
+  : SP!
+  # ( a -- )
+  # Set the data stack pointer.
+  .dhw (IBMz)
+  : SP!_ibmz
+  .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x18BB                   # LR GR11,  GR11             tmp1 := memory[instr_ptr]
+  .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (0, GR8)    jump to NXT
+
   
   : ?: 
   # ( alt conseq cond -- alt | conseq )
