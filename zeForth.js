@@ -640,6 +640,25 @@ const src = `
 
   : 31>>
   .dhw 31 >> EXIT
+
+  : RP@
+  # ( -- a )
+  # Push the current RP to the data stack.
+  .dhw (IBMz)
+  : RP@_ibmz
+  .dhw 0x1711 # XR GR1, GR1
+  .dhw 0x171C # XR GR1, GR12
+  .dhw 0x47F0 COMMON_TAIL1_ibmz_instrprt # BC 0xF,  0x052             jump to COMMON_TAIL1
+
+  : RP!
+  # ( a -- )
+  # Set the return stack pointer.
+  .dhw (IBMz)
+  : RP!_ibmz
+  .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x2F0 (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x18CB                   # LR GR12,  GR11             tmp1 := memory[instr_ptr]
+  .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (0, GR8)    jump to NXT
+
   
   : ?: 
   # ( alt conseq cond -- alt | conseq )
