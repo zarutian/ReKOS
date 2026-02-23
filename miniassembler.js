@@ -348,6 +348,34 @@ const assemble = (opts = {}) => {
       case ":":
         define_symbol(fields[1], opts.curr_addr);
         break;
+      case ":f":
+        {
+          const name = fields[1];
+          const bytes = textEncoder.encode(name);
+          const lengd = bytes.length;
+          if (lengd > 0x1FFF) {
+            throw new Error("length of an name must not be greater than 0x1FFF");
+          }
+          const name_length = divide_ceil(lengd, lookup_symbol("CELL"));
+          const loc  = opts.curr_addr;
+          define_symbol(name, loc);
+          const name_ptr = subtract(lookup_symbol("NAME_PTR"), multiply(lookup_symbol("CELL"), add(3, name_length)));
+          opts.curr_addr = name_ptr;
+          img_set(opts.curr_addr, loc, lookup_symbol("CELL"));
+          opts.curr_addr = add(opts.curr_addr, lookup_symbol("CELL"));
+          img_set(opts.curr_addr, lookup_symbol("NAME_LINK"), lookup_symbol("CELL"));
+          opts.curr_addr = add(opts.curr_addr, lookup_symbol("CELL"));
+          redefine_symbol("NAME_LINK", opts.curr_addr);
+          img_set(opts.curr_addr, lengd, 2);
+          opts.curr_addr = incr(opts.curr_addr, 2);
+          bytes.forEach((byte) => {
+            opts.img.set(opts.curr_addr, byte);
+            opts.curr_addr = incr(opts.curr_addr, 1);
+          });
+          redefine_symbol("NAME_PTR", name_ptr);
+          opts.curr_addr = loc;
+        };
+        break;
       case ".def":
         define_symbol(fields[1], parse_number_or_lookup_symbol(fields[2]));
         break;
