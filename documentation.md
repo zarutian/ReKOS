@@ -25,6 +25,7 @@ Various documentation links refered to:
 * [Ncurses](https://invisible-island.net/ncurses/)
 * [Nifty 3d rendering to ASCII](https://alexharri.com/blog/ascii-rendering)
 * [SSH rfc4251](https://www.rfc-editor.org/rfc/rfc4251.txt)
+* [Kitty Terminal Graphics protocol](https://sw.kovidgoyal.net/kitty/graphics-protocol/)
 ---
 
 * [Linux syscall table](https://github.com/torvalds/linux/blob/master/arch/s390/kernel/syscalls/syscall.tbl) for possible Linux Process in a KK Domain emulation
