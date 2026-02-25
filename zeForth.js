@@ -1,6 +1,11 @@
 const src = `
 
   #  fcpu32/16 ( cell is 32bit, instr is 16bit )
+  .def CELL            0d4
+  .def NAME_START      0x4000
+  .def NAME_LINK       0x0000_0000
+  .def NAME_PTR        NAME_START
+
   
   .def NOP             0x0000
   .def +               0x0001
@@ -478,21 +483,21 @@ const src = `
   .dhw 0x8810 0x2000 # SRL GR1, 0x000 (0, GR2)
   .dhw 0x47F0 COMMON_TAIL1_ibmz_instrprt # BC 0xF,  0x052 (0, GR8)    jump to COMMON_TAIL1
 
-  : 4
+  :f 4
   .dhw (CONST)
   : 4_ibmz
   .dw 0x0000_0004    #  4       \ note: also refered to in ibmz code
-  : 0xFFFF
+  :f 0xFFFF
   .dhw (CONST)
   : 0xFFFF_ibmz
   .dw 0x0000_FFFF    #  0xFFFF  \ note: also refered to in ibmz code
-  : 0xFFC0
+  :f 0xFFC0
   .dhw (CONST)
   : 0xFFC0_ibmz
   .dw 0x0000_FFC0    #  0xFFC0  \ note: also refered to in ibmz code
 
   .org 0x2300
-  : fcpu_opcode_jmptbl
+  :f fcpu_opcode_jmptbl
   .dhw (VAR)
   .dhw NOP_ibmz
   .dhw PLUS_ibmz
@@ -615,33 +620,33 @@ const src = `
   .dhw 0x41CC 0x0004 # LA GR12, 0x004 (GR12, 0)   returnstack_ptr := returnstack_ptr + 4
   .dhw 0x47F0 DOJMP_ibmz_instrprt # BC 0xF,  0x38A (0, GR8)    jump to DOJMP
 
-  : 31
+  :f 31
   .dhw (CONST)
   .dw  0x0000_001F
 
   .org 0x23F6
-  : COLD_vector
+  :f COLD_vector
   .dhw (CONST)
   : COLD_vector_ibmz
   .dw COLD_boot
 
   .org 0x2400
-  : (JMP)_model
+  :f (JMP)_model
   .dhw R> H@
-  : (EXIT)_model
+  :f (EXIT)_model
   .dhw EXIT
   
-  : 4+
+  :f 4+
   .dhw 1+
-  : 3+
+  :f 3+
   .dhw 1+
-  : 2+
+  :f 2+
   .dhw 1+ 1+ EXIT
 
-  : 31>>
+  :f 31>>
   .dhw 31 >> EXIT
 
-  : RP@
+  :f RP@
   # ( -- a )
   # Push the current RP to the data stack.
   .dhw (IBMz)
@@ -650,7 +655,7 @@ const src = `
   .dhw 0x171C # XR GR1, GR12
   .dhw 0x47F0 COMMON_TAIL1_ibmz_instrprt # BC 0xF,  0x052             jump to COMMON_TAIL1
 
-  : RP!
+  :f RP!
   # ( a -- )
   # Set the return stack pointer.
   .dhw (IBMz)
@@ -659,7 +664,7 @@ const src = `
   .dhw 0x18CB                   # LR GR12,  GR11             tmp1 := memory[instr_ptr]
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (0, GR8)    jump to NXT
 
-  : SP@
+  :f SP@
   # ( -- a )
   # Push the current data stack pointer.
   .dhw (IBMz)
@@ -668,7 +673,7 @@ const src = `
   .dhw 0x171B # XR GR1, GR11
   .dhw 0x47F0 COMMON_TAIL1_ibmz_instrprt # BC 0xF,  0x052             jump to COMMON_TAIL1
 
-  : SP!
+  :f SP!
   # ( a -- )
   # Set the data stack pointer.
   .dhw (IBMz)
@@ -678,11 +683,11 @@ const src = `
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (0, GR8)    jump to NXT
 
   
-  : ?: 
+  :f ?: 
   # ( alt conseq cond -- alt | conseq )
   .dhw SKZ SWAP DROP EXIT
   
-  : OVER
+  :f OVER
   # ( a b -- a b a )
   .dhw >R    # ( a )     R:( b )
   .dhw DUP   # ( a a )   R:( b )
@@ -690,7 +695,7 @@ const src = `
   .dhw SWAP  # ( a b a )
   .dhw EXIT
   
-  : (BRZ)_model
+  :f (BRZ)_model
   # ( cond -- )
   .dhw R>    # ( cond raddr )  R:( )
   .dhw SWAP  # ( raddr cond )  R:( )
@@ -701,46 +706,47 @@ const src = `
   .dhw 2+    # ( dest raddr+2 ) R:( cond )
   .dhw R>    # ( dest raddr+2 cond ) R:( cond )
   .dhw ?:    # ( addr )
-  : EXEC 
+  :f EXECUTE
+  :f EXEC
   # ( addr -- )
   .dhw >R    # ( ) R:( addr )
   .dhw EXIT  #
   
-  : 2DUP
+  :f 2DUP
   # ( a b -- a b a b )
   .dhw OVER OVER EXIT
   
-  : (CONST)
+  :f (CONST)
   # ( -- datum )
   .dhw R>       # ( raddr ) R:( )
   .dhw @        # ( datum )
   .dhw EXIT
 
-  : (CONST_D)
+  :f (CONST_D)
   # ( -- DatumU DatumL )
   .dhw R> D@ EXIT
 
-  : (CONST_H)
+  :f (CONST_H)
   .dhw R> H@ EXIT
   
-  : 0xFFFFFFFF
-  : TRUE
+  :f 0xFFFFFFFF
+  :f TRUE
   .dhw (CONST)
   .dw  0xFFFF_FFFF
   
-  : INVERT
+  :f INVERT
   # ( datum -- datumb )
   .dhw 0xFFFFFFFF XOR EXIT
   
-  : NEGATE
+  :f NEGATE
   # ( n -- -n )
   .dhw INVERT 1+ EXIT
   
-  : 1-_model
+  :f 1-_model
   # ( u -- u-1 )
   .dhw NEGATE 1+ NEGATE EXIT
   
-  : (NEXT)_model
+  :f (NEXT)_model
   # ( ) R:( count raddr -- )
   .dhw R>       # ( raddr ) R:( count )
   .dhw R>       # ( raddr count ) R:( )
@@ -759,27 +765,26 @@ const src = `
   .dhw >R       # ( ) R:( raddr+4 )
   .dhw EXIT
   
-  : 1   
+  :f 1   
   # ( -- 1 )
-  .dhw (CONST)
-  .dw  0x0000_0001
+  .dhw (CONST_H) 0x0001
   
-  : 0x7FFFFFFF
+  :f 0x7FFFFFFF
   # ( -- datum )
   .dhw (CONST)
   .dw  0x7FFF_FFFF
   
-  : 1<<
+  :f 1<<
   # ( u -- u<<1 )
-  : 2*
+  :f 2*
   # ( u -- u*2 )
   .dhw 0x7FFFFFFF & 1<<> EXIT
   
-  : 0x1F
+  :f 0x1F
   .dhw (CONST)
   .dw 0x0000_001F
   
-  : <<>_model
+  :f <<>_model
   # ( u count -- u<<>count )
   .dhw 0x1F & >R # ( u ) R:( count )
   .dhw (JMP)
@@ -791,17 +796,17 @@ const src = `
   .dhw <<>_L0
   .dhw EXIT
 
-  : (IBMz)
-  : (ibmz)
+  :f (IBMz)
+  :f (ibmz)
   # ( ... -- ... ) R:( raddr -- )
   # registers GR8 to GR14 must be preserved or handled correctly
   # suggest to re enter NXT at GR8 + 0x00A
   .dhw IBMe EXT EXIT
 
-  : <<>_ibmz_model
+  :f <<>_ibmz_model
   # ( u count -- u<<>count )
   .dhw (ibmz)
-  # LBR:
+  : LBR_ibmz
   .dhw 0x5FB0 4_ibmz_instrprt # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
   .dhw 0x182B        # LR GR2,  GR11             tmp2 := memory[datastack_ptr]
   .dhw 0x5FB0 4_ibmz_instrprt # SL GR11, 0x2F0 (0, GR8)   datastack_ptr := datastack_ptr - 4
@@ -815,15 +820,15 @@ const src = `
   .dhw 0x1613        # OR GR1,  GR3
   .dhw 47F0 8052 # BC 0xF,  0x052 (0, GR8)   jump to COMMON_TAIL1
 
-  : NAND
+  :f NAND
   # ( a b -- c )
   .dhw & INVERT EXIT
 
-  : OR_model
+  :f OR_model
   # ( a b -- a|b )
   .dhw INVERT SWAP INVERT NAND EXIT
 
-  : make_mask
+  :f make_mask
                # ( nrOfBits -- mask )
   .dhw 0x1F    # ( nrOfBits 0x1F )
   .dhw &       # ( nrOfBits )
@@ -839,7 +844,7 @@ const src = `
   .dhw (NEXT) make_mask_L0
   .dhw EXIT
 
-  : <<_model 
+  :f <<_model 
   # ( u count -- u<<count )
   .dhw 0x1F      # ( u count 0x1F )
   .dhw &         # ( u count )
@@ -853,17 +858,17 @@ const src = `
   .dhw &         # ( datum )
   .dhw EXIT
 
-  : 0xFF
+  :f 0xFF
   .dhw (CONST)
   .dw  0x0000_00FF
   
-  : -_model
+  :f -_model
   # ( a b -- a-b )
   .dhw NEGATE   ( a -b )
   .dhw +
   .dhw EXIT
 
-  : >>_model 
+  :f >>_model 
   # ( u count -- u>>count )
   .dhw DUP       # ( u count count )
   .dhw >R        # ( u count ) R:( count )
@@ -877,15 +882,14 @@ const src = `
   .dhw &         # ( datum )
   .dhw EXIT
 
-  : 24
-  .dhw (CONST)
-  .dw  0x0000_0018 # 24
+  :f 24
+  .dhw (CONST_H) 0x0018 # 24
 
-  : C@_model
+  :f C@_model
   # ( addr -- char )
   .dhw @ 24 >>_model EXIT
 
-  : C!_model
+  :f C!_model
   # ( char addr -- )
   .dhw SWAP      # ( addr char )
   .dhw 0xFF      # ( addr char 0xFF )
@@ -905,7 +909,7 @@ const src = `
   .dhw !         # ( )
   .dhw EXIT
 
-  : CMOVE_modelA
+  :f CMOVE_modelA
   # ( src dest len -- src )
   .dhw >R        # ( src dest ) R:( len )
   .dhw (JMP)     # ( src dest ) R:( len )
@@ -927,11 +931,10 @@ const src = `
   .dhw DROP
   .dhw EXIT
 
-  : 2
-  .dhw (CONST)
-  .dw  0x0000_0002 # 2
+  :f 2
+  .dhw (CONST_H) 0x0002 # 2
 
-  : CMOVE_modelB
+  :f CMOVE_modelB
                 # ( src dest len -- )
   .dhw DUP      # ( src dest len len )
   .dhw 2
@@ -960,10 +963,10 @@ const src = `
   .dhw CMOVE_modelA
   .dhw EXIT
 
-  : CMOVE
-  : CMOVE_ibmz
+  :f CMOVE
   # ( src dest len -- )
   .dhw (ibmz)
+  : CMOVE_ibmz
   .dhw 0x5FB0 4_ibmz_instrprt # SL GR11, 0x2D8 (0, GR8)   datastack_ptr := datastack_ptr - 4
   .dhw 0x183B        # LR GR3,  GR11             tmp3 := memory[datastack_ptr]   len
   .dhw 0x5FB0 4_ibmz_instrprt # SL GR11, 0x2D8 (0, GR8)   datastack_ptr := datastack_ptr - 4
@@ -975,7 +978,7 @@ const src = `
   .dhw 0x0E24        # MVCL GR2, GR4             move the datablock
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (0, GR8)   jump to NXT
 
-  : ROT
+  :f ROT
   # ( a b c -- b c a )
   .dhw >R       # ( a b ) R:( c )
   .dhw SWAP     # ( b a ) R:( c )
@@ -983,7 +986,7 @@ const src = `
   .dhw SWAP     # ( b c a )
   .dhw EXIT
 
-  : TRANSLATE_model ( ptr len tbl -- )
+  :f TRANSLATE_model ( ptr len tbl -- )
   .dhw SWAP     # ( ptr tbl len )
   .dhw >R       # ( ptr tbl ) R:( len )
   .dhw (JMP)    # ( ptr tbl ) R:( len )
@@ -1007,10 +1010,10 @@ const src = `
   .dhw 2DROP
   .dhw EXIT
 
-  : TRANSLATE
-  : TRANSLATE_ibmz
+  :f TRANSLATE
   # ( ptr len tbl -- )
   .dhw (ibmz)
+  : TRANSLATE_ibmz
   .dhw 0x5FB0 4_ibmz_instrprt          # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
   .dhw 0x182B                          # LR GR2,  GR11              tmp2 := tbl
   .dhw 0x5FB0 4_ibmz_instrprt          # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
@@ -1042,16 +1045,16 @@ const src = `
   : TRANSLATE_instr_ibmz
   .dhw 0xDC00 0x1000 0x2000            # TR 0x0 (1, GR1), 0x0, (GR2)   TRANSLATE
 
-  : 16<<>
+  :f 16<<>
   .dhw 8<<>
-  : 8<<>
+  :f 8<<>
   .dhw 4<<>
-  : 4<<>
+  :f 4<<>
   .dhw 2<<>
-  : 2<<>
+  :f 2<<>
   .dhw 1<<> 1<<> EXIT
 
-  : H@_model
+  :f H@_model
   # ( addr -- halfcell )
   .dhw @        # ( cell )
   .dhw 16<<>    # ( llce )
@@ -1059,7 +1062,7 @@ const src = `
   .dhw &        # (   ce )
   .dhw EXIT
 
-  : H!_model
+  :f H!_model
   # ( halfcell addr -- )
   .dhw SWAP     # ( addr halfcell )
   .dhw 0xFFFF   # ( addr halfcell 0xFFFF )
@@ -1073,7 +1076,7 @@ const src = `
   .dhw !        # ( )
   .dhw EXIT
 
-  : Q@
+  :f Q@
   # ( addr -- UU UL LU LL )
   .dhw DUP >R   # ( addr ) R:( addr )
   .dhw D@       # ( UU UL ) R:( addr )
@@ -1081,24 +1084,23 @@ const src = `
   .dhw D@       # ( UU UL LU LL )
   .dhw EXIT
 
-  : Q!
+  :f Q!
   # ( UU UL LU LL addr -- )
   .dhw DUP >R   # ( UU UL LU LL addr ) R:( addr )
   .dhw 8+ D!    # ( UU UL ) R:( addr )
   .dhw R> D!    # ( ) R:( )
   .dhw EXIT
 
-  : 0xF 
-  .dhw (CONST)
-  .dw  0x0000_000F
+  :f 0xF 
+  .dhw (CONST_H) 0x000F
 
-  : -ROT
+  :f -ROT
   # ( b c a -- a b c )
   .dhw ROT    # ( c a b )
   .dhw ROT    # ( a b c )
   .dhw EXIT
 
-  : R@_model
+  :f R@_model
   # ( -- a ) R:( a raddr -- a )  \ controlflow returns to raddr
   .dhw R>     # ( raddr ) R:( a )
   .dhw R>     # ( raddr a ) R:( )
@@ -1108,93 +1110,91 @@ const src = `
   .dhw >R     # ( a ) R:( a raddr )
   .dhw EXIT
 
-  : CLEANBOOL
+  :f CLEANBOOL
   # ( dirty -- clean )
   .dhw (BRZ) FALSE  # aka 0x00000000
   .dhw (JMP) TRUE   # aka 0xFFFFFFFF
   
-  : 0
-  : FALSE
-  .dhw (CONST)
-  .dw  0x0000_0000 # 0
+  :f 0
+  :f FALSE
+  .dhw (CONST_H) 0x0000 # 0
   
-  : =
+  :f =
   # ( a b -- T | F )
-  .dhw ^         # aka XOR
+  .dhw XOR          # aka ^
   .dhw CLEANBOOL
   .dhw INVERT
   .dhw EXIT
   
-  : 3
-  .dhw (CONST)
-  .dw  0x0000_0003
+  :f 3
+  .dhw (CONST_H) 0x0003
 
-  : (VAR)
+  :f (VAR)
   .dhw R> EXIT
 
-  : 0xFFFFFF
+  :f 0xFFFFFF
   .dhw (CONST) 0x00FF 0xFFFF
-  : 0x3F
+  :f 0x3F
   .dhw (CONST) 0x0000 0x003F
-  : 6
+  :f 6
   .dhw (CONST) 0x0000 0x0006
-  : 0xFF
+  :f 0xFF
   .dhw (CONST) 0x0000 0x00FF
-  : 64
-  : 0x40
+  :f 64
+  :f 0x40
   .dhw (CONST) 0x0000 0x0040
-  : 8
+  :f 8
   .dhw (CONST) 0x0000 0x0008
-  : 0xFFF
+  :f 0xFFF
   .dhw (CONST) 0x0000 0x0FFF
-  : 0x3FFFF
+  :f 0x3FFFF
   .dhw (CONST) 0x0003 0xFFFF
-  : 16
-  : 0x10
+  :f 16
+  :f 0x10
   .dhw (CONST) 0x0000 0x0010
-  : 0x4040
+  :f 0x4040
   .dhw (CONST) 0x0000 0x4040
-  : 0x80
+  :f 0x80
   .dhw (CONST) 0x0000 0x0080
-  : 20
+  :f 20
   .dhw (CONST) 0x0000 0x0014
-  : 12
-  : 0xC
+  :f 12
+  :f 0xC
   .dhw (CONST) 0x0000 0x000C
-  : 0x1000
+  :f 0x1000
   .dhw (CONST) 0x0000 0x1000
-  : 0x04000000
+  :f 0x04000000
   .dhw (CONST) 0x0400 0x0000
-  : 0xFCFFFFFF
+  :f 0xFCFFFFFF
   .dhw (CONST) 0xFCFF 0xFFFF
-  : 0x80000000
-  : KT
+  :f 0x80000000
+  :f KT
   .dhw (CONST) 0x8000 0x0000
-  : 0x03000000
+  :f 0x03000000
   .dhw (CONST) 0x0300 0x0000
-  : 7
+  :f 7
   .dhw (CONST) 0x0000 0x0007
-  : 9
+  :f 9
   .dhw (CONST) 0x0000 0x0009
-  : 10
-  : 0xA
+  :f 10
+  :f 0xA
   .dhw (CONST) 0x0000 0x000A
-  : 5
+  :f 5
   .dhw (CONST) 0x0000 0x0005
-  : 14
-  : 0xE
+  :f 14
+  :f 0xE
   .dhw (CONST) 0x0000 0x000E
-  : 11
-  : 0xB
+  :f 11
+  :f 0xB
   .dhw (CONST) 0x0000 0x000B
-  : 13
-  : 0xD
+  :f 13
+  :f 0xD
   .dhw (CONST) 0x0000 0x000D
 
-  : 0=
+  :f 0=
   .dhw 0 = EXIT
 
-  : 3DUP
+  :f 3DUP
   # ( a b c -- a b c a b c )
   .dhw >R     # ( a b ) R:( c )
   .dhw 2DUP   # ( a b a b ) R:( c )
@@ -1203,7 +1203,7 @@ const src = `
   .dhw R>     # ( a b c a b c ) R:( )
   .dhw EXIT
 
-  : 3C!
+  :f 3C!
   # ( 3bytes addr -- )
   .dhw 1-         # ( 3bytes addr-1 )
   .dhw SWAP       # ( addr-1 3bytes )
@@ -1219,7 +1219,7 @@ const src = `
   .dhw STORE      # ( )
   .dhw EXIT
 
-  : OVER3
+  :f OVER3
   # ( a b c d - a b c d a )
   .dhw >R      # ( a b c ) R:( d )
   .dhw ROT     # ( b c a ) R:( d )
@@ -1231,32 +1231,32 @@ const src = `
   .dhw SWAP    # ( a b c d a )
   .dhw EXIT
 
-  : NIP
+  :f NIP
   # ( a b -- b )
   .dhw SWAP       # ( b a )
   .dhw DROP       # ( b )
   .dhw EXIT
 
-  : TUCK
+  :f TUCK
   # ( a b -- b a b )
   .dhw SWAP       # ( b a )
   .dhw OVER       # ( b a b )
   .dhw EXIT
 
-  : CELL*
-  : 4* 
-  : 2<<
+  :f CELL*
+  :f 4* 
+  :f 2<<
   .dhw 2 << EXIT
 
-  : 4/
-  : 2>>
+  :f 4/
+  :f 2>>
   .dhw 2 >> EXIT
 
-  : 0<
+  :f 0<
   # ( n -- bool )
   .dhw 0x80000000 & (JMP) CLEANBOOL
 
-  : U<
+  :f U<
   # ( u u -- t )
   # Unsigned compare of top two items.
   .dhw 2DUP XOR 0<
@@ -1265,36 +1265,36 @@ const src = `
   : U<_L1
   .dhw - 0< EXIT
 
-  : < 
+  :f < 
   # ( a b -- bool )
   .dhw - 0< INVERT EXIT
 
-  : MIN
+  :f MIN
   # ( a b -- a | b )
   .dhw 2DUP
   .dhw SWAP  # ( a b b a )
   .dhw <     # ( a b bool )
   .dhw (JMP) ?:
 
-  : MAX
+  :f MAX
   # ( a b -- a | b )
   .dhw 2DUP  # ( a b a b )
   .dhw <     # ( a b bool )
   .dhw (JMP) ?:
 
-  : WITHIN
+  :f WITHIN
   # ( u ul uh -- t )
   # Return true if u is within the range of ul and uh.
   .dhw OVER - >R  # ul <= u < uh
   .dhw - R> U< EXIT
 
-  : KT+1
+  :f KT+1
   .dhw KT 1+ EXIT
 
-  : 3DROP
+  :f 3DROP
   .dhw DROP 2DROP EXIT
 
-  : FILL
+  :f FILL
   # ( caddr count char -- )
   .dhw OVER   # ( caddr count char count )
   .dhw (BRZ)  # ( caddr count char )
@@ -1315,10 +1315,10 @@ const src = `
   .dhw ROT    # ( caddr caddr+1 countz1 )
   .dhw (JMP) CMOVE
 
-  : 0x7FFFFFFF&
+  :f 0x7FFFFFFF&
   .dhw 0x7FFFFFFF & EXIT
   
-  : UM+
+  :f UM+
   # ( a b -- sum carry )
   .dhw 2DUP   # ( a b a b )
   .dhw 0x7FFFFFFF&
@@ -1341,7 +1341,7 @@ const src = `
   .dhw &      # ( sum carry )
   .dhw EXIT
 
-  : D+n 
+  :f D+n 
   # ( Du Dl increment -- Du+c Dl+n )
   .dhw UM+    # ( Du Dl+incr carry )
   .dhw ROT    # ( Dl+incr carry Du )
@@ -1349,7 +1349,7 @@ const src = `
   .dhw SWAP
   .dhw EXIT
 
-  : D@
+  :f D@
   # ( addr -- Du Dl )
   .dhw DUP    # ( addr addr )
   .dhw @      # ( addr Du )
@@ -1358,7 +1358,7 @@ const src = `
   .dhw @      # ( Du Dl )
   .dhw EXIT
 
-  : D+!
+  :f D+!
   # ( incrment addr -- )
   .dhw SWAP  # ( addr incr )
   .dhw OVER  # ( addr incr addr )
@@ -1366,7 +1366,7 @@ const src = `
   .dhw ROT   # ( addr Du Dl incr )
   .dhw D+n   # ( addr Du+c Dl+n )
   .dhw ROT   # ( Du+C Dl+n addr )
-  : D!
+  :f D!
   .dhw SWAP  # ( Du addr Dl )
   .dhw OVER  # ( Du addr Dl addr )
   .dhw 4+    # ( Du addr Dl addr+4 )
@@ -1374,14 +1374,14 @@ const src = `
   .dhw !     # ( )
   .dhw EXIT
 
-  : ABS
+  :f ABS
   # ( n -- n )
   # Return the absolute value of n.
   .dhw DUP 0<
   .dhw SKZ NEGATE
   .dhw EXIT
 
-  : UM/MOD
+  :f UM/MOD
   # ( udl udh u -- ur uq )
   # Unsigned divide of a double by a single. Return mod and quotient.
   .dhw DUP U<
@@ -1407,7 +1407,7 @@ const src = `
   .dhw -1
   .dhw DUP EXIT # overflow, return max
 
-  : M/MOD
+  :f M/MOD
   # ( d n -- r q )
   # Signed floored divide of double by single. Return mod and quotient.
   .dhw DUP 0< DUP >R
@@ -1424,24 +1424,24 @@ const src = `
   : M/MOD_L3
   .dhw EXIT
 
-  : /%
-  : /MOD
+  :f /%_model
+  :f /MOD
   # ( n n -- r q )
   # Signed divide. Return mod and quotient.
   .dhw OVER 0< SWAP M/MOD EXIT
 
-  : %
-  : MOD
+  :f %
+  :f MOD
   # ( n n -- r )
   # Signed divide. Return mod only.
   .dhw /% DROP EXIT
 
-  : /
+  :f /
   # ( n n -- q )
   # Signed divide. Return quotient only.
   .dhw /% NIP EXIT
 
-  : UM*
+  :f UM*
   # ( u u -- ud )
   # Unsigned multiply. Return double product.
   .dhw 0 SWAP 31 >R
@@ -1454,12 +1454,12 @@ const src = `
   .dhw (NEXT) UM*_L1
   .dhw ROT DROP EXIT
 
-  : *
+  :f *_model
   # ( n n -- n )
   # Signed multiply. Return single product.
   .dhw UM* DROP EXIT
 
-  : M*
+  :f M*
   # ( n n -- d )
   # Signed multiply. Return double product.
   .dhw DUP XOR 0< >R
@@ -1468,21 +1468,21 @@ const src = `
   .dhw SKZ DNEGATE
   .dhw EXIT
 
-  : */%
-  : */MOD
+  :f */%
+  :f */MOD
   # ( n1 n2 n3 -- r q )
   # Multiply n1 and n2, then divide by n3. Return mod and quotient.
   .dhw >R M* R> M/MOD EXIT
 
-  : */
+  :f */
   # ( n1 n2 n3 -- q )
   # Multiply n1 by n2, then divide by n3. Return quotient only.
   .dhw */% NIP EXIT
 
-  : 8+
+  :f 8+
   .dhw 4+ 4+ EXIT
   
-  : RDROP
+  :f RDROP
   # R:( a raddr -- raddr )
   .dhw R>      # ( raddr ) R:( a )
   .dhw R>      # ( raddr a ) R:( )
@@ -1490,76 +1490,76 @@ const src = `
   .dhw >R      # ( ) R:( raddr )
   .dhw EXIT
 
-  : UserVarArea_init
+  :f UserVarArea_init
   .dhw UZERO (LIT)
   .dw  0x0000_FA00
   .dhw 64 CMOVE EXIT
 
-  : (USER_PTR@)
+  :f (USER_PTR@)
   .dhw (IBMz)
   .dhw 0x1711        # XR GR1, GR1
   .dhw 0x171D        # XR GR1, GR13
   .dhw 0x47F0 COMMON_TAIL1_ibmz_instrprt # BC 0xF,  0x052 (GR8)        jump to COMMON_TAIL1
 
-  : (USER_VAR)
+  :f (USER_VAR)
   # ( -- addr )
   .dhw R> @ (USER_PTR@) + EXIT
 
-  : BYE
+  :f BYE
   .dhw .|"
   .utf8_hwc " Quitting zeForth to where? \\n"
   .dhw EXIT
 
 
-  : CPU_saved_state_base
+  :f CPU_saved_state_base
   # ( -- offset )
   .dhw (CONST_H) 0x800
 
-  : CPU_saved_state_base_offset
+  :f CPU_saved_state_base_offset
   # ( -- offset ) R:( client_raddr raddr -- )
   .dhw CPU_saved_state_base R> H@ + EXIT
 
-  : CPU_saved_state_CPU_Timer_390
+  :f CPU_saved_state_CPU_Timer_390
   # ( -- offset )
   .dhw CPU_saved_state_base_offset
   .dhw_calc 0d216
 
-  : CPU_saved_state_Clock_comparator_390
+  :f CPU_saved_state_Clock_comparator_390
   # ( -- offset )
   .dhw CPU_saved_state_base_offset
   .dhw_calc 0d224
 
-  : CPU_saved_state_PSW
+  :f CPU_saved_state_PSW
   # ( -- offset )   its at same offset both in ESA/390 and z/Arch
   .dhw CPU_saved_state_base_offset
   .dhw_calc 0d256
 
-  : CPU_saved_state_Prefix_390
+  :f CPU_saved_state_Prefix_390
   # ( -- offset )
   .dhw CPU_saved_state_base_offset
   .dhw_calc 0d264
 
-  : CPU_saved_state_AR_390
+  :f CPU_saved_state_AR_390
   # ( -- offset )
   .dhw CPU_saved_state_base_offset
   .dhw_calc 0d288
 
-  : CPU_saved_state_FPR_390
+  :f CPU_saved_state_FPR_390
   # ( -- offset )
   .dhw CPU_saved_state_base_offset
   .dhw_calc 0d352
 
-  : CPU_saved_state_GR_390
+  :f CPU_saved_state_GR_390
   # ( -- offset )
   .dhw CPU_saved_state_base_offset
   .dhw_calc 0d384
 
-  : CPU_saved_state_CR_390
+  :f CPU_saved_state_CR_390
   # ( -- offset )
   .dhw CPU_saved_state_base_offset
   .dhw_calc 0d448
 
-  : CPU_saved_state__sub0
+  :f CPU_saved_state__sub0
   # ( CPU_ss_addr -- CPU_ss_addr ... ) R:( raddr --)
   .dhw DUP                 # ( ss ss )
   .dhw CPU_saved_state_PSW # ( ss ss off )
@@ -1575,49 +1575,49 @@ const src = `
   .dhw >R                  # ( ss ) R:( raddr+4 raddr+sel )
   .dhw EXIT
   
-  : CPU_saved_state_CPU_Timer_D@
+  :f CPU_saved_state_CPU_Timer_D@
   # ( CPU_ss_addr -- TimerU TimerL )
   .dhw CPU_saved_state__sub0
   .dhw CPU_saved_state_CPU_Timer_zArch
   .dhw CPU_saved_state_CPU_Timer_390
   .dhw + D@ EXIT
 
-  : CPU_saved_state_CPU_Timer_D!
+  :f CPU_saved_state_CPU_Timer_D!
   # ( TimerU TimerL CPU_ss_addr -- )
   .dhw CPU_saved_state__sub0
   .dhw CPU_saved_state_CPU_Timer_zArch
   .dhw CPU_saved_state_CPU_Timer_390
   .dhw + D! EXIT
 
-  : CPU_saved_state_Clock_comparator_D@
+  :f CPU_saved_state_Clock_comparator_D@
   # ( CPU_ss_addr -- ccU ccL )
   .dhw CPU_saved_state__sub0
   .dhw CPU_saved_state_Clock_comparator_zArch
   .dhw CPU_saved_state_Clock_comparator_390
   .dhw + D@ EXIT
 
-  : CPU_saved_state_Clock_comparator_D!
+  :f CPU_saved_state_Clock_comparator_D!
   # ( ccU ccL CPU_ss_addr -- )
   .dhw CPU_saved_state__sub0
   .dhw CPU_saved_state_Clock_comparator_zArch
   .dhw CPU_saved_state_Clock_comparator_390
   .dhw + D! EXIT
 
-  : CPU_saved_state_PSW_Q@
+  :f CPU_saved_state_PSW_Q@
   # ( CPU_ss_addr -- PSW_UU PSW_UL PSW_LU PSW_LL )
   .dhw CPU_saved_state_PSW + Q@ EXIT
 
-  : CPU_saved_state_PSW_Q!
+  :f CPU_saved_state_PSW_Q!
   # ( PSW_UU PSW_UL PSW_LU PSW_LL CPU_ss_addr -- )
   .dhw CPU_saved_state_PSW + Q! EXIT
 
-  : IO_Interruption_Code
+  :f IO_Interruption_Code
   .dhw (CONST)
   .dw  0x000000B8
 
-  : IO_interrupt_handler_addr
+  :f IO_interrupt_handler_addr_ibm390
   .dhw (VAR)
-  : IO_interrupt_handler_ibm390
+  :f IO_interrupt_handler_ibm390
   # IO New PSW (REALADDR: 0x78) points here, disables interrupts
   .dhw 0x900F 0x0180 # STM GR0, GR15, 0x180 (0)  ESA/390 mode. See instruction STMG for z/Arch mode
   .dhw 0x41DD 0x0xxx # LA  GR13, 0x___ (GR13, 0) gr13 := 0x___  tbd: where does the USER_VARS page for IO interrupt handling task live?
@@ -1627,7 +1627,7 @@ const src = `
                      #                              0d384 = 0x180    0x800 + 0x180 = 0x980
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)        jump to NXT
 
-  : IO_return_from_interrupt
+  :f IO_return_from_interrupt_ibm390
   .dhw (USER_PTR@)
   .dhw (IBMz)
   .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
@@ -1635,7 +1635,7 @@ const src = `
   .dhw 0x980F 0x1000            # LM  GR0, GR15, 0x000 (GR1) ESA/390 mode. See instruction LMG for z/Arch mode
   .dhw 0x8200 0x0038            # LPSW 0x0038 (GR0)          Load the interrupted PSW into the PSW register
 
-  : IO_TestSubChan
+  :f IO_TestSubChan
   # ( SubChan IRB_addr -- ConditionCode )
   .dhw (IBMz)
   .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
@@ -1648,11 +1648,11 @@ const src = `
   .dhw 0x8810 0x001C            # SRL GR1, 0x01C             gr1 := gr1 >> 0d28     63-35=28  0d28=0x1C
   .dhw 0x47F0 COMMON_TAIL1_ibmz_instrprt # BC 0xF,  0x052 (GR8)        jump to COMMON_TAIL1
 
-  : IO_task_subchan_interrupt_dispatch_tbl
+  :f IO_task_subchan_interrupt_dispatch_tbl
   .dhw (USER_VAR)
   .dw  0x0000_09FC
 
-  : IO_interrupt_handler_task
+  :f IO_interrupt_handler_task
   # fcpu32/16 instruction pointer for task points here when IO interrupts happen
   .dhw (LIT)
   .dhw_calc 0x0180
@@ -1698,16 +1698,16 @@ const src = `
   #   See Figures 4-30 and 4-31 in the z/Arch PoOPs.
   #   Restriction is that it takes 512 bytes and if done via the CPU SIGNAL mechanism must start on 512 alignment
 
-  : External_Interruption_Code
+  :f External_Interruption_Code
   # its is a halfword, so use H@
   .dhw (CONST)
   .dw  0x00000086
 
-  : External_Interrupt_Code_CPU_Timer
+  :f External_Interrupt_Code_CPU_Timer
   .dhw (CONST)
   .dhw 0x1005
 
-  : External_interrupt_handler
+  :f External_interrupt_handler_ibm390
   .dhw (VAR)
   : External_interrupt_handler_ibm390
   # External interrupt New PSW (REALADR: 0x58) points here.
@@ -1717,7 +1717,7 @@ const src = `
   .dhw 0x980F 0xD980 # LM  GR0, GR15, 0x980 (GR13)  ESA/390 mode. See instruction LMG for z/Arch mode
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)        jump to NXT
 
-  : External_return_from_interrupt
+  :f External_return_from_interrupt_ibm390
   .dhw (USER_PTR@)
   .dhw (IBMz)
   .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
@@ -1725,7 +1725,7 @@ const src = `
   .dhw 0x980F 0x1000            # LM  GR0, GR15, 0x000 (GR1) ESA/390 mode. See instruction LMG for z/Arch mode
   .dhw 0x8200 0x0018            # LPSW 0x0018 (GR0)          Load the interrupted PSW into the PSW register
   
-  : External_interrupt_handler_task
+  :f External_interrupt_handler_task
   # fcpu32/16 instruction pointer for task points here when External interrupts happen
   .dhw (LIT)
   .dw_calc 0x00000180
@@ -1767,7 +1767,7 @@ const src = `
   .dhw External_return_from_interrupt
   .dhw (JMP) External_interrupt_handler_task
 
-  : CPU_address
+  :f CPU_address
   # ( -- cpu_address )
   # cpu_address is a halfcell (16 bits)
   .dhw (IBMz)
@@ -1778,7 +1778,7 @@ const src = `
   .dhw 0x41BB 0x0002            # LA GR11, 0x002 (GR11, 0)  datastack_ptr := datastack_ptr + 2
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)       jump to NXT
 
-  : CPU_prefix!
+  :f CPU_prefix!
   # store into the cpu prefix register
   # ( Prefix -- )
   .dhw (IBMz)
@@ -1786,7 +1786,7 @@ const src = `
   .dhw 0xB210 B000              # SPX 0 (GR11)
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)       jump to NXT
 
-  : CPU_prefix@
+  :f CPU_prefix@
   # fetch from the cpu prefix register
   # ( -- Prefix )
   .dhw (IBMz)
@@ -1795,11 +1795,11 @@ const src = `
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)       jump to NXT
 
 
-  : global__current_task
+  :f global__current_task
   .dhw (VAR)
   .dw  0x0000F000 # the bootup/main task
 
-  : CPU_Timer!
+  :f CPU_Timer!
   # ( Du Dl -- )
   .dhw (IBMz)
   .dhw 0x5FB0 4_ibmz_instrprt   # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
@@ -1807,28 +1807,28 @@ const src = `
   .dhw 0xB208 B000              # SPT 0 (GR111)              CPU_Timer := datastack
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)       jump to NXT
   
-  : 10millisecond_in_TOD_Clock_units
+  :f 10millisecond_in_TOD_Clock_units
   .dhw (CONST_D)
   # .ddw 0x0000_0000_003E_8000 # 1 ms
   .ddw_calc 0x0038_8000 0d10 *
 
-  : enable_external_interrupts
+  :f enable_external_interrupts
   # ( PSWu PSWl -- PSWu' PSWl' )
   .dhw SWAP 1 24 << OR SWAP EXIT
 
-  : disable_external_interrupts
+  :f disable_external_interrupts
   # ( PSWu PSWl -- PSWu' PSWl' )
   .dhw SWAP 1 24 << INVERT & SWAP EXIT
 
-  : enable_IO_interrupts
+  :f enable_IO_interrupts
   # ( PSWu PSWl -- PSWu' PSWl' )
   .dhw SWAP 2 24 << OR SWAP EXIT
 
-  : disable_IO_interrupts
+  :f disable_IO_interrupts
   # ( PSWu PSWl -- PSWu' PSWl' )
   .dhw SWAP 2 24 << INVERT & SWAP EXIT
 
-  : control_registers!
+  :f control_registers!
   # store into control registers
   # ( ptr -- )
   .dhw (IBMz)
@@ -1837,7 +1837,7 @@ const src = `
   .dhw 0xB70F 0x1000            # LCTL CR0, CR15, 0 (GR1)    ESA/390 mode. See LCTLG for z/Arch
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)       jump to NXT
 
-  : control_registers@
+  :f control_registers@
   # fetch from control registers
   # ( ptr -- )
   .dhw (IBMz)
@@ -1847,7 +1847,7 @@ const src = `
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)       jump to NXT
 
 
-  : COLDD
+  :f COLDD
   .dhw (IBMz)
   ########################
   # Cold start  ibmz (z/Arch or z390 code)
@@ -1885,11 +1885,11 @@ const src = `
   .dhw 0x4177 0x0F00 # LA  GR7,  0xF00 (GR7, 0)  gr7  := 0x0000F000
   .dhw 0x47F0 NXT_ibmz_instrprt # BC 0xF,  0x00A (GR8)       jump to NXT
 
-  : COLD_boot
+  :f COLD_boot
   .dhw UserVarArea_init
   . merkill
   
-  : COLD_boot2
+  :f COLD_boot2
   .dhw NL EMIT
   .dhw ."
   .utf8_hwc "ReKOS Version 0.1"
@@ -1912,15 +1912,15 @@ const src = `
   # probably in EBDIC, which means we need an ASCII to EBDIC TRANSLATE
  
   : TOB
-  : TerminalOutputBuffer
+  :f TerminalOutputBuffer
   .dhw (USER_VAR)
   .dw  0x0000_0B00  # because in KeyKos zeForth domains page at 0x00Fxxx is W/R
 
-  : console_devicenr
+  :f console_devicenr
   .dhw (CONST)
   .dw  0x0000_0009
   
-  : console_TX!_chars
+  :f console_TX!_chars
   # ( char_addr length -- )
   .dhw 2DUP TerminalOutputBuffer CMOVE  # ( caddr len )
   .dhw NIP  TerminalOutputBuffer SWAP   # ( TOB_addr len )
@@ -1941,7 +1941,7 @@ const src = `
   .dhw DROP
   .dhw EXIT
   
-  : console_TX!
+  :f console_TX!
   # ( char -- )
   .dhw TerminalOutputBuffer C!
   .dhw TerminalOutputBuffer 1
@@ -1951,19 +1951,19 @@ const src = `
 const src2 = `
   # a bit unrelated but wanted to save this from a handwritten note.
 
-  : 3NIP
+  :f 3NIP
   # ( a b c -- c )
   .dhw >R 3DROP R> EXIT
 
-  : 0<=
+  :f 0<=
   # ( num -- flag )
   .dhw DUP 0< SWAP 0= OR EXIT
 
-  : 2RDROP
+  :f 2RDROP
   # ( -- ) R:( a b raddr -- raddr )
   .dhw R> RDROP RDROP >R EXIT
 
-  : 4DUP
+  :f 4DUP
   # ( a b c d -- a b c d a b c d )
   .dhw >R >R               # ( a b ) R:( d c )
   .dhw 2DUP                # ( a b a b ) R:( d c )
@@ -1972,15 +1972,15 @@ const src2 = `
   .dhw >R -ROT             # ( a b c d a b ) R:( c d )
   .dhw R> R> SWAP EXIT     # ( a b c d a b c d ) R:( )
 
-  : 4DROP
+  :f 4DROP
   # ( a b c d -- )
   .dhw 2DROP 2DROP EXIT
 
-  : QROT
+  :f QROT
   # ( a b c d -- b c d a )
   .dhw >R ROT R> SWAP EXIT
 
-  : Tcl_list_first
+  :f Tcl_list_first
   # ( addr len -- addr len' )
   # Takes an ASCII string and returns the first 'word' of it per Tcl parsing rules
   # todo eventually: make an utf-8 version
@@ -1990,7 +1990,7 @@ const src2 = `
   .dhw OVER MINUS          # ( addr len' )
   .dhw EXIT
 
-  : Tcl_list_first_sub0
+  :f Tcl_list_first_sub0
   # ( addr len -- bralvl brclvl inquote addr' )
   # todo: incorporate last_bracer_char idea
   .dhw >R                  # ( addr ) R:( len )
@@ -2069,7 +2069,7 @@ const src2 = `
   .dhw R> R> DROP EXIT
   
 
-  : Tcl_list_is_complete
+  :f Tcl_list_is_complete
   # ( addr len -- flag )
   # Takes a string and tells if its 'complete' per Tcl parsing rules
   # That is, if all the quotemarks, curly braces and brackets are balanced
@@ -2080,7 +2080,7 @@ const src2 = `
   .dhw >R SWAP - = R> &    # ( flag )
   .dhw EXIT
 
-  : Tcl_list_length
+  :f Tcl_list_length
   # ( addr len -- nrOfItems )
   .dhw 2DUP Tcl_list_is_complete INVERT
   .dhw (BRZ) Tcl_list_length_L0
@@ -2096,7 +2096,7 @@ const src2 = `
   .dhw >R + R> ROT 1+ -ROT # ( count+1 addr' remaining_len )
   .dhw (JMP) Tcl_list_length_L1
 
-  : Tcl_list_range
+  :f Tcl_list_range
   # ( addr len start_idx end_idx -- addr' len' )
   .dhw >R >R               # ( addr len ) R:( end_idx start_idx )
   .dhw LIT_0 -ROT          # ( idx addr len ) R:( end_idx start_idx )
@@ -2130,11 +2130,11 @@ const src2 = `
   .dhw R> 2RDROP           # ( idx addr ) R:( start_addr end_idx )
   .dhw (JMP) Tcl_list_range_L3
 
-  : Tcl_list_index
+  :f Tcl_list_index
   # ( addr len idx -- addr' len' )
   .dhw DUP (JMP) Tcl_list_range
 
-  : Tcl_simple_foreach
+  :f Tcl_simple_foreach
   # ( addr len xt -- )
   # xt ( idx addr' len' -- )
   .dhw -ROT                # ( xt addr len )
@@ -2155,7 +2155,7 @@ const src2 = `
   .dhw (JMP) 4DROP
 
 
-  : utf8_is_full_codepoint
+  :f utf8_is_full_codepoint
   # ( addr len -- flag )
   .dhw 2DUP 1= SWAP BYTE@ 0x80& CLEANBOOL INVERT &
   .dhw (BRZ) utf8_is_full_codepoint_L0
