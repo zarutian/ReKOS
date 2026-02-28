@@ -1633,6 +1633,13 @@ const src = `
   .dhw 1 24 << INVERT &         # ( addr PSW_UU' )
   .dhw SWAP_!_EXIT
 
+  :f external_interrupts@
+  # ( CPU_ss_addr -- bool )
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw NIP                      # ( PSW_UU )
+  .dhw 1 24 << &                # ( dirty_bool )
+  .dhw (JMP) CLEANBOOL
+
   :f enable_IO_interrupts
   # ( CPU_ss_addr -- )
   .dhw able_interrupts__common1 # ( addr PSW_UU )
@@ -1645,6 +1652,13 @@ const src = `
   .dhw 2 24 << INVERT &         # ( addr PSW_UU' )
   .dhw SWAP_!_EXIT              #
 
+  :f IO_interrupts@
+  # ( CPU_ss_addr -- bool )
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw NIP                      # ( PSW_UU )
+  .dhw 2 24 << &                # ( dirty_bool )
+  .dhw (JMP) CLEANBOOL
+
   :f enable_PER_interrupts
   # ( CPU_ss_addr -- )
   .dhw able_interrupts__common1 # ( addr PSW_UU )
@@ -1656,6 +1670,34 @@ const src = `
   .dhw able_interrupts__common1 # ( addr PSW_UU )
   .dhw 0x40 24 << INVERT &      # ( addr PSW_UU' )
   .dhw SWAP_!_EXIT
+
+  :f PER_interrupts@
+  # ( CPU_ss_addr -- bool )
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw NIP                      # ( PSW_UU )
+  .dhw 0x40 24 << &             # ( dirty_bool )
+  .dhw (JMP) CLEANBOOL
+
+  :f turn_DAT_mode_on
+  # ( CPU_ss_addr -- )
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw 4 24 << OR               # ( addr PSW_UU' )
+  .dhw SWAP_!_EXIT
+
+  :f turn_DAT_mode_off
+  # ( CPU_ss_addr -- )
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw 4 24 << INVERT &
+  .dhw SWAP_!_EXIT
+
+  :f DAT_mode@
+  # ( CPU_ss_addr -- bool )
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw NIP                      # ( PSW_UU )
+  .dhw 4 24 << &                # ( dirty_bool )
+  .dhw (JMP) CLEANBOOL
+
+  # ----
 
   :f IO_Interruption_Code
   .dhw (CONST)
