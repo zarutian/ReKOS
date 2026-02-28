@@ -1611,21 +1611,39 @@ const src = `
   # ( PSW_UU PSW_UL PSW_LU PSW_LL CPU_ss_addr -- )
   .dhw CPU_saved_state_PSW + Q! EXIT
 
+  :f able_interrupts__common1
+  .dhw CPU_saved_state_PSW # ( ss off )
+  .dhw +                   # ( addr )
+  .dhw DUP                 # ( addr addr )
+  .dhw @                   # ( addr PSW_UU )
+  .dhw EXIT
+
+  :f SWAP_!_EXIT
+  .dhw SWAP ! RDROP EXIT
+  
   :f enable_external_interrupts
   # ( CPU_ss_addr -- )
-  .dhw SWAP 1 24 << OR SWAP EXIT
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw 1 24 << OR               # ( addr PSW_UU' )
+  .dhw SWAP_!_EXIT
 
   :f disable_external_interrupts
   # ( CPU_ss_addr -- )
-  .dhw SWAP 1 24 << INVERT & SWAP EXIT
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw 1 24 << INVERT &         # ( addr PSW_UU' )
+  .dhw SWAP_!_EXIT
 
   :f enable_IO_interrupts
   # ( CPU_ss_addr -- )
-  .dhw SWAP 2 24 << OR SWAP EXIT
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw 2 24 << OR               # ( addr PSW_UU' )
+  .dhw SWAP_!_EXIT
 
   :f disable_IO_interrupts
   # ( CPU_ss_addr -- )
-  .dhw SWAP 2 24 << INVERT & SWAP EXIT
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw 2 24 << INVERT &         # ( addr PSW_UU' )
+  .dhw SWAP_!_EXIT              #
 
   :f IO_Interruption_Code
   .dhw (CONST)
