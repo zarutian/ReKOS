@@ -1946,6 +1946,13 @@ const src = `
   .dhw TerminalOutputBuffer C!
   .dhw TerminalOutputBuffer 1
   .dhw (JMP) console_TX!_common
+
+  :f console_?RX_chars
+  # ( char_addr length -- returned_length T | F )
+  .dhw FALSE EXIT
+
+  :f console_?RX
+  # ( -- char T | F )
   
 `;
 const src2 = `
