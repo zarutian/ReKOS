@@ -1645,6 +1645,18 @@ const src = `
   .dhw 2 24 << INVERT &         # ( addr PSW_UU' )
   .dhw SWAP_!_EXIT              #
 
+  :f enable_PER_interrupts
+  # ( CPU_ss_addr -- )
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw 0x40 24 << OR            # ( addr PSW_UU' )
+  .dhw SWAP_!_EXIT
+
+  :f disable_PER_interrupts
+  # ( CPU_ss_addr -- )
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw 0x40 24 << INVERT &      # ( addr PSW_UU' )
+  .dhw SWAP_!_EXIT
+
   :f IO_Interruption_Code
   .dhw (CONST)
   .dw  0x000000B8
