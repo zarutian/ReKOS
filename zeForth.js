@@ -1732,6 +1732,44 @@ const src = `
   .dhw 4 16 << &                # ( dirty_bool )
   .dhw (JMP) CLEANBOOL
 
+  :f turn_WaitState_on
+  # ( CPU_ss_addr -- )
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw 2 16 << OR
+  .dhw SWAP_!_EXIT
+
+  :f turn_WaitState_off
+  # ( CPU_ss_addr -- )
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw 2 16 << INVERT &
+  .dhw SWAP_!_EXIT
+
+  :f WaitState@
+  # ( CPU_ss_addr -- bool )
+  .dhw able_interrupts__common1
+  .dhw NIP
+  .dhw 2 16 << &
+  .dhw (JMP) CLEANBOOL
+
+  :f turn_ProblemMode_on
+  # ( CPU_ss_addr -- )
+  .dhw able_interrupts__common1
+  .dhw 1 16 << OR
+  .dhw SWAP_!_EXIT
+
+  :f turn_ProblemMode_off
+  # ( CPU_ss_addr -- )
+  .dhw able_interrupts__common1
+  .dhw 1 16 << INVERT &
+  .dhw SWAP_!_EXIT
+
+  :f ProblemMode@
+  # ( CPU_ss_addr -- bool )
+  .dhw able_interrupts__common1
+  .dhw 1 16 << &
+  .dhw (JMP) CLEANBOOL
+  
+
   # ----
 
   :f IO_Interruption_Code
