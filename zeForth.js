@@ -1611,6 +1611,22 @@ const src = `
   # ( PSW_UU PSW_UL PSW_LU PSW_LL CPU_ss_addr -- )
   .dhw CPU_saved_state_PSW + Q! EXIT
 
+  :f enable_external_interrupts
+  # ( CPU_ss_addr -- )
+  .dhw SWAP 1 24 << OR SWAP EXIT
+
+  :f disable_external_interrupts
+  # ( CPU_ss_addr -- )
+  .dhw SWAP 1 24 << INVERT & SWAP EXIT
+
+  :f enable_IO_interrupts
+  # ( CPU_ss_addr -- )
+  .dhw SWAP 2 24 << OR SWAP EXIT
+
+  :f disable_IO_interrupts
+  # ( CPU_ss_addr -- )
+  .dhw SWAP 2 24 << INVERT & SWAP EXIT
+
   :f IO_Interruption_Code
   .dhw (CONST)
   .dw  0x000000B8
@@ -1811,22 +1827,6 @@ const src = `
   .dhw (CONST_D)
   # .ddw 0x0000_0000_003E_8000 # 1 ms
   .ddw_calc 0x0038_8000 0d10 *
-
-  :f enable_external_interrupts
-  # ( PSWu PSWl -- PSWu' PSWl' )
-  .dhw SWAP 1 24 << OR SWAP EXIT
-
-  :f disable_external_interrupts
-  # ( PSWu PSWl -- PSWu' PSWl' )
-  .dhw SWAP 1 24 << INVERT & SWAP EXIT
-
-  :f enable_IO_interrupts
-  # ( PSWu PSWl -- PSWu' PSWl' )
-  .dhw SWAP 2 24 << OR SWAP EXIT
-
-  :f disable_IO_interrupts
-  # ( PSWu PSWl -- PSWu' PSWl' )
-  .dhw SWAP 2 24 << INVERT & SWAP EXIT
 
   :f control_registers!
   # store into control registers
