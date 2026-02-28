@@ -1713,6 +1713,25 @@ const src = `
   .dhw ROT 20 << OR             # ( addr PSW_UU" )
   .dhw SWAP_!_EXIT
 
+  :f enable_MachineCheck_interrupts
+  # ( CPU_ss_addr -- )
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw 4 16 << OR
+  .dhw SWAP_!_EXIT
+
+  :f disable_MachineCheck_interrupts
+  # ( CPU_ss_addr -- )
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw 4 16 << INVERT &
+  .dhw SWAP_!_EXIT
+
+  :f MachineCheck_interrupts@
+  # ( CPU_ss_addr -- bool )
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw NIP                      # ( PSW_UU )
+  .dhw 4 16 << &                # ( dirty_bool )
+  .dhw (JMP) CLEANBOOL
+
   # ----
 
   :f IO_Interruption_Code
