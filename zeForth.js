@@ -1697,6 +1697,22 @@ const src = `
   .dhw 4 24 << &                # ( dirty_bool )
   .dhw (JMP) CLEANBOOL
 
+  :f PSW_storageKey@
+  # ( CPU_ss_addr -- keynybble )
+  # Key here is an IBM term and not a KeyKOS term
+  .dhw able_interrupts__common1 # ( addr PSW_UU )
+  .dhw NIP                      # ( PSW_UU )
+  .dhw 20 >> 0xF & EXIT         # ( keynybble )
+
+  :f PSW_storageKey!
+  # ( keynybble CPU_ss_addr -- )
+  # Key here is an IBM term and not a KeyKOS term
+  .dhw 0xF &                    # ( keynybble )
+  .dhw able_interrupts__common1 # ( keynybble addr PSW_UU )
+  .dhw 0xF 20 << INVERT &       # ( keynybble addr PSW_UU' )
+  .dhw ROT 20 << OR             # ( addr PSW_UU" )
+  .dhw SWAP_!_EXIT
+
   # ----
 
   :f IO_Interruption_Code
