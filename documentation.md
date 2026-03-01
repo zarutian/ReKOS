@@ -1,5 +1,63 @@
 
-Various documentation links refered to:
+#### 2026-03-01T15:00 ####
+
+Been trying to suss out the bitpatterns of KeyKos keys.
+There are references in the manual to enum in an assembler source file. A file that I do not have.
+
+I have found out that in KeyKos keys are 12 bytes on disk and 16 bytes in memory. (See prepared keys)
+
+The kernel implementation manual indicates that base key types are at most 32, the bits 3-7 (IBM way) of the first byte of a key. The key type byte (not to be confused with KT returncodes).
+
+I have decided on the following key type byte enumeration (subject to change and updates):
+```
+  0b___00000  Data key
+  0b___00001  -tbd-
+  0b___00010  Page key (read only)
+  0b___00011  Page key (read/write)
+  0b___00100  Device key
+  0b___00101  -tbd-
+  0b___00110  -tbd-
+  0b___00111  -tbd-
+  0b___01000  Node key
+  0b___01001  Segmode key (also a node key)
+  0b___01010  Meter key (also a node key)
+  0b___01011  Domain key (also a node key)
+  0b___01100  Start key to a domain (also a node key)
+  0b___01101  Resume key to a domain (also a node key)
+  0b___01110  -tbd-
+  0b___01111  -tbd-
+  0b___10000  -tbd-
+  0b___10001  -tbd-
+  0b___10010  -tbd-
+  0b___10011  -tbd-
+  0b___10100  -tbd-
+  0b___10101  -tbd-
+  0b___10110  -tbd-
+  0b___10111  -tbd-
+  0b___11000  -tbd-
+  0b___11001  -tbd-
+  0b___11010  -tbd-
+  0b___11011  -tbd-
+  0b___11100  -tbd-
+  0b___11101  -tbd-
+  0b___11110  -tbd-
+  0b___11111  -tbd-
+
+```
+
+Data keys have 11 databytes, can never be revoked or prepared as such is pointless. DK(0) is shorthand for an all zeros data key.
+
+Page keys and node keys have 6 bytes of CodedDiskAddress, a databyte, and an allocation count.
+
+Resume keys additionally have callcount thay MUST match the callcount in the domain they refer to.
+If they do not match the kernel, when it notices, turns the resume key into DK(0). Domain's callcount increaments every time it is resumed.
+
+Device keys have 2 byte device nr (same as SUBCHAN nr) and a 'B' number.
+I suspect that this 'B' number is to facilitate device key revocation upon restart.
+
+-Zarutian
+
+#### Various documentation links refered to:
 * [Alleged KeyTypes in KeyKos](http://cap-lore.com/CapTheory/KK/m/181.html)
 * [Scheduling in KeyKos](http://cap-lore.com/CapTheory/KK/m/137.html#supsched)
 * [More on scheduling in KeyKos](http://cap-lore.com/CapTheory/KK/m/kl.html#scheduler)
