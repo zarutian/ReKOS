@@ -2333,6 +2333,43 @@ const src2 = `
   : utf8_is_full_codepoint_L5
   .dhw (NEXT) utf8_is_full_codepoint_L3
   .dhw DROP (JMP) TRUE
+
+  :f NIP_0
+  .dhw NIP 0 EXIT
+
+  : f decode_diffManchesterEncoding
+  # ( src_addr src_len dest_addr max_len -- len_r len_q )
+  # source is a bytestring where each byte is 0bLLLLLLLI sample
+  # where L is unsigned time Length and I is bIt value of the sample
+  # time unit not specified
+  # destination is a bytestring
+  # len_q (quotent) is the length of the bytestring
+  # len_r (reminder) is the remaining length in bits of decoded data
+  # len_r will be higher than 7 if decoded data is longer than max_len
+  .dhw 8*
+  .dhw >R          # ( src_addr src_len dest_addr ) R:( max_len )
+  .dhw SWAP >R     # ( src_addr dest_addr ) R:( max_len src_len )
+  .dhw 0 DUP DUP   # ( src_addr dest_addr byte clk_cnt accum ) R:( max_len src_len )
+  .dhw (JMP) decode_diffManchesterEncoding_L
+  : decode_diffManchesterEncoding_L0
+  .dhw QROT >R     # ( src_addr byte clk_cnt accum ) R:( max_len src_len dest_addr )
+  .dhw QROT DUP >R # ( byte clk_cnt accum src_addr ) R:( max_len src_len dest_addr src_addr )
+  .dhw C@          # ( byte clk_cnt accum sample   ) R:( max_len src_len dest_addr src_addr )
+  .dhw 2DUP        # ( byte clk_cnt accum sample accum sample ) R:( max_len src_len dest_addr src_addr )
+  .dhw 1& SWAP 1&  # ( byte clk_cnt accum sample sbit abit ) R:( max_len src_len dest_addr src_addr )
+  .dhw XOR         # ( byte clk_cnt accum sample change? ) R:( max_len src_len dest_addr src_addr )
+  .dhw SWAP >R     # ( byte clk_cnt accum change? ) R:( max_len src_len dest_addr src_addr sample )
+  .dhw DUP  >R     # ( byte clk_cnt accum change? ) R:( max_len src_len dest_addr src_addr sample change? )
+  .dhw (BRZ) decode_diffManchesterEncoding_L1
+  .dhw 2DUP
+  .dhw 1 INVERT & 1>>
+  .dhw <           # ( byte clk_cnt accum bit )
+
+  : decode_diffManchesterEncoding_L1
+  .dhw R> R> SWAP
+  .dhw SKZ NIP_0
+  .dhw 0xFE& +     # ( byte clk_cnt accum' )
+  
   
 `;
 
