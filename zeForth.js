@@ -2385,7 +2385,9 @@ const src2 = `
   .dhw decode_diffManchesterEncoding_discernAbit
   .dhw 1& >R ROT   # ( max_len*8 clk_cnt accum byte )  R:( src_len dest_addr src_addr sample change? bit )
   .dhw 1<< R> OR   # ( max_len*8 clk_cnt accum byte' ) R:( src_len dest_addr src_addr sample change? )
-  .dhw QROT 1-   
+  .dhw QROT 1-     #
+  .dhw DUP 0<=
+  .dhw (BRNZ) decode_diffManchesterEncoding_L3
   .dhw DUP >R      # ( clk_cnt accum byte' max_len*8 ) R:( src_len dest_addr src_addr sample change? max_len*8 )
   .dhw 8_%         # ( clk_cnt accum byte' reminder )  R:( src_len dest_addr src_addr sample change? max_len*8 )
   .dhw R> SWAP >R  #
@@ -2432,6 +2434,7 @@ const src2 = `
   .dhw 8 SWAP - >>
   .dhw SWAP C!     # ( ) R:( q r )
   .dhw R> R> EXIT  #
+  : decode_diffManchesterEncoding_L3
   
 `;
 
