@@ -1070,7 +1070,6 @@ const src = `
   .dhw 0x1B34                          # SR GR3,  GR4               tmp3 := tmp3 - tmp4
   .dhw 0xA7F4 0xFFEA                   # BCR 0xF, 0xFFEA            jump to TRANSLATE_ibmz_L0
 
-
   :f TRANSLATE&TEST_model
   # ( ptr len tbl -- ptr' len' tbl funcbyte )
   # when len is exhausted with no non-zero funcbyte found then funcbyte will be zero
@@ -1089,7 +1088,34 @@ const src = `
   .dhw (NEXT) TRANSLATE&TEST_model_L0
   .dhw SWAP 0 TUCK     # ( ptr+n 0 tbl 0 )
   .dhw EXIT
-  
+
+  :f TRANSLATE&TEST
+  # ( ptr len tbl -- ptr' len' tbl funcbyte )
+  # when len is exhausted with no non-zero funcbyte found then funcbyte will be zero
+  : TRANSLATE&TEST_ibmz
+  .dhw 0x5FB0 4_ibmz_instrprt          # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B                          # LR GR1,  GR11              tmp1 := tbl
+  .dhw 0x5FB0 4_ibmz_instrprt          # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x183B                          # LR GR3,  GR11              tmp3 := len
+  .dhw 0x5FB0 4_ibmz_instrprt          # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x182B                          # LR GR2,  GR11              tmp2 := ptr
+  : TRANSLATE&TEST_ibmz_L0
+  .dhw 0xB9BF 0x0024                   # TRTE GR2, GR4
+  .dhw 0xA714 0xFFFC                   # BRC 0x1, -4                branch to TRANSLATE&TEST_ibmz_L0 on condition 3
+  .dhw 0xA744 0x0001                   # BRC 0x4,  _                branch to TRANSLATE&TEST_ibmz_L1 on condition 1
+  # 0 Entire first operand processed without selecting a nonzero function code
+  .dhw 0x1744                          # XR GR4,  GR4               tmp4 := funcbyte := 0x00
+  : TRANSLATE&TEST_ibmz_L1
+  # 1 Nonzero function code selected
+  .dhw 0x502B 0x0000                   # ST GR2,  0x000 (GR11, 0)   memory[datastack_ptr] := tmp2 := ptr'
+  .dhw 0x41BB 0x0004                   # LA GR11, 0x004 (GR11, 0)   datastack_ptr := datastack_ptr + 4
+  .dhw 0x503B 0x0000                   # ST GR3,  0x000 (GR11, 0)   memory[datastack_ptr] := tmp3 := len'
+  .dhw 0x41BB 0x0004                   # LA GR11, 0x004 (GR11, 0)   datastack_ptr := datastack_ptr + 4
+  .dhw 0x501B 0x0000                   # ST GR1,  0x000 (GR11, 0)   memory[datastack_ptr] := tmp1 := tbl
+  .dhw 0x41BB 0x0004                   # LA GR11, 0x004 (GR11, 0)   datastack_ptr := datastack_ptr + 4
+  .dhw 0x504B 0x0000                   # ST GR1,  0x000 (GR11, 0)   memory[datastack_ptr] := tmp4 := funcbyte
+  .dhw 0x41BB 0x0004                   # LA GR11, 0x004 (GR11, 0)   datastack_ptr := datastack_ptr + 4
+  .dhw 0x47F0 NXT_ibmz_instrprt        # BC 0xF,  0x00A (0, GR8)    jump to NXT
 
   :f 16<<>
   .dhw 8<<>
