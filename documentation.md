@@ -16,8 +16,8 @@ I have decided on the following key type byte enumeration (subject to change and
   0b___00011  Page key (read/write)
   0b___00100  Device key
   0b___00101  -tbd-
-  0b___00110  -tbd-
-  0b___00111  -tbd-
+  0b___00110  Page Range Key
+  0b___00111  Node Range Key
   0b___01000  Node key
   0b___01001  Segmode key (also a node key)
   0b___01010  Meter key (also a node key)
@@ -40,8 +40,8 @@ I have decided on the following key type byte enumeration (subject to change and
   0b___11011  -tbd-
   0b___11100  -tbd-
   0b___11101  -tbd-
-  0b___11110  -tbd-
-  0b___11111  -tbd-
+  0b___11110  zeForth kernel console input key  (follows the bytestream protocol)
+  0b___11111  zeForth kernel console output key  (follows the bytestream protocol)
 
 ```
 
