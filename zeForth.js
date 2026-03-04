@@ -1045,6 +1045,26 @@ const src = `
   : TRANSLATE_instr_ibmz
   .dhw 0xDC00 0x1000 0x2000            # TR 0x0 (1, GR1), 0x0, (GR2)   TRANSLATE
 
+  :f TRANSLATE&TEST_model
+  # ( ptr len tbl -- ptr' len' tbl funcbyte )
+  # when len is exhausted with no non-zero funcbyte found then funcbyte will be zero
+  .dhw -ROT >R         # ( tbl ptr ) R:( len )
+  .dhw (JMP) TRANSLATE&TEST_model_L2
+  : TRANSLATE&TEST_model_L0
+  .dhw 2DUP C@         # ( tbl ptr tbl byte )
+  .dhw + C@            # ( tbl ptr funcbyte )
+  .dhw DUP 0= INVERT   # ( tbl ptr funcbyte nonzero? )
+  .dhw (BRZ) TRANSLATE&TEST_model_L1
+  .dhw R> QROT         # ( ptr funcbyte len tbl ) R:( )
+  .dhw ROT EXIT        # ( ptr len tbl funcbyte )
+  : TRANSLATE&TEST_model_L1
+  .dhw DROP 1+         # ( tbl ptr+1 )
+  : TRANSLATE&TEST_model_L2
+  .dhw (NEXT) TRANSLATE&TEST_model_L0
+  .dhw SWAP 0 TUCK     # ( ptr+n 0 tbl 0 )
+  .dhw EXIT
+  
+
   :f 16<<>
   .dhw 8<<>
   :f 8<<>
