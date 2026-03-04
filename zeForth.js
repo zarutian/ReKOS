@@ -1010,10 +1010,10 @@ const src = `
   .dhw 2DROP
   .dhw EXIT
 
-  :f TRANSLATE
+  :f TRANSLATE_obsolete
   # ( ptr len tbl -- )
   .dhw (ibmz)
-  : TRANSLATE_ibmz
+  : TRANSLATE_obsolete_ibmz
   .dhw 0x5FB0 4_ibmz_instrprt          # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
   .dhw 0x182B                          # LR GR2,  GR11              tmp2 := tbl
   .dhw 0x5FB0 4_ibmz_instrprt          # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
@@ -1044,6 +1044,32 @@ const src = `
   .dhw 0x47F0 NXT_ibmz_instrprt          # BC 0xF,  0x00A (0, GR8)    jump to NXT
   : TRANSLATE_instr_ibmz
   .dhw 0xDC00 0x1000 0x2000            # TR 0x0 (1, GR1), 0x0, (GR2)   TRANSLATE
+
+  :f TRANSLATE
+  # ( ptr len tbl -- )
+  .dhw (ibmz)
+  : TRANSLATE_ibmz
+  .dhw 0x1700                          # XR GR0, GR0                gr0 := 0x00
+  .dhw 0x5FB0 4_ibmz_instrprt          # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x181B                          # LR GR1,  GR11              tmp1 := tbl
+  .dhw 0x5FB0 4_ibmz_instrprt          # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x183B                          # LR GR3,  GR11              tmp3 := len
+  .dhw 0x5FB0 4_ibmz_instrprt          # SL GR11, 0x04A (0, GR8)    datastack_ptr := datastack_ptr - 4
+  .dhw 0x182B                          # LR GR2,  GR11              tmp2 := ptr
+  : TRANSLATE_ibmz_L0
+  .dhw 0xB2A5 0x0021                   # TRE GR2, GR1
+  .dhw 0xA714 0xFFFC                   # BRC 0x1, -4                branch to TRANSLATE_ibmz_L0 on condition 3
+  .dhw 0xA744 0x0002                   # BRC 0x4,  2                branch to TRANSLATE_ibmz_L1 on condition 1
+  .dhw 0x47F0 NXT_ibmz_instrprt        # BC 0xF,  0x00A (0, GR8)    jump to NXT
+  : TRANSLATE_ibmz_L1
+  .dhw 0x4341 0x0000                   # IC GR4,  0x000 (GR1, 0)    tmp4 := memory[tmp1 - 3] & 0xFF
+  .dhw 0x4242 0x0000                   # STC GR4, 0x000 (GR2, 0)    memory[tmp2 - 3] := (tmp4 & 0xFF) | (memory[tmp2 - 3] & 0xFFFFFF00)
+  .dhw 0x4122 0x0001                   # LA GR2,  0x001 (GR2, 0)    tmp2 := tmp2 + 1
+  .dhw 0x1744                          # XR GR4,  GR4               tmp4 := 0
+  .dhw 0x4144 0x0001                   # LA GR4,  0x001 (GR4, 0)    tmp4 := 1
+  .dhw 0x1B34                          # SR GR3,  GR4               tmp3 := tmp3 - tmp4
+  .dhw 0xA7F4 0xFFEA                   # BCR 0xF, 0xFFEA            jump to TRANSLATE_ibmz_L0
+
 
   :f TRANSLATE&TEST_model
   # ( ptr len tbl -- ptr' len' tbl funcbyte )
