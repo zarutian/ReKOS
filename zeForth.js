@@ -1583,6 +1583,32 @@ const src = `
   .dhw EXIT
 
 
+  :f QUIT
+  # ( -- )
+  .dhw RP0 @ RP!                # reset return stack pointer
+  : QUIT_L1
+  .dhw [                        # start interpretation
+  : QUIT_L2
+  .dhw QUERY                    # get input
+  .dhw (LIT_H) EVAL CATCH ?DUP	# evaluate input
+  .dhw (BRZ) QUIT_L2            # continue till error
+  .dhw 'PROMPT @ SWAP           # save input device
+  .dhw CONSOLE NULL$ OVER XOR   # ?display error message
+  .dhw (BRZ) QUIT_L3
+  .dhw SPACE COUNT TYPE         # error message
+  .dhw ."|                      # error prompt
+  .utf8_hwc " ? "
+  : QUIT_L3
+  .dhw (LIT_H) .OK XOR          # ?file input
+  .dhw (BRZ) QUIT_L4
+  .dhw (LIT_H) ERR DUP EMIT EMIT # file error, tell host
+  : QUIT_L4
+  .dhw PRESET                   # some cleanup
+  .dhw (JMP) QUIT_L1
+
+  
+  # ##########
+
   :f CPU_saved_state_base
   # ( -- offset )
   .dhw (CONST_H) 0x800
