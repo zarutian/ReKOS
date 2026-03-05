@@ -1625,7 +1625,7 @@ const src = `
   :f doUSER
   # ( -- a )
   # Run time routine for user variables.
-  .dhw R> H@ USERPTR + EXIT
+  .dhw R> H@ CELLS USERPTR + EXIT
 
   :f SP0
   # ( -- a )
@@ -1681,6 +1681,97 @@ const src = `
   .dhw doUSER
   .dhw_calc 0xD
 
+  :f tmp COMPILE
+  # ( -- a )
+  # A temporary storage location used in parse and find.
+  .dhw doUSER
+  .dhw_calc 0xE
+
+  :f SPAN
+  # ( -- a )
+  # Hold character count received by EXPECT.
+  .dhw doUSER
+  .dhw_calc 0xF
+
+  :f >IN
+  # ( -- a )
+  # Hold the character pointer while parsing input stream.
+  .dhw doUSER
+  .dhw_calc 0x10
+
+  :f #TIB
+  # ( -- a )
+  # Hold the current count and address of the terminal input buffer.
+  .dhw doUSER
+  .dhw_calc 0x11
+  # alott 2 cells
+
+  :f CSP
+  # ( -- a )
+  # Hold the stack pointer for error checking.
+  .dhw doUSER
+  .dhw_calc 0x13
+
+  :f 'EVAL
+  # ( -- a )
+  # Execution vector of EVAL.
+  .dhw doUSER
+  .dhw_calc 0x14
+
+  :f 'NUMBER
+  # ( -- a )
+  # Execution vector of NUMBER?.
+  .dhw doUSER
+  .dhw_calc 0x15
+
+  :f HLD
+  # ( -- a )
+  # Hold a pointer in building a numeric output string.
+  .dhw doUSER
+  .dhw_calc 0x16
+
+  :f HANDLER
+  # ( -- a )
+  # Hold the return stack pointer for error handling.
+  .dhw doUSER
+  .dhw_calc 0x17
+
+  :f CONTEXT
+  # ( -- a )
+  # A area to specify vocabulary search order.
+  .dhw doUSER
+  .dhw_calc 0x18
+  # alott 8 cells when VOCSS == 8
+
+  :f CURRENT
+  # ( -- a )
+  # Point to the vocabulary to be extended.
+  .dhw doUSER
+  .dhw_calc 0x20
+
+  :f CP
+  # ( -- a )
+  # Point to the top of the code dictionary.
+  .dhw doUSER
+  .dhw_calc 0x21
+
+  :f NP
+  # ( -- a )
+  # Point to the bottom of the name dictionary.
+  .dhw doUSER
+  .dhw_calc 0x22
+
+  : LAST
+  # ( -- a )
+  # Point to the last name in the name dictionary.
+
+
+
+
+
+
+
+  
 
 
   :f BYE
