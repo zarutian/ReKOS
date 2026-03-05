@@ -1562,20 +1562,60 @@ const src = `
   .dhw >R      # ( ) R:( raddr )
   .dhw EXIT
 
-  :f UserVarArea_init
-  .dhw UZERO (LIT)
-  .dw  0x0000_FA00
-  .dhw 64 CMOVE EXIT
-
   :f (USER_PTR@)
   .dhw (IBMz)
   .dhw 0x1711        # XR GR1, GR1
   .dhw 0x171D        # XR GR1, GR13
   .dhw 0x47F0 COMMON_TAIL1_ibmz_instrprt # BC 0xF,  0x052 (GR8)        jump to COMMON_TAIL1
 
+  :f UserVarArea_init
+  .dhw UZERO (LIT)
+  .dw_calc  0x0000_FA00
+  .dhw (USER_PTR@) +
+  .dhw 64 CELLS CMOVE EXIT
+
+  :f UZERO
+  .dhw (VAR)
+  .dw  0 0 0 0
+  .dw  SPP     # SP0
+	.dw  RPP     # RP0
+	.dw  ?RX     # '?KEY
+	.dw  TX!     # 'EMIT
+	.dw  ACCEPT  # 'EXPECT
+	.dw  KTAP    # 'TAP
+	.dw  TX!     # 'ECHO
+  .dw  .OK     # 'PROMPT
+	.dw  BASEE   # BASE
+	.dw  0       # tmp
+	.dw  0       # SPAN
+	.dw  0       # >IN
+	.dw  0       # #TIB
+	.dw  TIBB    # TIB
+	.dw  0			 # CSP
+	.dw  INTER   # 'EVAL
+	.dw  NUMBQ   # 'NUMBER
+	.dw  0       # HLD
+	.dw  0       # HANDLER
+	.dw  0       # CONTEXT pointer
+	.dw  0       # vocabulary stack  VOCSS
+  .dw  0       # - || -
+  .dw  0       # - || -
+  .dw  0       # - || -
+  .dw  0       # - || -
+  .dw  0       # - || -
+  .dw  0       # - || -
+  .dw  0       # - || -
+  .dw  0       # CURRENT pointer
+	.dw  0       # vocabulary link pointer
+	.dw  CTOP    # CP
+	.dw  NTOP    # NP
+	.dw  LASTN   # LAST
+
   :f (USER_VAR)
   # ( -- addr )
   .dhw R> @ (USER_PTR@) + EXIT
+
+  
 
   :f BYE
   .dhw .|"
