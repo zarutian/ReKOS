@@ -1769,12 +1769,16 @@ const src = `
 
 
 
-
-
   :f BYE
   .dhw .|"
   .utf8_hwc " Quitting zeForth to where? \\n"
   .dhw EXIT
+
+
+  :f [ IMMEDIATE
+  # ( -- )
+  # Start the text interpreter.
+  .dhw (LIT_H) $INTERPRET 'EVAL ! EXIT
 
 
   :f QUIT
