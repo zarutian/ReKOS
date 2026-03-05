@@ -1775,6 +1775,15 @@ const src = `
   .dhw EXIT
 
 
+  :f QUERY
+  # ( -- )
+  # Accept input stream to terminal input buffer.
+  .dhw TIB (LIT_H)
+  .dhw_calc 0d80
+  .dhw 'EXPECT @EXECUTE #TIB !
+  .dhw DROP 0 >IN ! EXIT
+
+
   :f [ IMMEDIATE
   # ( -- )
   # Start the text interpreter.
