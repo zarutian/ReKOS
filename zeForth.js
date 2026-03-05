@@ -1764,14 +1764,11 @@ const src = `
   : LAST
   # ( -- a )
   # Point to the last name in the name dictionary.
+  .dhw doUSER
+  .dhw_calc 0x23
 
 
 
-
-
-
-
-  
 
 
   :f BYE
