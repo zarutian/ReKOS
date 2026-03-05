@@ -1578,26 +1578,26 @@ const src = `
   .dhw (VAR)
   .dw  0 0 0 0
   .dw  SPP     # SP0
-	.dw  RPP     # RP0
-	.dw  ?RX     # '?KEY
-	.dw  TX!     # 'EMIT
-	.dw  ACCEPT  # 'EXPECT
-	.dw  KTAP    # 'TAP
-	.dw  TX!     # 'ECHO
+  .dw  RPP     # RP0
+  .dw  ?RX     # '?KEY
+  .dw  TX!     # 'EMIT
+  .dw  ACCEPT  # 'EXPECT
+  .dw  KTAP    # 'TAP
+  .dw  TX!     # 'ECHO
   .dw  .OK     # 'PROMPT
-	.dw  BASEE   # BASE
-	.dw  0       # tmp
-	.dw  0       # SPAN
-	.dw  0       # >IN
-	.dw  0       # #TIB
-	.dw  TIBB    # TIB
-	.dw  0			 # CSP
-	.dw  INTER   # 'EVAL
-	.dw  NUMBQ   # 'NUMBER
-	.dw  0       # HLD
-	.dw  0       # HANDLER
-	.dw  0       # CONTEXT pointer
-	.dw  0       # vocabulary stack  VOCSS
+  .dw  BASEE   # BASE
+  .dw  0       # tmp
+  .dw  0       # SPAN
+  .dw  0       # >IN
+  .dw  0       # #TIB
+  .dw  TIBB    # TIB
+  .dw  0       # CSP
+  .dw  INTER   # 'EVAL
+  .dw  NUMBQ   # 'NUMBER
+  .dw  0       # HLD
+  .dw  0       # HANDLER
+  .dw  0       # CONTEXT pointer
+  .dw  0       # vocabulary stack  VOCSS
   .dw  0       # - || -
   .dw  0       # - || -
   .dw  0       # - || -
@@ -1606,10 +1606,10 @@ const src = `
   .dw  0       # - || -
   .dw  0       # - || -
   .dw  0       # CURRENT pointer
-	.dw  0       # vocabulary link pointer
-	.dw  CTOP    # CP
-	.dw  NTOP    # NP
-	.dw  LASTN   # LAST
+  .dw  0       # vocabulary link pointer
+  .dw  CTOP    # CP
+  .dw  NTOP    # NP
+  .dw  LASTN   # LAST
 
   :f (USER_VAR)
   # ( -- addr )
