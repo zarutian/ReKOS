@@ -1615,7 +1615,73 @@ const src = `
   # ( -- addr )
   .dhw R> @ (USER_PTR@) + EXIT
 
-  
+  :f USERPTR
+  # ( -- a )
+  # Pointer to the user area.
+  .dhw (LIT_H)
+  .dhw_calc 0xFA00
+  .dhw (USER_PTR@) + EXIT
+
+  :f doUSER
+  # ( -- a )
+  # Run time routine for user variables.
+  .dhw R> H@ USERPTR + EXIT
+
+  :f SP0
+  # ( -- a )
+  # Pointer to bottom of the data stack.
+  .dhw doUSER
+  .dhw_calc 0x5
+
+  :f RP0
+  # ( -- a )
+  # Pointer to bottom of the return stack.
+  .dhw doUSER
+  .dhw_calc 0x6
+
+  :f '?KEY
+  # ( -- a )
+  # Execution vector of ?KEY.
+  .dhw doUSER
+  .dhw_calc 0x7
+
+  :f 'EMIT
+  # ( -- a )
+  # Execution vector of EMIT.
+  .dhw doUSER
+  .dhw_calc 0x8
+
+  :f 'EXPECT
+  # ( -- a )
+  # Execution vector of EXPECT.
+  .dhw doUSER
+  .dhw_calc 0x9
+
+  :f 'TAP
+  # ( -- a )
+  # Execution vector of TAP.
+  .dhw doUSER
+  .dhw_calc 0xA
+
+  :f 'ECHO
+  # ( -- a )
+  # Execution vector of ECHO.
+  .dhw doUSER
+  .dhw_calc 0xB
+
+  :f 'PROMPT
+  # ( -- a )
+  # Execution vector of PROMPT.
+  .dhw doUSER
+  .dhw_calc 0xC
+
+  :f BASE
+  # ( -- a )
+  # Storage of the radix base for numeric I/O.
+  .dhw doUSER
+  .dhw_calc 0xD
+
+
 
   :f BYE
   .dhw .|"
