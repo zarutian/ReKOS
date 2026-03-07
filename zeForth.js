@@ -1861,6 +1861,12 @@ const src = `
   : EVAL_L2
   .dhw 'PROMPT @EXECUTE EXIT # prompt
 
+  :f PRESET
+  # ( -- )
+  # Reset data stack pointer and the terminal input buffer.
+  .dhw SP0 @ SP!
+  .dhw (LIT_H) TIBB #TIB CELL+ ! EXIT
+
   :f CONSOLE
   # ( -- )
   # Initiate terminal interface.
