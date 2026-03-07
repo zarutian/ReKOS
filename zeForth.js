@@ -1801,6 +1801,11 @@ const src = `
   .dhw (NEXT) TYPE_L1
   .dhw DROP EXIT
 
+  :f ."| COMPILE
+  # ( -- )
+  # Run time routine of ." . Output a compiled string.
+  .dhw do$ COUNT TYPE EXIT
+
   :f QUERY
   # ( -- )
   # Accept input stream to terminal input buffer.
