@@ -715,6 +715,11 @@ const src = `
   :f 2DUP
   # ( a b -- a b a b )
   .dhw OVER OVER EXIT
+
+  :f ?DUP
+  # ( w -- w w | 0 )
+  # Dup TOS if its is not zero.
+  .dhw DUP SKZ DUP EXIT
   
   :f (CONST)
   # ( -- datum )
