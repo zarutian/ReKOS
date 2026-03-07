@@ -1779,6 +1779,10 @@ const src = `
   .utf8_hwc " Quitting zeForth to where? \\n"
   .dhw EXIT
 
+  :f SPACE
+  # ( -- )
+  # Send the blank character to the output device.
+  .dhw BLANK EMIT EXIT
 
   :f QUERY
   # ( -- )
