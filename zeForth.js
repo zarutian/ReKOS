@@ -1807,7 +1807,7 @@ const src = `
   # ( -- )
   # Interpret the input stream.
   : EVAL_L1
-  .dhw TOKEN DUP C@          # ?input stream empty
+  .dhw TOKEN DUP H@          # ?input stream empty
   .dhw (BRZ) EVAL_L2
   .dhw 'EVAL @EXECUTE ?STACK # evaluate input, check stack
   .dhw (JMP) EVAL_L1
