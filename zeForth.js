@@ -1783,6 +1783,15 @@ const src = `
   .dhw 'EXPECT @EXECUTE #TIB !
   .dhw DROP 0 >IN ! EXIT
 
+  :f CATCH
+  # ( ca -- 0 | err# )
+  # Execute word at ca and set up an error frame for it.
+  .dhw SP@ >R HANDLER @ >R    # save error frame
+  .dhw RP@ HANDLER ! EXECUTE  # execute
+  .dhw R>  HANDLER !          # restore error frame
+  .dhw R>  DROP 0    EXIT     # no error
+
+
 
   :f [ IMMEDIATE
   # ( -- )
