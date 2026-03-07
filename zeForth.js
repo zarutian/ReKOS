@@ -1796,7 +1796,13 @@ const src = `
   .dhw R>  HANDLER !          # restore error frame
   .dhw R>  DROP 0    EXIT     # no error
 
-
+  :f NULL$
+  # ( -- a )
+  # Return address of a null string with zero count.
+  .dhw (VAR)     # emulate CREATE
+	.dhw_calc 0x0000
+  .utf8 "tófa, melrakki, rebbi."
+  # it was coyote in the original eForth
 
   :f [ IMMEDIATE
   # ( -- )
