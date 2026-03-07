@@ -1835,6 +1835,16 @@ const src = `
   # Start the text interpreter.
   .dhw (LIT_H) $INTERPRET 'EVAL ! EXIT
 
+  :f .OK
+  # ( -- )
+  # Display 'ok' only while interpreting.
+  .dhw (LIT_H) $INTERPRET 'EVAL @ =
+  .dhw (BRZ) .OK_L1
+  .dhw ."|
+  .utf8_hwc " ok"
+  : .OK_L1
+  .dhw CR EXIT
+
   :f EVAL
   # ( -- )
   # Interpret the input stream.
