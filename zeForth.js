@@ -1784,6 +1784,11 @@ const src = `
   .dhw DUP 2+
   .dhw SWAP H@ EXIT
 
+  : EMIT
+  # ( c -- )
+  # Send a character to the output device.
+  .dhw 'EMIT @EXECUTE EXIT
+
   :f SPACE
   # ( -- )
   # Send the blank character to the output device.
