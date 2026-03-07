@@ -1814,6 +1814,12 @@ const src = `
   : EVAL_L2
   .dhw 'PROMPT @EXECUTE EXIT # prompt
 
+  :f CONSOLE
+  # ( -- )
+  # Initiate terminal interface.
+  .dhw I/O D@ '?KEY D!  # restore default I/O device
+  .dhw HAND EXIT        # keyboard input
+
   :f QUIT
   # ( -- )
   .dhw RP0 @ RP!                # reset return stack pointer
