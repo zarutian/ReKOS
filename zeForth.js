@@ -1773,11 +1773,16 @@ const src = `
   .dhw_calc 0x23
 
 
-
   :f BYE
   .dhw .|"
   .utf8_hwc " Quitting zeForth to where? \\n"
   .dhw EXIT
+
+  :f COUNT
+  # ( b -- b +n )
+  # Return count halfcell of a string and add 2 to byte address.
+  .dhw DUP 2+
+  .dhw SWAP H@ EXIT
 
   :f SPACE
   # ( -- )
