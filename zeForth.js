@@ -1789,6 +1789,18 @@ const src = `
   # Send the blank character to the output device.
   .dhw BLANK EMIT EXIT
 
+  :f TYPE
+  # ( b u -- )
+  # Output u characters from b.
+  .dhw >R
+  .dhw (JMP) TYPE_L2
+  : TYPE_L1
+  .dhw DUP C@ EMIT
+  .dhw 1+
+  : TYPE_L2
+  .dhw (NEXT) TYPE_L1
+  .dhw DROP EXIT
+
   :f QUERY
   # ( -- )
   # Accept input stream to terminal input buffer.
