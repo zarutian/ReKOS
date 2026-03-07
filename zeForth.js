@@ -1789,6 +1789,16 @@ const src = `
   # Start the text interpreter.
   .dhw (LIT_H) $INTERPRET 'EVAL ! EXIT
 
+  :f EVAL
+  # ( -- )
+  # Interpret the input stream.
+  : EVAL_L1
+  .dhw TOKEN DUP C@          # ?input stream empty
+  .dhw (BRZ) EVAL_L2
+  .dhw 'EVAL @EXECUTE ?STACK # evaluate input, check stack
+  .dhw (JMP) EVAL_L1
+  : EVAL_L2
+  .dhw 'PROMPT @EXECUTE EXIT # prompt
 
   :f QUIT
   # ( -- )
