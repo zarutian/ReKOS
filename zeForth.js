@@ -1867,6 +1867,24 @@ const src = `
   .dhw SP0 @ SP!
   .dhw (LIT_H) TIBB #TIB CELL+ ! EXIT
 
+  :f xio
+  # ( a a a -- )
+  # Reset the I/O vectors 'EXPECT, 'TAP, 'ECHO and 'PROMPT.
+  .dhw (LIT_H) accept 'EXPECT D!
+  .dhw 'ECHO D! EXIT
+
+  :f FILE
+  # ( -- )
+  # Select I/O vectors for file download.
+  .dhw (LIT_H) PACE (LIT_H) (DROP)
+  .dhw (LIT_H) kTAP xio EXIT
+
+  :f HAND
+  # ( -- )
+  # Select I/O vectors for terminal interface.
+  .dhw (LIT_H) .OK  (LIT_H) EMIT
+  .dhw (LIT_H) kTAP xio EXIT
+
   :f I/O
   # ( -- a )
   # Array to store default I/O vectors.
