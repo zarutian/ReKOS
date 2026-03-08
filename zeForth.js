@@ -1803,6 +1803,13 @@ const src = `
   # Send a character to the output device.
   .dhw 'EMIT @EXECUTE EXIT
 
+  : PACE
+  # ( -- )
+  # Send a pace character for the file downloading process.
+  .dhw (LIT_H)
+  .dhw_calc 11
+  .dhw EMIT EXIT
+
   :f SPACE
   # ( -- )
   # Send the blank character to the output device.
@@ -1824,6 +1831,19 @@ const src = `
   # ( -- )
   # Run time routine of ." . Output a compiled string.
   .dhw do$ COUNT TYPE EXIT
+
+  :f kTAP
+  # ( bot eot cur c -- bot eot cur )
+  # Process a key stroke, CR or backspace.
+  .dhw DUP (LIT_H) CRR XOR
+  .dhw (BRZ) kTAP_L2
+  .dhw (LIT_H) BKSPP XOR
+  .dhw (BRZ) kTAP_L1
+  .dhw BLANK TAP EXIT
+  : kTAP_L1
+  .dhw BKSP EXIT
+  : kTAP_L2
+  .dhw DROP SWAP DROP DUP EXIT
 
   :f QUERY
   # ( -- )
