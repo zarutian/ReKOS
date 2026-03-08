@@ -1867,6 +1867,12 @@ const src = `
   .dhw SP0 @ SP!
   .dhw (LIT_H) TIBB #TIB CELL+ ! EXIT
 
+  :f I/O
+  # ( -- a )
+  # Array to store default I/O vectors.
+  .dhw (VAR)    # emulate CREATE
+  .dw  ?RX  TX! # default I/O vectors
+
   :f CONSOLE
   # ( -- )
   # Initiate terminal interface.
