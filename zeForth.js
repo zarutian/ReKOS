@@ -1845,6 +1845,26 @@ const src = `
   : kTAP_L2
   .dhw DROP SWAP DROP DUP EXIT
 
+  :f accept
+  # ( b u -- b u )
+  # Accept characters to input buffer. Return with actual count.
+  .dhw OVER + OVER
+  : accept_L1
+  .dhw 2DUP  XOR
+  .dhw (BRZ) accept_L4
+  .dhw KEY   DUP
+  # .dhw BLANK - (LIT_H) 95 U<
+  .dhw BLANK (LIT_H) 0d127 WITHIN
+  .dhw (BRZ) accept_L2
+  .dhw TAP
+  .dhw (JMP) accept_L3
+  : accept_L2
+  .dhw 'TAP @EXECUTE
+  : accept_L3
+  .dhw (JMP) accept_L1
+  : accept_L4
+  .dhw DROP OVER - EXIT
+
   :f QUERY
   # ( -- )
   # Accept input stream to terminal input buffer.
