@@ -1778,6 +1778,20 @@ const src = `
   .utf8_hwc " Quitting zeForth to where? \\n"
   .dhw EXIT
 
+  :f ?RX
+  # ( -- c T | F )
+  # Return input character and true, or a false if no input.
+  # TBD on what to do here
+  .dhw FALSE
+  .dhw EXIT
+
+  :f TX!
+  # ( c -- )
+  # Send character c to the output device.
+  # TBD on what to do here
+  .dhw DROP
+  .dhw EXIT
+
   :f COUNT
   # ( b -- b +n )
   # Return count halfcell of a string and add 2 to byte address.
