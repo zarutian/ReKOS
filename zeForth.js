@@ -1556,6 +1556,31 @@ const src = `
   # Multiply n1 by n2, then divide by n3. Return quotient only.
   .dhw */% NIP EXIT
 
+  :f CELL+
+  # ( a -- a )
+  # Add cell size in byte to address.
+  .dhw (LIT_H) CELLL + EXIT
+
+  :f CELL-
+  # ( a -- a )
+  # Subtract cell size in byte from address.
+  .dhw (LIT_H) CELLL - EXIT
+
+  :f CELLS
+  # ( n -- n )
+  # Multiply tos by cell size in bytes.
+  .dhw (LIT_H) CELLL * EXIT
+
+  :f ALIGNED
+  # ( b -- a )
+  # Align address to the cell boundary.
+  .dhw DUP 0 (LIT_H) CELLL
+  .dhw UM/MOD DROP DUP
+  .dhw (BRZ) ALIGNED_L1
+  .dhw (LIT_H) CELLL SWAP -
+  : ALIGNED_L1
+  .dhw + EXIT
+
   :f 8+
   .dhw 4+ 4+ EXIT
   
