@@ -91,4 +91,8 @@ I suspect that this 'B' number is to facilitate device key revocation upon resta
 * [Linux syscall table](https://github.com/torvalds/linux/blob/master/arch/s390/kernel/syscalls/syscall.tbl) for possible Linux Process in a KK Domain emulation
 * [CloudABI](https://github.com/NuxiNL/cloudabi/blob/master/cloudabi.txt) even though that project is no longer maintained it is a nice subset.
 * [QubesOs Networking](https://doc.qubes-os.org/en/latest/developer/system/networking.html)
+* 
+---
+* [IBM 2250 links](https://sites.google.com/site/2250programminginformation/home/5-online-resources)
+
 
