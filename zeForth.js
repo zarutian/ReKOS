@@ -2928,6 +2928,26 @@ const src2 = `
   : decode_diffManchesterEncoding_L3
   
 `;
+const src3 = `
+  # ibm1130 5D acting as a bit richer terminal
+  # devices:
+  # 0b00001  Console keyboard and console printer
+  # 0b00011  1134 Paper Tape Reader and Paper Tape Punch, will IPL'ed at startup
+  # 0b00101  1627 Plotter
+  # 0b01010  Synchronous Communications Adapter, in BSC mode connected to the IBM z/390
+  # 0b11001	 2250 Display Unit, with both Alphanumeric keyboard and Programmed Function Lighted Keypad
 
+  :f ibm1130_5D_IPL_tape
+  .dhw (VAR)
+  .dhw <length>
+  .db 0x00
+`;
 export { src };
+
+
+
+
+
+
+
 
