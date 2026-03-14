@@ -3455,8 +3455,21 @@ const src3 = `
   .dhw 0x000C # 0x01FA 0x000C   >R
   .dhw 0x000F # 0x01FB 0x000F   EXIT
   .dhw 0x01CB # 0x01FC 0x01CB   (SPARSE_LUT) : ASCII2CONSOLE_PRINTER_CODE ( ascii -- consolecode )
-  .dhw
-  
+  .dhw 0x00__ # 0x01FD 0x00__   nr of entries
+  .dhw 0x0008 # 0x01FE 0x0008   ASCII Backspace           UC
+  .dhw 0x1100 # 0x01FF 0x1100                    0b0001_0001  Console printer control code, backspace
+  .dhw 0x0009 # 0x0200 0x0009   Horizational Tab          UC
+  .dhw 0x4100 # 0x0201 0x4100                    0b0100_0001
+  .dhw 0x000A # 0x0202 0x000A   New Line (the \\n char)
+  .dhw 0x0300 # 0x0203 0x0300
+  .dhw 0x000D # 0x0204 0x000D   Carriage Return
+  .dhw 0x8100 # 0x0205 0x8100
+  .dhw 0x000E # 0x0206 0x000E   Shift In                  UC
+  .dhw 0x0500 # 0x0207 0x0500   Shift to Black   0b0000_0101
+  .dhw 0x000F # 0x0208 0x000F   Shift Out                 UC
+  .dhw 0x__00 # 0x0209 0x__00   Shift to Red     0b????_???1
+  .dhw 0x00
+  .dhw 0x
 
 
   # turns out I need a diffrent table, setting this one aside for now
