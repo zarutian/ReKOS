@@ -3461,14 +3461,14 @@ const src3 = `
   .dhw 0x0009 # 0x0200 0x0009   Horizational Tab          UC
   .dhw 0x4100 # 0x0201 0x4100                    0b0100_0001
   .dhw 0x000A # 0x0202 0x000A   New Line (the \\n char)
-  .dhw 0x0300 # 0x0203 0x0300
+  .dhw 0x0300 # 0x0203 0x0300                    0b0000_0011
   .dhw 0x000D # 0x0204 0x000D   Carriage Return
-  .dhw 0x8100 # 0x0205 0x8100
+  .dhw 0x8100 # 0x0205 0x8100                    0b1000_0001
   .dhw 0x000E # 0x0206 0x000E   Shift In                  UC
   .dhw 0x0500 # 0x0207 0x0500   Shift to Black   0b0000_0101
   .dhw 0x000F # 0x0208 0x000F   Shift Out                 UC
-  .dhw 0x__00 # 0x0209 0x__00   Shift to Red     0b????_???1
-  .dhw 0x0020 # 0x020A 0x0020   Space                     UC
+  .dhw 0x0900 # 0x0209 0x0900   Shift to Red     0b0000_?001
+  .dhw 0x0020 # 0x020A 0x0020   Space                     UC  -----
   .dhw 0x2100 # 0x020B 0x2100   Space            0b0010_0001
   .dhw 0x0021 # 0x020C 0x0021   !                         UC
   .dhw 0x4200 # 0x020D 0x4200   !                0b0100_0010
@@ -3488,8 +3488,39 @@ const src3 = `
   .dhw 0xFE00 # 0x021B 0xFE00   (                0b1111_1110
   .dhw 0x0029 # 0x021C 0x0029   )                         UC
   .dhw 0xF600 # 0x021D 0xF600   )                0b1111_0110
-
-
+  .dhw 0x002A # 0x021E 0x002A   *                         UC
+  .dhw 0xD600 # 0x021F 0xD600   *                0b1101_0110
+  .dhw 0x002B # 0x0220 0x002B   +                         UC
+  .dhw 0xDA00 # 0x0221 0xDA00   +                0b1101_1010
+  .dhw 0x002C # 0x0222 0x002C   ,                         UC
+  .dhw 0x8000 # 0x0223 0x8000   ,                0b1000_0000
+  .dhw 0x002D # 0x0224 0x002D   -                         UC
+  .dhw 0x8400 # 0x0225 0x8400   -                0b1000_0100
+  .dhw 0x002E # 0x0226 0x002E   .                         UC
+  .dhw 0x0000 # 0x0227 0x0000   .                0b0000_0000
+  .dhw 0x002F # 0x0228 0x002F   /                         UC
+  .dhw 0xBC00 # 0x0229 0xBC00   /                0b1011_1100
+  .dhw 0x0030 # 0x022A 0x0030   0                         UC
+  .dhw 0xC400 # 0x022B 0xC400   0                0b1100_0100
+  .dhw 0x0031 # 0x022C 0x0031   1                         UC
+  .dhw 0xFC00 # 0x022D 0xFC00   1                0b1111_1100
+  .dhw 0x0032 # 0x022E 0x0032   2                         UC
+  .dhw 0xD800 # 0x022F 0xD800   2                0b1101_1000
+  .dhw 0x0033 # 0x0230 0x0033   3                         UC
+  .dhw 0xDC00 # 0x0231 0xDC00   3                0b1101_1100
+  .dhw 0x0034 # 0x0232 0x0034   4                         UC
+  .dhw 0xF000 # 0x0233 0xF000   4                0b1111_0000
+  .dhw 0x0035 # 0x0234 0x0035   5                         UC
+  .dhw 0xF400 # 0x0235 0xF400   5                0b1111_0100
+  .dhw 0x0036 # 0x0236 0x0036   6                         UC
+  .dhw 0xD000 # 0x0237 0xD000   6                0b1101_0000
+  .dhw 0x0037 # 0x0238 0x0037   7                         UC
+  .dhw 0xD400 # 0x0239 0xD400   7                0b1101_0100
+  .dhw 0x0038 # 0x023A 0x0038   8                         UC
+  .dhw 0xE400 # 0x023B 0xE400   8                0b1110_0100
+  .dhw 0x0039 # 0x023C 0x0039   9                         UC
+  .dhw 0xE000 # 0x023D 0xE000   9                0b1110_0000
+ 
   # turns out I need a diffrent table, setting this one aside for now
   .dhw 0x015D # 0x01CB 0x015D   (LUT)   : ASCII2EBDIC
   .dhw 0x0080 # 0x01CC 0x0080   0d128   nr of entries
