@@ -3468,8 +3468,26 @@ const src3 = `
   .dhw 0x0500 # 0x0207 0x0500   Shift to Black   0b0000_0101
   .dhw 0x000F # 0x0208 0x000F   Shift Out                 UC
   .dhw 0x__00 # 0x0209 0x__00   Shift to Red     0b????_???1
-  .dhw 0x00
-  .dhw 0x
+  .dhw 0x0020 # 0x020A 0x0020   Space                     UC
+  .dhw 0x2100 # 0x020B 0x2100   Space            0b0010_0001
+  .dhw 0x0021 # 0x020C 0x0021   !                         UC
+  .dhw 0x4200 # 0x020D 0x4200   !                0b0100_0010
+  .dhw 0x0022 # 0x020E 0x0022   "                         UC
+  .dhw 0xE200 # 0x020F 0xE200   "                0b1110_0010
+  .dhw 0x0023 # 0x0210 0x0023   #                         UC
+  .dhw 0xC000 # 0x0211 0xC000   #                0b1100_0000
+  .dhw 0x0024 # 0x0212 0x0024   $                         UC
+  .dhw 0x4000 # 0x0213 0x4000   $                0b0100_0000
+  .dhw 0x0025 # 0x0214 0x0025   %                         UC
+  .dhw 0x0600 # 0x0215 0x0600   %                0b0110_0000
+  .dhw 0x0026 # 0x0216 0x0026   &                         UC
+  .dhw 0x4400 # 0x0217 0x4400   &                0b0100_0100
+  .dhw 0x0027 # 0x0218 0x0027   '                         UC
+  .dhw 0xE600 # 0x0219 0xE600   '                0b1110_0110
+  .dhw 0x0028 # 0x021A 0x0028   (                         UC
+  .dhw 0xFE00 # 0x021B 0xFE00   (                0b1111_1110
+  .dhw 0x0029 # 0x021C 0x0029   )                         UC
+  .dhw 0xF600 # 0x021D 0xF600   )                0b1111_0110
 
 
   # turns out I need a diffrent table, setting this one aside for now
