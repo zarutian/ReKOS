@@ -3454,138 +3454,86 @@ const src3 = `
   .dhw 0x0005 # 0x01F9 0x0005   1+
   .dhw 0x000C # 0x01FA 0x000C   >R
   .dhw 0x000F # 0x01FB 0x000F   EXIT
-  .dhw 0x01CB # 0x01FC 0x01CB   (SPARSE_LUT) : ASCII2CONSOLE_PRINTER_CODE ( ascii -- consolecode )
-  .dhw 0x00__ # 0x01FD 0x00__   nr of entries
-  .dhw 0x0008 # 0x01FE 0x0008   ASCII Backspace           UC
-  .dhw 0x1100 # 0x01FF 0x1100                    0b0001_0001  Console printer control code, backspace
-  .dhw 0x0009 # 0x0200 0x0009   Horizational Tab          UC
-  .dhw 0x4100 # 0x0201 0x4100                    0b0100_0001
-  .dhw 0x000A # 0x0202 0x000A   New Line (the \\n char)
-  .dhw 0x0300 # 0x0203 0x0300                    0b0000_0011
-  .dhw 0x000D # 0x0204 0x000D   Carriage Return
-  .dhw 0x8100 # 0x0205 0x8100                    0b1000_0001
-  .dhw 0x000E # 0x0206 0x000E   Shift In                  UC
-  .dhw 0x0500 # 0x0207 0x0500   Shift to Black   0b0000_0101
-  .dhw 0x000F # 0x0208 0x000F   Shift Out                 UC
-  .dhw 0x0900 # 0x0209 0x0900   Shift to Red     0b0000_?001
-  .dhw 0x0020 # 0x020A 0x0020   Space                     UC  -----
-  .dhw 0x2100 # 0x020B 0x2100   Space            0b0010_0001
-  .dhw 0x0021 # 0x020C 0x0021   !                         UC
-  .dhw 0x4200 # 0x020D 0x4200   !                0b0100_0010
-  .dhw 0x0022 # 0x020E 0x0022   "                         UC
-  .dhw 0xE200 # 0x020F 0xE200   "                0b1110_0010
-  .dhw 0x0023 # 0x0210 0x0023   #                         UC
-  .dhw 0xC000 # 0x0211 0xC000   #                0b1100_0000
-  .dhw 0x0024 # 0x0212 0x0024   $                         UC
-  .dhw 0x4000 # 0x0213 0x4000   $                0b0100_0000
-  .dhw 0x0025 # 0x0214 0x0025   %                         UC
-  .dhw 0x0600 # 0x0215 0x0600   %                0b0110_0000
-  .dhw 0x0026 # 0x0216 0x0026   &                         UC
+  .dhw 0x013B # 0x01FC 0x013B   (CONST) : 8_const
+  .dhw 0x0008 # 0x01FD 0x0008   0d8
+  .dhw 0x01FC # 0x01FE 0x01FC   8_const : ASCII2CONSOLE_PRINTER_CODE_sub1 ( ascii -- consolecode | TRUE )
+  .dhw 0x017D # 0x01FF 0x017D   -
+  .dhw 0x015D # 0x01FC 0x015D   (LUT)
+  .dhw 0x0006 # 0x01FD 0x0006   nr of entries
+  .dhw 0x1100 # 0x01FE 0x1100   ASCII Backspace  0b0001_0001  0x08 ASCII
+  .dhw 0x4100 # 0x01FD 0x4100   Horizational Tab 0b0100_0001
+  .dhw 0x0300 # 0x0203 0x0300   New Line         0b0000_0011  (the \\n char)
+  .dhw 0x8100 # 0x0205 0x8100   Carriage Return  0b1000_0001
+  .dhw 0x0500 # 0x0207 0x0500   Shift to Black   0b0000_0101  Shift In
+  .dhw 0x0900 # 0x0209 0x0900   Shift to Red     0b0000_?001  Shift Out
+  .dhw 0xFFFF # 0x020A 0xFFFF   equiv to TRUE
+  .dhw 0x013B # 0x020B 0x013B   (CONST)   : 0x20_const
+  .dhw 0x0020 # 0x020C 0x0020   0x20 0d32 or ASCII Space
+  .dhw 0x020B # 0x020D 0x020B   0x20_const   : ASCII2CONSOLE_PRINTER_CODE_sub2 ( ascii -- consolecode )
+  .dhw 0x017D # 0x020E 0x017D   -
+  .dhw 0x015D # 0x020F 0x015D   (LUT)
+  .dhw 0x003A # 0x0210 0x003A   nr of entries    0x024B - 0x0211 = 0x003A
+  .dhw 0x2100 # 0x0211 0x2100   Space            0b0010_0001  ASCII 0x20
+  .dhw 0x4200 # 0x0212 0x4200   !                0b0100_0010
+  .dhw 0xE200 # 0x0213 0xE200   "                0b1110_0010
+  .dhw 0xC000 # 0x0214 0xC000   #                0b1100_0000
+  .dhw 0x4000 # 0x0215 0x4000   $                0b0100_0000
+  .dhw 0x0600 # 0x0216 0x0600   %                0b0110_0000
   .dhw 0x4400 # 0x0217 0x4400   &                0b0100_0100
-  .dhw 0x0027 # 0x0218 0x0027   '                         UC
-  .dhw 0xE600 # 0x0219 0xE600   '                0b1110_0110
-  .dhw 0x0028 # 0x021A 0x0028   (                         UC
-  .dhw 0xFE00 # 0x021B 0xFE00   (                0b1111_1110
-  .dhw 0x0029 # 0x021C 0x0029   )                         UC
-  .dhw 0xF600 # 0x021D 0xF600   )                0b1111_0110
-  .dhw 0x002A # 0x021E 0x002A   *                         UC
-  .dhw 0xD600 # 0x021F 0xD600   *                0b1101_0110
-  .dhw 0x002B # 0x0220 0x002B   +                         UC
-  .dhw 0xDA00 # 0x0221 0xDA00   +                0b1101_1010
-  .dhw 0x002C # 0x0222 0x002C   ,                         UC
-  .dhw 0x8000 # 0x0223 0x8000   ,                0b1000_0000
-  .dhw 0x002D # 0x0224 0x002D   -                         UC
-  .dhw 0x8400 # 0x0225 0x8400   -                0b1000_0100
-  .dhw 0x002E # 0x0226 0x002E   .                         UC
-  .dhw 0x0000 # 0x0227 0x0000   .                0b0000_0000
-  .dhw 0x002F # 0x0228 0x002F   /                         UC
-  .dhw 0xBC00 # 0x0229 0xBC00   /                0b1011_1100
-  .dhw 0x0030 # 0x022A 0x0030   0                         UC
-  .dhw 0xC400 # 0x022B 0xC400   0                0b1100_0100
-  .dhw 0x0031 # 0x022C 0x0031   1                         UC
-  .dhw 0xFC00 # 0x022D 0xFC00   1                0b1111_1100
-  .dhw 0x0032 # 0x022E 0x0032   2                         UC
-  .dhw 0xD800 # 0x022F 0xD800   2                0b1101_1000
-  .dhw 0x0033 # 0x0230 0x0033   3                         UC
-  .dhw 0xDC00 # 0x0231 0xDC00   3                0b1101_1100
-  .dhw 0x0034 # 0x0232 0x0034   4                         UC
-  .dhw 0xF000 # 0x0233 0xF000   4                0b1111_0000
-  .dhw 0x0035 # 0x0234 0x0035   5                         UC
-  .dhw 0xF400 # 0x0235 0xF400   5                0b1111_0100
-  .dhw 0x0036 # 0x0236 0x0036   6                         UC
-  .dhw 0xD000 # 0x0237 0xD000   6                0b1101_0000
-  .dhw 0x0037 # 0x0238 0x0037   7                         UC
-  .dhw 0xD400 # 0x0239 0xD400   7                0b1101_0100
-  .dhw 0x0038 # 0x023A 0x0038   8                         UC
-  .dhw 0xE400 # 0x023B 0xE400   8                0b1110_0100
-  .dhw 0x0039 # 0x023C 0x0039   9                         UC
-  .dhw 0xE000 # 0x023D 0xE000   9                0b1110_0000
-  .dhw 0x003A # 0x023E 0x003A   :                         UC
-  .dhw 0x8200 # 0x023F 0x8200   :                0b1000_0010
-  .dhw 0x003B # 0x0240 0x003B   ;                         UC
-  .dhw 0xD200 # 0x0241 0xD200   ;                0b1101_0010
-  .dhw 0x003C # 0x0242 0x003C   <                         UC
-  .dhw 0xDE00 # 0x0243 0xDE00   <                0b1101_1110
-  .dhw 0x003D # 0x0244 0x003D   =                         UC
-  .dhw 0xC200 # 0x0245 0xC200   =                0b1100_0010
-  .dhw 0x003E # 0x0246 0x003E   >                         UC
-  .dhw 0x4600 # 0x0247 0x4600   >                0b0100_0110
-  .dhw 0x003F # 0x0248 0x003F   ?                         UC
-  .dhw 0x8600 # 0x0249 0x8600   ?                0b1000_0110
-  .dhw 0x0040 # 0x024A 0x0040   @                         UC
-  .dhw 0x0400 # 0x024B 0x0400   @                0b0100_0000
-  .dhw 0x0041 # 0x024C 0x0041   A                         UC
-  .dhw 0x3E00 # 0x024D 0x3E00   A                0b0011_1110
-  .dhw 0x0042 # 0x024E 0x0042   B                         UC
-  .dhw 0x1A00 # 0x024F 0x1A00   B                0b0001_1010
-  .dhw 0x0043 # 0x0250 0x0043   C                         UC
-  .dhw 0x1E00 # 0x0251 0x1E00   C                0b0001_1110
-  .dhw 0x0044 # 0x0252 0x0044   D                         UC
-  .dhw 0x3200 # 0x0253 0x3200   D                0b0011_0010
-  .dhw 0x0045 # 0x0254 0x0045   E                         UC
-  .dhw 0x3600 # 0x0255 0x3600   E                0b0011_0110
-  .dhw 0x0046 # 0x0256 0x0046   F                         UC
-  .dhw 0x1200 # 0x0257 0x1200   F                0b0001_0010
-  .dhw 0x0047 # 0x0258 0x0047   G                         UC
-  .dhw 0x1600 # 0x0259 0x1600   G                0b0001_0110
-  .dhw 0x0048 # 0x025A 0x0048   H                         UC
-  .dhw 0x2600 # 0x025B 0x2600   H                0b0010_0110
-  .dhw 0x0049 # 0x025C 0x0049   I                         UC
-  .dhw 0x2200 # 0x025D 0x2200   I                0b0010_0010
-  .dhw 0x004A # 0x025E 0x004A   J                         UC
-  .dhw 0xCE00 # 0x025F 0xCE00   J                0b1100_1110
-  .dhw 0x004B # 0x0260 0x004B   K                         UC
-  .dhw 0x5A00 # 0x0261 0x5A00   K                0b0101_1010
-  .dhw 0x004C # 0x0262 0x004C   L                         UC
-  .dhw 0x5E00 # 0x0263 0x5E00   L                0b0101_1110
-  .dhw 0x004D # 0x0264 0x004C   M                         UC
-  .dhw 0x7200 # 0x0265 0x7200   M                0b0111_0010
-  .dhw 0x004E # 0x0266 0x004E   N                         UC
-  .dhw 0x7600 # 0x0267 0x7600   N                0b0111_0110
-  .dhw 0x004F # 0x0268 0x004F   O                         UC
-  .dhw 0x5200 # 0x0269 0x5200   O                0b0101_0010
-  .dhw 0x0050 # 0x026A 0x0050   P                         UC
-  .dhw 0x5600 # 0x026B 0x5600   P                0b0101_0110
-  .dhw 0x0051 # 0x026C 0x0051   Q                         UC
-  .dhw 0x6600 # 0x026D 0x6600   Q                0b0110_0110
-  .dhw 0x0052 # 0x026E 0x0052   R                         UC
-  .dhw 0x6200 # 0x026F 0x6200   R                0b0110_0010
-  .dhw 0x0053 # 0x0270 0x0053   S                         UC
-  .dhw 0x9A00 # 0x0271 0x9A00   S                0b1001_1010
-  .dhw 0x0054 # 0x0272 0x0054   T                         UC
-  .dhw 0x9E00 # 0x0273 0x9E00   T                0b1001_1110
-  .dhw 0x0055 # 0x0274 0x0055   U                         UC
-  .dhw 0xB200 # 0x0275 0xB200   U                0b1011_0010
-  .dhw 0x0056 # 0x0276 0x0056   V                         UC
-  .dhw 0xB600 # 0x0277 0xB600   V                0b1011_0110
-  .dhw 0x0057 # 0x0278 0x0057   W                         UC
-  .dhw 0x9200 # 0x0279 0x9200   W                0b1001_0010
-  .dhw 0x0058 # 0x027A 0x0058   X                         UC
-  .dhw 0x9600 # 0x027B 0x9600   X                0b1001_0110
-  .dhw 0x0059 # 0x027C 0x0059   Y                         UC
-  .dhw 0xA600 # 0x027D 0xA600   Y                0b1010_0110
-  .dhw 0x005A # 0x027E 0x005A   Z                         UC
-  .dhw 0xA200 # 0x027F 0xA200   Z                0b1010_0010
+  .dhw 0xE600 # 0x0218 0xE600   '                0b1110_0110
+  .dhw 0xFE00 # 0x0219 0xFE00   (                0b1111_1110
+  .dhw 0xF600 # 0x021A 0xF600   )                0b1111_0110
+  .dhw 0xD600 # 0x021B 0xD600   *                0b1101_0110
+  .dhw 0xDA00 # 0x021C 0xDA00   +                0b1101_1010
+  .dhw 0x8000 # 0x021D 0x8000   ,                0b1000_0000
+  .dhw 0x8400 # 0x021E 0x8400   -                0b1000_0100
+  .dhw 0x0000 # 0x021F 0x0000   .                0b0000_0000
+  .dhw 0xBC00 # 0x0220 0xBC00   /                0b1011_1100
+  .dhw 0xC400 # 0x0221 0xC400   0                0b1100_0100
+  .dhw 0xFC00 # 0x0222 0xFC00   1                0b1111_1100
+  .dhw 0xD800 # 0x0223 0xD800   2                0b1101_1000
+  .dhw 0xDC00 # 0x0224 0xDC00   3                0b1101_1100
+  .dhw 0xF000 # 0x0225 0xF000   4                0b1111_0000
+  .dhw 0xF400 # 0x0226 0xF400   5                0b1111_0100
+  .dhw 0xD000 # 0x0227 0xD000   6                0b1101_0000
+  .dhw 0xD400 # 0x0228 0xD400   7                0b1101_0100
+  .dhw 0xE400 # 0x0229 0xE400   8                0b1110_0100
+  .dhw 0xE000 # 0x022A 0xE000   9                0b1110_0000
+  .dhw 0x8200 # 0x022B 0x8200   :                0b1000_0010
+  .dhw 0xD200 # 0x022C 0xD200   ;                0b1101_0010
+  .dhw 0xDE00 # 0x022D 0xDE00   <                0b1101_1110
+  .dhw 0xC200 # 0x022E 0xC200   =                0b1100_0010
+  .dhw 0x4600 # 0x022F 0x4600   >                0b0100_0110
+  .dhw 0x8600 # 0x0230 0x8600   ?                0b1000_0110
+  .dhw 0x0400 # 0x0231 0x0400   @                0b0100_0000
+  .dhw 0x3E00 # 0x0232 0x3E00   A                0b0011_1110
+  .dhw 0x1A00 # 0x0233 0x1A00   B                0b0001_1010
+  .dhw 0x1E00 # 0x0234 0x1E00   C                0b0001_1110
+  .dhw 0x3200 # 0x0235 0x3200   D                0b0011_0010
+  .dhw 0x3600 # 0x0236 0x3600   E                0b0011_0110
+  .dhw 0x1200 # 0x0237 0x1200   F                0b0001_0010
+  .dhw 0x1600 # 0x0238 0x1600   G                0b0001_0110
+  .dhw 0x2600 # 0x0239 0x2600   H                0b0010_0110
+  .dhw 0x2200 # 0x023A 0x2200   I                0b0010_0010
+  .dhw 0xCE00 # 0x023B 0xCE00   J                0b1100_1110
+  .dhw 0x5A00 # 0x023C 0x5A00   K                0b0101_1010
+  .dhw 0x5E00 # 0x023D 0x5E00   L                0b0101_1110
+  .dhw 0x7200 # 0x023E 0x7200   M                0b0111_0010
+  .dhw 0x7600 # 0x023F 0x7600   N                0b0111_0110
+  .dhw 0x5200 # 0x0240 0x5200   O                0b0101_0010
+  .dhw 0x5600 # 0x0241 0x5600   P                0b0101_0110
+  .dhw 0x6600 # 0x0242 0x6600   Q                0b0110_0110
+  .dhw 0x6200 # 0x0243 0x6200   R                0b0110_0010
+  .dhw 0x9A00 # 0x0244 0x9A00   S                0b1001_1010
+  .dhw 0x9E00 # 0x0245 0x9E00   T                0b1001_1110
+  .dhw 0xB200 # 0x0246 0xB200   U                0b1011_0010
+  .dhw 0xB600 # 0x0247 0xB600   V                0b1011_0110
+  .dhw 0x9200 # 0x0248 0x9200   W                0b1001_0010
+  .dhw 0x9600 # 0x0249 0x9600   X                0b1001_0110
+  .dhw 0xA600 # 0x024A 0xA600   Y                0b1010_0110
+  .dhw 0xA200 # 0x024B 0xA200   Z                0b1010_0010
+  .dhw 0xFFFF # 0x024C 0xFFFF   equiv to TRUE
+  
   
 
   .undef 《NO_SYM_LOOKUP》
