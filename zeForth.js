@@ -3921,6 +3921,17 @@ const src3 = `
   .dhw 0x0172 # 0x03C0 0x0172   TRUE
   .dhw 0x013B # 0x03C1 0x013B   (CONST) : console_keyboard_read_IOCC2
   .dhw 0x0A00 # 0x03C2 0x0A00
+  .dhw 0x000D # 0x03C3 0x000D   R>   : type_on_console_inline_short_string ( -- )
+  .dhw 0x0008 # 0x03C4 0x0008   DUP             ( raddr raddr )
+  .dhw 0x0___ # 0x03C5 0x0___   1<<             ( raddr raddr*2 )
+  .dhw 0x0___ # 0x03C6 0x0___   SHORT_STR_COUNT ( raddr byteaddr length )
+  .dhw 0x0___ # 0x03C7 0x0___   ROT             ( byteaddr length raddr )
+  .dhw 0x0___ # 0x03C8 0x0___   OVER            ( byteaddr length raddr length )
+  .dhw 0x0___ # 0x03C9 0x0___   1>>             ( byteaddr length raddr length/2 )
+  .dhw 0x0001 # 0x03CA 0x0___   +               ( byteaddr length raddr+n )
+  .dhw 0x000C # 0x03CB 0x000C   >R
+  .dhw 0x0___ # 0x03CC 0x0___   console_TYPE_STR
+  .dhw 0x000F # 0x03CD 0x000F   EXIT
 
   .undef 《NO_SYM_LOOKUP》
 `;
