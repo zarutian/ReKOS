@@ -2936,6 +2936,24 @@ const src3 = `
   # 0b00101  1627 Plotter
   # 0b01010  Synchronous Communications Adapter, in BSC mode 4800 baud connected to the IBM z/390
   # 0b11001	 2250 Display Unit, with both Alphanumeric keyboard and Programmed Function Lighted Keypad
+  # 
+  # 0b11010  Monochrome (not grayscale) Display unit
+  #          512x512 pixels  (can fake Macintosh SE 512x384 )
+  #            split into 4x4 pixel tile per cell (no tileset, just directly addressable)
+  #            first nybble is first line in tile and so on
+  #          Initiate Write IOCC tells where in IBM 1130 the framebuffer starts
+  #          Initiate Read  IOCC:
+  #            WCA+0:  Word Count
+  #            WCA+1:  0bTTTT_LMRX_XXXX_XXXX  Mouse Left Middle and Right buttons and X coord
+  #            WCA+2:  0bTTTT_TTTY_YYYY_YYYY  Mouse Y coord
+  #            WCA+3:  Full ISO Keyboard 1st Cell
+  #            WCA+4:                    2nd Cell
+  #            WCA+5:                    3rd Cell
+  #            WCA+6:                    4th Cell
+  #            WCA+7:                    5th Cell
+  #            WCA+8:                    6th Cell
+  #            WCA+9:                    7th Cell
+  #            WCA+10:                   8th Cell
 
   :f ibm1130_5D_IPL_papertape
   .dhw (VAR)
