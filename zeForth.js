@@ -4433,7 +4433,46 @@ const src3 = `
   .dhw 0x____ # 0x10F1 0x____   (DROP) galli?
   .dhw 0x____ # 0x10F2 0x____   ((plot_IO))
   .dhw 0x000F # 0x10F3 0x000F   EXIT
-  
+  .dhw 0x____ # 0x10F4 0x____   (CONST)   : 38_const
+  .dhw 0x0026 # 0x10F5 0x0026   38
+  .dhw 0x____ # 0x10F6 0x____   38_const  : 0.4mm
+  .dhw 0x000C # 0x10F7 0x000C   >R
+  .dhw 0x____ # 0x10F8 0x____   repeat_last_pen_act
+  .dhw 0x____ # 0x10F9 0x____   (NEXT)
+  .dhw 0x10F8 # 0x10FA 0x10F8
+  .dhw 0x000F # 0x10FB 0x000F   EXIT
+  .dhw 0x000D # 0x10FC 0x000D   R>   : (bitmap)
+  .dhw 0x0008 # 0x10FD 0x0008   DUP     ( raddr raddr )
+  .dhw 0x0008 # 0x10FE
+  .dhw 0x0006 # 0x10FF 0x0006   @       ( raddr raddr width&height )
+  .dhw 0x000A # 0x1100 0x000A   SWAP    ( raddr width&height raddr )
+  .dhw 0x____ # 0x1101 0x____   OVER    ( raddr width&height raddr width&height )
+  .dhw 0x0008 # 0x1102 0x0008   DUP     ( raddr width&height raddr width&height width&height )
+  .dhw 0x____ # 0x1103 0x____   8<<>    ( raddr width&height raddr width&height height&width )
+  .dhw 0x____ # 0x1104 0x____   0xFF&   ( raddr width&height raddr width&height width )
+  .dhw 0x____ # 0x1105 0x____   4>>     ( raddr width&height raddr width&height width/16 )
+  .dhw 0x000A # 0x1106 0x000A   SWAP    ( raddr width&height raddr width/16 width&height )
+  .dhw 0x____ # 0x1107 0x____   0xFF&   ( raddr width&height raddr width/16 height )
+  .dhw 0x____ # 0x1108 0x____   *       ( raddr width&height raddr offset )
+  .dhw 0x0001 # 0x1109 0x0001   +       ( raddr width&height raddr+offset )
+  .dhw 0x0005 # 0x110A 0x0005   1+      ( raddr width&height raddr+offset+1 )
+  .dhw 0x000D # 0x110B 0x000D   >R      ( raddr width&height ) R:( raddr' )
+  .dhw 0x0008 # 0x110C 0x0008   DUP     ( raddr width&height width&height )
+  .dhw 0x____ # 0x110D 0x____   0xFF&   ( raddr width&height height )
+  .dhw 0x000D # 0x110E 0x000D   >R      ( raddr width&height ) R:( raddr' height )
+  .dhw 0x____ # 0x110F 0x____   8<<>    ( raddr height&width ) R:( raddr' height )
+  .dhw 0x____ # 0x1110 0x____   0xFF&   ( raddr width ) R:( raddr' height )
+  .dhw 0x000A # 0x1111 0x000A   SWAP    ( width raddr ) R:( raddr' height )
+  .dhw 0x0005 # 0x1112 0x0005   1+      ( width raddr+1 ) R:( raddr' height )
+  .dhw 0x____ # 0x1113 0x____   (JMP)
+  .dhw 0x____ # 0x1114 0x____
+  .dhw 0x____ # 0x1115 0x____   OVER    ( width raddr+1 width ) R:( raddr' height )
+  .dhw 0x000D # 0x1116 0x000D   >R      ( width raddr+1 )       R:( raddr' height width )
+  .dhw 0x____ # 0x1117 0x____   (JMP)
+  .dhw 0x____ # 0x1118 0x____
+
+
+  .dhw 0x
 
   
   .undef 《NO_SYM_LOOKUP》
