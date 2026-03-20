@@ -98,4 +98,11 @@ I suspect that this 'B' number is to facilitate device key revocation upon resta
 * [IBM 2250-4 at bitsavers](https://www.bitsavers.org/pdf/ibm/2250/A27-2723-0_2250mod4Descr.pdf)
 * https://www.ibm1130.net/functional/index.html
 * http://ibm1130.org/sim/downloads/
+* [SAC OEM](https://archive.org/details/ibm-file-1130-19-ga-26-3645-5/page/1/mode/1up)
+
+
+
+
+
+
 
