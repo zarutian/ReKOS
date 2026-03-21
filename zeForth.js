@@ -4467,12 +4467,14 @@ const src3 = `
   .dhw 0x____ # 0x1113 0x____   (JMP)
   .dhw 0x____ # 0x1114 0x____
   .dhw 0x____ # 0x1115 0x____   OVER    ( width raddr+1 width ) R:( raddr' height )
-  .dhw 0x000D # 0x1116 0x000D   >R      ( width raddr+1 )       R:( raddr' height width )
-  .dhw 0x____ # 0x1117 0x____   (JMP)
-  .dhw 0x____ # 0x1118 0x____
-
-
-  .dhw 0x
+  .dhw 0x____ # 0x1116 0x____   16_const
+  .dhw 0x____ # 0x1117 0x____   /%      ( width raddr+1 wr wq )
+  .dhw 0x000D # 0x1118 0x000D   >R      ( width raddr+1 wr )    R:( raddr' height wq )
+  .dhw 0x000A # 0x1119 0x000A   SWAP    ( width wr raddr+1 )    R:( raddr' height wq )
+  .dhw 0x____ # 0x111A 0x____   (JMP)
+  .dhw 0x____ # 0x111B 0x____
+  .dhw 0x0008 # 0x111C 0x0008   DUP     ( width wr addr addr )  R:( raddr' height wq )
+  .dhw 0x0006 # 0x111D 0x0006   @       ( width wr addr cell )  R:( raddr' height wq )
 
   
   .undef 《NO_SYM_LOOKUP》
