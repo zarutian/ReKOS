@@ -4588,6 +4588,57 @@ const src3 = `
   .dhw 0x0005 # 0x114D 0x0005   1+
   .dhw 0x____ # 0x114E 0x____   0_const
   .dhw 0x000F # 0x114F 0x000F   EXIT
+
+  .dhw 0x0000 # 0x2000 0x0000   NOP     : PAUSE ( -- )  here to be overwriten for co-operative task switch
+  .dhw 0x000F # 0x2001 0x000F   EXIT
+  .dhw 0x____ # 0x2002 0x____   (VAR)   : DISK_init_read_IOCC
+  .dhw 0xDEAD # 0x2003 0xDEAD   gets replaced with an Word Count Address
+  .dhw 0x0600 # 0x2004 0x0600   operation initiate read, device, disk, and sector selection bits will be modified
+  .dhw 0x____ # 0x2005 0x____   (VAR)   : DISK_init_write_IOCC
+  .dhw 0xDEAD # 0x2006 0xDEAD   gets replaced with an Word Count Address
+  .dhw 0x0500 # 0x2007 0x0500   operation initiate write, device, disk, and sector selection bits will be modified
+  .dhw 0x____ # 0x2008 0x____   (VAR)   : DISK_control_IOCC
+  .dhw 0x00DE # 0x2009 0x00DE   the DE byte gets replaced with how many cylenders to move
+  .dhw 0x0400 # 0x200A 0x0400   operation control, device and disk selection bits and direction bit will be modified
+  .dhw 0x____ # 0x200B 0x____   (VAR)   : DISK_sense_device_IOCC
+  .dhw 0x____ # 0x2009 0x____   address of DISK_device_status
+  .dhw 0x0700 # 0x200A 0x0700   operation sense device status, device and disk selection bits and reset bit will be modified
+  .dhw 0x____ # 0x200B 0x____   (VAR)   : DISK_device_status
+  .dhw 0x0000 # 0x200C 0x0000   aforesaid address is this one
+  .dhw 0x____ # 0x200D 0x____   (VAR)   : DISK_device&disk_select
+  .dhw 0x0000 # 0x200E 0x0000
+  .dhw 0x____ # 0x200F 0x____   (VAR)   : DISK_curr_sector_nr
+  .dhw 0x0000 # 0x2010 0x0000   bits 5-12 cylender  bits 13-15 sector
+  .dhw 0x0008 # 0x2011 0x0008   DUP   : DISK_seek ( target_sector_nr -- )
+  .dhw 0x____ # 0x2012 0x____   DISK_curr_sector_nr ( target_sector_nr target_sector_nr vaddr )
+  .dhw 0x0006 # 0x2013 0x0006   @                   ( target_sector_nr target_sector_nr curr_sector_nr )
+  .dhw 0x____ # 0x2014 0x____   ~=                  ( target_sector_nr bool )
+  .dhw 0x____ # 0x2015 0x____   (BRZ)               ( target_sector_nr )
+  .dhw 0x____ # 0x2016 0x____   1DROP   we are already there, so exit and drop target_sector_nr
+  .dhw 0x0008 # 0x2017 0x0008   DUP                 ( target_sector_nr target_sector_nr )
+  .dhw 0x____ # 0x2018 0x____   DISK_curr_sector_nr ( target_sector_nr target_sector_nr vaddr )
+  .dhw 0x0006 # 0x2019 0x0006   @                   ( target_sector_nr target_sector_nr curr_sector_nr )
+  .dhw 0x____ # 0x201A 0x____   <                   ( target_sector_nr bool )
+  .dhw 0x0008 # 0x2018 0x0008   DUP                 ( target_sector_nr bool bool )
+  .dhw 0x____ # 0x201C 0x____   4&                  ( target_sector_nr bool direction_bit )
+  .dhw 0x000C # 0x201D 0x000C   >R                  ( target_sector_nr bool )
+  .dhw 0x____ # 0x201E 0x____   (BRZ)               ( target_sector_nr )
+  .dhw 0x____ # 0x201F 0x____   DISK_seek_L0
+  .dhw 0x____ # 0x2020 0x____   DISK_curr_sector_nr ( target_sector_nr vaddr )
+  .dhw 0x0006 # 0x2021 0x0006   @                   ( target_sector_nr curr_sector_nr )
+  .dhw 0x____ # 0x2022 0x____   3>>                 ( target_sector_nr curr_cylender_nr )
+  .dhw 0x000A # 0x2023 0x000A   OVER                ( target_sector_nr curr_cylender_nr  )
+  .dhw 0x____ # 0x2024 0x____   3>>                 ( target_sector_nr curr_cylender_nr target_cylender_nr )
+  .dhw 0x____ # 0x2025 0x____   -                   ( target_sector_nr offset_in_cylenders )
+  .dhw 0x____ # 0x2026 0x____   (JMP)
+  .dhw 0x____ # 0x2027 0x____   DISK_seek_L1
+  .dhw 0x0008 # 0x2028 0x0008   DUP                 ( target_sector_nr target_sector_nr )
+  .dhw 0x____ # 0x2029 0x____   3>>                 ( target_sector_nr target_cylender_nr )
+  .dhw 0x____ # 0x202A 0x____   DISK_curr_sector_nr
+  .dhw 0x0006 # 0x202B 0x0006   @                   ( target_sector_nr target_cylender_nr curr_sector_nr )
+  .dhw 0x____ # 0x202C 0x____   3>>
+  
+  tbd: : DISK_init_subsys   ( devicnr disknr -- )
   
   .undef 《NO_SYM_LOOKUP》
 `;
