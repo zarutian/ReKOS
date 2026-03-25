@@ -4606,10 +4606,10 @@ const src3 = `
   .dhw 0x____ # 0x200B 0x____   (VAR)   : DISK_device_status
   .dhw 0x0000 # 0x200C 0x0000   aforesaid address is this one
   .dhw 0x____ # 0x200D 0x____   (VAR)   : DISK_device&disk_select
-  .dhw 0x0000 # 0x200E 0x0000
+  .dhw 0x0000 # 0x200E 0x0000   the device and disk selection bits are in apropos bit places
   .dhw 0x____ # 0x200F 0x____   (VAR)   : DISK_curr_sector_nr
   .dhw 0x0000 # 0x2010 0x0000   bits 5-12 cylender  bits 13-15 sector
-  .dhw 0x0008 # 0x2011 0x0008   DUP   : DISK_seek ( target_sector_nr -- )
+  .dhw 0x0008 # 0x2011 0x0008   DUP     : DISK_seek ( target_sector_nr -- )
   .dhw 0x____ # 0x2012 0x____   DISK_curr_sector_nr ( target_sector_nr target_sector_nr vaddr )
   .dhw 0x0006 # 0x2013 0x0006   @                   ( target_sector_nr target_sector_nr curr_sector_nr )
   .dhw 0x____ # 0x2014 0x____   ~=                  ( target_sector_nr bool )
@@ -4619,25 +4619,45 @@ const src3 = `
   .dhw 0x____ # 0x2018 0x____   DISK_curr_sector_nr ( target_sector_nr target_sector_nr vaddr )
   .dhw 0x0006 # 0x2019 0x0006   @                   ( target_sector_nr target_sector_nr curr_sector_nr )
   .dhw 0x____ # 0x201A 0x____   <                   ( target_sector_nr bool )
-  .dhw 0x0008 # 0x2018 0x0008   DUP                 ( target_sector_nr bool bool )
-  .dhw 0x____ # 0x201C 0x____   4&                  ( target_sector_nr bool direction_bit )
-  .dhw 0x000C # 0x201D 0x000C   >R                  ( target_sector_nr bool )
-  .dhw 0x____ # 0x201E 0x____   (BRZ)               ( target_sector_nr )
-  .dhw 0x____ # 0x201F 0x____   DISK_seek_L0
-  .dhw 0x____ # 0x2020 0x____   DISK_curr_sector_nr ( target_sector_nr vaddr )
-  .dhw 0x0006 # 0x2021 0x0006   @                   ( target_sector_nr curr_sector_nr )
-  .dhw 0x____ # 0x2022 0x____   3>>                 ( target_sector_nr curr_cylender_nr )
-  .dhw 0x000A # 0x2023 0x000A   OVER                ( target_sector_nr curr_cylender_nr  )
-  .dhw 0x____ # 0x2024 0x____   3>>                 ( target_sector_nr curr_cylender_nr target_cylender_nr )
-  .dhw 0x____ # 0x2025 0x____   -                   ( target_sector_nr offset_in_cylenders )
-  .dhw 0x____ # 0x2026 0x____   (JMP)
-  .dhw 0x____ # 0x2027 0x____   DISK_seek_L1
-  .dhw 0x0008 # 0x2028 0x0008   DUP                 ( target_sector_nr target_sector_nr )
-  .dhw 0x____ # 0x2029 0x____   3>>                 ( target_sector_nr target_cylender_nr )
-  .dhw 0x____ # 0x202A 0x____   DISK_curr_sector_nr
-  .dhw 0x0006 # 0x202B 0x0006   @                   ( target_sector_nr target_cylender_nr curr_sector_nr )
-  .dhw 0x____ # 0x202C 0x____   3>>
-  
+  .dhw 0x000C # 0x201B 0x000C   >R                  ( target_sector_nr ) R:( bool )
+  .dhw 0x____ # 0x201C 0x____   DISK_curr_sector_nr ( target_sector_nr vaddr ) R:( bool )
+  .dhw 0x0006 # 0x201D 0x0006   @                   ( target_sector_nr curr_sector_nr ) R:( bool )
+  .dhw 0x____ # 0x201E 0x____   3>>                 ( target_sector_nr curr_cylender_nr ) R:( bool )
+  .dhw 0x000A # 0x201F 0x000A   OVER                ( target_sector_nr curr_cylender_nr  ) R:( bool )
+  .dhw 0x____ # 0x2020 0x____   3>>                 ( target_sector_nr curr_cylender_nr target_cylender_nr ) R:( bool )
+  .dhw 0x____ # 0x2021 0x____   R@
+  .dhw 0x____ # 0x2022 0x____   INVERT
+  .dhw 0x000B # 0x2023 0x000B   SKZ
+  .dhw 0x000A # 0x2024 0x000A   SWAP
+  .dhw 0x____ # 0x2025 0x____   -                   ( target_sector_nr offset_in_cylenders ) R:( bool )
+  .dhw 0x000D # 0x2026 0x000D   R>                  ( target_sector_nr offset_in_cylenders bool )
+  .dhw 0x____ # 0x2027 0x____   4&                  ( target_sector_nr offset_in_cylenders direction_bit )
+  .dhw 0x____ # 0x2028 0x____   DISK_control_IOCC
+  .dhw 0x0005 # 0x2029 0x0005   1+
+  .dhw 0x0006 # 0x202A 0x0006   @                   ( target_sector_nr offset_in_cylenders direction_bit IOCC2 )
+  .dhw 0x____ # 0x202B 0x____   OR                  ( target_sector_nr offset_in_cylenders IOCC2 )
+  .dhw 0x____ # 0x202C 0x____   DISK_device&disk_select
+  .dhw 0x0006 # 0x202D 0x0006   @
+  .dhw 0x____ # 0x202E 0x____   OR
+  .dhw 0x____ # 0x202F 0x____   pause_until_DISK_ready
+  .dhw 0x____ # 0x2030 0x____   (IO)_DROP
+  .dhw 0x____ # 0x2031 0x____   DISK_curr_sector_nr
+  .dhw 0x0007 # 0x2032 0x0007   !
+  .dhw 0x000F # 0x2033 0x000F   EXIT
+  .dhw 0x____ # 0x2034 0x____   pause_until_DISK_ready   : DISK_read_sector ( dest_addr -- )
+  .dhw 0x0008 # 0x2035 0x0008   DUP
+  .dhw 0x____ # 0x2036 0x____   DISK_device&disk_select  ( dest_addr dest_addr vaddr )
+  .dhw 0x0006 # 0x2037 0x0006   @                        ( dest_addr dest_addr selection_bits )
+  .dhw 0x____ # 0x2038 0x____   DISK_init_read_IOCC      ( dest_addr dest_addr selection_bits vaddr )
+  .dhw 0x0005 # 0x2039 0x0005   1+                       ( dest_addr dest_addr selection_bits vaddr+1 )
+  .dhw 0x0006 # 0x203A 0x0006   @                        ( dest_addr dest_addr selection_bits IOCC2 )
+  .dhw 0x____ # 0x203B 0x____   OR                       ( dest_addr dest_addr IOCC2' )
+  .dhw 0x____ # 0x203C 0x____   (IO)_DROP                ( dest_addr )
+  .dhw 0x____ # 0x203D 0x____   FALSE                    ( dest_addr 0 )
+  .dhw 0x____ # 0x203E 0x____   DISK_device&disk_select
+  .dhw 0x0006 # 0x203F 0x0006   @
+  .dhw 0x____ # 0x2040 0x____   DISK_
+ 
   tbd: : DISK_init_subsys   ( devicnr disknr -- )
   
   .undef 《NO_SYM_LOOKUP》
