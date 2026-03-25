@@ -4645,7 +4645,7 @@ const src3 = `
   .dhw 0x0007 # 0x2032 0x0007   !
   .dhw 0x000F # 0x2033 0x000F   EXIT
   .dhw 0x____ # 0x2034 0x____   pause_until_DISK_ready   : DISK_read_sector ( dest_addr -- )
-  .dhw 0x0008 # 0x2035 0x0008   DUP
+  .dhw 0x0008 # 0x2035 0x0008   DUP                      : DISK_read_sector_L0
   .dhw 0x____ # 0x2036 0x____   DISK_device&disk_select  ( dest_addr dest_addr vaddr )
   .dhw 0x0006 # 0x2037 0x0006   @                        ( dest_addr dest_addr selection_bits )
   .dhw 0x____ # 0x2038 0x____   DISK_init_read_IOCC      ( dest_addr dest_addr selection_bits vaddr )
@@ -4653,10 +4653,37 @@ const src3 = `
   .dhw 0x0006 # 0x203A 0x0006   @                        ( dest_addr dest_addr selection_bits IOCC2 )
   .dhw 0x____ # 0x203B 0x____   OR                       ( dest_addr dest_addr IOCC2' )
   .dhw 0x____ # 0x203C 0x____   (IO)_DROP                ( dest_addr )
-  .dhw 0x____ # 0x203D 0x____   FALSE                    ( dest_addr 0 )
-  .dhw 0x____ # 0x203E 0x____   DISK_device&disk_select
-  .dhw 0x0006 # 0x203F 0x0006   @
-  .dhw 0x____ # 0x2040 0x____   DISK_
+  .dhw 0x____ # 0x203D 0x____   DISK_sense_device_IOCC   ( dest_addr vaddr )
+  .dhw 0x____ # 0x203E 0x____   D@                       ( dest_addr IOCC1 IOCC2 )
+  .dhw 0x____ # 0x203F 0x____   DISK_device&disk_select  ( dest_addr IOCC1 IOCC2 vaddr )
+  .dhw 0x0006 # 0x2040 0x0006   @                        ( dest_addr IOCC1 IOCC2 selection_bits )
+  .dhw 0x____ # 0x2041 0x____   OR                       ( dest_addr IOCC1 IOCC2' )
+  .dhw 0x____ # 0x2042 0x____   (IO)                     ( dest_addr device_status )
+  .dhw 0x____ # 0x2043 0x____   0x8000&
+  .dhw 0x____ # 0x2044 0x____   (BRZ)
+  .dhw 0x____ # 0x2045 0x____   1DROP
+  .dhw 0x____ # 0x2046 0x____   (JMP)
+  .dhw 0x2034 # 0x2047 0x2034   DISK_read_sector
+  .dhw 0x____ # 0x2048 0x____   (CONST)  : DISK_tmp_buffer_addr   used for readback check in writes
+  .dhw 0x____ # 0x2049 0x____   this buffer needs 232 cells ( Word Count cell + 231 sector cells )
+  .dhw 0x____ # 0x204A 0x____   pause_until_DISK_ready   : DISK_write_sector ( src_addr -- )
+  .dhw 0x0008 # 0x204B 0x0008   DUP
+  .dhw 0x____ # 0x204C 0x____   DISK_device&disk_select
+  .dhw 0x0006 # 0x204D 0x0006   @
+  .dhw 0x____ # 0x204E 0x____   DISK_init_write_IOCC
+  .dhw 0x0005 # 0x204F 0x0005   1+
+  .dhw 0x0006 # 0x2050 0x0006   @
+  .dhw 0x____ # 0x2051 0x____   OR
+  .dhw 0x____ # 0x2052 0x____   (IO)_DROP
+  .dhw 0x____ # 0x2053 0x____   DISK_tmp_buffer_addr
+  .dhw 0x____ # 0x2054 0x____   DISK_read_sector
+  .dhw 0x0008 # 0x2055 0x0008   DUP
+  .dhw 0x____ # 0x2056 0x____   DISK_tmp_buffer_addr
+  .dhw 0x____ # 0x2057 0x____   MEMCMP
+  .dhw 0x____ # 0x2058 0x____   (BRZ)
+  .dhw 0x____ # 0x2059 0x____   DISK_write_sector
+  .dhw 0x0009 # 0x205A 0x0009   DROP
+  .dhw 0x000F # 0x205B 0x000F   EXIT
  
   tbd: : DISK_init_subsys   ( devicnr disknr -- )
   
