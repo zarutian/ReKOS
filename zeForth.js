@@ -4833,6 +4833,11 @@ const src3 = `
   .dhw 0x____ # 0x____ 0x____   ibm1442_columns_left
   .dhw 0x0007 # 0x____ 0x0007   !
   .dhw 0x000F # 0x____ 0x000F   EXIT
+
+  .dhw 0x____ # 0x____ 0x____   SWAP   : NOS++
+  .dhw 0x____ # 0x____ 0x____   1+
+  .dhw 0x____ # 0x____ 0x____   SWAP
+  .dhw 0x____ # 0x____ 0x____   EXIT
   
   .dhw 0x0008 # 0x____ 0x0008   DUP      : MEMDUMP_TO_CARDSTACK ( start_addr length -- )
   .dhw 0x____ # 0x____ 0x____   54_const ( start length length 54 ) : MEMDUMP_TO_CARDSTACK_L0
@@ -4850,9 +4855,7 @@ const src3 = `
   .dhw 0x____ # 0x____ 0x____   0xFFF0&  ( remaining addr cell masked )
   .dhw 0x____ # 0x____ 0x____   ibm1442_punch  ( remaining addr cell ) R:( count )
   .dhw 0x____ # 0x____ 0x____   12<<     ( remaining addr cell<<12 )
-  .dhw 0x____ # 0x____ 0x____   SWAP
-  .dhw 0x____ # 0x____ 0x____   1+
-  .dhw 0x____ # 0x____ 0x____   SWAP
+  .dhw 0x____ # 0x____ 0x____   NOS++
   .dhw 0x____ # 0x____ 0x____   R--_R@   ( remaining addr+1 cell<<12 count-1 ) R:( count-1 )
   .dhw 0x____ # 0x____ 0x____   (BRZ)    ( remaining addr+1 cell<<12 )
   .dhw 0x____ # 0x____ 0x____   MEMDUMP_TO_CARDSTACK_L4
@@ -4861,12 +4864,31 @@ const src3 = `
   .dhw 0x____ # 0x____ 0x____   8<>>     ( remaining addr+1 cellA<<12 cellB<>>8 ) R:( count-1 )
   .dhw 0x____ # 0x____ 0x____   DUP      ( remaining addr+1 cellA<<12 cellB<>>8 cellB<>>8 ) R:( count-1 )
   .dhw 0x____ # 0x____ 0x____   >R       ( remaining addr+1 cellA<<12 cellB<>>8 ) R:( count-1 cellB<>>8 )
-  .dhw 0x____ # 0x____ 0x____   0xFF&    ( remaining addr+1 cellA<<12 cellB_masked ) R:( count-1 cell<>>8 )
+  .dhw 0x____ # 0x____ 0x____   0xFF&    ( remaining addr+1 cellA<<12 cellB_masked_u ) R:( count-1 cell<>>8 )
   .dhw 0x____ # 0x____ 0x____   OR       ( remaining addr+1 cell )
   .dhw 0x____ # 0x____ 0x____   ibm1442_punch  ( remaining addr+1 ) R:( count-1 cell<>>8 )
   .dhw 0x____ # 0x____ 0x____   R>       ( remaining addr+1 cellB<>>8 ) R:( count-1 )
-  
-
+  .dhw 0x____ # 0x____ 0x____   NOS++    ( remaining addr+2 cellB<>>8 ) R:( count-1 )
+  .dhw 0x____ # 0x____ 0x____   0xFF00&  ( remaining addr+2 cellB_masked_l ) R:( count-1 )
+  .dhw 0x____ # 0x____ 0x____   R--_R@   ( remaining addr+2 cellB_masked_l count-2 ) R:( count-2 )
+  .dhw 0x____ # 0x____ 0x____   (BRZ)    ( remaining addr+2 cellB_masked_l ) R:( count-2 )
+  .dhw 0x____ # 0x____ 0x____   MEMDUMP_TO_CARDSTACK_L4
+  .dhw 0x____ # 0x____ 0x____   OVER
+  .dhw 0x____ # 0x____ 0x____   @        ( remaining addr+2 cellB_masked_l cellC )
+  .dhw 0x____ # 0x____ 0x____   4<>>
+  .dhw 0x____ # 0x____ 0x____   DUP
+  .dhw 0x____ # 0x____ 0x____   >R       ( remaining addr+2 cellB_masked_l cellC<>>4 ) R:( count-2 cellC<>>4 )
+  .dhw 0x____ # 0x____ 0x____   0xF&
+  .dhw 0x____ # 0x____ 0x____   OR
+  .dhw 0x____ # 0x____ 0x____   ibm1442_punch ( remaing addr+2 ) R:( count-2 cellC<>>4 )
+  .dhw 0x____ # 0x____ 0x____   R>       ( remaining addr+2 cellC<>>4 )
+  .dhw 0x____ # 0x____ 0x____   0xFFF&
+  .dhw 0x____ # 0x____ 0x____   ibm1442_punch ( remaining addr+2 )
+  .dhw 0x____ # 0x____ 0x____   1+       ( remaining addr+3 )
+  .dhw 0x____ # 0x____ 0x____   (JMP)
+  .dhw 0x____ # 0x____ 0x____   MEMDUMP_TO_CARDSTACK_L2
+  .dhw 0x____ # 0x____ 0x____   FALSE   : MEMDUMP_TO_CARDSTACK_L4
+  .dhw 0x____ # 0x____ 0x____   ibm1442_punch
   .dhw 0x____ # 0x____ 0x____   (NEXT)  : MEMDUMP_TO_CARDSTACK_L2
   .dhw 0x____ # 0x____ 0x____   MEMDUMP_TO_CARDSTACK_L1
   .dhw 0x____ # 0x____ 0x____   ibm1442_columns_left  : MEMDUMP_TO_CARDSTACK_L3
