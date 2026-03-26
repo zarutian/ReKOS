@@ -4,10 +4,22 @@ See [this](https://www.ibm1130.net/functional/index.html) on how to read cards a
 
 ```txt
 
-Loader card:
+Loader card:                      op      ss displ.
            rows                   cell in core
             11                            ==111111
             210123456789   addr   01234___89012345
 column 0: 0b000000000000 0x0000 0b0000000000000000  NOP
        1:
+       2:
+       3:
+
+ C    72:
+ A    73:
+ R    74:
+ D    75:
+ S    76:
+ E    77:
+ Q    78:
+ #    79:
+    END OF CARD
 ```
