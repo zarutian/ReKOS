@@ -4834,10 +4834,30 @@ const src3 = `
   .dhw 0x0007 # 0x____ 0x0007   !
   .dhw 0x000F # 0x____ 0x000F   EXIT
 
+  .dhw 0x____ # 0x____ 0x____   3_const   : ibm1442_punch_4_digit_BCD ( bcdn -- )
+  .dhw 0x000C # 0x____ 0x000C   >R
+  .dhw 0x____ # 0x____ 0x____   4<<>      ( cdnb )  : ibm1442_punch_4_digit_BCD_L0
+  .dhw 0x0008 # 0x____ 0x0008   DUP       ( cdnb cdnb )
+  .dhw 0x____ # 0x____ 0x____   BCD_digit_TO_IBM_CARDCODE  ( cdnb cardcode )
+  .dhw 0x____ # 0x____ 0x____   ibm1442_punch
+  .dhw 0x____ # 0x____ 0x____   (NEXT)
+  .dhw 0x____ # 0x____ 0x____   ibm1442_punch_4_digit_BCD_L0
+  .dhw 0x0009 # 0x____ 0x0009   DROP
+  .dhw 0x000F # 0x____ 0x000F   EXIT
+
   .dhw 0x____ # 0x____ 0x____   SWAP   : NOS++
   .dhw 0x____ # 0x____ 0x____   1+
   .dhw 0x____ # 0x____ 0x____   SWAP
   .dhw 0x____ # 0x____ 0x____   EXIT
+
+  .dhw 0x000D # 0x____ 0x000D   R>       : R--_R@ ( -- count-1 ) R:( count raddr -- count-1 raddr )
+  .dhw 0x000D # 0x____ 0x000D   R>       ( raddr count )
+  .dhw 0x____ # 0x____ 0x____   1-       ( raddr count-1 )
+  .dhw 0x000A # 0x____ 0x000A   SWAP     ( count-1 raddr )
+  .dhw 0x____ # 0x____ 0x____   OVER     ( count-1 raddr count-1 )
+  .dhw 0x000C # 0x____ 0x000C   >R       ( count-1 raddr ) R:( count-1 )
+  .dhw 0x000C # 0x____ 0x000C   >R       ( count-1 ) R:( count-1 raddr )
+  .dhw 0x000F # 0x____ 0x000F   EXIT     ( count-1 )
   
   .dhw 0x0008 # 0x____ 0x0008   DUP      : MEMDUMP_TO_CARDSTACK ( start_addr length -- )
   .dhw 0x____ # 0x____ 0x____   54_const ( start length length 54 ) : MEMDUMP_TO_CARDSTACK_L0
