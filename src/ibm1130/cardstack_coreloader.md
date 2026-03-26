@@ -32,8 +32,8 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly 
       17: 0b             0x60F 0x0011 0b01100___00001111  LDX_s IA = 0x0F
       18: 0b             0x    0x0012 0b11000___11111011  LD_s IA-0x5  # load constant 1 into the accumulator
       19: 0b             0x    0x0013 0b00010___00001010  SLA_s 10     # shift it left 10 bit places
-      20: 0b             0x    0x0014 0b11101___00001011  OR_s IA+0xB  # or it with the OR at address 0x0003
-      21: 0b             0x    0x00   0b
+      20: 0b             0x    0x0014 0b11101___11111111  OR_s IA-     # or it with the OR at address 0x0003
+      21: 0b             0x    0x0015 0b
       22: 0b             0x    0x00   0b
       23: 0b             0x    0x00   0b
       24: 0b             0x    0x00   0b
@@ -58,4 +58,8 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly 
     END OF CARD
 
   0d80 = 0d64 + 0d16 = 0x40 + 0x10 = 0x50
+  0x15 - 0x03 = 0x12
+  0x0012 ^ 0xFFFF = 0xFFED
+  0xFFED + 0x0001 = 0xFFEE
+                    0x00
 ```
