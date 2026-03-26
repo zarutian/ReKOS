@@ -4844,6 +4844,28 @@ const src3 = `
   .dhw 0x____ # 0x____ 0x____   ibm1442_start_punch_new_card
   .dhw 0x____ # 0x____ 0x____   (JMP)
   .dhw 0x____ # 0x____ 0x____   MEMDUMP_TO_CARDSTACK_L2
+  .dhw 0x____ # 0x____ 0x____   DUP      ( remaining addr addr ) R:( count )  : MEMDUMP_TO_CARDSTACK_L1
+  .dhw 0x____ # 0x____ 0x____   @        ( remaining addr cell )
+  .dhw 0x____ # 0x____ 0x____   DUP      ( remaining addr cell cell )
+  .dhw 0x____ # 0x____ 0x____   0xFFF0&  ( remaining addr cell masked )
+  .dhw 0x____ # 0x____ 0x____   ibm1442_punch  ( remaining addr cell ) R:( count )
+  .dhw 0x____ # 0x____ 0x____   12<<     ( remaining addr cell<<12 )
+  .dhw 0x____ # 0x____ 0x____   SWAP
+  .dhw 0x____ # 0x____ 0x____   1+
+  .dhw 0x____ # 0x____ 0x____   SWAP
+  .dhw 0x____ # 0x____ 0x____   R--_R@   ( remaining addr+1 cell<<12 count-1 ) R:( count-1 )
+  .dhw 0x____ # 0x____ 0x____   (BRZ)    ( remaining addr+1 cell<<12 )
+  .dhw 0x____ # 0x____ 0x____   MEMDUMP_TO_CARDSTACK_L4
+  .dhw 0x____ # 0x____ 0x____   OVER     ( remaining addr+1 cell<<12 addr+1 )
+  .dhw 0x____ # 0x____ 0x____   @        ( remaining addr+1 cellA<<12 cellB )
+  .dhw 0x____ # 0x____ 0x____   8<>>     ( remaining addr+1 cellA<<12 cellB<>>8 ) R:( count-1 )
+  .dhw 0x____ # 0x____ 0x____   DUP      ( remaining addr+1 cellA<<12 cellB<>>8 cellB<>>8 ) R:( count-1 )
+  .dhw 0x____ # 0x____ 0x____   >R       ( remaining addr+1 cellA<<12 cellB<>>8 ) R:( count-1 cellB<>>8 )
+  .dhw 0x____ # 0x____ 0x____   0xFF&    ( remaining addr+1 cellA<<12 cellB_masked ) R:( count-1 cell<>>8 )
+  .dhw 0x____ # 0x____ 0x____   OR       ( remaining addr+1 cell )
+  .dhw 0x____ # 0x____ 0x____   ibm1442_punch  ( remaining addr+1 ) R:( count-1 cell<>>8 )
+  .dhw 0x____ # 0x____ 0x____   R>       ( remaining addr+1 cellB<>>8 ) R:( count-1 )
+  
 
   .dhw 0x____ # 0x____ 0x____   (NEXT)  : MEMDUMP_TO_CARDSTACK_L2
   .dhw 0x____ # 0x____ 0x____   MEMDUMP_TO_CARDSTACK_L1
@@ -4864,6 +4886,8 @@ const src3 = `
   .dhw 0x0005 # 0x____ 0x0005   1+
   .dhw 0x0006 # 0x____ 0x0006   @
   .dhw 0x____ # 0x____ 0x____   ibm1442_punch_4_digit_BCD
+  .dhw 0x____ # 0x____ 0x____   CARD_NR
+  .dhw 0x____ # 0x____ 0x____   BCD_1+D!
   .dhw 0x000A # 0x____ 0x000A   SWAP
   .dhw 0x0008 # 0x____ 0x0008   DUP   ( addr remaining remaining )
   .dhw 0x____ # 0x____ 0x____   0~=
