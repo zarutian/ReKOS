@@ -12,27 +12,27 @@ Loader card:                            op      ss displ.
            rows on card                 cell in core
             11                               000==111111
             210123456789   dat   addr   01234___89012345
-column 0: 0b11000        0xC   0x0000 0b11000___00001101  LD_s IA+0xD
-       1: 0b             0x    0x0001 0b
-       2: 0b             0x    0x0002 0b
-       3: 0b             0x    0x0003 0b
-       4: 0b             0x    0x0004 0b
-       5: 0b             0x    0x0005 0b
-       6: 0b             0x    0x0006 0b
-       7: 0b             0x    0x0007 0b
+column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly due to that cut corner on the card (is: aðalega út af fláanum á horni gataspjaldsins)
+       1: 0b110000001100 0xC0C 0x0001 0b11000___00001100  LD_s IA+0xC  # load constant 1 into the accumulator
+       2: 0b             0x    0x0002 0b00010___00001010  SLA_s 10     # shift it left 10 bit places
+       3: 0b             0x    0x0003 0b11101___00001011  OR_s IA+0xB  # or it with the BOSC_s instruction, turning it into BOSC_l
+       4: 0b000000000000 0x000 0x0004 0b00000___00000000  NOP
+       5: 0b             0x    0x0005 0b11010___00001010  STO_s IA+0xA # store it back
+       6: 0b000000000000 0x000 0x0006 0b00000___00000000  NOP
+       7: 0b             0x    0x0007 0b01100___00010010  LDX_s IA = 0x12
        8: 0b             0x    0x0008 0bXXXXX___YYZZZZZZ  # Interrupt vector (lvl 0) for 1442 Card Read Punch (column read, punch), we want the column read        
-       9: 0b             0x    0x0009 0b                  #                   lvl 1
-      10: 0b             0x    0x000A 0b                  #                   lvl 2
-      11: 0b             0x    0x000B 0b                  #                   lvl 3
+       9: 0b             0x    0x0009 0b00000___00010000  #                   lvl 1
+      10: 0b             0x    0x000A 0b00000___00010000  #                   lvl 2
+      11: 0b             0x    0x000B 0b00000___00010000  #                   lvl 3
       12: 0b             0x    0x000C 0bXXXXX___YYZZZZZZ  # Interrupt vector (lvl 4) for 1442 (operation complete), that is card completely read
-      13: 0b             0x    0x000D 0b                  #                   lvl 5
+      13: 0b             0x    0x000D 0b00000___00010000  #                   lvl 5
       14: 0b000000000001 0x001 0x000E 0b00000___00000001  # constant 1
       15: 0b010011000000 0x4C0 0x000F 0b01001___11000000  BOSC_s  # will be BOSC_l
-      16: 0b110111101101 0xDED 0x0010 0b11011___11111101  # gets replaced by any unwanted interrupt 'calling'
-      17: 0b             0x    0x0011 0b
-      18: 0b             0x    0x00   0b
-      19: 0b             0x    0x00   0b
-      20: 0b             0x    0x00   0b
+      16: 0b110111101101 0xDED 0x0010 0b11011___11111101  # gets replaced by any unwanted interrupt 'calling' it
+      17: 0b             0x60F 0x0011 0b01100___00001111  LDX_s IA = 0x0F
+      18: 0b             0x    0x0012 0b11000___11111011  LD_s IA-0x5  # load constant 1 into the accumulator
+      19: 0b             0x    0x0013 0b00010___00001010  SLA_s 10     # shift it left 10 bit places
+      20: 0b             0x    0x0014 0b11101___00001011  OR_s IA+0xB  # or it with the OR at address 0x0003
       21: 0b             0x    0x00   0b
       22: 0b             0x    0x00   0b
       23: 0b             0x    0x00   0b
