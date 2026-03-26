@@ -4712,6 +4712,55 @@ const src3 = `
   .dhw 0x000F # 0x____ 0x000F   EXIT
  
   tbd: : DISK_init_subsys   ( devicnr disknr -- )
+
+
+  .dhw 0x____ # 0x____ 0x____   0xF&   : BCD_+_digit ( digitA digitB -- carry sum )
+  .dhw 0x000A # 0x____ 0x000A   SWAP    ( maskedB digitA )
+  .dhw 0x____ # 0x____ 0x____   0xF&    ( maskedB maskedA )
+  .dhw 0x0001 # 0x____ 0x0001   +       ( sum )
+  .dhw 0x0008 # 0x____ 0x0008   DUP     ( sum sum )
+  .dhw 0x____ # 0x____ 0x____   9_const ( sum sum 9 )
+  .dhw 0x____ # 0x____ 0x____   >       ( sum bool )
+  .dhw 0x000C # 0x____ 0x000C   >R      ( sum ) R:( bool )
+  .dhw 0x____ # 0x____ 0x____   FALSE   ( sum 0 )
+  .dhw 0x____ # 0x____ 0x____   9_const ( sum 0 9 ) R:( bool )
+  .dhw 0x____ # 0x____ 0x____   R@      ( sum 0 9 bool ) R:( bool )
+  .dhw 0x____ # 0x____ 0x____   ?:      ( sum subtractand ) R:( bool )
+  .dhw 0x____ # 0x____ 0x____   -       ( sum' ) R:( bool )
+  .dhw 0x____ # 0x____ 0x____   FALSE   ( sum' 0 )
+  .dhw 0x____ # 0x____ 0x____   1_const ( sum' 0 1 ) R:( bool )
+  .dhw 0x000D # 0x____ 0x000D   R>      ( sum' 0 1 bool ) R:( )
+  .dhw 0x____ # 0x____ 0x____   ?:      ( sum' carry )
+  .dhw 0x000A # 0x____ 0x000A   SWAP
+  .dhw 0x000F # 0x____ 0x000F   EXIT
+  .dhw 0x____ # 0x____ 0x____   NOP    : BCD_+_ ( bcdA bcdB -- sum carry )
+  .dhw 0x____ # 0x____ 0x____   2DUP
+  .dhw 0x____ # 0x____ 0x____   BCD_+_digit     ( bcdA bcdB carry units )
+  .dhw 0x000C # 0x____ 0x000C   >R              ( bcdA bcdB carry ) R:( units )
+  .dhw 0x000C # 0x____ 0x000C   >R              ( bcdA bcdB ) R:( units carry )
+  .dhw 0x____ # 0x____ 0x____   4>>             ( bcdA bcdB' ) R:( units carry )
+  .dhw 0x000A # 0x____ 0x000A   SWAP            ( bcdB' bcdA ) R:( units carry )
+  .dhw 0x____ # 0x____ 0x____   4>>             ( bcdB' bcdA' ) R:( units carry )
+  .dhw 0x000A # 0x____ 0x000A   SWAP
+  .dhw 0x____ # 0x____ 0x____   2DUP            ( bcdA' bcdB' bcdA' bcdB' ) R:( units carry )
+  .dhw 0x____ # 0x____ 0x____   BCD_+_digit     ( bcdA' bcdB' carry_from_tens tens ) R:( units carry )
+  .dhw 0x000D # 0x____ 0x000D   R>              ( bcdA' bcdB' carry_from_tens tens carry ) R:( units )
+  .dhw 0x____ # 0x____ 0x____   BCD_+_digit     ( bcdA' bcdB' carry_from_tens carry' tens ) R:( units )
+  .dhw 0x____ # 0x____ 0x____   4<<
+  .dhw 0x000D # 0x____ 0x000D   R>
+  .dhw 0x____ # 0x____ 0x____   OR              ( bcdA' bcdB' carry_from_tens
+  
+  
+  .dhw 0x0008 # 0x____ 0x0008   DUP  : BCD_1+D! ( vaddr -- )
+  .dhw 0x000C # 0x____ 0x000C   >R      ( vaddr ) R:( vaddr )
+  .dhw 0x____ # 0x____ 0x____   D@      ( BCD_u BCD_l ) R:( vaddr )
+  .dhw 0x____ # 0x____ 0x____   BCD_1+D ( BCD_u' BCD_l' )
+  .dhw 0x000D # 0x____ 0x000D   R>      ( BCD_u' BCD_l' vaddr ) R:( )
+  .dhw 0x____ # 0x____ 0x____   D!      ( )
+  .dhw 0x000F # 0x____ 0x000F   EXIT
+  
+
+  .dhw 0x000C # 0x____ 0x000C   >R  : MEMDUMP_TO_CARDSTACK ( start_addr length -- )
   
   .undef 《NO_SYM_LOOKUP》
 `;
