@@ -12,39 +12,34 @@ Loader card:                            op      ss displ.
            rows on card                 cell in core
             11                               000==111111
             210123456789   dat   addr   01234___89012345
-column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly due to that cut corner on the card (is: aðalega út af fláanum á horni gataspjaldsins)
-       1: 0b             0x    0x0001 0b01100___00010010  LDX_s IA = 0x12
-       2: 0b             0x    0x00   0b                  # tbd: L
-       3: 0b             0x    0x00   0b                  # tbd: O
-       4: 0b             0x    0x00   0b                  # tbd: A
-       5: 0b             0x    0x00   0b                  # tbd: D
-       6: 0b             0x    0x00   0b                  # tbd: E
-       7: 0b             0x    0x00   0b                  # tbd: R
-       8: 0b             0x    0x0008 0b00000___00011000  # Interrupt vector (lvl 0) for 1442 Card Read Punch (column read, punch), we want the column read        
-       9: 0b             0x    0x0009 0b00000___00010000  #                   lvl 1
-      10: 0b             0x    0x000A 0b00000___00010000  #                   lvl 2
-      11: 0b             0x    0x000B 0b00000___00010000  #                   lvl 3
+column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # mainly due to that cut corner on the card (is: aðalega út af fláanum á horni gataspjaldsins)
+       1: 0b11000        0xC   0x0001 0b11000___          LD_s  IA          # load constant 1 into the accumulator
+       2: 0b             0x    0x0002 0b00010___00001010  SLA_s 10          # shift it left 10 bit places
+       3: 0b             0x    0x0003 0b11101___          OR_s  IA          # or it with the BOSC_s instruction at address 0x000F, turning it into BOSC_l
+       4: 0b             0x    0x0005 0b11010___          STO_s IA          # store it back
+       5: 0b             0x
+       6: 0b             0x
+       7: 0b             0x    0x0016 0b01100___00        LDX_s IA =        # jump to further fixups
+       8: 0b             0x    0x0008 0b00000___00010010  # Interrupt vector (lvl 0) for 1442 Card Read Punch (column read, punch), we want the column read        
+       9: 0b             0x    0x0009 0b00000___00001111  #                   lvl 1
+      10: 0b             0x    0x000A 0b00000___00001111  #                   lvl 2
+      11: 0b             0x    0x000B 0b00000___00001111  #                   lvl 3
       12: 0b             0x    0x000C 0bXXXXX___YYZZZZZZ  # Interrupt vector (lvl 4) for 1442 (operation complete), that is card completely read
-      13: 0b             0x    0x000D 0b00000___00010000  #                   lvl 5
-      14: 0b000000000001 0x001 0x000E 0b00000___00000001  # constant 1
-      15: 0b010011000000 0x4C0 0x000F 0b01001___11000000  BOSC_s            # will become BOSC_l after fixups
-      16: 0b110111101101 0xDED 0x0010 0b11011___11111101  # gets replaced by any unwanted interrupt 'calling' it
-      17: 0b             0x60F 0x0011 0b01100___00001111  LDX_s IA = 0x0F   # jump back two cells
-      18: 0b11000        0xC   0x0012 0b11000___11111011  LD_s  IA-5        # load constant 1 into the accumulator
-      19: 0b             0x    0x0013 0b00010___00001010  SLA_s 10          # shift it left 10 bit places
-      20: 0b             0x    0x0014 0b11101___11111010  OR_s  IA-6        # or it with the BOSC_s instruction at address 0x000F, turning it into BOSC_l
-      21: 0b             0x    0x0015 0b11010___11111001  STO_s IA-7        # store it back
-      22: 0b             0x    0x0016 0b01100___00        LDX_s IA =        # jump to further fixups
-      23: 0b             0x    0x0017 0b01001___11000000  BOSC_l            # needs fixup!
-      24: 0b000000000000 0x000 0x0018 0b00000___00000000                    # gets replaced with saved IA during interrupt
-      25: 0b             0x    0x0019 0b11010___00        ST0_s IA+         # temp save accumulator
-      26: 0b             0x    0x001A 0b00001___00        XIO_s IA+         # do a Sense Device XIO  as only the ibm1442 card reader/punch is at interrupt level 0
-      27: 0b             0x    0x001B 0b00010___00000001  SLA_s 1           # shift Read response bit into Carry
-      28: 0b             0x    0x001C 0b01001___00000010  SKCO_s            # SKip next cell if Carry Off
-      29: 0b             0x    0x001D 0b01100___00011111  LDX_s IA = 0x1F   # 
-      30: 0b             0x    0x001E 0b11000___00        LD_s  IA+         # restore accumulator
-      31: 0b             0x    0x001F 0b01100___00010111  LDX_s IA = 0x17   # go and return from the interrupt
-      32: 0b             0x    0x0021 0b00010___00000010  SLA_s 2           # shift Error Check bit into Carry
+      13: 0b             0x    0x000D 0b00000___00001111  #                   lvl 5
+      14: 0b010011000000 0x4C0 0x000E 0b01001___11000000  BOSC_s            # will become BOSC_l after fixups
+      15: 0b110111101101 0xDED 0x000F 0b11011___11111101  # gets replaced by any unwanted interrupt 'calling' it
+      16: 0b             0x60F 0x0010 0b01100___00001111  LDX_s IA = 0x0F   # jump back two cells
+      17: 0b             0x    0x0011 0b01001___11000000  BOSC_l            # needs fixup!
+      18: 0b000000000000 0x000 0x0012 0b00000___00000000                    # gets replaced with saved IA during interrupt
+      19: 0b             0x    0x0013 0b11010___00        ST0_s IA+         # temp save accumulator
+      20: 0b             0x    0x0014 0b00001___00        XIO_s IA+         # do a Sense Device XIO  as only the ibm1442 card reader/punch is at interrupt level 0
+      21: 0b             0x    0x0015 0b00010___00000001  SLA_s 1           # shift Read response bit into Carry
+      22: 0b             0x    0x0016 0b01001___00000010  SKCO_s            # SKip next cell if Carry Off
+      23: 0b             0x    0x0017 0b01100___00011010  LDX_s IA = 0x1A   # 
+      24: 0b             0x    0x0018 0b11000___00        LD_s  IA+         # restore accumulator
+      25: 0b             0x    0x0019 0b01100___00010001  LDX_s IA = 0x11   # go and return from the interrupt
+      26: 0b             0x    0x001A 0b00010___00000010  SLA_s 2           # shift Error Check bit into Carry
+
       33: 0b             0x    0x0022 0b01001___00000010  SKCO_s            # SKip next cell if Carry Off
       34: 0b             0x    0x0023 0b                  tbd               # an Error occured at the ibm1442 card reader
       35: 0b             0x    0x0024 0b00001___00        XIO_s IA+         # do a Read XIO
@@ -82,10 +77,10 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly 
       50: 0b             0x    0x0044 0b00000___00000000                    # saved accumulator
       51: 0b             0x    0x0045 0b00000___00000100                    # constant 4
       52: 0b             0x    0x0046 0b00000___00000011                    # constant 3
-      53: 0b             0x    0x0047 0b00000___11000000  0x00C0            #                         Read IOCC1
-      54: 0b             0x    0x0048 0b00000___00100001                    # needs fixup via <<_9 !  Read IOCC2
-      55: 0b             0x    0x00   0b
-      56: 0b             0x    0x00   0b
+      53: 0b             0x    0x0047 0b                                    #                 Sense Devive IOCC2
+      54: 0b             0x    0x0048 0b00000___11000000  0x00C0            #                         Read IOCC1
+      55: 0b             0x    0x0049 0b00000___00100001  0x0021            # needs fixup via <<_9 !  Read IOCC2
+      56: 0b             0x    0x004A 0b                  
       57: 0b             0x    0x00   0b
       58: 0b             0x    0x00   0b
       59: 0b             0x    0x00   0b
