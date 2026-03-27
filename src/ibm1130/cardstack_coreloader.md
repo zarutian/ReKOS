@@ -20,7 +20,7 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly 
        5: 0b             0x    0x00   0b                  # tbd: D
        6: 0b             0x    0x00   0b                  # tbd: E
        7: 0b             0x    0x00   0b                  # tbd: R
-       8: 0b             0x    0x0008 0b00000___00011001  # Interrupt vector (lvl 0) for 1442 Card Read Punch (column read, punch), we want the column read        
+       8: 0b             0x    0x0008 0b00000___00011000  # Interrupt vector (lvl 0) for 1442 Card Read Punch (column read, punch), we want the column read        
        9: 0b             0x    0x0009 0b00000___00010000  #                   lvl 1
       10: 0b             0x    0x000A 0b00000___00010000  #                   lvl 2
       11: 0b             0x    0x000B 0b00000___00010000  #                   lvl 3
@@ -35,21 +35,21 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly 
       20: 0b             0x    0x0014 0b11101___11111010  OR_s  IA-6        # or it with the BOSC_s instruction at address 0x000F, turning it into BOSC_l
       21: 0b             0x    0x0015 0b11010___11111001  STO_s IA-7        # store it back
       22: 0b             0x    0x0016 0b01100___00        LDX_s IA =        # jump to further fixups
-      23  0b101010101010 0x    0x0017 0b                                    # gets replaced with saved accumulator 
-      24: 0b             0x    0x0018 0b01001___11000000  BOSC_l            # needs fixup!
-      25: 0b000000000000 0x000 0x0019 0b00000___00000000                    # gets replaced with saved IA during interrupt
-      26: 0b             0x    0x001A 0b11010___11111100  STO_s IA-4        # temp save accumulator
-      27: 0b             0x    0x001B 0b00001___00        XIO_s IA+         # do a Sense Device XIO  as only the ibm1442 card reader/punch is at interrupt level 0
-      28: 0b             0x    0x001C 0b00010___00000001  SLA_s 1           # shift Read response bit into Carry
-      29: 0b             0x    0x001D 0b01001___00000010  SKCO_s            # SKip next cell if Carry Off
-      30: 0b             0x    0x001E 0b01100___00100000  LDX_s IA = 0x20   # 
-      31: 0b             0x    0x001F 0b11000___11110111  LD_s  IA-9        # restore accumulator
-      32: 0b             0x    0x0020 0b01100___00011000  LDX_s IA = 0x18   # go and return from the interrupt
-      33: 0b             0x    0x0021 0b00010___00000010  SLA_s 2           # shift Error Check bit into Carry
-      34: 0b             0x    0x0022 0b01001___00000010  SKCO_s            # SKip next cell if Carry Off
-      35: 0b             0x    0x0023 0b                  tbd               # an Error occured at the ibm1442 card reader
-      36: 0b             0x    0x0024 0b00001___00        XIO_s IA+         # do a Read XIO
-      37: 0b             0x    0x0025 0b
+      23: 0b             0x    0x0017 0b01001___11000000  BOSC_l            # needs fixup!
+      24: 0b000000000000 0x000 0x0018 0b00000___00000000                    # gets replaced with saved IA during interrupt
+      25: 0b             0x    0x0019 0b11011___00        STD_s IA+         # temp save accumulator and extension
+      26: 0b             0x    0x001A 0b00001___00        XIO_s IA+         # do a Sense Device XIO  as only the ibm1442 card reader/punch is at interrupt level 0
+      27: 0b             0x    0x001B 0b00010___00000001  SLA_s 1           # shift Read response bit into Carry
+      28: 0b             0x    0x001C 0b01001___00000010  SKCO_s            # SKip next cell if Carry Off
+      29: 0b             0x    0x001D 0b01100___00011111  LDX_s IA = 0x1F   # 
+      30: 0b             0x    0x001E 0b11001___00        LDD_s IA+         # restore accumulator and extension
+      31: 0b             0x    0x001F 0b01100___00011000  LDX_s IA = 0x18   # go and return from the interrupt
+      32: 0b             0x    0x0021 0b00010___00000010  SLA_s 2           # shift Error Check bit into Carry
+      33: 0b             0x    0x0022 0b01001___00000010  SKCO_s            # SKip next cell if Carry Off
+      34: 0b             0x    0x0023 0b                  tbd               # an Error occured at the ibm1442 card reader
+      35: 0b             0x    0x0024 0b00001___00        XIO_s IA+         # do a Read XIO
+      36: 0b             0x    0x0024 0b
+      37: 0b             0x    0x00   0b
       38: 0b             0x    0x00   0b
       39: 0b             0x    0x00   0b
       40: 0b             0x    0x00   0b
