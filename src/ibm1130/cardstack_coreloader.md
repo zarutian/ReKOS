@@ -11,7 +11,18 @@ The restrictions on the loader card:
 Loader card:                            op      ss displ.
            rows on card                 cell in core
             11                               000==111111
-            210123456789   dat   addr   01234___89012345
+            210123456789   dat   addr   0123456789012345
+column 0: 0b11000        0xC   0x0000 0b11000___          LDX_s IA =        # jump to
+       1: 0b000001000000 0x    0x0001 0b00000___11000000  0x00C0            # X1   Read IOCC1
+       2: 0b             0x    0x0002 0b00000___00100001  0x0021            # needs fixup via <<_9 !  Read IOCC2
+       3: 0b110000000000 0x    0x0003 0b11000___00000000  LDX_l IA          # needs fixup via or_0x0200 !
+       4: 0b000000000000 0x000 0x0004 0b00000___00000000  0x0000            # gets replaced via a BSI call
+       5: 0b             0x    0x0005 0b11000___11111011  LD_s  IA-5        #
+       6: 0b             0x    0x0006 0b10000___          ADD_s IA+         # add y to it
+       7: 0b             0x    0x00
+     
+
+the following ran out of space (0v1):
 column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # mainly due to that cut corner on the card (is: aðalega út af fláanum á horni gataspjaldsins)
        1: 0b11000        0xC   0x0001 0b11000___          LD_s  IA          # load constant 1 into the accumulator
        2: 0b             0x    0x0002 0b00010___00001010  SLA_s 10          # shift it left 10 bit places
