@@ -52,16 +52,16 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly 
       37: 0b             0x    0x0026 0b10000___11101000  ADD_s IA-24       # incr it by one         ( 0d24 = 0d16 + 0d08 = 0x18 = 0b00011000 )
       38: 0b             0x    0x0027 0b11010___00        STO_s IA+         # store it back
       39: 0b             0x    0x0028 0b11100___00        AND_s IA+         # and it with 0x0003
-      40: 0b             0x    0x0029 0b
-      41: 0b             0x    0x00   0b
-      42: 0b             0x    0x00   0b
-      43: 0b             0x    0x00   0b
-      44: 0b             0x    0x00   0b
-      45: 0b             0x    0x00   0b
-      46: 0b             0x    0x00   0b
-      47: 0b             0x    0x00   0b
-      48: 0b             0x    0x00   0b
-      49: 0b             0x    0x00   0b
+      40: 0b             0x    0x0029 0b01001___00100000  SKAZ_s            # SKip next cell if Accumulator is Zero
+      41: 0b             0x    0x002A 0b01100___00        LDX_s IA = 0x     # jump to
+      42: 0b             0x    0x002B 0b11000___00        LD_s IA+          # load the address part of the Read IOCC into the accumulator
+      43: 0b             0x    0x002C 0b10010___00        MINUS_s IA+       # subtract three from it
+      44: 0b             0x    0x002D 0b11010___00        STO_s IA+3        # store it as the load address
+      45: 0b             0x    0x002E 0b10010___11        MINUS_s IA-       # subtract one from it
+      46: 0b             0x    0x002F 0b11010___00        STO_s IA          # store it as store addresd
+      47: 0b             0x    0x0030 0b11000___00000000  LD_l              # needs fixup!  load the B cell into accumulator 
+      48: 0b             0x    0x0031 0b00000___00000000                    # the load address
+      49: 0b             0x    0x0032 0b00011___00001100  SRL_s 12          #
       50: 0b             0x    0x00   0b
       51: 0b             0x    0x00   0b
       52: 0b             0x    0x00   0b
