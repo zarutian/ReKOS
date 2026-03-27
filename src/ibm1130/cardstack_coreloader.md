@@ -38,15 +38,15 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly 
       23: 0b000000000000 0x000 0x0017 0b00000___00000000  NOP
       24: 0b             0x    0x0018 0b11010___11110110  STO_s IA-10  # store it back
       25: 0b000000000000 0x000 0x0019 0b00000___00000000  NOP
-      26: 0b             0x    0x001A 0b11000___11110011  LD_s IA-13   # load constant 1 into the accumulator
+      26: 0b             0x    0x001A 0b11000___11110011  LD_s  IA-13  # load constant 1 into the accumulator
       27: 0b             0x    0x001B 0b00010___00001010  SLA_s 10     # shift it left 10 bit places
-      28: 0b             0x    0x001C 0b11101___11110101  OR_s IA-11   # or it with the LDX_s at address 0x0012
-      29: 0b             0x    0x001D 0b11010___          STO_s IA-    # store it back
-      30: 0b             0x    0x001E 0b
-      31: 0b             0x    0x00   0b
-      32: 0b             0x    0x00   0b
-      33: 0b             0x    0x00   0b
-      34: 0b             0x    0x00   0b
+      28: 0b             0x    0x001C 0b11101___11110101  OR_s  IA-11  # or it with the LDX_s at address 0x0012
+      29: 0b             0x    0x001D 0b11010___11110100  STO_s IA-12  # store it back
+      30: 0b             0x    0x001E 0b11000___11101111  LD_s  IA-17  # load constant 1 into the accumulator     0d17 = 0x11 = 0b00010001
+      31: 0b             0x    0x001F 0b00010___00001010  SLA_s 10     # shift it left 10 bit places
+      32: 0b             0x    0x0020 0b11101___11110101  OR_s  IA-11  # or it with the OR_s  at address 0x0016
+      33: 0b             0x    0x0021 0b11010___11110110  STO_s IA-12  # store it back
+      34: 0b             0x    0x0022 0b
       35: 0b             0x    0x00   0b
       36: 0b             0x    0x00   0b
       37: 0b             0x    0x00   0b
