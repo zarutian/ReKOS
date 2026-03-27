@@ -6,7 +6,7 @@ The restrictions on the loader card:
 1. short instructions only
 2. all displacements in instructions are relative to Instruction Address except for Shift, BOSC and BSC instructions.
 
-``txt
+```txt
 
 Loader card:                            op      ss displ.
            rows on card                 cell in core
@@ -53,7 +53,7 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly 
       38: 0b             0x    0x0027 0b11010___00        STO_s IA+         # store it back
       39: 0b             0x    0x0028 0b11100___00        AND_s IA+         # and it with 0x0003
       40: 0b             0x    0x0029 0b01001___00100000  SKAZ_s            # SKip next cell if Accumulator is Zero
-      41: 0b             0x    0x002A 0b01100___00        LDX_s IA = 0x     # jump to
+      41: 0b             0x    0x002A 0b01100___00        LDX_s IA = 0x1E   # jump to 0x1E
       42: 0b             0x    0x002B 0b11000___00        LD_s IA+          # load the address part of the Read IOCC into the accumulator
       43: 0b             0x    0x002C 0b10010___00        MINUS_s IA+       # subtract four from it
       44: 0b             0x    0x002D 0b11010___00000000  STO_l             # needs fixup!
@@ -70,15 +70,20 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly 
       55: 0b             0x    0x0038 0b                  OR_si  (X1+1)     #  ! or it with cell B
       56: 0b             0x    0x0039 0b                  STO_si (X1+1)     #  ! store now full cell B
       57: 0b             0x    0x003A 0b                  LD_si  (X1+2)     #  ! load cell C again
-      58: 0b             0x    0x003B 0b                  SLA_s  8
-      59: 0b             0x    0x003C 0b                  STO_si (X1+2)     #
-      60: 
-      
-      50: 0b             0x    0x00   0b
-      51: 0b             0x    0x00   0b
-      52: 0b             0x    0x00   0b
-      53: 0b             0x    0x00   0b
-      54: 0b             0x    0x00   0b
+      58: 0b             0x    0x003B 0b                  SLA_s  8          #  ! shift left it 8bits
+      59: 0b             0x    0x003C 0b                  STO_si (X1+2)     #  ! store it back
+      60: 0b             0x    0x003D 0b                  LD_si  (X1+3)     #  ! load cell D
+      61: 0b             0x    0x003E 0b                  OR_si  (X1+2)     #  ! or it with what is left of cell C
+      62: 0b             0x    0x003F 0b                  STO_si (X1+2)     #  ! store cell C and D back
+      63: 0b             0x    0x0040 0b                  LD_s   IA+        #  load the address part of the Read IOCC into the accumulator
+      64: 0b             0x    0x0041 0b                  MINUS_s IA-       #  decr by one
+      65: 0b             0x    0x0042 0b                  STO_s  IA         #  store it back
+      66: 0b             0x    0x0043 0b01100___00        LDX_s IA = 0x1E   # jump to 0x1E
+      50: 0b             0x    0x0044 0b00000___00000000                    # saved accumulator
+      51: 0b             0x    0x0045 0b00000___00000100                    # constant 4
+      52: 0b             0x    0x0046 0b00000___00000011                    # constant 3
+      53: 0b             0x    0x0047 0b00000___11000000  0x00C0            #                         Read IOCC1
+      54: 0b             0x    0x0048 0b00000___00100001                    # needs fixup via <<_9 !  Read IOCC2
       55: 0b             0x    0x00   0b
       56: 0b             0x    0x00   0b
       57: 0b             0x    0x00   0b
@@ -111,6 +116,14 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly 
   0x0012 ^ 0xFFFF = 0xFFED
   0xFFED + 0x0001 = 0xFFEE
                     0x00
+```
+
+```
+                 11 1111
+     0123 4567 8901 2345
+     AAAA AAAA AAAA BBBB
+     BBBB BBBB CCCC CCCC
+     CCCC DDDD DDDD DDDD
 ```
 
 Loader program flow:
