@@ -4949,7 +4949,7 @@ const src3 = `
 
   .dhw 0x000C # 0x____ 0x000C   >R   : LOAD_MEMDUMP_FROM_CARDSTACK ( start_addr end?_xt )
   .dhw 0x____ # 0x____ 0x____   ibm1442_init_read
-  .dhw 0x____ # 0x____ 0x____   3_const
+  .dhw 0x____ # 0x____ 0x____   3_const              : LOAD_MEMDUMP_FROM_CARDSTACK_L1
   .dhw 0x000C # 0x____ 0x000C   >R
   .dhw 0x0008 # 0x____ 0x0008   DUP                  ( addr addr ) : LOAD_MEMDUMP_FROM_CARDSTACK_L0
   .dhw 0x____ # 0x____ 0x____   ibm1442_read_column  ( addr )
@@ -4972,6 +4972,34 @@ const src3 = `
   .dhw 0x0007 # 0x____ 0x0007   !                   ( addr+1 ) R:( raddr end?_xt B )
   .dhw 0x000D # 0x____ 0x000D   R>                  ( addr+1 B )
   .dhw 0x____ # 0x____ 0x____   NOS++
+  .dhw 0x____ # 0x____ 0x____   8<<                 ( addr+2 B<<8 )
+  .dhw 0x____ # 0x____ 0x____   OVER                ( addr+2 B<<8 addr+2 )
+  .dhw 0x0006 # 0x____ 0x0006   @                   ( addr+2 B<<8 C )
+  .dhw 0x0008 # 0x____ 0x0008   DUP                 ( addr+2 B<<8 C C )
+  .dhw 0x000C # 0x____ 0x000C   >R
+  .dhw 0x____ # 0x____ 0x____   8>>
+  .dhw 0x____ # 0x____ 0x____   OR                  ( addr+2 B_C )
+  .dhw 0x____ # 0x____ 0x____   OVER                ( addr+2 B_C addr+2 )
+  .dhw 0x____ # 0x____ 0x____   1-                  ( addr+2 B_C addr+1 )
+  .dhw 0x0007 # 0x____ 0x0007   !                   ( addr+2 )
+  .dhw 0x000D # 0x____ 0x000D   R>                  ( addr+2 C )
+  .dhw 0x____ # 0x____ 0x____   8<<                 ( addr+2 C<<8 )
+  .dhw 0x____ # 0x____ 0x____   NOS++               ( addr+3 C<<8 )
+  .dhw 0x____ # 0x____ 0x____   OVER                ( addr+3 C<<8 addr+3 )
+  .dhw 0x0006 # 0x____ 0x0006   @                   ( addr+3 C<<8 D )
+  .dhw 0x____ # 0x____ 0x____   4>>                 ( addr+3 C<<8 D>>4 )
+  .dhw 0x____ # 0x____ 0x____   OR
+  .dhw 0x____ # 0x____ 0x____   OVER                ( addr+3 C_D addr+3 )
+  .dhw 0x____ # 0x____ 0x____   1-
+  .dhw 0x0007 # 0x____ 0x0007   !                   ( addr+3 )
+  .dhw 0x____ # 0x____ 0x____   R@                  ( addr+3 end?_xt )
+  .dhw 0x____ # 0x____ 0x____   EXECUTE             ( addr'  bool )
+  .dhw 0x____ # 0x____ 0x____   INVERT
+  .dhw 0x____ # 0x____ 0x____   (BSC)
+  .dhw 0x____ # 0x____ 0x____   LOAD_MEMDUMP_FROM_CARDSTACK_L1
+  .dhw 0x000D # 0x____ 0x000D   R>
+  .dhw 0x____ # 0x____ 0x____   2DROP
+  .dhw 0x000F # 0x____ 0x000F   EXIT
   
   ibm1442_read_column_IOCC2
   
