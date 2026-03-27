@@ -34,9 +34,9 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly 
       19: 0b             0x    0x0013 0b00010___00001010  SLA_s 10     # shift it left 10 bit places
       20: 0b             0x    0x0014 0b11101___11111111  OR_s IA-     # or it with the OR at address 0x0003
       21: 0b             0x    0x0015 0b
-      22: 0b             0x    0x00   0b
-      23: 0b             0x    0x00   0b
-      24: 0b             0x    0x00   0b
+      22: 0b             0x    0x0016 0b
+      23: 0b             0x    0x0017 0b
+      24: 0b             0x    0x0018 0b
       25: 0b             0x    0x00   0b
       26: 0b             0x    0x00   0b
       27: 0b             0x    0x00   0b
