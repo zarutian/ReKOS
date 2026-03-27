@@ -19,7 +19,7 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # ma
        4: 0b             0x    0x0005 0b11010___          STO_s IA          # store it back
        5: 0b             0x
        6: 0b             0x
-       7: 0b             0x    0x0016 0b01100___00        LDX_s IA =        # jump to further fixups
+       7: 0b             0x    0x0007 0b01100___00        LDX_s IA =        # jump to further fixups
        8: 0b             0x    0x0008 0b00000___00010010  # Interrupt vector (lvl 0) for 1442 Card Read Punch (column read, punch), we want the column read        
        9: 0b             0x    0x0009 0b00000___00001111  #                   lvl 1
       10: 0b             0x    0x000A 0b00000___00001111  #                   lvl 2
@@ -39,62 +39,51 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # ma
       24: 0b             0x    0x0018 0b11000___00        LD_s  IA+         # restore accumulator
       25: 0b             0x    0x0019 0b01100___00010001  LDX_s IA = 0x11   # go and return from the interrupt
       26: 0b             0x    0x001A 0b00010___00000010  SLA_s 2           # shift Error Check bit into Carry
-
-      33: 0b             0x    0x0022 0b01001___00000010  SKCO_s            # SKip next cell if Carry Off
-      34: 0b             0x    0x0023 0b                  tbd               # an Error occured at the ibm1442 card reader
-      35: 0b             0x    0x0024 0b00001___00        XIO_s IA+         # do a Read XIO
-      36: 0b             0x    0x0025 0b11000___00        LD_s IA+          # load the address part of the Read IOCC into the accumulator
-      37: 0b             0x    0x0026 0b10000___11101000  ADD_s IA-24       # incr it by one         ( 0d24 = 0d16 + 0d08 = 0x18 = 0b00011000 )
-      38: 0b             0x    0x0027 0b11010___00        STO_s IA+         # store it back
-      39: 0b             0x    0x0028 0b11100___00        AND_s IA+         # and it with 0x0003
-      40: 0b             0x    0x0029 0b01001___00100000  SKAZ_s            # SKip next cell if Accumulator is Zero
-      41: 0b             0x    0x002A 0b01100___00        LDX_s IA = 0x1E   # jump to 0x1E
-      42: 0b             0x    0x002B 0b11000___00        LD_s IA+          # load the address part of the Read IOCC into the accumulator
-      43: 0b             0x    0x002C 0b10010___00        MINUS_s IA+       # subtract four from it
-      44: 0b             0x    0x002D 0b11010___00000000  STO_l             # needs fixup!
-      45: 0b000000000001 0x001 0x002E 0b00000___00000001                    # todo eliminate the duplicate constant 1 at address 0x000E
-      46: 0b             0x    0x002F 0b                  LD_si  (X1+1)     # needs fixup both via <<_8 and then or_1 !  load cell B into accumulator
-      47: 0b             0x    0x0030 0b00011___00001100  SRL_s  12         # shift right by 12 bits
-      48: 0b             0x    0x0031 0b                  OR_si  (X1+0)     # needs fixup via <<_8 !  or that part by cell A
-      49: 0b             0x    0x0032 0b                  STO_si (X1+0)     # needs fixup via <<_8 !  store now full cell A
-      50: 0b             0x    0x0033 0b                  LD_si  (X1+1)     # needs fixup via <<_8 !  load cell B again
-      51: 0b             0x    0x0034 0b                  SLA_s  8          # shift left by 8 bits
-      52: 0b             0x    0x0035 0b                  STO_si (X1+1)     # needs fixup via <<_8 and then or_1 !  store the now half cell B
-      53: 0b             0x    0x0036 0b                  LD_si  (X1+2)     # needs fixup via <<_8 and then or_2 !  load cell C
-      54: 0b             0x    0x0037 0b                  SRL_s  8          #
-      55: 0b             0x    0x0038 0b                  OR_si  (X1+1)     #  ! or it with cell B
-      56: 0b             0x    0x0039 0b                  STO_si (X1+1)     #  ! store now full cell B
-      57: 0b             0x    0x003A 0b                  LD_si  (X1+2)     #  ! load cell C again
-      58: 0b             0x    0x003B 0b                  SLA_s  8          #  ! shift left it 8bits
-      59: 0b             0x    0x003C 0b                  STO_si (X1+2)     #  ! store it back
-      60: 0b             0x    0x003D 0b                  LD_si  (X1+3)     #  ! load cell D
-      61: 0b             0x    0x003E 0b                  OR_si  (X1+2)     #  ! or it with what is left of cell C
-      62: 0b             0x    0x003F 0b                  STO_si (X1+2)     #  ! store cell C and D back
-      63: 0b             0x    0x0040 0b                  LD_s   IA+        #  load the address part of the Read IOCC into the accumulator
-      64: 0b             0x    0x0041 0b                  MINUS_s IA-       #  decr by one
-      65: 0b             0x    0x0042 0b                  STO_s  IA         #  store it back
-      66: 0b             0x    0x0043 0b01100___00        LDX_s IA = 0x1E   # jump to 0x1E
-      50: 0b             0x    0x0044 0b00000___00000000                    # saved accumulator
-      51: 0b             0x    0x0045 0b00000___00000100                    # constant 4
-      52: 0b             0x    0x0046 0b00000___00000011                    # constant 3
-      53: 0b             0x    0x0047 0b                                    #                 Sense Devive IOCC2
-      54: 0b             0x    0x0048 0b00000___11000000  0x00C0            #                         Read IOCC1
-      55: 0b             0x    0x0049 0b00000___00100001  0x0021            # needs fixup via <<_9 !  Read IOCC2
-      56: 0b             0x    0x004A 0b                  
-      57: 0b             0x    0x00   0b
-      58: 0b             0x    0x00   0b
-      59: 0b             0x    0x00   0b
-      60: 0b             0x    0x00   0b
-      61: 0b             0x    0x00   0b
-      62: 0b             0x    0x00   0b
-      63: 0b             0x    0x00   0b
-      64: 0b             0x    0x00   0b
-      65: 0b             0x    0x00   0b
-      66: 0b             0x    0x00   0b
+      27: 0b             0x    0x001B 0b01001___00000010  SKCO_s            # SKip next cell if Carry Off
+      28: 0b             0x    0x001C 0b                  tbd               # an Error occured at the ibm1442 card reader
+      29: 0b             0x    0x001D 0b00001___00        XIO_s IA+         # do a Read XIO
+      30: 0b             0x    0x001E 0b11000___00        LD_s IA+          # load the address part of the Read IOCC into the accumulator
+      31: 0b             0x    0x001F 0b10000___          ADD_s IA          # incr it by one         ( 0d24 = 0d16 + 0d08 = 0x18 = 0b00011000 )
+      32: 0b             0x    0x0020 0b11010___00        STO_s IA+         # store it back
+      33: 0b             0x    0x0021 0b11100___00        AND_s IA+         # and it with 0x0003
+      34: 0b             0x    0x0022 0b01001___00100000  SKAZ_s            # SKip next cell if Accumulator is Zero
+      35: 0b             0x    0x0023 0b01100___00        LDX_s IA = 0x18   # jump to 
+      36: 0b             0x    0x0024 0b11000___00        LD_s IA+          # load the address part of the Read IOCC into the accumulator
+      37: 0b             0x    0x0025 0b10010___00        MINUS_s IA+       # subtract four from it
+      38: 0b             0x    0x0026 0b11010___00000000  STO_l             # needs fixup!
+      39: 0b000000000001 0x001 0x0027 0b00000___00000001
+      40: 0b             0x    0x0028 0b                  LD_si  (X1+1)     # needs fixup both via <<_8 and then or_1 !  load cell B into accumulator
+      41: 0b             0x    0x0029 0b00011___00001100  SRL_s  12         # shift right by 12 bits
+      42: 0b             0x    0x002A 0b                  OR_si  (X1+0)     # needs fixup via <<_8 !  or that part by cell A
+      43: 0b             0x    0x002B 0b                  STO_si (X1+0)     # needs fixup via <<_8 !  store now full cell A
+      44: 0b             0x    0x002C 0b                  LD_si  (X1+1)     # needs fixup via <<_8 !  load cell B again
+      45: 0b             0x    0x002D 0b                  SLA_s  8          # shift left by 8 bits
+      46: 0b             0x    0x002E 0b                  STO_si (X1+1)     # needs fixup via <<_8 and then or_1 !  store the now half cell B
+      47: 0b             0x    0x002F 0b                  LD_si  (X1+2)     # needs fixup via <<_8 and then or_2 !  load cell C
+      48: 0b             0x    0x0030 0b                  SRL_s  8          #
+      49: 0b             0x    0x0031 0b                  OR_si  (X1+1)     #  ! or it with cell B
+      50: 0b             0x    0x0032 0b                  STO_si (X1+1)     #  ! store now full cell B
+      51: 0b             0x    0x0033 0b                  LD_si  (X1+2)     #  ! load cell C again
+      52: 0b             0x    0x0034 0b                  SLA_s  8          #  ! shift left it 8bits
+      53: 0b             0x    0x0035 0b                  STO_si (X1+2)     #  ! store it back
+      54: 0b             0x    0x0036 0b                  LD_si  (X1+3)     #  ! load cell D
+      55: 0b             0x    0x0037 0b                  OR_si  (X1+2)     #  ! or it with what is left of cell C
+      56: 0b             0x    0x0038 0b                  STO_si (X1+2)     #  ! store cell C and D back
+      57: 0b             0x    0x0039 0b                  LD_s   IA+        #  load the address part of the Read IOCC into the accumulator
+      58: 0b             0x    0x003A 0b                  MINUS_s IA-       #  decr by one
+      59: 0b             0x    0x003B 0b                  STO_s  IA         #  store it back
+      60: 0b             0x    0x003C 0b01100___00        LDX_s IA = 0x1E   # jump to 0x1E
+      61: 0b             0x    0x003D 0b00000___00000000                    # saved accumulator
+      62: 0b             0x    0x003E 0b00000___00000100                    # constant 4
+      63: 0b             0x    0x003F 0b00000___00000011                    # constant 3
+      64: 0b             0x    0x0040 0b                                    #                 Sense Devive IOCC2
+      65: 0b             0x    0x0041 0b00000___11000000  0x00C0            #                         Read IOCC1
+      66: 0b             0x    0x0042 0b00000___00100001  0x0021            # needs fixup via <<_9 !  Read IOCC2
+      67: 0b             0x    0x0043 0b                  
       67: 0b             0x    0x00   0b
-      68: 0b             0x    0x0044 0b
-      69: 0b             0x    0x0045 0b
-      70: 0b             0x    0x0046 0b
+      68: 0b             0x    0x00   0b
+      69: 0b             0x    0x00   0b
+      70: 0b             0x    0x00   0b
       71: 0b             0x    0x0047 0b
  C I  72: 0b001000000000 0x200 0x0048 0b00100___00000000  # tbd: 0 or L
  A N  73: 0b001000000000 0x200 0x0049 0b00100___00000000  # tbd: 0 or O
