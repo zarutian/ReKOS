@@ -12,17 +12,6 @@ Loader card:                            op      ss displ.
            rows on card                 cell in core
             11                               000==111111
             210123456789   dat   addr   0123456789012345
-column 0: 0b11000        0xC   0x0000 0b11000___          LDX_s IA =        # jump to
-       1: 0b000001000000 0x    0x0001 0b00000___11000000  0x00C0            # X1   Read IOCC1
-       2: 0b             0x    0x0002 0b00000___00100001  0x0021            # needs fixup via <<_9 !  Read IOCC2
-       3: 0b110000000000 0x    0x0003 0b11000___00000000  LDX_l IA          # needs fixup via or_0x0200 !
-       4: 0b000000000000 0x000 0x0004 0b00000___00000000  0x0000            # gets replaced via a BSI call
-       5: 0b             0x    0x0005 0b11000___11111011  LD_s  IA-5        #
-       6: 0b             0x    0x0006 0b10000___          ADD_s IA+         # add y to it
-       7: 0b             0x    0x00
-     
-
-the following ran out of space (0v1):
 column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # mainly due to that cut corner on the card (is: aðalega út af fláanum á horni gataspjaldsins)
        1: 0b11000        0xC   0x0001 0b11000___          LD_s  IA          # load constant 1 into the accumulator
        2: 0b             0x    0x0002 0b00010___00001010  SLA_s 10          # shift it left 10 bit places
@@ -31,7 +20,7 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # ma
        5: 0b             0x
        6: 0b             0x
        7: 0b             0x    0x0007 0b01100___00        LDX_s IA =        # jump to further fixups
-       8: 0b             0x    0x0008 0b00000___00010010  # Interrupt vector (lvl 0) for 1442 Card Read Punch (column read, punch), we want the column read        
+       8: 0b             0x    0x0008 0b00000___000       # Interrupt vector (lvl 0) for 1442 Card Read Punch (column read, punch), we want the column read        
        9: 0b             0x    0x0009 0b00000___00001111  #                   lvl 1
       10: 0b             0x    0x000A 0b00000___00001111  #                   lvl 2
       11: 0b             0x    0x000B 0b00000___00001111  #                   lvl 3
@@ -40,6 +29,22 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # ma
       14: 0b010011000000 0x4C0 0x000E 0b01001___11000000  BOSC_s            # will become BOSC_l after fixups
       15: 0b110111101101 0xDED 0x000F 0b11011___11111101  # gets replaced by any unwanted interrupt 'calling' it
       16: 0b             0x60F 0x0010 0b01100___00001111  LDX_s IA = 0x0F   # jump back two cells
+      17: 0b000000000000 0x000 0x0011 0b00000___00000000  0x0000            # gets replaced with IA by an BSI_s
+      19: 0b             0x    0x0012 0b                  STO_s IA+         # routine that expects an address in accumulator
+
+                                                          LD_l              # need fixup!
+                                                          gets replaced     # +1
+                                      0b00011___00001100  SRL_s  12
+                                                          OR_l              # need fixup!
+                                                          gets replaced     #  0
+                                                          STO_l
+                                                          gets replaced     #  0
+                                                          LD_l
+                                                          gets replaced     # +1
+                                                          SLA_s  8          # shift left by 8 bits
+                                                          STO_l
+                                                          gets replaced     # +1
+
       17: 0b             0x    0x0011 0b01001___11000000  BOSC_l            # needs fixup!
       18: 0b000000000000 0x000 0x0012 0b00000___00000000                    # gets replaced with saved IA during interrupt
       19: 0b             0x    0x0013 0b11010___00        ST0_s IA+         # temp save accumulator
