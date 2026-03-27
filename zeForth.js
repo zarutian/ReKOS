@@ -4795,6 +4795,8 @@ const src3 = `
   .dhw 0x1703 # 0x____ 0x1703
   .dhw 0x____ # 0x____ 0x____   (CONST)   : ibm1442_punch_column_IOCC2
   .dhw 0x1100 # 0x____ 0x1100
+  .dhw 0x____ # 0x____ 0x____   (CONST)   : ibm1442_read_column_IOCC2
+  .dhw 0x1200 # 0x____ 0x1200
 
   .dhw 0x____ # 0x____ 0x____   FALSE   : ibm1442_wait_until_ready_to_punch ( -- status )
   .dhw 0x____ # 0x____ 0x____   ibm1442_sense_device_IOCC2
@@ -4843,6 +4845,12 @@ const src3 = `
   .dhw 0x____ # 0x____ 0x____   (NEXT)
   .dhw 0x____ # 0x____ 0x____   ibm1442_punch_4_digit_BCD_L0
   .dhw 0x0009 # 0x____ 0x0009   DROP
+  .dhw 0x000F # 0x____ 0x000F   EXIT
+
+  .dhw 0x____ # 0x____ 0x____   ibm1442_wait_until_ready_to_read   : ibm1442_read_column ( addr -- )
+  .dhw 0x____ # 0x____ 0x____   SP@
+  .dhw 0x____ # 0x____ 0x____   ibm1442_read_column_IOCC2
+  .dhw 0x____ # 0x____ 0x____   (IO)_DROP
   .dhw 0x000F # 0x____ 0x000F   EXIT
 
   .dhw 0x____ # 0x____ 0x____   SWAP   : NOS++
@@ -4938,6 +4946,34 @@ const src3 = `
   .dhw 0x____ # 0x____ 0x____   ibm1442_feed_cycle
   .dhw 0x____ # 0x____ 0x____   2DROP
   .dhw 0x____ # 0x____ 0x____   EXIT
+
+  .dhw 0x000C # 0x____ 0x000C   >R   : LOAD_MEMDUMP_FROM_CARDSTACK ( start_addr end?_xt )
+  .dhw 0x____ # 0x____ 0x____   ibm1442_init_read
+  .dhw 0x____ # 0x____ 0x____   3_const
+  .dhw 0x000C # 0x____ 0x000C   >R
+  .dhw 0x0008 # 0x____ 0x0008   DUP                  ( addr addr ) : LOAD_MEMDUMP_FROM_CARDSTACK_L0
+  .dhw 0x____ # 0x____ 0x____   ibm1442_read_column  ( addr )
+  .dhw 0x0005 # 0x____ 0x0005   1+                   ( addr+1 addr+1 )
+  .dhw 0x____ # 0x____ 0x____   (NEXT)
+  .dhw 0x____ # 0x____ 0x____   LOAD_MEMDUMP_FROM_CARDSTACK_L0
+  .dhw 0x____ # 0x____ 0x____   4_const
+  .dhw 0x____ # 0x____ 0x____   -                    ( addr )
+  .dhw 0x0008 # 0x____ 0x0008   DUP                  ( addr addr )
+  .dhw 0x0006 # 0x____ 0x0006   @                    ( addr A )
+  .dhw 0x____ # 0x____ 0x____   NOS++                ( addr A )
+  .dhw 0x____ # 0x____ 0x____   OVER                 ( addr+1 A addr+1 )
+  .dhw 0x0006 # 0x____ 0x0006   @                    ( addr+1 A B )
+  .dhw 0x0008 # 0x____ 0x0008   DUP                  ( addr+1 A B B )
+  .dhw 0x000C # 0x____ 0x000C   >R                   ( addr+1 A B ) R:( raddr end?_xt B )
+  .dhw 0x____ # 0x____ 0x____   12>>
+  .dhw 0x____ # 0x____ 0x____   OR
+  .dhw 0x____ # 0x____ 0x____   OVER
+  .dhw 0x____ # 0x____ 0x____   1-
+  .dhw 0x0007 # 0x____ 0x0007   !                   ( addr+1 ) R:( raddr end?_xt B )
+  .dhw 0x000D # 0x____ 0x000D   R>                  ( addr+1 B )
+  .dhw 0x____ # 0x____ 0x____   NOS++
+  
+  ibm1442_read_column_IOCC2
   
   .undef 《NO_SYM_LOOKUP》
 `;
