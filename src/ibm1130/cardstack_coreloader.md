@@ -37,22 +37,22 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly 
       22: 0b             0x    0x0016 0b01100___00        LDX_s IA =        # jump to further fixups
       23: 0b             0x    0x0017 0b01001___11000000  BOSC_l            # needs fixup!
       24: 0b000000000000 0x000 0x0018 0b00000___00000000                    # gets replaced with saved IA during interrupt
-      25: 0b             0x    0x0019 0b11011___00        STD_s IA+         # temp save accumulator and extension
+      25: 0b             0x    0x0019 0b11010___00        ST0_s IA+         # temp save accumulator
       26: 0b             0x    0x001A 0b00001___00        XIO_s IA+         # do a Sense Device XIO  as only the ibm1442 card reader/punch is at interrupt level 0
       27: 0b             0x    0x001B 0b00010___00000001  SLA_s 1           # shift Read response bit into Carry
       28: 0b             0x    0x001C 0b01001___00000010  SKCO_s            # SKip next cell if Carry Off
       29: 0b             0x    0x001D 0b01100___00011111  LDX_s IA = 0x1F   # 
-      30: 0b             0x    0x001E 0b11001___00        LDD_s IA+         # restore accumulator and extension
-      31: 0b             0x    0x001F 0b01100___00011000  LDX_s IA = 0x18   # go and return from the interrupt
+      30: 0b             0x    0x001E 0b11000___00        LD_s  IA+         # restore accumulator
+      31: 0b             0x    0x001F 0b01100___00010111  LDX_s IA = 0x17   # go and return from the interrupt
       32: 0b             0x    0x0021 0b00010___00000010  SLA_s 2           # shift Error Check bit into Carry
       33: 0b             0x    0x0022 0b01001___00000010  SKCO_s            # SKip next cell if Carry Off
       34: 0b             0x    0x0023 0b                  tbd               # an Error occured at the ibm1442 card reader
       35: 0b             0x    0x0024 0b00001___00        XIO_s IA+         # do a Read XIO
-      36: 0b             0x    0x0024 0b
-      37: 0b             0x    0x00   0b
-      38: 0b             0x    0x00   0b
-      39: 0b             0x    0x00   0b
-      40: 0b             0x    0x00   0b
+      36: 0b             0x    0x0025 0b11000___00        LD_s IA+          # load the address part of the Read IOCC into the accumulator
+      37: 0b             0x    0x0026 0b10000___11101000  ADD_s IA-24       # incr it by one         ( 0d24 = 0d16 + 0d08 = 0x18 = 0b00011000 )
+      38: 0b             0x    0x0027 0b11010___00        STO_s IA+         # store it back
+      39: 0b             0x    0x0028 0b11100___00        AND_s IA+         # and it with 0x0003
+      40: 0b             0x    0x0029 0b
       41: 0b             0x    0x00   0b
       42: 0b             0x    0x00   0b
       43: 0b             0x    0x00   0b
@@ -84,7 +84,7 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly 
       69: 0b             0x    0x0045 0b
       70: 0b             0x    0x0046 0b
       71: 0b             0x    0x0047 0b
- C I  72: 0b001000000000 0x200 0x0048 0b00100___00000000  
+ C I  72: 0b001000000000 0x200 0x0048 0b00100___00000000  # tbd 
  A N  73: 0b001000000000 0x200 0x0049 0b00100___00000000
  R    74: 0b001000000000 0x200 0x004A 0b00100___00000000
  D I  75: 0b001000000000 0x200 0x004B 0b00100___00000000
