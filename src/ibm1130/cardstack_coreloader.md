@@ -6,7 +6,7 @@ The restrictions on the loader card:
 1. short instructions only
 2. all displacements in instructions are relative to Instruction Address except for Shift, BOSC and BSC instructions.
 
-```txt
+``txt
 
 Loader card:                            op      ss displ.
            rows on card                 cell in core
@@ -43,43 +43,43 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly 
       28: 0b             0x    0x00   0b
       29: 0b             0x    0x00   0b
       30: 0b             0x    0x00   0b
-      31:
-      32:
-      33:
-      34:
-      35:
-      36:
-      37:
-      38:
-      39:
-      40:
-      41:
-      42:
-      43:
-      44:
-      45:
-      46:
-      47:
-      48:
-      49:
-      50:
-      51:
-      52:
-      53:
-      54:
-      55:
-      56:
-      57:
-      58:
-      59:
-      60:
-      61:
-      62:
-      63:
-      64:
-      65:
-      66:
-      67:
+      31: 0b             0x    0x00   0b
+      32: 0b             0x    0x00   0b
+      33: 0b             0x    0x00   0b
+      34: 0b             0x    0x00   0b
+      35: 0b             0x    0x00   0b
+      36: 0b             0x    0x00   0b
+      37: 0b             0x    0x00   0b
+      38: 0b             0x    0x00   0b
+      39: 0b             0x    0x00   0b
+      40: 0b             0x    0x00   0b
+      41: 0b             0x    0x00   0b
+      42: 0b             0x    0x00   0b
+      43: 0b             0x    0x00   0b
+      44: 0b             0x    0x00   0b
+      45: 0b             0x    0x00   0b
+      46: 0b             0x    0x00   0b
+      47: 0b             0x    0x00   0b
+      48: 0b             0x    0x00   0b
+      49: 0b             0x    0x00   0b
+      50: 0b             0x    0x00   0b
+      51: 0b             0x    0x00   0b
+      52: 0b             0x    0x00   0b
+      53: 0b             0x    0x00   0b
+      54: 0b             0x    0x00   0b
+      55: 0b             0x    0x00   0b
+      56: 0b             0x    0x00   0b
+      57: 0b             0x    0x00   0b
+      58: 0b             0x    0x00   0b
+      59: 0b             0x    0x00   0b
+      60: 0b             0x    0x00   0b
+      61: 0b             0x    0x00   0b
+      62: 0b             0x    0x00   0b
+      63: 0b             0x    0x00   0b
+      64: 0b             0x    0x00   0b
+      65: 0b             0x    0x00   0b
+      66: 0b             0x    0x00   0b
+      67: 0b             0x    0x00   0b
       68: 0b             0x    0x0044 0b
       69: 0b             0x    0x0045 0b
       70: 0b             0x    0x0046 0b
