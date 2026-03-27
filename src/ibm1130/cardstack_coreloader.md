@@ -39,10 +39,47 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly 
       24: 0b             0x    0x00   0b
       25: 0b             0x    0x00   0b
       26: 0b             0x    0x00   0b
-      27:
-      28:
-      29:
-      30:
+      27: 0b             0x    0x00   0b
+      28: 0b             0x    0x00   0b
+      29: 0b             0x    0x00   0b
+      30: 0b             0x    0x00   0b
+      31:
+      32:
+      33:
+      34:
+      35:
+      36:
+      37:
+      38:
+      39:
+      40:
+      41:
+      42:
+      43:
+      44:
+      45:
+      46:
+      47:
+      48:
+      49:
+      50:
+      51:
+      52:
+      53:
+      54:
+      55:
+      56:
+      57:
+      58:
+      59:
+      60:
+      61:
+      62:
+      63:
+      64:
+      65:
+      66:
+      67:
       68: 0b             0x    0x0044 0b
       69: 0b             0x    0x0045 0b
       70: 0b             0x    0x0046 0b
@@ -63,3 +100,12 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP          # mainly 
   0xFFED + 0x0001 = 0xFFEE
                     0x00
 ```
+
+Loader program flow:
+  1. Various fixups of cells/words from the loadercard
+  2. do Start Read IOCC
+
+  In response to column read interrupt
+  1. do the Read Column IOCC
+
+
