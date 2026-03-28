@@ -18,7 +18,7 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # ma
        3: 0b             0x    0x0003 0b11101___00001011  OR_s  IA+11       # or it with the BOSC_s instruction at address 0x000F, turning it into BOSC_l
        4: 0b             0x    0x0004 0b11010___00001010  STO_s IA+10       # store it back
        5: 0b             0x    0x0005 0b11000___00001000  LD_s  IA+8        # load constant 1
-       6: 0b             0x    0x0006 0b00010___00001010  SLA_s 10
+       6: 0b             0x    0x0006 0b00010___00001010  SLA_s 10          #
        7: 0b             0x    0x0007 0b01100___00110110  LDX_s IA = 0x36   # jump to further fixups
        8: 0b             0x    0x0008 0b00000___00010101  # Interrupt vector (lvl 0) for 1442 Card Read Punch (column read, punch), we want the column read        
        9: 0b             0x    0x0009 0b00000___00010000  #                   lvl 1
@@ -66,11 +66,11 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # ma
       51: 0b             0x    0x0033 0b01100___00101101  LDX_s IA = 0x3F   # jump to newly loaded code
       52: 0b             0x    0x0034 0b01100___00111111  LDX_s IA = 0x2D   # interrupt not from ibm1442 card read, so return from the interrupt
       53: 0b000000000011 0x003 0x0035 0b00000___00000011  0x0003            # needs fixup via <<_8 !  Sense Interrupt IOCC2
-      54:
-      55:
-      56:
-      57:
-      58:
+      54: 0b             0x    0x0036 0b11101___11011101  OR_s  IA-35       # or it with the BOSC_s instruction at address 0x0014, turning it into BOSC_l
+      55: 0b             0x    0x0037 0b11010___11011100  STO_s IA-36       # store it back
+      56: 0b             0x    0x0038 0b11000___11010011  LD_s  IA-43       # load constant 1 
+      57: 0b             0x    0x0039 0b00010___00001010  SLA_s 10          # shift it left 10 bit places
+      58: 0b             0x    0x003A 0b
       59:
       60:
       61:
@@ -129,6 +129,9 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # ma
       70: 0b             0x    0x00   0b
       71: 0b             0x    0x0047 0b
 
+  0d35 = 0d32 + 0d03 = 0x20 + 0x03 = 0x23
+  0d36 = 0d32 + 0d04 = 0x20 + 0x04 = 0x24
+  0d43 = 0d32 + 0d13 = 0x20 + 0x0d = 0x2D
 
   0d80 = 0d64 + 0d16 = 0x40 + 0x10 = 0x50
   0x15 - 0x03 = 0x12
