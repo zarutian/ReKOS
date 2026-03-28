@@ -60,7 +60,7 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # ma
       45: 0b             0x    0x002D 0b11000___00111110  LD_s  IA-2        # restore accumulator
       46: 0b             0x    0x002E 0b01001___11000000  BOSC_l            # needs fixup!
       47: 0b000000000000 0x000 0x002F 0b00000___00000000                    # gets replaced by saved IA
-      48: 0b             0x    0x0030 0b00001___00000011  XIO IA+3          # do Sense Interrupt
+      48: 0b             0x    0x0030 0b00001___00000011  XIO_s IA+3        # do Sense Interrupt
       49: 0b             0x    0x0031 0b00010___00000011  SLA 3
       50: 0b             0x    0x0032 0b01001___00000010  SKCO_s            # SKip next cell if Carry Off
       51: 0b             0x    0x0033 0b01100___00101101  LDX_s IA = 0x3F   # jump to newly loaded code
@@ -70,9 +70,9 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # ma
       55: 0b             0x    0x0037 0b11010___11011100  STO_s IA-36       # store it back
       56: 0b             0x    0x0038 0b11000___11010011  LD_s  IA-43       # load constant 1 
       57: 0b             0x    0x0039 0b00010___00001010  SLA_s 10          # shift it left 10 bit places
-      58: 0b             0x    0x003A 0b
-      59:
-      60:
+      58: 0b             0x    0x003A 0b11101___11110011  OR_s  IA-13       # or it with the BOSC_s instruction at address 0x002E
+      59: 0b             0x    0x003B 0b11010___11110010  STO_s IA-14       # store it back
+      60: 0b
       61:
       62:
       63:
@@ -141,6 +141,23 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # ma
 ```
 
 ```
+A:
+     11
+     2101 2345 6789
+     AAAA AAAA xxxx
+     BBBB BBBB xxxx
+
+                 11 1111
+     0123 4567 8901 2345
+     AAAA AAAA BBBB BBBB
+B:
+     11
+     2101 2345 6789
+     AAAA AAAA AAAA
+     BBBB BBBB BBBB
+     CCCC CCCC CCCC
+     DDDD DDDD DDDD
+
                  11 1111
      0123 4567 8901 2345
      AAAA AAAA AAAA BBBB
