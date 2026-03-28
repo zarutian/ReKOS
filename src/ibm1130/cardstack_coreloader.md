@@ -6,7 +6,7 @@ The restrictions on the loader card:
 1. short instructions only
 2. all displacements in instructions are relative to Instruction Address except for Shift, BOSC and BSC instructions.
 
-```txt
+``txt
 
 Loader card 0x00:                       op      ss displ.
            rows on card                 cell in core
@@ -35,7 +35,7 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # ma
       20: 0b             0x    0x0014 0b01001___11000000  BOSC_l            # needs fixup!
       21: 0b000000000000 0x000 0x0015 0b00000___00000000                    # gets replaced with saved IA during interrupt
       22: 0b             0x    0x0016 0b11010___11111011  ST0_s IA-5        # temp save accumulator
-      23: 0b             0x    0x0017 0b00001___00010000  XIO_s IA+16       # do a Sense Device XIO  as only the ibm1442 card reader/punch is at interrupt level 0
+      23: 0b             0x    0x0017 0b00001___00        XIO_s IA+         # do a Sense Device XIO  as only the ibm1442 card reader/punch is at interrupt level 0
       24: 0b             0x    0x0018 0b00010___00000001  SLA_s 1           # shift Read response bit into Carry
       25: 0b             0x    0x0019 0b01001___00000010  SKCO_s            # SKip next cell if Carry Off
       26: 0b             0x    0x001A 0b01100___00011100  LDX_s IA = 0x1C   # 
@@ -43,16 +43,32 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # ma
       28: 0b             0x    0x001C 0b00010___00000010  SLA_s 2           # shift Error Check bit into Carry
       29: 0b             0x    0x001D 0b01001___00000010  SKCO_s            # SKip next cell if Carry Off
       30: 0b             0x    0x001E 0b01100___00011110  LDX_s IA = 0x1E   # an Error occured at the ibm1442 card reader, so infinity loop
-      31: 0b             0x    0x001F 0b00001___00001010  XIO_s IA+10       # do a Read XIO
-      32: 0b             0x    0x0020 0b11000___00001001  LD_s  IA+9        # load the address part of the Read IOCC into the accumulator
-      33: 0b             0x    0x0021 0b10000___11100000  ADD_s IA-20       # incr it by one         ( 0d24 = 0d16 + 0d08 = 0x18 = 0b00011000 )
-      34: 0b             0x    0x0022 0b11010___00000111  STO_s IA+7        # store it back
-      35: 0b             0x    0x0023 0b11100___00000100  AND_s IA+4        # and it with 0x0003
-      36: 0b             0x    0x0024 0b01001___00100000  SKAZ_s            # SKip next cell if Accumulator is Zero
-      37: 0b             0x    0x0025 0b01100___00010011  LDX_s IA = 0x13   # go and return from the interrupt
-      38: 0b             0x    0x0026 0b01100___00010011  LDX_s IA = 0x13   # gets overwritten by later loader card
-      39: 0b000000000000 0x000 0x0027 0b00000___00000000                    # ditto
-      40: 0b000000000011 0x003 0x0028 0b00000___00000011  constant 3
+      31: 0b             0x    0x001F 0b00001___00        XIO_s IA+         # do a Read XIO
+      32: 0b             0x    0x0020 0b11000___00        LD_s  IA+         # load the address part of the Read IOCC into the accumulator
+      33: 0b             0x    0x0023 0b10000___11100000  ADD_s IA-20       # incr it by one         ( 0d24 = 0d16 + 0d08 = 0x18 = 0b00011000 )
+      34: 0b             0x    0x0024 0b11010___00        STO_s IA+         # store it back
+      35: 0b             0x    0x0025 0b11000___00        LD_s  IA+         # load the state variable
+      36: 0b             0x    0x0026 0b                  XOR_s IA-         # xor it with one
+      37: 0b             0x    0x0027 0b11010___00        STO_s IA+         # store it back
+      38: 0b             0x    0x0028 0b01001___00000100  SKAEV             # SKip if Accumulator is EVen
+      39: 0b             0x    0x0029 0b01100___00010011  LDX_s IA = 0x13   # go and return from the interrupt
+      40: 0b             0x    0x002A 0b11000___00        LD_s  IA+         # load the address part of the Read IOCC into the accumulator
+      41: 0b             0x    0x002B 0b                  MINUS_s IA-       # subtract one from it
+      42: 0b             0x    0x002C 0b11010___00        STO_s IA+         # store it back
+      43: 0b             0x    0x002D 0b11010___00        STO_s IA+         # store it as the target address of LD_l downrange
+      44: 0b             0x    0x002E 0b                  MINUS_s IA-       # subtract one again from it
+      45: 0b             0x    0x002F 0b11010___00        STO_s IA+         # store it as the target address of OR_l downrange
+      46: 0b             0x    0x0030 0b11010___00        STO_s IA+         # store it as the target address of STO_l downrange
+      47: 0b             0x    0x0031 0b11000___00000000  LD_l              # needs fixup!  load B
+      48: 0b000000000000 0x000 0x0032 0b00000___00000000                    # gets replaced
+      49: 0b             0x    0x0033 0b                  SRL_s 8           # shift B right 8 bit places
+      50: 0b             0x    0x0034 0b                  OR_l              # needs fixup!  or B with A
+      51: 0b000000000000 0x000 0x0035 0b00000___00000000                    # gets replaced
+      52: 0b             0x    0x0036 0b                  STO_l             # needs fixup!  overwrite A with the result
+      53: 0b000000000000 0x    0x0037 0b00000___00000000                    # gets replaced
+      54: 0b             0x    0x0038                     LDX_s IA = 0x13
+
+      
       41: 0b             0x    0x0029 0b00000___00010111  0x0017            # needs fixup via <<_8 ! Sense Devive IOCC2
       42: 0b             0x    0x002A 0b00000___00111111  0x003F            #                                Read IOCC1
       43: 0b             0x    0x002B 0b00000___00100001  0x0021            # needs fixup via <<_9 !         Read IOCC2
@@ -144,8 +160,8 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # ma
 A:
      11
      2101 2345 6789
-     AAAA AAAA xxxx
-     BBBB BBBB xxxx
+     AAAA AAAA 0000
+     BBBB BBBB 0000
 
                  11 1111
      0123 4567 8901 2345
