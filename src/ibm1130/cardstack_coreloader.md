@@ -56,13 +56,13 @@ column 0: 0b110000001100 0xC0C 0x0000 0b11000___00001100  LD_s  IA+13       # lo
       41: 0b             0x    0x0029 0b                  SRL_s 8           # shift B right 8 bit places
       42: 0b             0x    0x002A 0b                  OR_l              # needs fixup!  or B with A
       43: 0b110000001000 0xC08 0x002B 0b11000___00001000                    # gets replaced
-      44: 0b             0x    0x002C 0b                  STO_l             # needs fixup!  overwrite A with the result
-      45: 0b011000100000 0x620 0x002D 0b00000___00000000                    # gets replaced
-      46: 0b             0x    0x002E                     LDX_s IA = 0x13   # return from interrupt
-      47: 0b             0x    0x002F 0b00000___00110101  0x0035            #                                Read IOCC1
-      48: 0b             0x    0x0030 0b00000___00100001  0x0021            # needs fixup via <<_9 !         Read IOCC2
-      49: 0b           0 0x  0 0x0031 0b00000___00000000  0x0000            # the state variable
-      50: 0b101000000001 0xA01 0x0032 0b                                    # gets replaced by saved accumulator
+      44: 0b110100000000 0xD00 0x002C 0b11010___00000000  STO_l             # needs fixup!  overwrite A with the result
+      45: 0b011000100000 0x620 0x002D 0b01100___00100000                    # gets replaced
+      46: 0b011000010011 0x613 0x002E 0b01100___00010011  LDX_s IA = 0x13   # return from interrupt
+      47: 0b000000110101 0x035 0x002F 0b00000___00110101  0x0035            #                                Read IOCC1
+      48: 0b000000100001 0x021 0x0030 0b00000___00100001  0x0021            # needs fixup via <<_9 !         Read IOCC2
+      49: 0b000000000000 0x000 0x0031 0b00000___00000000  0x0000            # the state variable
+      50: 0b101000000001 0xA01 0x0032 0b10100___00000001                    # gets replaced by saved accumulator
       51: 0b             0x    0x0033 0b11000___00111110  LD_s  IA-2        # restore accumulator
       52: 0b             0x    0x0034 0b01001___11000000  BOSC_l            # needs fixup!
       53: 0b             0x    0x0035 0b11101___11011100  OR_s  IA-34       # or it with the BOSC_s instruction at address 0x0014, turning it into BOSC_l
@@ -82,14 +82,14 @@ column 0: 0b110000001100 0xC0C 0x0000 0b11000___00001100  LD_s  IA+13       # lo
       68: 0b             0x    0x0044 0b11000___11101100  LD_s  IA-0x14     # load from 0x0030 ( 0x44 - 0x30 = 0x14 )
       69: 0b             0x    0x0045 0b00010___00001001  SLA_s 9           # shift it left 9 bit placrs
       70: 0b             0x    0x0046 0b11010___11101010  STO_s IA-0x16     # store it back
-      71: 0b             0x    0x0047 0b11000___00000110  LD_s  IA+6        # load Control Start Read IOCC2
-U C I 72: 0b             0x    0x0048 0b00010___00000101  SLA_s 5           # shift it left 5 bit places
-S A N 73: 0b             0x    0x0049 0b11101___11        OR_s  IA-         # or it with constant 1 ( 0x49 - 0x0E = 0x40 - 0x05 = 
-U R   74: 0b             0x    0x004A 0b00010___00000010  SLA_s 2           # shift it left 2 bit places
-A D I 75: 0b             0x    0x004B 0b11010___00000010  STO_s IA+2        # store it back
-L S B 76: 0b             0x    0x004C 0b00001___00000000  XIO_s IA+0        # do XIO Control Start Read IOCC2
-L E M 77: 0b             0x    0x004D 0b01100___00010011  LDX_s IA = 13     # try to return from an non existant interrupt
-Y Q   78: 0b000000101000 0x    0x004E 0b00000___00101000
+      71: 0b110000000110 0xC06 0x0047 0b11000___00000110  LD_s  IA+6        # load Control Start Read IOCC2
+U C I 72: 0b000100000101 0x105 0x0048 0b00010___00000101  SLA_s 5           # shift it left 5 bit places
+S A N 73: 0b111011000101 0xEC5 0x0049 0b11101___11000101  OR_s  IA-0x3B     # or it with constant 1 ( 0x49 - 0x0E = 0x40 - 0x05 = 0x3B )
+U R   74: 0b000100000010 0x102 0x004A 0b00010___00000010  SLA_s 2           # shift it left 2 bit places
+A D I 75: 0b110100000010 0xD02 0x004B 0b11010___00000010  STO_s IA+2        # store it back
+L S B 76: 0b000010000000 0x080 0x004C 0b00001___00000000  XIO_s IA+0        # do XIO Control Start Read IOCC2
+L E M 77: 0b011000010011 0x613 0x004D 0b01100___00010011  LDX_s IA = 13     # try to return from an non existant interrupt
+Y Q   78: 0b000000101000 0x028 0x004E 0b00000___00101000
   #   79: 0b001000000000 0x200 0x004F 0b00100___00000000                    # '0'
     END OF CARD
 
