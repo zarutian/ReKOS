@@ -121,52 +121,65 @@ column 0: 0b000000000000 0x000 0x0035 0b00000000________
       24: 0b        0000 0x  0 0x0041 0b        ________
       25: 0b        0000 0x  0 0x0041 0b________          LDX_s IA = 0x33   # return from the interrupt
       26: 0b000000000000 0x000 0x0042 0b00000000________
-      27: 0b000000010000 0x010 0x0042 0b________00000001  constant 1
+      27: 0b000000010000 0x010 0x0042 0b________00000001                    # constant 1       
       28: 0b000000000000 0x000 0x0043 0b00000000________
-      29: 0b0000    0000 0x0 0 0x0043 0b________0000      card downcounter
+      29: 0b0000    0000 0x0 0 0x0043 0b________0000                        # card downcounter
       30: 0b        0000 0x  0 0x0044                     
-      31: 0b        0000 0x  0 0x0044                     Ctrl Read Init IOCC2
+      31: 0b        0000 0x  0 0x0044                                       # Ctrl Read Init IOCC2
       32: 0b        0000 0x  0 0x0045
-      33: 0b        0000 0x  0 0x0045                     LD_s IA+
+      33: 0b        0000 0x  0 0x0045                     LD_s IA+          # load the LDX_l IA instruction at 0x004E into the accumulator
       34: 0b        0000 0x  0 0x0046
-      35: 0b        0000 0x  0 0x0046                     STO_l
+      35: 0b        0000 0x  0 0x0046                     STO_l             # overwrite part of the Card Column Read Interrupt Service Routine
       36: 0b000000000000 0x000 0x0047 0b00000000________  0x00__
       37: 0b000110110000 0x080 0x0047 0b________000011011 0x__1B
       38: 0b        0000 0x  0 0x0048 0b        ________
-      39: 0b        0000 0x  0 0x0048 0b________          LD_s IA+
+      39: 0b        0000 0x  0 0x0048 0b________          LD_s IA+          # load the destination branch address of that new jump being patched in
       40: 0b        0000 0x  0 0x0049 0b        ________
-      41: 0b        0000 0x  0 0x0049 0b________          STO_l
+      41: 0b        0000 0x  0 0x0049 0b________          STO_l             # store it after that copied LDX_l IA
       42: 0b000000000000 0x  0 0x004A 0b00000000________  0x00__
       43: 0b000111000000 0x  0 0x004A 0b________00011100  0x__1C
       44: 0b        0000 0x  0 0x004B 0b        ________
-      45: 0b        0000 0x  0 0x004B 0b________          LD_s IA+
+      45: 0b        0000 0x  0 0x004B 0b________          LD_s IA+          # load the new Card Complete Interrupt vector
       46: 0b        0000 0x  0 0x004C 0b        ________
-      47: 0b        0000 0x  0 0x004C 0b________          STO_l
+      47: 0b        0000 0x  0 0x004C 0b________          STO_l             # overwrite that interrupt vector
       48: 0b000000000000 0x  0 0x004D 0b00000000________  0x00__
       49: 0b000011000000 0x  0 0x004D 0b________00001100  0x__0C
       50: 0b        0000 0x  0 0x004E 0b        ________
-      51: 0b        0000 0x  0 0x004E 0b________          LDX_l IA
+      51: 0b        0000 0x  0 0x004E 0b________          LDX_l IA        
       52: 0b000000000000 0x000 0x004C 0b00000000________  0x00__
       53: 0b010000000000 0x400 0x004C 0b________01000000  0x__40
       54: 0b        0000 0x  0 0x004D 0b        ________
       55: 0b        0000 0x  0 0x004D 0b________          Card Column Read interrupt routine continuence vector
       56: 0b        0000 0x  0 0x004E 0b        ________
       57: 0b        0000 0x  0 0x004E 0b________          New Card Complete interrupt vector
+      58: 0b        0000 0x  0 0x004F 0b        ________
+      59: 0b        0000 0x  0 0x004F 0b________          LD_l              # load the address part of the Read IOCC into the accumulator
+      60: 0b000000000000 0x000 0x0050 0b00000000________  0x00__
+      61: 0b001011110000 0x2F0 0x0050 0b________00101111  0x__2F            # the location of that IOCC1
+      62: 0b        0000 0x  0 0x0051 0b        ________
+      63: 0b        0000 0x  0 0x0051 0b________          MINUS_s IA+       # subtract four from it
+      64: 0b        0000 0x  0 0x0052 0b        ________
+      65: 0b        0000 0x  0 0x0052 0b________          STO_l             # set the X1 register to what is in the accumulator
+      66: 0b000000000000 0x000 0x0053 0b00000000________  0x00__
+      67: 0b000000010000 0x010 0x0053 0b________00000001  0x__01
+      68: 0b        0000 0x  0 0x0054 0b        ________
+      69: 0b        0000 0x  0 0x0054 0b________          LD_li  (X1+1)     # load cell B into accumulator
+      70: 0b000000000000 0x000 0x0055 0b00000000________  0x00__
+      71: 0b000000010000 0x010 0x0055 0b________00000000  0x__01
+      72: 0b000110000000 0x180 0x0056 0b00011000________
+      73: 0b000011000000 0x0C0 0x0056 0b________00001100  SRL_s  12         # shift right by 12 bits
+      74: 0b        0000 0x  0 0x0057 0b        ________
+      75: 0b        0000 0x  0 0x0057 0b________          OR_li  (X1+0)     # or that part by cell A
+      76: 0b000000000000 0x000 0x0058 0b00000000________  0x00__
+      77: 0b000000000000 0x000 0x0058 0b________00000000  0x__00
+      78: 0b             0x    0x0059                                       # 'B'   gets overwritten in core by loader card 2
+      79: 0b000100000000 0x100 0x0059                                       # '1'   ditto
 
-
-
-      36: 0b             0x    0x0024 0b11000___00        LD_s IA+          # load the address part of the Read IOCC into the accumulator
-      37: 0b             0x    0x0025 0b10010___00        MINUS_s IA+       # subtract four from it
-      38: 0b             0x    0x0026 0b11010___00000000  STO_l             # needs fixup!
-      39: 0b000000000001 0x001 0x0027 0b00000___00000001
-      40: 0b             0x    0x0028 0b                  LD_si  (X1+1)     # needs fixup both via <<_8 and then or_1 !  load cell B into accumulator
-      41: 0b             0x    0x0029 0b00011___00001100  SRL_s  12         # shift right by 12 bits
-      42: 0b             0x    0x002A 0b                  OR_si  (X1+0)     # needs fixup via <<_8 !  or that part by cell A
-      43: 0b             0x    0x002B 0b                  STO_si (X1+0)     # needs fixup via <<_8 !  store now full cell A
-      44: 0b             0x    0x002C 0b                  LD_si  (X1+1)     # needs fixup via <<_8 !  load cell B again
+      43: 0b             0x    0x002B 0b                  STO_si (X1+0)     # store now full cell A
+      44: 0b             0x    0x002C 0b                  LD_si  (X1+1)     # load cell B again
       45: 0b             0x    0x002D 0b                  SLA_s  8          # shift left by 8 bits
-      46: 0b             0x    0x002E 0b                  STO_si (X1+1)     # needs fixup via <<_8 and then or_1 !  store the now half cell B
-      47: 0b             0x    0x002F 0b                  LD_si  (X1+2)     # needs fixup via <<_8 and then or_2 !  load cell C
+      46: 0b             0x    0x002E 0b                  STO_si (X1+1)     # store the now half cell B
+      47: 0b             0x    0x002F 0b                  LD_si  (X1+2)     # load cell C
       48: 0b             0x    0x0030 0b                  SRL_s  8          #
       49: 0b             0x    0x0031 0b                  OR_si  (X1+1)     #  ! or it with cell B
       50: 0b             0x    0x0032 0b                  STO_si (X1+1)     #  ! store now full cell B
@@ -184,8 +197,7 @@ column 0: 0b000000000000 0x000 0x0035 0b00000000________
       62: 0b             0x    0x003E 0b00000___00000100                    # constant 4
       63: 0b             0x    0x003F 0b00000___00000011                    # constant 3
 
-      78: 0b             0x    0x00                       B
-      79: 0b000100000000 0x100 0x00                       1
+
  
 ```
 
