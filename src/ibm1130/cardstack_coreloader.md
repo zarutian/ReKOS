@@ -6,7 +6,7 @@ The restrictions on the loader card:
 1. short instructions only
 2. all displacements in instructions are relative to Instruction Address except for Shift, BOSC and BSC instructions.
 
-``txt
+```txt
 
 Loader card 0x00:                       op      ss displ.
            rows on card                 cell in core
@@ -82,20 +82,22 @@ column 0: 0b11000        0xC   0x0000 0b11000___00001100  LD_s  IA+13       # lo
       68: 0b             0x    0x0044 0b11000___11        LD_s  IA-         # load from 0x0030
       69: 0b             0x    0x0045 0b00010___00001001  SLA_s 9
       70: 0b             0x    0x0046 0b11010___11        STO_s IA-         # store it back
-      71: 0b             0x    0x0047 
-U C I 72: 0b             0x    0x0048 0b
-S A N 73: 0b             0x    0x0049 0b
-U R   74: 0b             0x    0x004A 0b
-A D I 75: 0b             0x    0x004B 0b
-L S B 76: 0b             0x    0x004C 0b
+      71: 0b             0x    0x0047 0b11000___00        LD_s  IA+         # load Control Start Read IOCC2
+U C I 72: 0b             0x    0x0048 0b00010___00000101  SLA_s 5           # shift it left 5 bit places
+S A N 73: 0b             0x    0x0049 0b11101___11        OR_s  IA-         # or it with constant 1
+U R   74: 0b             0x    0x004A 0b00010___00000010  SLA_s 2           # shift it left 2 bit places
+A D I 75: 0b             0x    0x004B 0b11010___00        STO_s IA+         # store it back
+L S B 76: 0b             0x    0x004C 0b00001___00        XIO_s IA+
 L E M 77: 0b             0x    0x004D 0b                  LDX_s IA = 13     # try to return from an non existant interrupt
 Y Q   78: 0b             0x    0x004E 0b
   #   79: 0b001000000000 0x200 0x004F 0b00100___00000000  # 0
     END OF CARD
 
-  0x1401 = 0b0001_0100_0000_0001
-           0bxxxx_xxxx_xx10_1000   <<
-           0bxxxx_xxx
+  0x1404 = 0b0001_0100_0000_0100
+           0bxxxx_xxxx_xx10_1000   <<5
+           0bxxxx_x101_0000_0000
+           0bxxxx_x101_0000_0001  or 1
+           0bxxx1_0100_0000_0100  <<2
 
   todo: add XIO Control of initiate read sequence to end of fixup code
 
