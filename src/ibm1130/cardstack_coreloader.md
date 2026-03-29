@@ -35,20 +35,20 @@ column 0: 0b110000001100 0xC0C 0x0000 0b11000___00001100  LD_s  IA+13       # lo
       20: 0b             0x    0x0014 0b01001___11000000  BOSC_l            # needs fixup!
       21: 0b000000010011 0x000 0x0015 0b00000___00000000  0x0013            # gets replaced with saved IA during interrupt
       22: 0b             0x    0x0016 0b11010___11111011  ST0_s IA-5        # temp save accumulator
-      23: 0b             0x    0x0017 0b00001___00        XIO_s IA+         # do a Read XIO
-      24: 0b             0x    0x0018 0b11000___00        LD_s  IA+         # load the address part of the Read IOCC into the accumulator
+      23: 0b             0x    0x0017 0b00001___00010110  XIO_s IA+0x16     # do a Read XIO  ( 0x2F - 0x19 = 0x16 )
+      24: 0b             0x    0x0018 0b11000___00010101  LD_s  IA+0x15     # load the address part of the Read IOCC into the accumulator
       25: 0b             0x    0x0019 0b10000___11100000  ADD_s IA-20       # incr it by one         ( 0d24 = 0d16 + 0d08 = 0x18 = 0b00011000 )
-      26: 0b             0x    0x001A 0b11010___00        STO_s IA+         # store it back
-      27: 0b             0x    0x001B 0b11000___00        LD_s  IA+         # load the state variable
-      28: 0b             0x    0x001C 0b                  XOR_s IA-         # xor it with one
-      29: 0b             0x    0x001D 0b11010___00        STO_s IA+         # store it back
+      26: 0b             0x    0x001A 0b11010___00010011  STO_s IA+0x13     # store it back
+      27: 0b             0x    0x001B 0b11000___00010100  LD_s  IA+0x14     # load the state variable
+      28: 0b             0x    0x001C 0b11111___11110010  XOR_s IA-15       # xor it with one
+      29: 0b             0x    0x001D 0b11010___00010010  STO_s IA+0x12     # store it back
       30: 0b             0x    0x001E 0b01001___00000100  SKAEV             # SKip if Accumulator is EVen
       31: 0b             0x    0x001F 0b01100___00010011  LDX_s IA = 0x13   # go and return from the interrupt
       32: 0b             0x    0x0020 0b11000___00        LD_s  IA+         # load the address part of the Read IOCC into the accumulator
-      33: 0b             0x    0x0021 0b                  MINUS_s IA-       # subtract one from it
+      33: 0b             0x    0x0021 0b10010___11        MINUS_s IA-20     # subtract one from it
       34: 0b             0x    0x0022 0b11010___00        STO_s IA+         # store it back
       35: 0b             0x    0x0023 0b11010___00        STO_s IA+         # store it as the target address of LD_l downrange
-      36: 0b             0x    0x0024 0b                  MINUS_s IA-       # subtract one again from it
+      36: 0b             0x    0x0024 0b                  MINUS_s IA-23     # subtract one again from it
       37: 0b             0x    0x0025 0b11010___00        STO_s IA+         # store it as the target address of OR_l downrange
       38: 0b             0x    0x0026 0b11010___00        STO_s IA+         # store it as the target address of STO_l downrange
       39: 0b             0x    0x0027 0b11000___00000000  LD_l              # needs fixup!  load B
