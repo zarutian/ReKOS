@@ -33,7 +33,7 @@ column 0: 0b11000        0xC   0x0000 0b11000___00001100  LD_s  IA+13       # lo
       18: 0b000000000000 0x000 0x0012 0b00000___00000000                    # gets replaced by saved accumulator
       19: 0b             0x    0x0013 0b11000___00111110  LD_s  IA-2        # restore accumulator       
       20: 0b             0x    0x0014 0b01001___11000000  BOSC_l            # needs fixup!
-      21: 0b000000000000 0x000 0x0015 0b00000___00000000                    # gets replaced with saved IA during interrupt
+      21: 0b000000010011 0x000 0x0015 0b00000___00000000  0x0013            # gets replaced with saved IA during interrupt
       22: 0b             0x    0x0016 0b11010___11111011  ST0_s IA-5        # temp save accumulator
       23: 0b             0x    0x0017 0b00001___00        XIO_s IA+         # do a Read XIO
       24: 0b             0x    0x0018 0b11000___00        LD_s  IA+         # load the address part of the Read IOCC into the accumulator
@@ -88,10 +88,14 @@ S A N 73: 0b             0x    0x0049 0b
 U R   74: 0b             0x    0x004A 0b
 A D I 75: 0b             0x    0x004B 0b
 L S B 76: 0b             0x    0x004C 0b
-L E M 77: 0b             0x    0x004D 0b
-Y Q   78: 0b010001000000 0x440 0x004E 0b00100___00000000  # L (oader)
+L E M 77: 0b             0x    0x004D 0b                  LDX_s IA = 13     # try to return from an non existant interrupt
+Y Q   78: 0b             0x    0x004E 0b
   #   79: 0b001000000000 0x200 0x004F 0b00100___00000000  # 0
     END OF CARD
+
+  0x1401 = 0b0001_0100_0000_0001
+           0bxxxx_xxxx_xx10_1000   <<
+           0bxxxx_xxx
 
   todo: add XIO Control of initiate read sequence to end of fixup code
 
