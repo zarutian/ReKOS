@@ -6,7 +6,7 @@ The restrictions on the loader card:
 1. short instructions only
 2. all displacements in instructions are relative to Instruction Address except for Shift, BOSC and BSC instructions.
 
-``txt
+```txt
 
 Loader card 0x00:                       op      ss displ.
            rows on card                 cell in core
@@ -66,27 +66,26 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # ma
       51: 0b000000000000 0x000 0x0035 0b00000___00000000                    # gets replaced
       52: 0b             0x    0x0036 0b                  STO_l             # needs fixup!  overwrite A with the result
       53: 0b000000000000 0x    0x0037 0b00000___00000000                    # gets replaced
-      54: 0b             0x    0x0038                     LDX_s IA = 0x13
+      54: 0b             0x    0x0038                     LDX_s IA = 0x13   # return from interrupt
+      55: 0b             0x    0x0039 0b00000___00010111  0x0017            # needs fixup via <<_8 ! Sense Devive IOCC2
+      56: 0b             0x    0x003A 0b00000___00111111  0x003F            #                                Read IOCC1
+      57: 0b             0x    0x003B 0b00000___00100001  0x0021            # needs fixup via <<_9 !         Read IOCC2
+      58: 0b000000000000 0x000 0x003C 0b00000___00000000                    # gets replaced by saved accumulator
+      59: 0b             0x    0x003D 0b11000___00111110  LD_s  IA-2        # restore accumulator
+      60: 0b             0x    0x003E 0b01001___11000000  BOSC_l            # needs fixup!
+      61: 0b000000000000 0x000 0x003F 0b00000___00000000                    # gets replaced by saved IA
+      62: 0b             0x    0x0030 0b00001___00000011  XIO_s IA+3        # do Sense Interrupt
+      63: 0b             0x    0x0031 0b00010___00000011  SLA 3
+      64: 0b             0x    0x0032 0b01001___00000010  SKCO_s            # SKip next cell if Carry Off
+      65: 0b             0x    0x0033 0b01100___00101101  LDX_s IA = 0x3F   # jump to newly loaded code
+      66: 0b             0x    0x0034 0b01100___00111111  LDX_s IA = 0x2D   # interrupt not from ibm1442 card read, so return from the interrupt
+      67: 0b000000000011 0x003 0x0035 0b00000___00000011  0x0003            # needs fixup via <<_8 !  Sense Interrupt IOCC2
 
-      
-      41: 0b             0x    0x0029 0b00000___00010111  0x0017            # needs fixup via <<_8 ! Sense Devive IOCC2
-      42: 0b             0x    0x002A 0b00000___00111111  0x003F            #                                Read IOCC1
-      43: 0b             0x    0x002B 0b00000___00100001  0x0021            # needs fixup via <<_9 !         Read IOCC2
-      44: 0b000000000000 0x000 0x002C 0b00000___00000000                    # gets replaced by saved accumulator
-      45: 0b             0x    0x002D 0b11000___00111110  LD_s  IA-2        # restore accumulator
-      46: 0b             0x    0x002E 0b01001___11000000  BOSC_l            # needs fixup!
-      47: 0b000000000000 0x000 0x002F 0b00000___00000000                    # gets replaced by saved IA
-      48: 0b             0x    0x0030 0b00001___00000011  XIO_s IA+3        # do Sense Interrupt
-      49: 0b             0x    0x0031 0b00010___00000011  SLA 3
-      50: 0b             0x    0x0032 0b01001___00000010  SKCO_s            # SKip next cell if Carry Off
-      51: 0b             0x    0x0033 0b01100___00101101  LDX_s IA = 0x3F   # jump to newly loaded code
-      52: 0b             0x    0x0034 0b01100___00111111  LDX_s IA = 0x2D   # interrupt not from ibm1442 card read, so return from the interrupt
-      53: 0b000000000011 0x003 0x0035 0b00000___00000011  0x0003            # needs fixup via <<_8 !  Sense Interrupt IOCC2
-      54: 0b             0x    0x0036 0b11101___11011101  OR_s  IA-35       # or it with the BOSC_s instruction at address 0x0014, turning it into BOSC_l
-      55: 0b             0x    0x0037 0b11010___11011100  STO_s IA-36       # store it back
-      56: 0b             0x    0x0038 0b11000___11010011  LD_s  IA-43       # load constant 1 
-      57: 0b             0x    0x0039 0b00010___00001010  SLA_s 10          # shift it left 10 bit places
-      58: 0b             0x    0x003A 0b11101___11110011  OR_s  IA-13       # or it with the BOSC_s instruction at address 0x002E
+      68: 0b             0x    0x0036 0b11101___11011101  OR_s  IA-35       # or it with the BOSC_s instruction at address 0x0014, turning it into BOSC_l
+      69: 0b             0x    0x0037 0b11010___11011100  STO_s IA-36       # store it back
+      70: 0b             0x    0x0038 0b11000___11010011  LD_s  IA-43       # load constant 1 
+      71: 0b             0x    0x0039 0b00010___00001010  SLA_s 10          # shift it left 10 bit places
+      72: 0b             0x    0x003A 0b11101___11110011  OR_s  IA-13       # or it with the BOSC_s instruction at address 0x002E
       59: 0b             0x    0x003B 0b11010___11110010  STO_s IA-14       # store it back
       60: 0b
       61:
