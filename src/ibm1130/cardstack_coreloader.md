@@ -84,7 +84,7 @@ column 0: 0b110000001100 0xC0C 0x0000 0b11000___00001100  LD_s  IA+13       # lo
       70: 0b             0x    0x0046 0b11010___11101010  STO_s IA-0x16     # store it back
       71: 0b             0x    0x0047 0b11000___00000110  LD_s  IA+6        # load Control Start Read IOCC2
 U C I 72: 0b             0x    0x0048 0b00010___00000101  SLA_s 5           # shift it left 5 bit places
-S A N 73: 0b             0x    0x0049 0b11101___11        OR_s  IA-         # or it with constant 1
+S A N 73: 0b             0x    0x0049 0b11101___11        OR_s  IA-         # or it with constant 1 ( 0x49 - 0x0E = 0x40 - 0x05 = 
 U R   74: 0b             0x    0x004A 0b00010___00000010  SLA_s 2           # shift it left 2 bit places
 A D I 75: 0b             0x    0x004B 0b11010___00000010  STO_s IA+2        # store it back
 L S B 76: 0b             0x    0x004C 0b00001___00000000  XIO_s IA+0        # do XIO Control Start Read IOCC2
