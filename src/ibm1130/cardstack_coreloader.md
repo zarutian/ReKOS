@@ -93,14 +93,45 @@ Y Q   78: 0b000000101000 0x028 0x004E 0b00000___00101000
   #   79: 0b001000000000 0x200 0x004F 0b00100___00000000                    # '0'
     END OF CARD
 
-  0x1404 = 0b0001_0100_0000_0100
-           0bxxxx_xxxx_xx10_1000   <<5
-           0bxxxx_x101_0000_0000
-           0bxxxx_x101_0000_0001  or 1
-           0bxxx1_0100_0000_0100  <<2
-
-  todo: add XIO Control of initiate read sequence to end of fixup code
-
+Loader card 1 in format B:
+column 0: 0b000000000000 0x000 0x0035 0b00000000________
+       1: 0b000000000000 0x000 0x0035 0b________00000000  NOP               # gets replaced by saved IA during the CARD COMPLETE interrupt
+       2: 0b        0000 0x  0 0x0036 0b        ________
+       3: 0b        0000 0x  0 0x0036 0b________          LD_s IA+          # load card down counter into accumlator
+       4: 0b        0000 0x  0 0x0037 0b        ________
+       5: 0b        0000 0x  0 0x0037 0b________          MINUS_s IA+       # decrement it by one
+       6: 0b        0000 0x  0 0x0038 0b        ________
+       7: 0b        0000 0x  0 0x0038 0b________          STO_s IA+         # store it back
+       8: 0b        0000 0x  0 0x0039 0b        ________
+       9: 0b        0000 0x  0 0x0039 0b________          BSC_l AZ          # branch if Accumulator is Zero
+      10: 0b        0000 0x  0 0x003A 0b        ________
+      11: 0b        0000 0x  0 0x003A 0b________                            # branch destination
+      12: 0b        0000 0x  0 0x003B 0b        ________
+      13: 0b        0000 0x  0 0x003B 0b________          XIO_s IA+         # do a XIO Control Read Initial
+      14: 0b        0000 0x  0 0x003C 0b        ________
+      15: 0b        0000 0x  0 0x003C 0b________          LDX_s IA = 0x33   # return from the interrupt
+      16: 0b000000000000 0x000 0x003D 0b00000000________
+      17: 0b000000010000 0x010 0x003D 0b________00000001  constant 1
+      18: 0b000000000000 0x000 0x003E 0b00000000________
+      19: 0b0000    0000 0x0 0 0x003E 0b________0000      card downcounter
+      20: 0b        0000 0x  0 0x003F
+      21: 0b        0000 0x  0 0x003F
+      22: 0b        0000 0x  0 0x0040
+      23: 0b        0000 0x  0 0x0040
+      24: 0b        0000 0x  0 0x0041
+      25: 0b        0000 0x  0 0x0041
+      26: 0b        0000 0x  0 0x0042
+      27: 0b        0000 0x  0 0x0042
+      28:
+      29:
+      30:
+      31:
+      32:
+      33:
+      34:
+      35:
+      36:
+      79: 0b000100000000 0x100 0x00
 
       36: 0b             0x    0x0024 0b11000___00        LD_s IA+          # load the address part of the Read IOCC into the accumulator
       37: 0b             0x    0x0025 0b10010___00        MINUS_s IA+       # subtract four from it
