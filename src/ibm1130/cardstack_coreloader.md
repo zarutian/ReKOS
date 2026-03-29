@@ -6,7 +6,7 @@ The restrictions on the loader card:
 1. short instructions only
 2. all displacements in instructions are relative to Instruction Address except for Shift, BOSC and BSC instructions.
 
-```txt
+``txt
 
 Loader card 0x00:                       op      ss displ.
            rows on card                 cell in core
@@ -14,12 +14,12 @@ Loader card 0x00:                       op      ss displ.
             210123456789   dat   addr   0123456789012345
 column 0: 0b11000        0xC   0x0000 0b11000___00001100  LD_s  IA+13       # load constant 1 into the accumulator
        1: 0b             0x    0x0001 0b00010___00001010  SLA_s 10          # shift it left 10 bit places
-       2: 0b             0x    0x0002 0b11101___00001011  OR_s  IA+12       # or it with the BOSC_s instruction at address 0x000F, turning it into BOSC_l
-       3: 0b             0x    0x0003 0b11010___00001010  STO_s IA+11       # store it back
-       4: 0b             0x    0x0004 0b11000___00001000  LD_s  IA+p        # load constant 1
-       5: 0b             0x    0x0005 0b00010___00001010  SLA_s 10          #
-       6: 0b             0x    0x0006 0b11101___00        OR_s  IA+         # or it with the BOSC_s instruction at address 0x0014, turning it into BOSC_l
-       7: 0b             0x    0x0007 0b01100___00110101  LDX_s IA = 0x35   # jump to further fixups
+       2: 0b             0x    0x0002 0b11010___00        STO_s IA+         # store it as constant 0x0200 (0b0000001000000000)
+       3: 0b             0x    0x0003 0b11101___00001011  OR_s  IA+12       # or it with the BOSC_s instruction at address 0x000F, turning it into BOSC_l
+       4: 0b             0x    0x0004 0b11010___00        STO_s IA+         # store it back
+       5: 0b             0x    0x0005 0b11000___00001000  LD_s  IA+         # load constant 0x0200
+       6: 0b             0x    0x0006 0b01100___00110101  LDX_s IA = 0x35   # jump to further fixups 
+       7: 0b000001000010 0x042 0x0007 0b00000___11000010
        8: 0b             0x    0x0008 0b00000___00010101  # Interrupt vector (lvl 0) for 1442 Card Read Punch (column read, punch), we want the column read        
        9: 0b             0x    0x0009 0b00000___00010000  #                   lvl 1
       10: 0b             0x    0x000A 0b00000___00010000  #                   lvl 2
@@ -65,36 +65,36 @@ column 0: 0b11000        0xC   0x0000 0b11000___00001100  LD_s  IA+13       # lo
       50: 0b101000000001 0xA01 0x0032 0b00000___00000000                    # gets replaced by saved accumulator
       51: 0b             0x    0x0033 0b11000___00111110  LD_s  IA-2        # restore accumulator
       52: 0b             0x    0x0034 0b01001___11000000  BOSC_l            # needs fixup!
-      53: 0b             0x    0x0035 0b11010___11        STO_s IA-         # store it back                                       # gets replaced by saved IA
-      54: 0b             0x    0x0036 0b11000___11        LD_s  IA-         # load constant 1                                     # gets replaced by loader card 1
-      55: 0b             0x    0x0037 0b00010___00001010  SLA_s 10          # shift it left 10 bit places                         # gets replaced by loader card 1
+      53: 0b             0x    0x0035 0b11101___00        OR_s  IA+         # or it with the BOSC_s instruction at address 0x0014, turning it into BOSC_l
+      54: 0b             0x    0x0036 0b11010___11        STO_s IA-         # store it back                                       # gets replaced by loader card 1
+      55: 0b             0x    0x0036 0b11000___11        LD_s  IA-         # load constant 0x0200                                    # gets replaced by loader card 1
       56: 0b             0x    0x0038 0b11101___11        OR_s  IA-         # or it with the BOSC_s instruction at address 0x0034 # gets replaced by loader card 1
-      58: 0b             0x    0x0039 0b11010___11        STO_s IA-         # store it back
-      59: 0b             0x    0x003A 0b11000___11        LD_s  IA-         # load constant 1
-      60: 0b             0x    0x003B 0b00010___00001010  SLA_s 10          # shift it left 10 bit places
-      61: 0b             0x    0x003C 0b11101___11        OR_s  IA-         # or it with the LD_s instruction at 0x0027 
-      62: 0b             0x    0x003D 0b11010___11        STO_s IA-         # store it back
-      63: 0b             0x    0x003E 0b11000___11        LD_s  IA-         # load constant 1
-      64: 0b             0x    0x003F 0b00010___00001010  SLA_s 10          # shift it left 10 bit places
-      65: 0b             0x    0
-      66:
-      67:
-      68:
-      69:
-      70:
-      71:
+      57: 0b             0x    0x0039 0b11010___11        STO_s IA-         # store it back
+      58: 0b             0x    0x003A 0b11000___11        LD_s  IA-         # load constant 0x0200
+      59: 0b             0x    0x003C 0b11101___11        OR_s  IA-         # or it with the LD_s instruction at 0x0027 
+      60: 0b             0x    0x003D 0b11010___11        STO_s IA-         # store it back
+      61: 0b             0x    0x003E 0b11000___11        LD_s  IA-         # load constant 0x0200
+      62: 0b             0x    0x003F 0b11101___11        OR_s  IA-         # or it with the OR_s instruction at 0x002A
+      63: 0b             0x    0x0040 0b11010___11        STO_s IA-         # store it back
+      64: 0b             0x    0x0041 0b11000___11        LD_s  IA-         # load constant 0x0200
+      66: 0b             0x    0x0042 0b11101___11        OR_s  IA-         # or it with the STO_s instruction at 0x002C
+      67: 0b             0x    0x0043 0b11010___11        STO_s IA-         # store it back
+      68: 0b             0x    0x0044 0b11000___11        LD_s  IA-         # load from 0x0030
+      69: 0b             0x    0x0045 0b00010___00001001  SLA_s 9
+      70: 0b             0x    0x0046 0b11010___11        STO_s IA-         # store it back
+      71: 0b             0x    0x0047 
 U C I 72: 0b             0x    0x0048 0b
 S A N 73: 0b             0x    0x0049 0b
-U R   74: 0b             0x___ 0x004A 0b
-A D I 75: 0b             0x___ 0x004B 0b
-L S B 76: 0b             0x___ 0x004C 0b
-L E M 77: 0b             0x___ 0x004D 0b
+U R   74: 0b             0x    0x004A 0b
+A D I 75: 0b             0x    0x004B 0b
+L S B 76: 0b             0x    0x004C 0b
+L E M 77: 0b             0x    0x004D 0b
 Y Q   78: 0b010001000000 0x440 0x004E 0b00100___00000000  # L (oader)
   #   79: 0b001000000000 0x200 0x004F 0b00100___00000000  # 0
     END OF CARD
 
-  todo: change the fixup code so it loads constant 1, does the <<10 shift and stores that as an constant
   todo: add XIO Control of initiate read sequence to end of fixup code
+
 
       36: 0b             0x    0x0024 0b11000___00        LD_s IA+          # load the address part of the Read IOCC into the accumulator
       37: 0b             0x    0x0025 0b10010___00        MINUS_s IA+       # subtract four from it
