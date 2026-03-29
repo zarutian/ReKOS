@@ -73,40 +73,24 @@ column 0: 0b000000000000 0x000 0x0000 0b00000___00000000  NOP               # ma
       58: 0b000000000000 0x000 0x003C 0b00000___00000000                    # gets replaced by saved accumulator
       59: 0b             0x    0x003D 0b11000___00111110  LD_s  IA-2        # restore accumulator
       60: 0b             0x    0x003E 0b01001___11000000  BOSC_l            # needs fixup!
-      61: 0b000000000000 0x000 0x003F 0b00000___00000000                    # gets replaced by saved IA
-      62: 0b             0x    0x0030 0b00001___00000011  XIO_s IA+3        # do Sense Interrupt
-      63: 0b             0x    0x0031 0b00010___00000011  SLA 3
-      64: 0b             0x    0x0032 0b01001___00000010  SKCO_s            # SKip next cell if Carry Off
-      65: 0b             0x    0x0033 0b01100___00101101  LDX_s IA = 0x3F   # jump to newly loaded code
-      66: 0b             0x    0x0034 0b01100___00111111  LDX_s IA = 0x2D   # interrupt not from ibm1442 card read, so return from the interrupt
-      67: 0b000000000011 0x003 0x0035 0b00000___00000011  0x0003            # needs fixup via <<_8 !  Sense Interrupt IOCC2
-
-      68: 0b             0x    0x0036 0b11101___11011101  OR_s  IA-35       # or it with the BOSC_s instruction at address 0x0014, turning it into BOSC_l
-      69: 0b             0x    0x0037 0b11010___11011100  STO_s IA-36       # store it back
-      70: 0b             0x    0x0038 0b11000___11010011  LD_s  IA-43       # load constant 1 
-      71: 0b             0x    0x0039 0b00010___00001010  SLA_s 10          # shift it left 10 bit places
-      72: 0b             0x    0x003A 0b11101___11110011  OR_s  IA-13       # or it with the BOSC_s instruction at address 0x002E
-      59: 0b             0x    0x003B 0b11010___11110010  STO_s IA-14       # store it back
-      60: 0b
-      61:
-      62:
-      63:
-      64:
-      65:
-      66:
-      67:
+      61: 0b             0x    0x003F 0b11101___11        OR_s  IA-         # or it with the BOSC_s instruction at address 0x0014, turning it into BOSC_l    # gets replaced by saved IA
+      63: 0b             0x    0x0040 0b11010___11        STO_s IA-         # store it back
+      64: 0b             0x    0x0041 0b11000___11        LD_s  IA-         # load constant 1 
+      65: 0b             0x    0x0042 0b00010___00        SLA_s 10          # shift it left 10 bit places
+      66: 0b             0x    0x0043 0b11101___11        OR_s  IA-         # or it with the BOSC_s instruction at address 0x003E
+      67: 0b             0x    0x0045 0b11010___11        STO_s IA-         # store it back
       68:
       69:
       70:
       71:
- C I  72: 0b             0x___ 0x0048 0b00100___00000000  # L
- A N  73: 0b             0x200 0x0049 0b00100___00000000  # O
- R    74: 0b             0x___ 0x004A 0b00100___00000000  # A
- D I  75: 0b             0x___ 0x004B 0b00100___00000000  # D
- S B  76: 0b             0x___ 0x004C 0b00100___00000000  # E
- E M  77: 0b             0x___ 0x004D 0b00100___00000000  # R
- Q    78: 0b001000000000 0x200 0x004E 0b00100___00000000  # tbd: 0
- #    79: 0b001000000000 0x200 0x004F 0b00100___00000000  # tbd: 0
+U C I 72: 0b             0x___ 0x0048 0b00100___00000000  # L
+S A N 73: 0b             0x200 0x0049 0b00100___00000000  # O
+U R   74: 0b             0x___ 0x004A 0b00100___00000000  # A
+A D I 75: 0b             0x___ 0x004B 0b00100___00000000  # D
+L S B 76: 0b             0x___ 0x004C 0b00100___00000000  # E
+L E M 77: 0b             0x___ 0x004D 0b00100___00000000  # R
+Y Q   78: 0b001000000000 0x200 0x004E 0b00100___00000000  # tbd: 0
+  #   79: 0b001000000000 0x200 0x004F 0b00100___00000000  # tbd: 0
     END OF CARD
 
       36: 0b             0x    0x0024 0b11000___00        LD_s IA+          # load the address part of the Read IOCC into the accumulator
