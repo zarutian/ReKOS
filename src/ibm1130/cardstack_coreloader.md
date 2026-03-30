@@ -182,30 +182,69 @@ column 0: 0b        0000 0x  0 0x0059 0b        ________
        2: 0b000000000000 0x000 0x005A 0b00000000________  0x00__
        3: 0b000000000000 0x000 0x005A 0b________00000000  0x__00
        4: 0b        0000 0x  0 0x005B 0b        ________
-       6: 0b        0000 0x  0 0x005B 0b________          LD_li  (X1+1)     # load cell B again
-       7: 0b000000000000 0x000 0x005C 0b00000000________  0x00__
-       8: 0b000000010000 0x010 0x005C 0b________00000001  0x__01
-       9: 0b        0000 0x  0 0x005D 0b        ________
-      10: 0b        0000 0x  0 0x005D 0b________          SLA_s  8          # shift left by 8 bits
-      11: 0b        0000 0x  0 0x005E 0b        ________
-      12: 0b             0x    0x005E 0b                  STO_si (X1+1)     # store the now half cell B
-
-      47: 0b             0x    0x002F 0b                  LD_si  (X1+2)     # load cell C
-      48: 0b             0x    0x0030 0b                  SRL_s  8          # shift right by 8 bits
-      49: 0b             0x    0x0031 0b                  OR_si  (X1+1)     #  or it with cell B
-      50: 0b             0x    0x0032 0b                  STO_si (X1+1)     #  store now full cell B
-      51: 0b             0x    0x0033 0b                  LD_si  (X1+2)     #  load cell C again
-      52: 0b             0x    0x0034 0b                  SLA_s  8          #  shift left it 8bits
-      53: 0b             0x    0x0035 0b                  STO_si (X1+2)     #  store it back
-      54: 0b             0x    0x0036 0b                  LD_si  (X1+3)     #  load cell D
-      55: 0b             0x    0x0037 0b                  OR_si  (X1+2)     #  or it with what is left of cell C
-      56: 0b             0x    0x0038 0b                  STO_si (X1+2)     #   store cell C and D back
-      57: 0b             0x    0x0039 0b                  LD_s   IA+        #  load the address part of the Read IOCC into the accumulator
-      58: 0b             0x    0x003A 0b                  MINUS_s IA-       #  decr by one
-      59: 0b             0x    0x003B 0b                  STO_s  IA         #  store it back
-      60: 0b             0x    0x003C 0b01100___00        LDX_s IA = 0x     # go and return from the interrupt
-      62: 0b             0x    0x003E 0b00000___00000100                    # constant 4
-      63: 0b             0x    0x003F 0b00000___00000011                    # constant 3
+       5: 0b        0000 0x  0 0x005B 0b________          LD_li  (X1+1)     # load cell B again
+       6: 0b000000000000 0x000 0x005C 0b00000000________  0x00__
+       7: 0b000000010000 0x010 0x005C 0b________00000001  0x__01
+       8: 0b        0000 0x  0 0x005D 0b        ________
+       9: 0b        0000 0x  0 0x005D 0b________          SLA_s  8          # shift left by 8 bits
+      10: 0b        0000 0x  0 0x005E 0b        ________
+      11: 0b        0000 0x  0 0x005E 0b________          STO_li (X1+1)     # store the now half cell B
+      12: 0b000000000000 0x000 0x005F 0b00000000________  0x00__
+      13: 0b000000010000 0x010 0x005F 0b________00000000  0x__01
+      14: 0b        0000 0x  0 0x0060 0b        ________
+      15: 0b        0000 0x  0 0x0060 0b________          LD_si  (X1+2)     # load cell C
+      16: 0b000000000000 0x000 0x0061 0b00000000________  0x00__
+      17: 0b000000100000 0x020 0x0061 0b________00000010  0x__02
+      18: 0b        0000 0x  0 0x0062 0b        ________
+      19: 0b        0000 0x  0 0x0062 0b________          SRL_s  8          # shift right by 8 bits
+      20: 0b        0000 0x  0 0x0063 0b        ________
+      21: 0b        0000 0x  0 0x0063 0b________          OR_li  (X1+1)     #  or it with cell B
+      22: 0b000000000000 0x000 0x0064 0b00000000________  0x00__
+      23: 0b000000010000 0x010 0x0064 0b________00000001  0x__01
+      24: 0b        0000 0x  0 0x0065 0b        ________
+      25: 0b        0000 0x  0 0x0065 0b________          STO_li (X1+1)     #  store now full cell B
+      26: 0b000000000000 0x000 0x0066 0b00000000________  0x00__
+      27: 0b000000010000 0x010 0x0066 0b________00000001  0x__01
+      28: 0b        0000 0x  0 0x0067 0b        ________
+      29: 0b        0000 0x  0 0x0067 0b________          LD_li  (X1+2)     #  load cell C again
+      30: 0b000000000000 0x000 0x0068 0b00000000________  0x00__
+      31: 0b000000100000 0x020 0x0068 0b________00000010  0x__02
+      32: 0b        0000 0x  0 0x0069 0b        ________
+      33: 0b        0000 0x  0 0x0069 0b________          SLA_s  8          #  shift left it 8bits
+      34: 0b        0000 0x  0 0x006A 0b        ________
+      35: 0b        0000 0x  0 0x006A 0b________          STO_li (X1+2)     #  store it back
+      36: 0b000000000000 0x000 0x006B 0b        ________  0x00__
+      37: 0b000000100000 0x020 0x006B 0b________          0x__02
+      38: 0b        0000 0x  0 0x006C 0b        ________  
+      39: 0b        0000 0x  0 0x006C 0b________          LD_li  (X1+3)     #  load cell D
+      40: 0b000000000000 0x000 0x006D 0b00000000________  0x00__
+      41: 0b000000110000 0x030 0x006D 0b________00000011  0x__03
+      42: 0b        0000 0x  0 0x006E 0b        ________
+      43: 0b        0000 0x  0 0x006E 0b________          OR_li  (X1+2)     #  or it with what is left of cell C
+      44: 0b000000000000 0x000 0x006F 0b00000000________  0x00__
+      45: 0b000000100000 0x020 0x006F 0b________00000010  0x__02
+      46: 0b        0000 0x  0 0x0070 0b        ________
+      47: 0b        0000 0x  0 0x0070 0b________          STO_li (X1+2)     #   store cell C and D back
+      48: 0b000000000000 0x000 0x0071 0b00000000________  0x00__
+      49: 0b000000100000 0x020 0x0071 0b________00000010  0x__02
+      50: 0b        0000 0x  0 0x0072 0b        ________
+      51: 0b        0000 0x  0 0x0072 0b________          LD_l              #  load the address part of the Read IOCC into the accumulator
+      52: 0b        0000 0x  0 0x0073 0b        ________
+      53: 0b        0000 0x  0 0x0073 0b________
+      54: 0b        0000 0x  0 0x0074 0b        ________
+      55: 0b        0000 0x  0 0x0074 0b________          MINUS_l IA+       #  decr by one
+      56: 0b        0000 0x  0 0x0075 0b        ________
+      57: 0b        0000 0x  0 0x0075 0b________          STO_l             #  store it back
+      58: 0b        0000 0x  0 0x0076 0b        ________
+      59: 0b        0000 0x  0 0x0076 0b________
+      60: 0b        0000 0x  0 0x0077 0b        ________
+      61: 0b        0000 0x  0 0x0077 0b________          LDX_s IA = 0x     # go and return from the interrupt
+      62: 0b000000000000 0x000 0x0078 0b00000000________
+      63: 0b000001000000 0x040 0x0078 0b________00000100                    # constant 4
+      64: 0b000000000000 0x000 0x0079 0b00000000________
+      65: 0b000000110000 0x030 0x0079 0b________00000011                    # constant 3
+      66: 0b000000000000 0x000 0x007A 0b00000000________
+      67: 0b000000010000 0x010 0x007A 0b________00000001                    # constant 1
 
 
  
