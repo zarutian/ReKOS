@@ -6,7 +6,7 @@ The restrictions on the loader card:
 1. short instructions only
 2. all displacements in instructions are relative to Instruction Address except for Shift, BOSC and BSC instructions.
 
-``txt
+```txt
 
 Loader card 0 in format A:              op      ss displ 
            rows on card                 cell in core
@@ -221,46 +221,212 @@ column 0: 0b000000000000 0x000 0x005D 0b00000000________  0x00__
       41: 0b        0000 0x  0 0x0071 0b________          SLA_s  8          #  shift left it 8bits
       42: 0b        0000 0x  0 0x0072 0b        ________
       43: 0b        0000 0x  0 0x0072 0b________          STO_li (X1+2)     #  store it back
-      44: 0b000000000000 0x000 0x00   0b        ________  0x00__
-      45: 0b000000100000 0x020 0x00   0b________          0x__02
-      46: 0b        0000 0x  0 0x00   0b        ________  
-      47: 0b        0000 0x  0 0x00   0b________          LD_li  (X1+3)     #  load cell D
-      48: 0b000000000000 0x000 0x00   0b00000000________  0x00__
-      49: 0b000000110000 0x030 0x00   0b________00000011  0x__03
-      50: 0b        0000 0x  0 0x00   0b        ________
-      51: 0b        0000 0x  0 0x00   0b________          OR_li  (X1+2)     #  or it with what is left of cell C
-      52: 0b000000000000 0x000 0x00   0b00000000________  0x00__
-      53: 0b000000100000 0x020 0x00   0b________00000010  0x__02
-      54: 0b        0000 0x  0 0x00   0b        ________
-      55: 0b        0000 0x  0 0x00   0b________          STO_li (X1+2)     #   store cell C and D back
-      56: 0b000000000000 0x000 0x00   0b00000000________  0x00__
-      57: 0b000000100000 0x020 0x00   0b________00000010  0x__02
-      58: 0b        0000 0x  0 0x00   0b        ________
-      59: 0b        0000 0x  0 0x00   0b________          LD_l              #  load the address part of the Read IOCC into the accumulator
-      60: 0b        0000 0x  0 0x00   0b        ________
-      61: 0b        0000 0x  0 0x00   0b________
-      62: 0b        0000 0x  0 0x00   0b        ________
-      63: 0b        0000 0x  0 0x00   0b________          MINUS_l IA+       #  decr by one
-      64: 0b        0000 0x  0 0x00   0b        ________
-      65: 0b        0000 0x  0 0x00   0b________          STO_l             #  store it back
-      66: 0b        0000 0x  0 0x00   0b        ________
-      67: 0b        0000 0x  0 0x00   0b________
-      68: 0b        0000 0x  0 0x00   0b        ________
-      69: 0b        0000 0x  0 0x00   0b________          LDX_s IA = 0x     # go and return from the interrupt
-      70: 0b000000000000 0x000 0x00   0b00000000________
-      71: 0b000001000000 0x040 0x00   0b________00000100                    # constant 4
-      72: 0b000000000000 0x000 0x00   0b00000000________
-      73: 0b000000110000 0x030 0x00   0b________00000011                    # constant 3
-      74: 0b000000000000 0x000 0x00   0b00000000________
-      75: 0b000000010000 0x010 0x00   0b________00000001                    # constant 1
-      76:
-      77:
-      78: 0b100010000000 0x880 0x00   0b10001000________                    # 'B'   gets overwritten in core by loader card 3
-      79: 0b000100000000 0x100 0x00   0b________00010000                    # '1'   ditto
+      44: 0b000000000000 0x000 0x0073 0b        ________  0x00__
+      45: 0b000000100000 0x020 0x0073 0b________          0x__02
+      46: 0b        0000 0x  0 0x0074 0b        ________  
+      47: 0b        0000 0x  0 0x0074 0b________          LD_li  (X1+3)     #  load cell D
+      48: 0b000000000000 0x000 0x0075 0b00000000________  0x00__
+      49: 0b000000110000 0x030 0x0075 0b________00000011  0x__03
+      50: 0b        0000 0x  0 0x0076 0b        ________
+      51: 0b        0000 0x  0 0x0076 0b________          OR_li  (X1+2)     #  or it with what is left of cell C
+      52: 0b000000000000 0x000 0x0077 0b00000000________  0x00__
+      53: 0b000000100000 0x020 0x0077 0b________00000010  0x__02
+      54: 0b        0000 0x  0 0x0078 0b        ________
+      55: 0b        0000 0x  0 0x0078 0b________          STO_li (X1+2)     #   store cell C and D back
+      56: 0b000000000000 0x000 0x0079 0b00000000________  0x00__
+      57: 0b000000100000 0x020 0x0079 0b________00000010  0x__02
+      58: 0b        0000 0x  0 0x007A 0b        ________
+      59: 0b        0000 0x  0 0x007A 0b________          LD_l              #  load the address part of the Read IOCC into the accumulator
+      60: 0b        0000 0x  0 0x007B 0b        ________
+      61: 0b        0000 0x  0 0x007B 0b________
+      62: 0b        0000 0x  0 0x007C 0b        ________
+      63: 0b        0000 0x  0 0x007C 0b________          MINUS_l IA+       #  decr by one
+      64: 0b        0000 0x  0 0x007D 0b        ________
+      65: 0b        0000 0x  0 0x007D 0b________          STO_l             #  store it back
+      66: 0b        0000 0x  0 0x007E 0b        ________
+      67: 0b        0000 0x  0 0x007E 0b________
+      68: 0b        0000 0x  0 0x007F 0b        ________
+      69: 0b        0000 0x  0 0x007F 0b________          LDX_s IA = 0x     # go and return from the interrupt
+      70: 0b000000000000 0x000 0x0080 0b00000000________
+      71: 0b000001000000 0x040 0x0080 0b________00000100                    # constant 4
+      72: 0b000000000000 0x000 0x0081 0b00000000________
+      73: 0b000000110000 0x030 0x0081 0b________00000011                    # constant 3
+      74: 0b000000000000 0x000 0x0082 0b00000000________
+      75: 0b000000010000 0x010 0x0082 0b________00000001                    # constant 1
+      76: 0b        0000 0x  0 0x0083 0b        ________
+      77: 0b        0000 0x  0 0x0083 0b________          XIO_s             # do Sense Device   New Card Complete Interrupt vector points here
+      78: 0b100010000000 0x880 0x0084 0b10001000________                    # 'B'   gets overwritten in core by loader card 3
+      79: 0b000010000000 0x100 0x0084 0b________00001000                    # '2'   ditto
     END OF CARD
 
-      Check if this was the last card
-      Check for the 'END CARD' ?stub? card
+Loader card 3 in format B:
+column 0: 0b        0000 0x  0 0x0084 0b        ________                    # Check if this was the last card
+       1: 0b        0000 0x  0 0x0084 0b________          SLA_s 4           # Shift Last Card bit into the carry
+       2: 0b        0000 0x  0 0x0085 0b        ________
+       3: 0b        0000 0x  0 0x0085 0b________          BRCZ_l
+       4: 0b000000000000 0x000 0x0086 0b00000000________  0x00__
+       5: 0b100010100000 0x8A0 0x0086 0b________10001010  0x__8A            # branch target
+       6: 0b        0000 0x  0 0x0087 0b        ________
+       7: 0b        0000 0x  0 0x0087 0b________          BOSC_l
+       8: 0b000000010000 0x010 0x0088 0b00000001________
+       9: 0b000000000000 0x000 0x0088 0b________00000000
+      10: 0b        0000 0x  0 0x0089 0b        ________
+      11: 0b        0000 0x  0 0x0089 0b________                            # Sense Device IOCC2
+      12: 0b        0000 0x  0 0x008A 0b        ________
+      13: 0b        0000 0x  0 0x008A 0b________          LD_l              # Load Read Column IOCC1 into accumulator
+      14: 0b000000000000 0x000 0x008B 0b00000000________  0x00__
+      15: 0b001011110000 0x2F0 0x008B 0b________00101111  0x__2F
+      16: 0b        0000 0x  0 0x008C 0b        ________
+      17: 0b        0000 0x  0 0x008C 0b________          MINUS_s IA+       # Subtract six from it
+      18: 0b        0000 0x  0 0x008D 0b        ________
+      19: 0b        0000 0x  0 0x008D 0b________          STO_l             # Store it back
+      20: 0b000000000000 0x000 0x008E 0b00000000________  0x00__
+      21: 0b001011110000 0x2F0 0x008E 0b________00101111  0x__2F
+      22: 0b        0000 0x  0 0x008F 0b        ________
+      23: 0b        0000 0x  0 0x008F 0b________          STO_l             # Store it into X1  Check for the 'END CARD' ?stub? card, that is a card whose columns 73-80 spell out that.
+      24: 0b000000000000 0x000 0x0090 0b00000000________  0x00__            #                   alternatively one can switch out the last loader card to have the loader finish at
+      25: 0b000000010000 0x010 0x0090 0b________00000001  0x__01            #                   and spefic card and start executing the loaded core
+      26: 0b        0000 0x  0 0x0091 0b        ________  
+      27: 0b        0000 0x  0 0x0091 0b________          LD_s  IA+         # Load str_addr
+      28: 0b        0000 0x  0 0x0092 0b        ________
+      29: 0b        0000 0x  0 0x0093 0b________          STO_l             # Store it into X2
+      30: 0b000000000000 0x000 0x0094 0b00000000________  0x00__
+      31: 0b000000100000 0x020 0x0094 0b________00000010  0x__02
+      32: 
+      33: 0b        0000 0x  0 0x0095 0b________          LD_s  IA+         # Load count
+      34:
+      35: 0b        0000 0x  0 0x0096 0b________          STO_l             # Store it into X3
+      36: 0b000000000000 0x000 0x0097 0b00000000________  0x00__
+      37: 0b000000110000 0x030 0x0097 0b________00000011  0x__03
+      38: 0b        0000 0x  0 0x0098 0b        ________
+      39: 0b        0000 0x  0 0x0098 0b________          LD_li (X1+0)      #
+      40: 0b000000000000 0x000 0x0099 0b00000000________  0x00__
+      41: 0b000000000000 0x000 0x0099 0b________00000000  0x__00
+      42: 0b        0000 0x  0 0x009A 0b        ________  
+      43: 0b        0000 0x  0 0x009A 0b________          XOR_li (X2+0)     #
+      44: 0b000000000000 0x000 0x009B 0b00000000________  0x00__
+      45: 0b000000000000 0x000 0x009B 0b________00000000  0x__00
+      46:
+      47: 0b        0000 0x  0 0x009C 0b________          BRAZ_l
+      48:
+      49:
+      50:
+      51: 0b        0000 0x  0 0x009E 0b________          LDX_l IA =        # go and issue a new card read init
+      52:
+      53:
+      54:
+      55: 0b        0000 0x  0 0x00A0 0b________          LD_l              # load X3
+      56:
+      57:
+      58:
+      59: 0b        0000 0x  0 0x00A2 0b________          MINUS_l IA+       # decrement it by one
+      60:
+      61: 0b        0000 0x  0 0x00A3 0b________          STO_l             # store it back
+      62:
+      63:
+      64:
+      65: 0b        0000 0x  0 0x00A5 0b________          BRAZ_l            # branch to loading done if accumulator is zero
+      66:
+      67:
+      68:
+      69: 0b        0000 0x  0 0x00A7 0b________          LDX_l IA
+      70:
+      71:
+      72: 0b000000000000 0x000 0x00A9 0b00000000________  0x00__
+      73: 0b000001100000 0x060 0x00A9 0b________00000110  0x__06
+      74: 0b000000000000 0x000 0x00AA 0b00000000________  0x00__
+      75: 0b000000010000 0x010 0x00AA 0b________00000001  0x__01
+      76:
+      77:
+      78: 0b100010000000 0x880 0x00AC 0b10001000________                    # 'B'   gets overwritten in core by loader card 4
+      79: 0b             0x    0x00AC 0b________                            # '3'   ditto
+    END OF CARD
+
+Loader card 4 in packed IBM EBDIC CARD CODE in format B:
+column 0: 0b        0000 0x  0 0x00AC 'E'
+       1: 0b        0000 0x  0 0x00AC
+       2: 0b        0000 0x  0 0x00AD 'N'
+       3: 0b        0000 0x  0 0x00AD
+       4: 0b        0000 0x  0 0x00AE 'D'
+       5: 0b        0000 0x  0 0x00AE
+       6: 0b        0000 0x  0 0x00AF ' '
+       7: 0b        0000 0x  0 0x00AF
+       8: 0b        0000 0x  0 0x00B0 'C'
+       9: 0b        0000 0x  0 0x00B0
+      10: 0b        0000 0x  0 0x00B1 'A'
+      11: 0b        0000 0x  0 0x00B1
+      12: 0b        0000 0x  0 0x00B2 'R'
+      13: 0b        0000 0x  0 0x00B2
+      14: 0b        0000 0x  0 0x00B3 'D'
+      15: 0b        0000 0x  0 0x00B3
+      16:
+      17:
+      18:
+      19:
+      20:
+      21:
+      22:
+      23:
+      24:
+      25:
+      26:
+      27:
+      28:
+      29:
+      30:
+      31:
+      32:
+      33:
+      34:
+      35:
+      36:
+      37:
+      38:
+      39:
+      40:
+      41:
+      42:
+      43:
+      44:
+      45:
+      46:
+      47:
+      48:
+      49:
+      50:
+      51:
+      52:
+      53:
+      54:
+      55:
+      56:
+      57:
+      58:
+      59:
+      60:
+      61:
+      62:
+      63:
+      64:
+      65:
+      66:
+      67:
+      68:
+      69:
+      70:
+      71:
+      72:
+      73:
+      74:
+      75:
+      76:
+      77:
+      78: 0b100010000000 0x880 0x00__ 0b10001000________                    # 'B'
+      79: 0b____________ 0x020 0x00__ 0b________                            # '4'   ditto
+    END OF CARD
+      
+      
+      
  
 ```
 
