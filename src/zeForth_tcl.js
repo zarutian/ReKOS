@@ -48,7 +48,7 @@ const src = `
   .dhw OVER MINUS          # ( addr len' )
   .dhw EXIT
 
-:f Tcl_list_first_sub0
+  :f Tcl_list_first_sub0
   # ( addr len -- bralvl brclvl inquote addr' )
   # todo: incorporate last_bracer_char idea
   .dhw >R                  # ( addr ) R:( len )
