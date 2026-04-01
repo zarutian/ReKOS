@@ -6,7 +6,7 @@ The restrictions on the loader card:
 1. short instructions only
 2. all displacements in instructions are relative to Instruction Address except for Shift, BOSC and BSC instructions.
 
-```txt
+``txt
 
 Loader card 0 in format A:              op      ss displ 
            rows on card                 cell in core
@@ -14,19 +14,18 @@ Loader card 0 in format A:              op      ss displ
             210123456789   dat   addr   0123456789012345
 column 0: 0b110000001100 0xC0C 0x0000 0b11000___00001100  LD_s  IA+13       # load constant 1 into the accumulator
        1: 0b000100001010 0x10A 0x0001 0b00010___00001010  SLA_s 10          # shift it left 10 bit places
-       2: 0b110100000100 0xD04 0x0002 0b11010___00000100  STO_s IA+4        # store it as constant 0x0200 (0b0000001000000000)
+       2: 0b110100000100 0xD04 0x0002 0b11010___11111110  STO_s IA-2        # store it as constant 0x0200 (0b0000001000000000)
        3: 0b111010001011 0xE8B 0x0003 0b11101___00001011  OR_s  IA+11       # or it with the BOSC_s instruction at address 0x000F, turning it into BOSC_l
        4: 0b110100001010 0xD0A 0x0004 0b11010___00001010  STO_s IA+10       # store it back
        5: 0b110000000001 0xC01 0x0005 0b11000___00000001  LD_s  IA+1        # load constant 0x0200
        6: 0b011000110101 0x635 0x0006 0b01100___00110101  LDX_s IA = 0x35   # jump to further fixups 
-       7: 0b000001000010 0x042 0x0007 0b00000___11000010
+       7: 0b000000000001 0x001 0x0007 0b00000___11000010  constant 1
        8: 0b000000010101 0x015 0x0008 0b00000___00010101  0x15 # Interrupt vector (lvl 0) for 1442 Card Read Punch (column read, punch), we want the column read        
        9: 0b000000010000 0x010 0x0009 0b00000___00010000  0x10 #                   lvl 1
       10: 0b000000010000 0x010 0x000A 0b00000___00010000  0x10 #                   lvl 2
       11: 0b000000010000 0x010 0x000B 0b00000___00010000  0x10 #                   lvl 3
       12: 0b000000110101 0x035 0x000C 0b00000___00110101  0x35 # Interrupt vector (lvl 4) for 1442 (operation complete), that is card completely read
       13: 0b000000010000 0x010 0x000D 0b00000___00001111  0x10 #                   lvl 5
-      14: 0b000000000001 0x001 0x000E 0b00000___00000001  constant 1
       15: 0b010011000000 0x4C0 0x000F 0b01001___11000000  BOSC_l            # needs fixup!
       16: 0b000000000000 0x000 0x0010 0b00000___00000000                    # gets replaced by any unwanted interrupt 'calling' it
       17: 0b011000001111 0x60F 0x0011 0b01100___00001111  LDX_s IA = 0x0F   # jump back two cells
