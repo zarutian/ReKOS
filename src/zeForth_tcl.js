@@ -154,6 +154,63 @@ const src = `
   .dhw >R + R> ROT 1+ -ROT # ( count+1 addr' remaining_len )
   .dhw (JMP) Tcl_list_length_L1
 
+  :f Tcl_list_range
+  # ( addr len start_idx end_idx -- addr' len' )
+  .dhw >R >R               # ( addr len ) R:( end_idx start_idx )
+  .dhw LIT_0 -ROT          # ( idx addr len ) R:( end_idx start_idx )
+  : Tcl_list_range_L0
+  .dhw 2DUP Tcl_list_first # ( idx addr len addr len' ) R:( end_idx start_idx )
+  .dhw NIP  SWAP OVER -    # ( idx addr len' remaining_len ) R:( end_idx start_idx )
+  .dhw R@   SWAP >R -ROT   # ( idx start_idx addr len' ) R:( end_idx start_idx remaining_len )
+  .dhw >R >R OVER =        # ( idx idx=start? ) R:( end_idx start_idx remaining_len len' addr )
+  .dhw INVERT (BRZ) Tcl_list_range_L1 # ( idx ) R:( end_idx start_idx remaining_len len' addr )
+  .dhw 1+ R> R> + R>       # ( idx+1 addr' remaining_len ) R:( end_idx start_idx )
+  .dhw DUP 0<= INVERT (BRZ) Tcl_list_range_L0
+  .dhw RDROP RDROP ROT DROP EXIT # ( addr' 0 )
+  : Tcl_list_range_L1
+                           # ( idx ) R:( end_idx start_idx remaining_len len' addr )
+  .dhw R> RDROP R> RDROP   # ( idx addr remaining_len ) R:( end_idx )
+  .dhw OVER R> SWAP >R >R  # ( idx addr remaining_len ) R:( start_addr end_idx )
+  : Tcl_list_range_L2
+  .dhw 2DUP Tcl_list_first # ( idx addr len addr len' ) R:( start_addr end_idx )
+  .dhw NIP  SWAP OVER -    # ( idx addr len' remaining_len ) R:( start_addr end_idx )
+  .dhw R@   SWAP >R -ROT   # ( idx end_idx addr len' ) R:( start_addr end_idx remaining_len )
+  .dhw >R >R OVER =        # ( idx idx=end? ) R:( start_addr end_idx remaining_len len' addr )
+  .dhw INVERT (BRZ) Tcl_list_range_L4 # ( idx ) R:( start_addr end_idx remaining_len len' addr )
+  .dhw 1+ R> R> + R>       # ( idx+1 addr' remaining_len ) R:( start_addr end_idx )
+  .dhw DUP 0<= INVERT (BRZ) Tcl_list_range_L2
+  : Tcl_list_range_L3
+  .dhw DROP                # ( idx   addr' ) R:( start_addr end_idx )
+  .dhw RDROP               # ( idx   addr' ) R:( start_addr )
+  .dhw NIP R> TUCK -       # ( start_addr len ) R:( )
+  .dhw EXIT
+  : Tcl_list_range_L4      # ( idx ) R:( start_addr end_idx remaining_len len' addr )
+  .dhw R> 2RDROP           # ( idx addr ) R:( start_addr end_idx )
+  .dhw (JMP) Tcl_list_range_L3
+
+    :f Tcl_list_index
+  # ( addr len idx -- addr' len' )
+  .dhw DUP (JMP) Tcl_list_range
+
+  :f Tcl_simple_foreach
+  # ( addr len xt -- )
+  # xt ( idx addr' len' -- )
+  .dhw -ROT                # ( xt addr len )
+  .dhw LIT_0 -ROT          # ( xt idx addr len ) R:( )
+  : Tcl_simple_foreach_L0
+  .dhw DUP >R              # ( xt idx addr len ) R:( len )
+  .dhw Tcl_list_first      # ( xt idx addr len' ) R:( len )
+  .dhw 4DUP                # ( xt idx addr len' xt idx addr len' ) R:( len )
+  .dhw QROT                # ( xt idx addr len' idx addr len' xt ) R:( len )
+  .dhw EXECUTE             # ( xt idx addr len' ) R:( len )
+  .dhw DUP >R + R> R>      # ( xt idx addr' len' len ) R:( )
+  .dhw SWAP - DUP 0<=      # ( xt idx addr' len" flag )
+  .dhw INVERT (BRZ)        # ( xt idx addr' len" )
+  .dhw Tcl_simple_foreach_L1
+  .dhw >R >R 1+ R> R>      # ( xt idx+1 addr' len" )
+  .dhw (JMP) Tcl_simple_foreach_L0
+  : Tcl_simple_foreach_L1
+  .dhw (JMP) 4DROP
   
 `;
 export { src };
