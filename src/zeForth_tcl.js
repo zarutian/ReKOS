@@ -1,0 +1,4 @@
+const src = `
+
+`;
+export { src };
