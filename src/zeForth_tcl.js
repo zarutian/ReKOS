@@ -127,5 +127,17 @@ const src = `
   .dhw R> R> DROP EXIT
 
 
+  :f Tcl_list_is_complete
+  # ( addr len -- flag )
+  # Takes a string and tells if its 'complete' per Tcl parsing rules
+  # That is, if all the quotemarks, curly braces and brackets are balanced
+  .dhw 2DUP                # ( addr len addr len )
+  .dhw Tcl_list_first_sub0 # ( addr len bralvl brclvl inquote addr' )
+  .dhw >R INVERT SWAP 0= & # ( addr len bralvl flag ) R:( addr' )
+  .dhw SWAP 0= & R> SWAP   # ( addr len addr' flag ) R:( )
+  .dhw >R SWAP - = R> &    # ( flag )
+  .dhw EXIT
+
+  
 `;
 export { src };
