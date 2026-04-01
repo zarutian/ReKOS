@@ -2934,7 +2934,7 @@ const src3 = `
   # 0b00001  Console keyboard and console printer
   # 0b00011  1134 Paper Tape Reader and Paper Tape Punch, will IPL'ed at startup
   # 0b00101  1627 Plotter, modified to take 0,01 millimetre steps (plot area 75cm y-axis 4m x-axis), pen is 0,4mm wide, black ink
-  # 0b01010  Synchronous Communications Adapter, in BSC mode 4800 baud connected to the IBM z/390
+  # 0b01010  Synchronous Communications Adapter, in BSC mode 4800 baud connected to the IBM z/390  ? tbd: replaced to connect to Hayes compatible modem?
   # 0b11001	 2250 Display Unit, with both Alphanumeric keyboard and Programmed Function Lighted Keypad
   # 
   # 0b11010  Monochrome (not grayscale) Display unit
@@ -2954,6 +2954,9 @@ const src3 = `
   #            WCA+8:                    6th Cell
   #            WCA+9:                    7th Cell
   #            WCA+10:                   8th Cell
+  #
+  # 0b11011  Attachment Channel PRQ #831552
+  #          0b000_00001 Channel To Channel Adapter connected to the main IBM z/390
 
   :f ibm1130_5D_IPL_papertape
   .dhw (VAR)
