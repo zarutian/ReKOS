@@ -48,5 +48,84 @@ const src = `
   .dhw OVER MINUS          # ( addr len' )
   .dhw EXIT
 
+:f Tcl_list_first_sub0
+  # ( addr len -- bralvl brclvl inquote addr' )
+  # todo: incorporate last_bracer_char idea
+  .dhw >R                  # ( addr ) R:( len )
+  .dhw BL        SWAP      # ( bracer addr ) R:( len )
+  .dhw LIT_0     SWAP      # ( bracer bralvl addr ) R:( len )
+  .dhw LIT_0     SWAP      # ( bracer bralvl brclvl addr ) R:( len )
+  .dhw LIT_FALSE SWAP      # ( bracer bralvl brclvl inquote addr ) R:( len )
+  .dhw (JMP) Tcl_list_first_sub0_L1
+  : Tcl_list_first_sub0_L0
+  .dhw DUP >R              # ( bracer bralvl brclvl inquote addr ) R:( len addr )
+  .dhw C@                  # ( bracer bralvl brclvl inquote addr char ) R:( len addr )
+  .dhw DUP LIT_'\\' =      # ( bracer bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw INVERT              # ( bracer bralvl brclvl inquote char ~flag ) R:( len addr )
+  .dhw (BRZ) Tcl_list_first_sub0_L2
+  .dhw DUP LIT_'"' =       # ( bracer bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw (BRZ) Tcl_list_first_sub0_L3
+  .dhw SWAP INVERT SWAP    # ( bracer bralvl brclvl inquote' char ) R:( len addr )
+  .dhw (JMP) Tcl_list_first_sub0_L2
+  : Tcl_list_first_sub0_L3
+  .dhw OVER                # ( bracer bralvl brclvl inquote char inquote ) R:( len addr )
+  .dhw (BRZ) Tcl_list_first_sub0_L2
+  .dhw DUP LIT_'[' =       # ( bracer bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw (BRZ) Tcl_list_first_sub0_L4
+  .dhw >R >R >R 1+ >R      # ( bracer ) R:( len addr char inquote brclvl bralvl+1 )
+  .dhw DROP LIT_'[' R>     # ( bracer bralvl+1 )
+  .dhw R> R> R>            # ( bracer bralvl+1 brclvl inquote char ) R:( len addr )
+  .dhw (JMP) Tcl_list_first_sub0_L2
+  : Tcl_list_first_sub0_L4
+  .dhw DUP LIT_']' =       # ( bracer bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw (BRZ) Tcl_list_first_sub0_L5
+  .dhw >R >R >R >R         # ( bracer ) R:( len addr char inquote brclvl bralvl )
+  .dhw DUP LIT_'[' =       # ( bracer flag )
+  .dhw (BRZ) Tcl_list_first_sub0_L8
+  .dhw DROP BL R>          # ( bracer bralvl )
+  .dhw 1- R> R> R>         # ( bracer bralvl-1 brclvl inquote char ) R:( len addr )
+  .dhw (JMP) Tcl_list_first_sub0_L2
+  : Tcl_list_first_sub0_L5
+  .dhw DUP LIT_'{' =       # ( bracer bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw (BRZ) Tcl_list_first_sub0_L6
+  .dhw >R >R 1+
+  .dhw >R >R DROP LIT_'{' R> R>
+  .dhw R> R>
+  .dhw (JMP) Tcl_list_first_sub0_L2
+  : Tcl_list_first_sub0_L6
+  .dhw DUP LIT_'}' =       # ( bracer bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw (BRZ) Tcl_list_first_sub0_L7
+  .dhw >R                  # ( bracer bralvl brclvl inquote ) R:( len addr char )
+  .dhw >R                  # ( bracer bralvl brclvl ) R:( len addr char inquote )
+  .dhw 1-                  # ( bracer bralvl brclvl-1 ) R:( len addr char inquote )
+  .dhw >R >R               # ( bracer ) R:( len addr char inquote brclvl-1 bralvl )
+  .dhw DUP LIT_'{' =       # ( bracer flag ) R:( len addr char inquote brclvl-1 bralvl )
+  .dhw INVERT (BRZ) Tcl_list_first_sub0_L8
+  .dhw R> R>
+  .dhw (JMP) Tcl_list_first_sub0_L2
+  : Tcl_list_first_sub0_L7
+  .dhw DUP LIT_'\\n' =     # ( bracer bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw OVER BL = OR        # ( bracer bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw SWAP >R SWAP DUP >R # ( bracer bralvl brclvl flag inquote ) R:( len addr char inquote )
+  .dhw INVERT AND          # ( bracer bralvl brclvl flag' ) R:( len addr char inquote )
+  .dhw >R 2DUP 0= SWAP 0=  # ( bracer bralvl brclvl brclvl=0 bralvl=0 ) R:( len addr char inquote flag' )
+  .dhw AND R> AND          # ( bracer bralvl brclvl flag" ) R:( len addr char inquote )
+  .dhw R> SWAP R> SWAP     # ( bracer bralvl brclvl inquote char flag" ) R:( len addr )
+  .dhw (BRZ) Tcl_list_first_sub0_L2
+  .dhw DROP R> RDROP       # ( bracer bralvl brclvl inquote addr' )
+  .dhw >R >R >R >R DROP R> R> R> R> EXIT
+  : Tcl_list_first_sub0_L2
+  .dhw DROP                # ( bracer bralvl brclvl inquote ) R:( len addr )
+  .dhw R> 1+               # ( bracer bralvl brclvl inquote addr+1 ) R:( len )
+  : Tcl_list_first_sub0_L1
+  .dhw (NEXT) Tcl_list_first_sub0_L0
+  .dhw EXIT                # ( bralvl brclvl inquote addr' )
+  : Tcl_list_first_sub0_L8
+                           # ( bracer ) R:( len addr char inquote brclvl bralvl )
+  .dhw DROP                # ( ) R:( len addr char inquote brclvl bralvl )
+  .dhw R> R> R> R> DROP    # ( bralvl brclvl inquote ) R:( len addr )
+  .dhw R> R> DROP EXIT
+
+
 `;
 export { src };
