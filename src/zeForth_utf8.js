@@ -74,5 +74,37 @@ const src = `
   .dhw (NEXT) utf8_codepoint_idx_2_byte_str_L1
   .dhw 2DROP 2_const 0_const EXIT
 
+  :f utf8_str_length_in_codepoints
+  # ( addr length_in_bytes -- length_in_codepoints )
+  .dhw 0_const   # ( addr blen idx )
+  : utf8_str_length_in_codepoints_L0
+  .dhw 3DUP      # ( addr blen idx addr blen idx )
+  .dhw utf8_codepoint_idx_2_byte_str # ( addr blen idx codepoint_addr codepoint_len )
+  .dhw 2DUP      # ( addr blen idx codepoint_addr codepoint_len codepoint_addr codepoint_len )
+  .dhw 0= SWAP
+  .dhw 0= &      # ( addr blen idx codepoint_addr codepoint_len bool )
+  .dhw INVERT (BRZ) utf8_str_length_in_codepoints_L1
+  .dhw 2DROP -ROT 2DROP ?1+ EXIT
+  : utf8_str_length_in_codepoints_L1
+  .dhw NIP SWAP >R DUP >R # ( addr blen codepoint_len ) R:( idx codepoint_len )
+  .dhw - SWAP R> + SWAP   # ( addr' blen' ) R:( idx )
+  .dhw DUP 0=
+  .dhw (BRZ) utf8_str_length_in_codepoints_L2
+  .dhw 2DROP R> 1+ EXIT
+  : utf8_str_length_in_codepoints_L2
+  .dhw R> (JMP) utf8_str_length_in_codepoints_L0
+
+  :f 3DUP
+  # ( a b c -- a b c a b c )
+  .dhw >R    # ( a b ) R:( c )
+  .dhw 2DUP  # ( a b a b ) R:( c )
+  .dhw R@    # ( a b a b c ) R:( c )
+  .dhw -ROT  # ( a b c a b ) R:( c )
+  .dhw R>    # ( a b c a b c ) R:( )
+  .dhw EXIT
+
+  :f ?1+ ( u -- u+1 | 0 )
+  .dhw DUP 0= SKZ 1+ EXIT
+
 `;
 export { src };
