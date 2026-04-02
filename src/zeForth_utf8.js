@@ -106,5 +106,44 @@ const src = `
   :f ?1+ ( u -- u+1 | 0 )
   .dhw DUP 0= SKZ 1+ EXIT
 
+  # getur verið að eftirfarandi sé tvítekið og til annarstaðar? -Zarutian
+  :f BYTESTR=
+  # ( A_addr A_len B_addr B_len -- bool )
+  # note: this leaks the fact of A_len and B_len being of equal length or not
+  .dhw ROT    # ( A_addr B_addr B_len A_len )
+  .dhw 2DUP   #
+  .dhw =      #
+  .dhw INVERT #
+  .dhw (BRZ) BYTESTR=_L0
+  .dhw 4DROP  # ( )
+  .dhw (JMP) FALSE
+  : BYTESTR=_L0
+  .dhw DROP   # ( A_addr B_addr B_len )
+  .dhw >R     # ( A_addr B_addr ) R:( B_len )
+  .dhw TRUE   # ( A_addr B_addr bool ) R:( B_len )
+  .dhw (JMP) BYTESTR=_L2
+  : BYTESTR=_L1
+  .dhw >R     #
+  .dhw OVER   # ( A_addr B_addr A_addr )
+  .dhw BYTE@  # ( A_addr B_addr A_byte )
+  .dhw OVER   # ( A_addr B_addr A_byte B_addr )
+  .dhw BYTE@  # ( A_addr B_addr A_byte B_byte )
+  .dhw =      # ( A_addr B_addr bool )
+  .dhw R>
+  .dhw &
+  .dhw >R
+  .dhw 1+
+  .dhw SWAP
+  .dhw 1+
+  .dhw SWAP
+  .dhw R>
+  : BYTESTR=_L2
+  .dhw (NEXT) BYTESTR=_L1
+  .dhw >R 2DROP R> EXIT
+
+  :f 4DROP
+  # ( a b c d -- )
+  .dhw 2DROP 2DROP EXIT
+
 `;
 export { src };
