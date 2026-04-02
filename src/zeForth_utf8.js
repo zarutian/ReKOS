@@ -25,5 +25,22 @@ const src = `
   : utf8_is_full_codepoint_L5
   .dhw (NEXT) utf8_is_full_codepoint_L3
   .dhw DROP (JMP) TRUE
+
+  :f CountLeadingOnesInByte
+  # ( byte -- count )
+  .dhw 0_const        ( byte count )
+  .dhw OVER           ( byte count byte ) : CountLeadingOnesInByte_L0
+  .dhw 0x80&          ( byte count bit<<7 )
+  .dhw (BRZ)
+  .dhw CountLeadingOnesInByte_L1
+  .dhw 1+             ( byte count+1 )
+  .dhw SWAP           ( count+1 byte )
+  .dhw 1<<            ( count+1 byte<<1 )
+  .dhw SWAP           ( byte<<1 count+1 )
+  .dhw (JMP)
+  .dhw CountLeadingOnesInByte_L0
+  .dhw NIP            ( count ) : CountLeadingOnesInByte_L1
+  .dhw EXIT
+  
 `;
 export { src };
