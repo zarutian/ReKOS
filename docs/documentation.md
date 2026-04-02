@@ -66,6 +66,7 @@ I suspect that this 'B' number is to facilitate device key revocation upon resta
 * [Bitsavers copy of IBM 370 PoOPs](http://www.bitsavers.org/pdf/ibm/370/princOps/)
 * [IBM 370 system summary](https://www.bitsavers.org/pdf/ibm/370/systemSummary/GA22-7001-6_370_System_Summary_Dec76.pdf)
 * [Archive.org ibm360 console]( https://archive.org/details/bitsavers_ibm360fe20terand2150ConsoleFETOPJan69_5926345)
+* [Daignose Power Off in hercules360](https://github.com/SDL-Hercules-390/hyperion/blob/master/diagnose.c#L265)
 * [Bitsavers copy of Channel-To-Channel-Adapter (used for Hercules Networking via TUNTAP on host)](http://www.bitsavers.org/pdf/ibm/370/CTCA/GA22-6983-0_Special_Feature_Description_Channel-to-Channel_Adapter_Mar72.pdf)
 * [Hercules ctcadpt.h]( https://github.com/SDL-Hercules-390/hyperion/blob/master/ctcadpt.h) for figuring out _how_ that net interface works
 * [Vendor mac address prefix list](https://gist.github.com/aallan/b4bb86db86079509e6159810ae9bd3e4)
