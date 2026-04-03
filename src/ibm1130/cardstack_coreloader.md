@@ -27,12 +27,12 @@ column 0: 0b             0xC06 0x0000 0b11000___00000110  LD_s  IA+6        # lo
       12: 0b             0x035 0x000C 0b00000___00110100  0x34 # Interrupt vector (lvl 4) for 1442 (operation complete), that is card completely read
       13: 0b             0x010 0x000D 0b00000___00001111  0x0F #                   lvl 5
       14: 0b             0x4C0 0x000E 0b01001___11000000  BOSC_l            # needs fixup!
-      15: 0b000000000000 0x000 0x000F 0b00000___00000000                    # gets replaced by any unwanted interrupt 'calling' it
+      15: 0b             0x    0x000F 0b     ___                            # gets replaced by any unwanted interrupt 'calling' it
       16: 0b011000001110 0x60E 0x0010 0b01100___00001110  LDX_s IA = 0x0E   # jump back two cells
-      17: 0b000000000000 0x000 0x0011 0b00000___00000000                    # gets replaced by saved accumulator
+      17: 0b             0x    0x0011 0b     ___                            # gets replaced by saved accumulator
       18: 0b110001111110 0xC7E 0x0012 0b11000___11111110  LD_s  IA-2        # restore accumulator       
       19: 0b010011000000 0x4C0 0x0013 0b01001___11000000  BOSC_l            # needs fixup!
-      20: 0b000000010010 0x012 0x0014 0b00000___00000000  0x0012            # gets replaced with saved IA during interrupt
+      20: 0b000000010010 0x012 0x0014 0b00000___00000000  0x0012            # gets replaced with saved IA during interrupt, set here by default to looping
       21: 0b110101111011 0xD7B 0x0015 0b11010___11111011  ST0_s IA-5        # temp save accumulator
       22: 0b000010010110 0x096 0x0016 0b00001___00010110  XIO_s IA+0x16     # do a Read XIO  ( 0x2E - 0x18 = 0x16 )
       23: 0b110000010101 0xC15 0x0017 0b11000___00010101  LD_s  IA+0x15     # load the address part of the Read IOCC into the accumulator
@@ -64,30 +64,30 @@ column 0: 0b             0xC06 0x0000 0b11000___00000110  LD_s  IA+6        # lo
       49: 0b101000000001 0xA01 0x0031 0b10100___00000001                    # gets replaced by saved accumulator
       50: 0b             0x    0x0032 0b11000___00111110  LD_s  IA-2        # restore accumulator
       51: 0b             0x    0x0033 0b01001___11000000  BOSC_l            # needs fixup!
-      52: 0b             0x    0x0034 0b11101___11011100  OR_s  IA-34       # or it with the BOSC_s instruction at address 0x0014, turning it into BOSC_l
+      52: 0b             0x    0x0034 0b11101___11011100  OR_s  IA-34       # or it with the BOSC_s instruction at address 0x0013, turning it into BOSC_l
       53: 0b             0x    0x0035 0b11010___11011011  STO_s IA-35       # store it back                                       # gets replaced by loader card 1
-      54: 0b             0x    0x0036 0b11000___11010000  LD_s  IA-0x30     # load constant 0x0200  ( 0x37 - 0x07 = 0x30 )        # gets replaced by loader card 1
-      55: 0b             0x    0x0037 0b11101___11111011  OR_s  IA-5        # or it with the BOSC_s instruction at address 0x0034 # gets replaced by loader card 1
+      54: 0b             0x    0x0036 0b11000___11000111  LD_s  IA-0x36     # load constant 0x0200  ( 0x37 - 0x01 = 0x36 )        # gets replaced by loader card 1
+      55: 0b             0x    0x0037 0b11101___11111011  OR_s  IA-5        # or it with the BOSC_s instruction at address 0x0033 # gets replaced by loader card 1
       56: 0b             0x    0x0038 0b11010___11110111  STO_s IA-6        # store it back
-      57: 0b             0x    0x0039 0b11000___11001101  LD_s  IA-0x33     # load constant 0x0200
+      57: 0b             0x    0x0039 0b11000___11000111  LD_s  IA-0x39     # load constant 0x0200
       58: 0b             0x    0x003A 0b11101___11101011  OR_s  IA-21       # or it with LD_s at 0x0027 (0d21 = 0d16+0d05 = 0x15) # gets replaced by loader card 1
       59: 0b             0x    0x003B 0b11010___11101010  STO_s IA-22       # store it back
-      60: 0b             0x    0x003C 0b11000___11001010  LD_s  IA-0x36     # load constant 0x0200
-      61: 0b             0x    0x003D 0b11101___11101011  OR_s  IA-0x15     # or it with the XOR_s at 0x002A ( 0x3F - 0x2A = 0x15)# gets replaced by loader card 1
+      60: 0b             0x    0x003C 0b11000___11000100  LD_s  IA-0x3C     # load constant 0x0200
+      61: 0b             0x    0x003D 0b11101___11101011  OR_s  IA-0x15     # or it with the XOR_s at 0x0029 ( 0x3F - 0x2A = 0x15)# gets replaced by loader card 1
       62: 0b             0x    0x003E 0b11010___11101010  STO_s IA-0x16     # store it back
-      63: 0b             0x    0x003F 0b11000___11000111  LD_s  IA-0x39     # load constant 0x0200
-      64: 0b             0x    0x0040 0b11101___11101010  OR_s  IA-0x16     # or it with the STO_s at 0x02C ( 0x42 - 0x2C = 0x16) # gets replaced by loader card 1
+      63: 0b             0x    0x003F 0b11000___11000001  LD_s  IA-0x3F     # load constant 0x0200  ( tæpt! -Zarutian )
+      64: 0b             0x    0x0040 0b11101___11101010  OR_s  IA-0x16     # or it with the STO_s at 0x02B ( 0x42 - 0x2C = 0x16) # gets replaced by loader card 1
       65: 0b             0x    0x0041 0b11010___11101001  STO_s IA-0x17     # store it back
-      66: 0b             0x    0x0042 0b11000___11101100  LD_s  IA-0x14     # load from 0x0030 ( 0x44 - 0x30 = 0x14 )
-      67: 0b             0x    0x0043 0b00010___00001001  SLA_s 9           # shift it left 9 bit placrs
-      68: 0b             0x    0x0044 0b11010___11101010  STO_s IA-0x16     # store it back
-      69: 0b110000000110 0xC06 0x0045 0b11000___00000110  LD_s  IA+6        # load Control Start Read IOCC2
-U C I 70: 0b000100000101 0x105 0x0046 0b00010___00000101  SLA_s 5           # shift it left 5 bit places
-S A N 71: 0b111011000101 0xEC5 0x0047 0b11101___11000101  OR_s  IA-0x3B     # or it with constant 1 ( 0x49 - 0x0E = 0x40 - 0x05 = 0x3B )
-U R   72: 0b000100000010 0x102 0x0048 0b00010___00000010  SLA_s 2           # shift it left 2 bit places
-A D I 73: 0b110100000010 0xD02 0x0049 0b11010___00000010  STO_s IA+2        # store it back
+      66: 0b110000000110 0xC06 0x0042 0b11000___00000110  LD_s  IA+6        # load Control Start Read IOCC2
+U C I 67: 0b000100000101 0x105 0x0043 0b00010___00000101  SLA_s 5           # shift it left 5 bit places
+S A N 68: 0b111011000101 0xEC5 0x0044 0b11101___11        OR_s  IA-0x3D     # or it with constant 1 ( 0x44 - 0x07 = 0x3D )
+U R   69: 0b000100000010 0x102 0x0045 0b00010___00000010  SLA_s 2           # shift it left 2 bit places
+A D I 70: 0b110100000010 0xD02 0x0046 0b11010___00000010  STO_s IA+2        # store it back
+      71: 0b             0x    0x0047 0b11000___11        LD_s  IA-0x       # load from 0x002F ( 0x44 - 0x30 = 0x14 )
+      72: 0b             0x    0x0048 0b00010___00001001  SLA_s 9           # shift it left 9 bit placrs
+      73: 0b             0x    0x0049 0b11010___11        STO_s IA-0x       # store it back
 L S B 74: 0b000010000000 0x080 0x004A 0b00001___00000000  XIO_s IA+0        # do XIO Control Start Read IOCC2
-L E M 75: 0b011000010011 0x613 0x004B 0b01100___00010011  LDX_s IA = 13     # try to return from an non existant interrupt
+L E M 75: 0b011000010010 0x612 0x004B 0b01100___00010010  LDX_s IA = 12     # try to return from an non existant interrupt
 Y Q   76: 0b000000101000 0x028 0x004C 0b00000___00101000
       77: 0b000000000000 0x000 0x004D 0b00000___00000000
       78: 0b100100000000 0x900 0x004E 0b10010___00000000                    # 'A'
