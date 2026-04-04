@@ -94,7 +94,7 @@ Y Q   76: 0b000000101000 0x028 0x004C 0b00000___00101000                    #   
   #   79: 0b001000000000 0x200 0x004F 0b00100___00000000                    # '0'                                                 # gets replaced by loader card 1
     END OF CARD
 ```
-[1](https://www.masswerk.at/keypunch/?q=%0B0306)
+[1](https://www.masswerk.at/keypunch/?q=%0B0306040A)
 
 ```txt
 Loader card 1 in format B:
