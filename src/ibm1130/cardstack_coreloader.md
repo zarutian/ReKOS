@@ -10,7 +10,7 @@ The restrictions on the loader card:
 
 Loader card 0 in format A:              op      ss displ 
            rows on card                 cell in core
-            11                               000==111111
+            11    ______                     000==111111
             210123456789   dat   addr   0123456789012345
 column 0: 0b110000000110 0xC06 0x0000 0b11000___00000110  LD_s  IA+6        # load constant 1 into the accumulator
        1: 0b000100001010 0x10A 0x0001 0b00010___00001010  SLA_s 10          # shift it left 10 bit places
@@ -93,7 +93,10 @@ Y Q   76: 0b000000101000 0x028 0x004C 0b00000___00101000                    #   
       78: 0b100100000000 0x900 0x004E 0b10010___00000000                    # 'A'                                                 # gets replaced by loader card 1
   #   79: 0b001000000000 0x200 0x004F 0b00100___00000000                    # '0'                                                 # gets replaced by loader card 1
     END OF CARD
+```
+[1](https://www.masswerk.at/keypunch/?q=%0B0306)
 
+```txt
 Loader card 1 in format B:
 column 0: 0b000000000000 0x000 0x0034 0b00000000________
        1: 0b000000000000 0x000 0x0034 0b________00000000  NOP               # gets replaced by saved IA during the CARD COMPLETE interrupt
