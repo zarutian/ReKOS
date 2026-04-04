@@ -54,7 +54,7 @@ column 0: 0b110000000110 0xC06 0x0000 0b11000___00000110  LD_s  IA+6        # lo
       39: 0b100100000000 0x900 0x0027 0b10010___00000000                    # 'A' gets replaced
       40: 0b000110001000 0x188 0x0028 0b00011___00001000  SRL_s 8           # shift B right 8 bit places
       41: 0b111110000000 0xF80 0x0029 0b11111___00000000  XOR_l             # needs fixup!  or B with A
-      42: 0b100000100000 0x820 0x002A 0b10000___00100000                                    # 'D' gets replaced
+      42: 0b100000100000 0x820 0x002A 0b10000___00100000                    # 'D' gets replaced
       43: 0b110100000000 0xD00 0x002B 0b11010___00000000  STO_l             # needs fixup!  overwrite A with the result
       44: 0b100000010000 0x810 0x002C 0b01100___00100000                    # 'E' gets replaced
       45: 0b011000010011 0x612 0x002D 0b01100___00010010  LDX_s IA = 0x12   # return from interrupt
@@ -113,35 +113,35 @@ column 0: 0b000000000000 0x000 0x0034 0b00000000________
       12: 0b        0000 0x  0 0x003A 0b        ________
       13: 0b        0000 0x  0 0x003A 0b________          LD_l              # load Read column IOCC1
       14: 0b000000000000 0x000 0x003B 0b00000000________  0x00__
-      15: 0b001011110000 0x2F0 0x003B 0b________00101111  0x__2F            # the location of that IOCC1
+      15: 0b001011100000 0x2F0 0x003B 0b________00101110  0x__2E            # the location of that IOCC1
       16: 0b        0000 0x  0 0x003C 0b        ________
       17: 0b        0000 0x  0 0x003C 0b________          MINUS_s IA+       
       18: 0b        0000 0x  0 0x003D 0b        ________
       19: 0b        0000 0x  0 0x003D 0b________          STO_l
       20: 0b000000000000 0x  0 0x003E 0b00000000________  0x00__
-      21: 0b001011110000 0x  0 0x003E 0b________00101111  0x__2F
+      21: 0b001011100000 0x  0 0x003E 0b________00101110  0x__2E
       22: 0b        0000 0x  0 0x003F 0b        ________
       23: 0b        0000 0x  0 0x003F 0b________          XIO_s IA+         # do a XIO Control Read Initial
       24: 0b        0000 0x  0 0x0040 0b        ________
-      25: 0b        0000 0x  0 0x0040 0b________          LDX_s IA = 0x33   # return from the interrupt
-      26: 0b000000000000 0x000 0x0041 0b00000000________
-      27: 0b000000010000 0x010 0x0041 0b________00000001                    # constant 1       
-      28: 0b000000000000 0x000 0x0044 0b00000000________
-      29: 0b0000    0000 0x0 0 0x0044 0b________0000                        # card downcounter
+      25: 0b        0000 0x  0 0x0040 0b________          LDX_s IA = 0x32   # return from the interrupt
+      26: 0b000000000000 0x000 0x0041 0b00000000________  0x00__
+      27: 0b000000010000 0x010 0x0041 0b________00000001  0x__01            # constant 1       
+      28: 0b000000000000 0x000 0x0044 0b00000000________  0x00__
+      29: 0b000001000000 0x040 0x0044 0b________00000100  0x__04            # card downcounter
       30: 0b        0000 0x  0 0x0045                     
       31: 0b        0000 0x  0 0x0045                                       # Ctrl Read Init IOCC2
       32: 0b        0000 0x  0 0x0046
-      33: 0b        0000 0x  0 0x0046                     LD_s IA+          # load the LDX_l IA instruction at 0x004E into the accumulator
+      33: 0b        0000 0x  0 0x0046                     LD_s IA+          # load the LDX_l IA instruction at 0x004C into the accumulator
       34: 0b        0000 0x  0 0x0047
       35: 0b        0000 0x  0 0x0047                     STO_l             # overwrite part of the Card Column Read Interrupt Service Routine
       36: 0b000000000000 0x000 0x0048 0b00000000________  0x00__
-      37: 0b000110110000 0x080 0x0048 0b________000011011 0x__1B
+      37: 0b000110100000 0x1A0 0x0048 0b________00011010  0x__1A
       38: 0b        0000 0x  0 0x0049 0b        ________
       39: 0b        0000 0x  0 0x0049 0b________          LD_s IA+          # load the destination branch address of that new jump being patched in
       40: 0b        0000 0x  0 0x004A 0b        ________
       41: 0b        0000 0x  0 0x004A 0b________          STO_l             # store it after that copied LDX_l IA
       42: 0b000000000000 0x  0 0x004B 0b00000000________  0x00__
-      43: 0b000111000000 0x  0 0x004B 0b________00011100  0x__1C
+      43: 0b000110110000 0x  0 0x004B 0b________00011011 0x__1B
       44: 0b        0000 0x  0 0x004C 0b        ________
       45: 0b        0000 0x  0 0x004C 0b________          LD_s IA+          # load the new Card Complete Interrupt vector
       46: 0b        0000 0x  0 0x004D 0b        ________
@@ -153,11 +153,11 @@ column 0: 0b000000000000 0x000 0x0034 0b00000000________
       52: 0b        0000 0x  0 0x0050 0b        ________
       53: 0b        0000 0x  0 0x0050 0b________          STO_l
       54: 0b000000000000 0x000 0x0051 0b00000000________
-      55: 0b001011110000 0x2F0 0x0051 0b________00101111  0x__2F            # the location of Read Column IOCC1
+      55: 0b001011100000 0x2E0 0x0051 0b________00101110  0x__2E            # the location of Read Column IOCC1
       56: 0b        0000 0x  0 0x0052 0b        ________
       57: 0b        0000 0x  0 0x0052 0b________          LDX_l IA        
       58: 0b000000000000 0x000 0x0053 0b00000000________  0x00__
-      59: 0b010000000000 0x400 0x0053 0b________01000000  0x__40
+      59: 0b001111110000 0x3F0 0x0053 0b________00111111  0x__3F
       60: 0b        0000 0x  0 0x0054 0b        ________
       61: 0b        0000 0x  0 0x0054 0b________          Card Column Read interrupt routine continuence vector
       62: 0b        0000 0x  0 0x0055 0b        ________
@@ -167,7 +167,7 @@ column 0: 0b000000000000 0x000 0x0034 0b00000000________
       66: 0b        0000 0x  0 0x0057 0b        ________
       67: 0b        0000 0x  0 0x0057 0b________          LD_l              # load the address part of the Read IOCC into the accumulator
       68: 0b000000000000 0x000 0x0058 0b00000000________  0x00__
-      69: 0b001011110000 0x2F0 0x0058 0b________00101111  0x__2F            # the location of that IOCC1
+      69: 0b001011100000 0x2E0 0x0058 0b________00101111  0x__2E            # the location of that IOCC1
       70: 0b        0000 0x  0 0x0059 0b        ________
       71: 0b        0000 0x  0 0x0059 0b________          MINUS_s IA+       # subtract four from it
       72: 0b        0000 0x  0 0x005A 0b        ________
