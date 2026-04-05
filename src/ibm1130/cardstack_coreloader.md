@@ -96,7 +96,7 @@ Y Q   76: 0b000000101000 0x028 0x004C 0b00000___00101000                    #   
 ```
 [![Loader card A0](./LoaderCard_A0.png)](https://www.masswerk.at/keypunch/?q=%0B0306040A353E3A0B3409313B)
 
-``txt
+```txt
 Loader card 1 in format B:
 column 0: 0b000000000000 0x000 0x0034 0b00000000________
        1: 0b000000000000 0x000 0x0034 0b________00000000  NOP               # gets replaced by saved IA during the CARD COMPLETE interrupt
