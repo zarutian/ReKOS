@@ -128,10 +128,10 @@ column 0: 0b000000000000 0x000 0x0034 0b00000000________
       27: 0b000000010000 0x010 0x0041 0b________00000001  0x__01            # constant 1       
       28: 0b000000000000 0x000 0x0044 0b00000000________  0x00__
       29: 0b000001000000 0x040 0x0044 0b________00000100  0x__04            # card downcounter
-      30: 0b        0000 0x  0 0x0045                     
-      31: 0b        0000 0x  0 0x0045                                       # Ctrl Read Init IOCC2
-      32: 0b        0000 0x  0 0x0046
-      33: 0b        0000 0x  0 0x0046                     LD_s IA+          # load the LDX_l IA instruction at 0x004C into the accumulator
+      30: 0b000101000000 0x140 0x0045 0b00010100________  0x14__                  
+      31: 0b000001000000 0x040 0x0045 0b________00000100  0x__04            # Ctrl Read Init IOCC2
+      32: 0b110000000000 0xC00 0x0046 0b11000000________
+      33: 0b000001100000 0x060 0x0046 0b________00000110  LD_s IA+6         # load the LDX_l IA instruction at 0x004C into the accumulator ( 0x4C - 0x46 = 0x06 )
       34: 0b        0000 0x  0 0x0047
       35: 0b        0000 0x  0 0x0047                     STO_l             # overwrite part of the Card Column Read Interrupt Service Routine
       36: 0b000000000000 0x000 0x0048 0b00000000________  0x00__
