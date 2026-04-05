@@ -96,7 +96,7 @@ Y Q   76: 0b000000101000 0x028 0x004C 0b00000___00101000                    #   
 ```
 [![Loader card A0](./LoaderCard_A0.png)](https://www.masswerk.at/keypunch/?q=%0B0306040A353E3A0B3409313B)
 
-```txt
+``txt
 Loader card 1 in format B:
 column 0: 0b000000000000 0x000 0x0034 0b00000000________
        1: 0b000000000000 0x000 0x0034 0b________00000000  NOP               # gets replaced by saved IA during the CARD COMPLETE interrupt
@@ -264,84 +264,84 @@ column 0: 0b000000000000 0x000 0x005D 0b00000000________  0x00__
     END OF CARD
 
 Loader card 3 in format B:
-column 0: 0b        0000 0x  0 0x0084 0b        ________                    # Check if this was the last card
-       1: 0b        0000 0x  0 0x0084 0b________          SLA_s 4           # Shift Last Card bit into the carry
-       2: 0b        0000 0x  0 0x0085 0b        ________
-       3: 0b        0000 0x  0 0x0085 0b________          BRCZ_l
-       4: 0b000000000000 0x000 0x0086 0b00000000________  0x00__
-       5: 0b100010100000 0x8A0 0x0086 0b________10001010  0x__8A            # branch target
-       6: 0b        0000 0x  0 0x0087 0b        ________
-       7: 0b        0000 0x  0 0x0087 0b________          BOSC_l
-       8: 0b000000010000 0x010 0x0088 0b00000001________
-       9: 0b000000000000 0x000 0x0088 0b________00000000
-      10: 0b        0000 0x  0 0x0089 0b        ________
-      11: 0b        0000 0x  0 0x0089 0b________                            # Sense Device IOCC2
+column 0: 0b000000000000 0x000 0x0084 0b00000000________
+       1: 0b000000000000 0x000 0x0084 0b________00000000  NOP
+       2: 0b        0000 0x  0 0x0085 0b        ________                    # Check if this was the last card
+       3: 0b        0000 0x  0 0x0085 0b________          SLA_s 4           # Shift Last Card bit into the carry
+       4: 0b        0000 0x  0 0x0086 0b        ________
+       5: 0b        0000 0x  0 0x0086 0b________          BRCZ_l
+       6: 0b000000000000 0x000 0x0087 0b00000000________  0x00__
+       7: 0b100010100000 0x8A0 0x0087 0b________10001010  0x__8A            # branch target
+       8: 0b        0000 0x  0 0x0088 0b        ________
+       9: 0b        0000 0x  0 0x0088 0b________          BOSC_l
+      10: 0b000000010000 0x010 0x0089 0b00000001________
+      11: 0b000000000000 0x000 0x0089 0b________00000000
       12: 0b        0000 0x  0 0x008A 0b        ________
-      13: 0b        0000 0x  0 0x008A 0b________          LD_l              # Load Read Column IOCC1 into accumulator
-      14: 0b000000000000 0x000 0x008B 0b00000000________  0x00__
-      15: 0b001011110000 0x2F0 0x008B 0b________00101111  0x__2F
-      16: 0b        0000 0x  0 0x008C 0b        ________
-      17: 0b        0000 0x  0 0x008C 0b________          MINUS_s IA+       # Subtract six from it
+      13: 0b        0000 0x  0 0x008A 0b________                            # Sense Device IOCC2
+      14: 0b        0000 0x  0 0x008B 0b        ________
+      15: 0b        0000 0x  0 0x008B 0b________          LD_l              # Load Read Column IOCC1 into accumulator
+      16: 0b000000000000 0x000 0x008C 0b00000000________  0x00__
+      17: 0b001011110000 0x2F0 0x008C 0b________00101111  0x__2F
       18: 0b        0000 0x  0 0x008D 0b        ________
-      19: 0b        0000 0x  0 0x008D 0b________          STO_l             # Store it back
-      20: 0b000000000000 0x000 0x008E 0b00000000________  0x00__
-      21: 0b001011110000 0x2F0 0x008E 0b________00101111  0x__2F
-      22: 0b        0000 0x  0 0x008F 0b        ________
-      23: 0b        0000 0x  0 0x008F 0b________          STO_l             # Store it into X1  Check for the 'END CARD' ?stub? card, that is a card whose columns 73-80 spell out that.
-      24: 0b000000000000 0x000 0x0090 0b00000000________  0x00__            #                   alternatively one can switch out the last loader card to have the loader finish at
-      25: 0b000000010000 0x010 0x0090 0b________00000001  0x__01            #                   and spefic card and start executing the loaded core
-      26: 0b        0000 0x  0 0x0091 0b        ________  
-      27: 0b        0000 0x  0 0x0091 0b________          LD_s  IA+         # Load str_addr
-      28: 0b        0000 0x  0 0x0092 0b        ________
-      29: 0b        0000 0x  0 0x0093 0b________          STO_l             # Store it into X2
-      30: 0b000000000000 0x000 0x0094 0b00000000________  0x00__
-      31: 0b000000100000 0x020 0x0094 0b________00000010  0x__02
-      32: 
-      33: 0b        0000 0x  0 0x0095 0b________          LD_s  IA+         # Load count
-      34:
-      35: 0b        0000 0x  0 0x0096 0b________          STO_l             # Store it into X3
-      36: 0b000000000000 0x000 0x0097 0b00000000________  0x00__
-      37: 0b000000110000 0x030 0x0097 0b________00000011  0x__03
-      38: 0b        0000 0x  0 0x0098 0b        ________
-      39: 0b        0000 0x  0 0x0098 0b________          LD_li (X1+0)      #
-      40: 0b000000000000 0x000 0x0099 0b00000000________  0x00__
-      41: 0b000000000000 0x000 0x0099 0b________00000000  0x__00
-      42: 0b        0000 0x  0 0x009A 0b        ________  
-      43: 0b        0000 0x  0 0x009A 0b________          XOR_li (X2+0)     #
-      44: 0b000000000000 0x000 0x009B 0b00000000________  0x00__
-      45: 0b000000000000 0x000 0x009B 0b________00000000  0x__00
-      46:
-      47: 0b        0000 0x  0 0x009C 0b________          BRAZ_l
-      48:
-      49:
-      50:
-      51: 0b        0000 0x  0 0x009E 0b________          LDX_l IA =        # go and issue a new card read init
-      52:
-      53:
-      54:
-      55: 0b        0000 0x  0 0x00A0 0b________          LD_l              # load X3
-      56:
-      57:
-      58:
-      59: 0b        0000 0x  0 0x00A2 0b________          MINUS_l IA+       # decrement it by one
-      60:
-      61: 0b        0000 0x  0 0x00A3 0b________          STO_l             # store it back
-      62:
-      63:
-      64:
-      65: 0b        0000 0x  0 0x00A5 0b________          BRAZ_l            # branch to loading done if accumulator is zero
-      66:
-      67:
-      68:
-      69: 0b        0000 0x  0 0x00A7 0b________          LDX_l IA
-      70:
-      71:
-      72: 0b000000000000 0x000 0x00A9 0b00000000________  0x00__
-      73: 0b000001100000 0x060 0x00A9 0b________00000110  0x__06
-      74: 0b000000000000 0x000 0x00AA 0b00000000________  0x00__
-      75: 0b000000010000 0x010 0x00AA 0b________00000001  0x__01
-      76:
-      77:
+      19: 0b        0000 0x  0 0x008D 0b________          MINUS_s IA+       # Subtract six from it
+      20: 0b        0000 0x  0 0x008E 0b        ________
+      21: 0b        0000 0x  0 0x008E 0b________          STO_l             # Store it back
+      22: 0b000000000000 0x000 0x008F 0b00000000________  0x00__
+      23: 0b001011110000 0x2F0 0x008F 0b________00101111  0x__2F
+      24: 0b        0000 0x  0 0x0090 0b        ________
+      25: 0b        0000 0x  0 0x0090 0b________          STO_l             # Store it into X1  Check for the 'END CARD' ?stub? card, that is a card whose columns 73-80 spell out that.
+      26: 0b000000000000 0x000 0x0091 0b00000000________  0x00__            #                   alternatively one can switch out the last loader card to have the loader finish at
+      27: 0b000000010000 0x010 0x0091 0b________00000001  0x__01            #                   a spefic card and start executing the loaded core
+      28: 0b        0000 0x  0 0x0092 0b        ________  
+      29: 0b        0000 0x  0 0x0092 0b________          LD_s  IA+         # Load str_addr
+      30: 0b        0000 0x  0 0x0093 0b        ________
+      31: 0b        0000 0x  0 0x0093 0b________          STO_l             # Store it into X2
+      32: 0b000000000000 0x000 0x0094 0b00000000________  0x00__
+      33: 0b000000100000 0x020 0x0094 0b________00000010  0x__02
+      34: 0b        0000 0x  0 0x0095
+      35: 0b        0000 0x  0 0x0095 0b________          LD_s  IA+         # Load count
+      36: 0b        0000 0x  0 0x0096
+      37: 0b        0000 0x  0 0x0096 0b________          STO_l             # Store it into X3
+      38: 0b000000000000 0x000 0x0097 0b00000000________  0x00__
+      39: 0b000000110000 0x030 0x0097 0b________00000011  0x__03
+      40: 0b        0000 0x  0 0x0098 0b        ________
+      41: 0b        0000 0x  0 0x0098 0b________          LD_li (X1+0)      #
+      42: 0b000000000000 0x000 0x0099 0b00000000________  0x00__
+      43: 0b000000000000 0x000 0x0099 0b________00000000  0x__00
+      44: 0b        0000 0x  0 0x009A 0b        ________  
+      45: 0b        0000 0x  0 0x009A 0b________          XOR_li (X2+0)     #
+      46: 0b000000000000 0x000 0x009B 0b00000000________  0x00__
+      47: 0b000000000000 0x000 0x009B 0b________00000000  0x__00
+      48: 0b        0000 0x  0 0x009C
+      49: 0b        0000 0x  0 0x009C 0b________          BRAZ_l
+      50: 0b        0000 0x  0 0x009D
+      51: 0b        0000 0x  0 0x009D
+      52: 0b        0000 0x  0 0x009E
+      53: 0b        0000 0x  0 0x009E 0b________          LDX_l IA =        # go and issue a new card read init
+      54: 0b        0000 0x  0 0x009F
+      55: 0b        0000 0x  0 0x009F
+      56: 0b        0000 0x  0 0x00A0
+      57: 0b        0000 0x  0 0x00A0 0b________          LD_l              # load X3
+      58: 0b        0000 0x  0 0x00A1
+      59: 0b        0000 0x  0 0x00A1
+      60: 0b        0000 0x  0 0x00A2
+      61: 0b        0000 0x  0 0x00A2 0b________          MINUS_l IA+       # decrement it by one
+      62: 0b        0000 0x  0 0x00A3
+      63: 0b        0000 0x  0 0x00A3 0b________          STO_l             # store it back
+      64: 0b        0000 0x  0 0x00A4
+      65: 0b        0000 0x  0 0x00A4
+      66: 0b        0000 0x  0 0x00A5
+      67: 0b        0000 0x  0 0x00A5 0b________          BRAZ_l            # branch to loading done if accumulator is zero
+      68: 0b        0000 0x  0 0x00A6
+      69: 0b        0000 0x  0 0x00A6
+      70: 0b        0000 0x  0 0x00A7
+      71: 0b        0000 0x  0 0x00A7 0b________          LDX_l IA
+      72: 0b        0000 0x  0 0x00A8
+      73: 0b        0000 0x  0 0x00A8
+      74: 0b000000000000 0x000 0x00A9 0b00000000________  0x00__
+      75: 0b000001100000 0x060 0x00A9 0b________00000110  0x__06
+      76: 0b000000000000 0x000 0x00AA 0b00000000________  0x00__
+      77: 0b000000010000 0x010 0x00AA 0b________00000001  0x__01
       78: 0b100010000000 0x880 0x00AC 0b10001000________                    # 'B'   gets overwritten in core by loader card 4
       79: 0b             0x    0x00AC 0b________                            # '3'   ditto
     END OF CARD
