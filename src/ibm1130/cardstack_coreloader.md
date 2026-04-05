@@ -96,7 +96,7 @@ Y Q   76: 0b000000101000 0x028 0x004C 0b00000___00101000                    #   
 ```
 [![Loader card A0](./LoaderCard_A0.png)](https://www.masswerk.at/keypunch/?q=%0B0306040A353E3A0B3409313B)
 
-```txt
+``txt
 Loader card 1 in format B:
 column 0: 0b000000000000       0x000 0x0034 0b00000000________
        1: 0b000000000000 x  x  0x000 0x0034 0b________00000000  NOP               # gets replaced by saved IA during the CARD COMPLETE interrupt
@@ -160,8 +160,8 @@ column 0: 0b000000000000       0x000 0x0034 0b00000000________
       59: 0b001111110000 xx    0x3F0 0x0053 0b________00111111  0x__3F
       60: 0b000000000000       0x000 0x0054 0b00000000________
       61: 0b010101110000 xxxx  0x570 0x0054 0b________01010111  Card Column Read interrupt routine continuence vector
-      62: 0b        0000 x x   0x  0 0x0055 0b        ________
-      63: 0b        0000  x x  0x  0 0x0055 0b________          New Card Complete interrupt vector
+      62: 0b000000000000 x x   0x000 0x0055 0b        ________
+      63: 0b100000110000  x x  0x830 0x0055 0b________          New Card Complete interrupt vector
       64: 0b000000010000       0x010 0x0056 0b00000001________
       65: 0b000000000000       0x000 0x0056 0b________00000000  New Start address
       66: 0b110001000000       0xC40 0x0057 0b11000100________
@@ -185,16 +185,16 @@ column 0: 0b000000000000 0x000 0x005D 0b00000000________  0x00__
        1: 0b000000010000 0x010 0x005D 0b________00000001  0x__01
        2: 0b000110000000 0x180 0x005E 0b00011000________
        3: 0b000011000000 0x0C0 0x005E 0b________00001100  SRL_s  12         # shift right by 12 bits
-       4: 0b        0000 0x  0 0x005F 0b        ________
-       5: 0b        0000 0x  0 0x005F 0b________          OR_li  (X1+0)     # or that part by cell A
+       4: 0b111011010000 0xED0 0x005F 0b11101101________
+       5: 0b100000000000 0x800 0x005F 0b________10000000  OR_li  (X1+0)     # or that part by cell A
        6: 0b000000000000 0x000 0x0060 0b00000000________  0x00__
        7: 0b000000000000 0x000 0x0060 0b________00000000  0x__00
-       8: 0b        0000 0x  0 0x0061 0b        ________
-       9: 0b        0000 0x  0 0x0061 0b________          STO_li (X1+0)     # store now full cell A
+       8: 0b110101010000 0xD50 0x0061 0b11010101________
+       9: 0b100000000000 0x800 0x0061 0b________10000000  STO_li (X1+0)     # store now full cell A
       10: 0b000000000000 0x000 0x0062 0b00000000________  0x00__
       11: 0b000000000000 0x000 0x0062 0b________00000000  0x__00
-      12: 0b        0000 0x  0 0x0063 0b        ________
-      13: 0b        0000 0x  0 0x0063 0b________          LD_li  (X1+1)     # load cell B again
+      12: 0b110001010000 0xC50 0x0063 0b11000101________
+      13: 0b100000000000 0x800 0x0063 0b________10000000  LD_li  (X1+1)     # load cell B again
       14: 0b000000000000 0x000 0x0064 0b00000000________  0x00__
       15: 0b000000010000 0x010 0x0064 0b________00000001  0x__01
       16: 0b        0000 0x  0 0x0065 0b        ________
@@ -258,7 +258,7 @@ column 0: 0b000000000000 0x000 0x005D 0b00000000________  0x00__
       74: 0b000000000000 0x000 0x0082 0b00000000________
       75: 0b000000010000 0x010 0x0082 0b________00000001                    # constant 1
       76: 0b        0000 0x  0 0x0083 0b        ________
-      77: 0b        0000 0x  0 0x0083 0b________          XIO_s             # do Sense Device   New Card Complete Interrupt vector points here
+      77: 0b        0000 0x  0 0x0083 0b________          XIO_s IA+         # do Sense Device   New Card Complete Interrupt vector points here
       78: 0b100010000000 0x880 0x0084 0b10001000________                    # 'B'   gets overwritten in core by loader card 3
       79: 0b000010000000 0x100 0x0084 0b________00001000                    # '2'   ditto
     END OF CARD
