@@ -96,7 +96,7 @@ Y Q   76: 0b000000101000 0x028 0x004C 0b00000___00101000                    #   
 ```
 [![Loader card A0](./LoaderCard_A0.png)](https://www.masswerk.at/keypunch/?q=%0B0306040A353E3A0B3409313B)
 
-```txt
+``txt
 Loader card 1 in format B:
 column 0: 0b000000000000 0x000 0x0034 0b00000000________
        1: 0b000000000000 0x000 0x0034 0b________00000000  NOP               # gets replaced by saved IA during the CARD COMPLETE interrupt
@@ -132,50 +132,50 @@ column 0: 0b000000000000 0x000 0x0034 0b00000000________
       31: 0b000001000000 0x040 0x0045 0b________00000100  0x__04            # Ctrl Read Init IOCC2
       32: 0b110000000000 0xC00 0x0046 0b11000000________
       33: 0b000001100000 0x060 0x0046 0b________00000110  LD_s IA+6         # load the LDX_l IA instruction at 0x004C into the accumulator ( 0x4C - 0x46 = 0x06 )
-      34: 0b        0000 0x  0 0x0047
-      35: 0b        0000 0x  0 0x0047                     STO_l             # overwrite part of the Card Column Read Interrupt Service Routine
+      34: 0b110101000000 0xD40 0x0047 0b11010100________
+      35: 0b000000000000 0x000 0x0047 0b________00000000  STO_l             # overwrite part of the Card Column Read Interrupt Service Routine
       36: 0b000000000000 0x000 0x0048 0b00000000________  0x00__
       37: 0b000110100000 0x1A0 0x0048 0b________00011010  0x__1A
-      38: 0b        0000 0x  0 0x0049 0b        ________
-      39: 0b        0000 0x  0 0x0049 0b________          LD_s IA+          # load the destination branch address of that new jump being patched in
-      40: 0b        0000 0x  0 0x004A 0b        ________
-      41: 0b        0000 0x  0 0x004A 0b________          STO_l             # store it after that copied LDX_l IA
-      42: 0b000000000000 0x  0 0x004B 0b00000000________  0x00__
-      43: 0b000110110000 0x  0 0x004B 0b________00011011 0x__1B
-      44: 0b        0000 0x  0 0x004C 0b        ________
-      45: 0b        0000 0x  0 0x004C 0b________          LD_s IA+          # load the new Card Complete Interrupt vector
-      46: 0b        0000 0x  0 0x004D 0b        ________
-      47: 0b        0000 0x  0 0x004D 0b________          STO_l             # overwrite that interrupt vector
-      48: 0b000000000000 0x  0 0x004E 0b00000000________  0x00__
-      49: 0b000011000000 0x  0 0x004E 0b________00001100  0x__0C
-      50: 0b        0000 0x  0 0x004F 0b        ________  
-      51: 0b        0000 0x  0 0x004F 0b________          LD_s IA+          # load starting address
-      52: 0b        0000 0x  0 0x0050 0b        ________
-      53: 0b        0000 0x  0 0x0050 0b________          STO_l
+      38: 0b110000000000 0xC00 0x0049 0b11000000________
+      39: 0b000010100000 0x0A0 0x0049 0b________00001010  LD_s IA+10        # load the destination branch address of that new jump being patched in
+      40: 0b110101000000 0xD40 0x004A 0b11010100________
+      41: 0b000000000000 0x000 0x004A 0b________00000000  STO_l             # store it after that copied LDX_l IA
+      42: 0b000000000000 0x000 0x004B 0b00000000________  0x00__
+      43: 0b000110110000 0x1B0 0x004B 0b________00011011  0x__1B
+      44: 0b110000000000 0xC00 0x004C 0b11000000________
+      45: 0b000010000000 0x080 0x004C 0b________00001000  LD_s IA+8         # load the new Card Complete Interrupt vector
+      46: 0b110101000000 0xD40 0x004D 0b11010100________
+      47: 0b000000000000 0x000 0x004D 0b________00000000  STO_l             # overwrite that interrupt vector
+      48: 0b000000000000 0x000 0x004E 0b00000000________  0x00__
+      49: 0b000011000000 0x0C0 0x004E 0b________00001100  0x__0C
+      50: 0b110000000000 0xC00 0x004F 0b11000000________  
+      51: 0b000001100000 0x060 0x004F 0b________          LD_s IA+6         # load starting address
+      52: 0b110101000000 0xD40 0x0050 0b11010100________
+      53: 0b000000000000 0x000 0x0050 0b________00000000  STO_l
       54: 0b000000000000 0x000 0x0051 0b00000000________
       55: 0b001011100000 0x2E0 0x0051 0b________00101110  0x__2E            # the location of Read Column IOCC1
-      56: 0b        0000 0x  0 0x0052 0b        ________
-      57: 0b        0000 0x  0 0x0052 0b________          LDX_l IA        
+      56: 0b011001000000 0x640 0x0052 0b        ________
+      57: 0b000000000000 0x000 0x0052 0b________          LDX_l IA        
       58: 0b000000000000 0x000 0x0053 0b00000000________  0x00__
       59: 0b001111110000 0x3F0 0x0053 0b________00111111  0x__3F
-      60: 0b        0000 0x  0 0x0054 0b        ________
-      61: 0b        0000 0x  0 0x0054 0b________          Card Column Read interrupt routine continuence vector
+      60: 0b000000000000 0x000 0x0054 0b00000000________
+      61: 0b010101110000 0x570 0x0054 0b________01010111  Card Column Read interrupt routine continuence vector
       62: 0b        0000 0x  0 0x0055 0b        ________
       63: 0b        0000 0x  0 0x0055 0b________          New Card Complete interrupt vector
       64: 0b000000010000 0x010 0x0056 0b00000001________
       65: 0b000000000000 0x000 0x0056 0b________00000000  New Start address
-      66: 0b        0000 0x  0 0x0057 0b        ________
-      67: 0b        0000 0x  0 0x0057 0b________          LD_l              # load the address part of the Read IOCC into the accumulator
+      66: 0b110001000000 0xC40 0x0057 0b11000100________
+      67: 0b000000000000 0x000 0x0057 0b________00000000  LD_l              # load the address part of the Read IOCC into the accumulator
       68: 0b000000000000 0x000 0x0058 0b00000000________  0x00__
       69: 0b001011100000 0x2E0 0x0058 0b________00101111  0x__2E            # the location of that IOCC1
-      70: 0b        0000 0x  0 0x0059 0b        ________
-      71: 0b        0000 0x  0 0x0059 0b________          MINUS_s IA+       # subtract four from it
-      72: 0b        0000 0x  0 0x005A 0b        ________
-      73: 0b        0000 0x  0 0x005A 0b________          STO_l             # set the X1 register to what is in the accumulator
+      70: 0b100100000000 0x900 0x0059 0b10010000________
+      71: 0b001000010000 0x210 0x0059 0b________00100001  MINUS_s IA+33     # subtract four from it
+      72: 0b110101000000 0xD40 0x005A 0b11010100________
+      73: 0b000000000000 0x000 0x005A 0b________00000000  STO_l             # set the X1 register to what is in the accumulator
       74: 0b000000000000 0x000 0x005B 0b00000000________  0x00__
       75: 0b000000010000 0x010 0x005B 0b________00000001  0x__01
-      76: 0b        0000 0x  0 0x005C 0b        ________
-      77: 0b        0000 0x  0 0x005C 0b________          LD_li  (X1+1)     # load cell B into accumulator
+      76: 0b110001010000 0xC50 0x005C 0b11000101________
+      77: 0b100000000000 0x800 0x005C 0b________10000000  LD_li  (X1+1)     # load cell B into accumulator
       78: 0b100010000000 0x880 0x005D 0b10001000________                    # 'B'   gets overwritten in core by loader card 2
       79: 0b000100000000 0x100 0x005D 0b________00010000                    # '1'   ditto
     END OF CARD
@@ -346,8 +346,8 @@ column 0: 0b        0000 0x  0 0x0084 0b        ________                    # Ch
       79: 0b             0x    0x00AC 0b________                            # '3'   ditto
     END OF CARD
 
-Loader card 4 in packed IBM EBDIC CARD CODE in format B:
-column 0: 0b        0000 0x  0 0x00AC 'E'
+Loader card 4 in format B:
+column 0: 0b        0000 0x  0 0x00AC 'E' packed IBM EBDIC CARD CODE
        1: 0b        0000 0x  0 0x00AC
        2: 0b        0000 0x  0 0x00AD 'N'
        3: 0b        0000 0x  0 0x00AD
