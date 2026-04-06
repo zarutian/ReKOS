@@ -584,7 +584,32 @@ column 0: 0b000000000000       0x000 0x005D 0b00000000________
       37: 0b        0000  x x  0x  0 0x006F 0b________          LDX_l IA
       38: 0b000000000000 x  x  0x000 0x0070 0b00000000________
       39: 0b000000000000 x x   0x000 0x0070 0b________00000000                    # start of the type_lit_str subroutine
-      40: 0b
+      40:
+      41: 0b        0000       0x  0 0x0071 0b________          LD_s IA-
+      42:
+      43: 0b        0000       0x  0 0x0072 0b________          STO_l
+      44:
+      45: 0b000000100000       0x020 0x0073 0b________          0x__02
+      46: 0b110001000000       0xC40 0x0074 0b11000100________
+      47: 0b100000000000       0x800 0x0074 0b________10000000  LD_li             # load string length and the first char into the accumulator
+      48: 0b000000000000       0x000 0x0075 0b00000000________
+      49: 0b011100000000       0x700 0x0075 0b________01110000
+      50: 0b        0000       0x  0 0x0076 0b        ________
+      51: 0b        0000       0x  0 0x0076 0b________          SRA_s 8           # get rid of the first char and be left with the length
+      52: 0b
+      53: 0b        0000       0x  0 0x0077 0b________          STO_l             # store it in X1
+      54:
+      55: 0b000000010000       0x010 0x0078 0b________00000001  0x__01
+      56:
+      57: 0b        0000       0x  0 0x0079 0b________          ADD_s IA+         # incr it by one
+      58:
+      59: 0b        0000       0x  0 0x007A 0b________          SRA_s 1           # halv it as the length is in bytes and not cells
+      60:
+      61: 0b        0000       0x  0 0x007B 0b________          ADD_s IA-         # add the subroutine return address to it
+      62:
+      63: 0b        0000       0x  0 0x007C 0b________          STO_s IA-         # store it as the new subroutine return address
+      64:
+      65:
 ```
 
 
