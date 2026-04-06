@@ -459,7 +459,7 @@ C:
 
 [Empty but marked B format punchcard](https://www.masswerk.at/keypunch/?b=DCA2OQwMNjg5DAw2NzkMDDY5DCAMNzg5DAw2OAwMNzg5DCAMNjc4OQwMNjgMDDc5DCAMNzg5NgwMOQwMNjc4OQwgDDYMDDY3ODkMDDYMIAw2OQwMNzg5NgwMNjkMIAw3ODkMDDY4DAw3ODkMIAw2Nzg5DAw3DAw4DAw2Nzg5DCAMNjcMIAw3OQwMNjkMDDY4DCAgIAw2Nzg5DAw5DAw5DCAMNzgMDDY5DAw3OAwgDDc4OQwMNjgMDDc4OQwgDDY3ODkMDDY5DAw3OAwgDDY3DCAMNjc4OQwMNjgMDDc5)
 
-```txt
+``txt
 Sorter card 1 in format B:
 column 0: 0b000000000000       0x000 0x0034 0b00000000________
        1: 0b000000000000 x  x  0x000 0x0034 0b________00000000  NOP               # gets replaced by saved IA during the CARD COMPLETE interrupt
@@ -493,5 +493,16 @@ column 0: 0b000000000000       0x000 0x0034 0b00000000________
       29: 0b000001000000       0x040 0x0044 0b________00000100  0x__04            # card downcounter
       30: 0b000101000000 xxxx  0x140 0x0045 0b00010100________  0x14__                  
       31: 0b000001000000  x    0x040 0x0045 0b________00000100  0x__04            # Ctrl Read Init IOCC2
+      32: 0b        0000   x   0x  0 0x0046 0b        ________
+      33: 0b        0000 xxxx  0x  0 0x0046 0b________
 ```
+
+
+
+
+
+
+
+
+
 
