@@ -542,6 +542,49 @@ column 0: 0b000000000000       0x000 0x0034 0b00000000________
       78: 0b100010000000       0x880 0x005D 0b10001000________                    # 'B'   gets overwritten in core by sorter card 2
       79: 0b000100000000       0x100 0x005D 0b________00010000                    # '1'   ditto
     END OF CARD
+
+Sorter card 2 in format B:
+column 0: 0b000000000000       0x000 0x005D 0b00000000________
+       1: 0b000000000000 x  x  0x000 0x005D 0b________00000000  NOP               #
+       2: 0b010001000000 x xx  0x440 0x005E 0b01000100________
+       3: 0b000000000000 xx x  0x000 0x005E 0b________00000000  BSI_l             # branch to subroutine
+       4: 0b        0000 x  x  0x  0 0x005F 0b        ________  0x  __            # type_lit_str
+       5: 0b        0000       0x  0 0x005F 0b________          0x__
+       6: 0b000010000000  xxx  0x080 0x0060 0b        ________  0x08__            # string length
+       7: 0b001000010000 x x   0x  0 0x0060 0b________          0x__21            # ' '
+       8: 0b        0000  xxx  0x  0 0x0061 0b        ________  0x  __            # 'S'
+       9: 0b        0000       0x  0 0x0061 0b________          0x__              # 'T'
+      10: 0b        0000 xxxx  0x  0 0x0062 0b        ________  0x  __            # 'A'
+      11: 0b        0000 x x   0x  0 0x0062 0b________          0x__              # 'R'
+      12: 0b        0000  x x  0x  0 0x0063 0b        ________  0x  __            # 'T'
+      13: 0b        0000       0x  0 0x0063 0b________          0x__              # '?'
+      14: 0b001000010000 xxxx  0x  0 0x0064 0b        ________  0x  __            # ' '
+      15: 0b000000000000    x  0x  0 0x0064 0b________00000000  0x__00
+      16: 0b010001000000 xxxx  0x440 0x0065 0b01000100________
+      17: 0b000000000000       0x000 0x0065 0b________00000000  BSI_l             # branch to subroutine
+      18: 0b        0000 x     0x  0 0x0066 0b        ________  0x  __            # read_and_echo_char
+      19: 0b        0000 xxxx  0x  0 0x0066 0b________          0x__
+      20: 0b        0000 x     0x  0 0x0067 0b        ________  0x  __            # varaddr of where that char goes
+      21: 0b        0000       0x  0 0x0067 0b________          0x__  
+      22: 0b        0000 x  x  0x  0 0x0068 0b        ________
+      23: 0b        0000 xxxx  0x  0 0x0068 0b________          LD_s IA+          # load that char into the accumulator
+      24: 0b        0000 x  x  0x  0 0x0069 0b        ________
+      25: 0b        0000       0x  0 0x0069 0b________          XOR_s IA+         # XOR it with 'Y' (IBM CARD CODE)
+      26: 0b        0000  xxx  0x  0 0x006A 0b        ________
+      27: 0b        0000 x x   0x  0 0x006A 0b________          BRAZ_l            # branch if accumulator is zero to
+      28: 0b        0000  xxx  0x  0 0x006B 0b        ________  0x  __            # the sorting part
+      29: 0b        0000       0x  0 0x006B 0b________          0x__  
+      30: 0b        0000 xxxx  0x  0 0x006C 0b        ________
+      31: 0b        0000  x    0x  0 0x006C 0b________          LDX_l IA
+      32: 0b000000000000   x   0x  0 0x006D 0b00000000________  0x00__
+      33: 0b010001100000 xxxx  0x  0 0x006D 0b________01000110  0x0046
+      34: 0b        0000       0x  0 0x006E 0b        ________
+      35: 0b        0000 xx    0x  0 0x006E 0b________                            # 'Y' in IBM cardcode
+      36: 0b        0000       0x  0 0x006F 0b        ________
+      37: 0b        0000  x x  0x  0 0x006F 0b________          LDX_l IA
+      38: 0b000000000000 x  x  0x000 0x0070 0b00000000________
+      39: 0b000000000000 x x   0x000 0x0070 0b________00000000                    # start of the type_lit_str subroutine
+      40: 0b
 ```
 
 
