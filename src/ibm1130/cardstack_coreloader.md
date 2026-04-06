@@ -428,10 +428,7 @@ column 0: 0b000000000000 0x000 0x00AC
       78: 0b100010000000       0x880 0x00D3 0b10001000________                    # 'B'
       79: 0b____________       0x020 0x00D3 0b________                            # '4'   ditto
     END OF CARD
-      
-      
-      
- 
+
 ```
 
 ```
@@ -462,4 +459,39 @@ C:
 
 [Empty but marked B format punchcard](https://www.masswerk.at/keypunch/?b=DCA2OQwMNjg5DAw2NzkMDDY5DCAMNzg5DAw2OAwMNzg5DCAMNjc4OQwMNjgMDDc5DCAMNzg5NgwMOQwMNjc4OQwgDDYMDDY3ODkMDDYMIAw2OQwMNzg5NgwMNjkMIAw3ODkMDDY4DAw3ODkMIAw2Nzg5DAw3DAw4DAw2Nzg5DCAMNjcMIAw3OQwMNjkMDDY4DCAgIAw2Nzg5DAw5DAw5DCAMNzgMDDY5DAw3OAwgDDc4OQwMNjgMDDc4OQwgDDY3ODkMDDY5DAw3OAwgDDY3DCAMNjc4OQwMNjgMDDc5)
 
+```txt
+Sorter card 1 in format B:
+column 0: 0b000000000000       0x000 0x0034 0b00000000________
+       1: 0b000000000000 x  x  0x000 0x0034 0b________00000000  NOP               # gets replaced by saved IA during the CARD COMPLETE interrupt
+       2: 0b110000000000 x xx  0xC00 0x0035 0b11000000________
+       3: 0b000011000000 xx x  0x0C0 0x0035 0b________00001100  LD_s IA+12        # load card down counter into accumlator
+       4: 0b100100000000 x  x  0x900 0x0036 0b10010000________
+       5: 0b000010100000       0x0A0 0x0036 0b________00001010  MINUS_s IA+10     # decrement it by one
+       6: 0b110100000000  xxx  0xD00 0x0037 0b11010000________
+       7: 0b000010100000 x x   0x0A0 0x0037 0b________00001010  STO_s IA+10       # store it back
+       8: 0b010011000000  xxx  0x4C0 0x0038 0b01001100________
+       9: 0b001000000000       0x200 0x0038 0b________00100000  BSC_l AZ          # branch if Accumulator is Zero
+      10: 0b000000000000 xxxx  0x000 0x0039 0b00000000________
+      11: 0b010001100000 x x   0x460 0x0039 0b________01000110  0x0046            # branch destination
+      12: 0b110001000000  x x  0xC40 0x003A 0b11000100________
+      13: 0b000000000000       0x000 0x003A 0b________00000000  LD_l              # load Read column IOCC1
+      14: 0b000000000000 xxxx  0x000 0x003B 0b00000000________  0x00__
+      15: 0b001011100000    x  0x2E0 0x003B 0b________00101110  0x__2E            # the location of that IOCC1
+      16: 0b100100000000 xxxx  0x900 0x003C 0b10010000________
+      17: 0b000001000000       0x040 0x003C 0b________00000100  MINUS_s IA+4      # decr 1
+      18: 0b110101000000 x     0xD40 0x003D 0b11010100________
+      19: 0b000000000000 xxxx  0x000 0x003D 0b________00000000  STO_l
+      20: 0b000000000000 x     0x000 0x003E 0b00000000________  0x00__
+      21: 0b001011100000       0x2E0 0x003E 0b________00101110  0x__2E
+      22: 0b000010000000 x  x  0x080 0x003F 0b00001000________
+      23: 0b000000100000 xxxx  0x020 0x003F 0b________00000010  XIO_s IA+2        # do a XIO Control Read Initial
+      24: 0b011000000000 x  x  0x600 0x0040 0b01100000________
+      25: 0b001100100000       0x320 0x0040 0b________00110010  LDX_s IA = 0x32   # return from the interrupt
+      26: 0b000000000000  xxx  0x000 0x0041 0b00000000________  0x00__
+      27: 0b000000010000 x x   0x010 0x0041 0b________00000001  0x__01            # constant 1       
+      28: 0b000000000000  xxx  0x000 0x0044 0b00000000________  0x00__
+      29: 0b000001000000       0x040 0x0044 0b________00000100  0x__04            # card downcounter
+      30: 0b000101000000 xxxx  0x140 0x0045 0b00010100________  0x14__                  
+      31: 0b000001000000  x    0x040 0x0045 0b________00000100  0x__04            # Ctrl Read Init IOCC2
+```
 
