@@ -585,7 +585,7 @@ column 0: 0b000000000000       0x000 0x005D 0b00000000________
       38: 0b000000000000 x  x  0x000 0x0070 0b00000000________
       39: 0b000000000000 x x   0x000 0x0070 0b________00000000                    # start of the type_lit_str subroutine
       40:
-      41: 0b        0000       0x  0 0x0071 0b________          LD_s IA-
+      41: 0b        0000       0x  0 0x0071 0b________          LD_s IA-          # store string address in X2
       42:
       43: 0b        0000       0x  0 0x0072 0b________          STO_l
       44:
@@ -608,8 +608,95 @@ column 0: 0b000000000000       0x000 0x005D 0b00000000________
       61: 0b        0000       0x  0 0x007B 0b________          ADD_s IA-         # add the subroutine return address to it
       62:
       63: 0b        0000       0x  0 0x007C 0b________          STO_s IA-         # store it as the new subroutine return address
+      64: 0b010001000000       0x440 0x007D 0b01000100________
+      65: 0b000000000000       0x000 0x007D 0b________00000000  BSI_l             # subroutine call to
+      66: 0b        0000       0x  0 0x007E 0b        ________                    # interrupt_level_4_setup
+      67: 0b        0000       0x  0 0x007E 0b________
+      68: 0b        0000       0x  0 0x007F 0b        ________ 
+      69: 0b        0000       0x  0 0x007F 0b________          LDX_l IA          #
+      70: 0b000000000000       0x000 0x0080 0b00000000________
+      71: 0b        0000       0x  0 0x0080 0b________                            # jump forward a bit
+      72: 0b000000000000       0x000 0x0081 0b00000000________  0x00__
+      73: 0b000000010000       0x010 0x0081 0b________00000001  0x__01            # constant 1
+      74: 0b        0000       0x  0 0x0082 0b        ________
+      75: 0b        0000       0x  0 0x0082 0b________                            # accumulator save space
+      76: 0b        0000       0x  0 0x0083 0b        ________
+      77: 0b        0000       0x  0 0x0083 0b________          LD_s IA-2
+      78: 0b100010000000       0x880 0x0084 0b10001000________                    # 'B'   gets overwritten in core by sorter card 2
+      79: 0b000010000000       0x080 0x0084 0b________00001000                    # '2'   ditto
+    END OF CARD
+
+Sorter card 3 in format B:
+column 0: 0b000000000000       0x000 0x0084 0b00000000________
+       1: 0b000000000000 x  x  0x000 0x0084 0b________00000000  NOP               #
+       2: 0b        0000 x xx  0x  0 0x0085 0b        ________
+       3: 0b        0000 xx x  0x  0 0x0085 0b________          BOSC_l            # return from the interrupt
+       4: 0b        0000 x  x  0x  0 0x0086 0b        ________                    # interrupt level 4 vector will point here
+       5: 0b        0000       0x  0 0x0086 0b________                            # also save space for IA
+       6: 0b        0000       0x  0 0x0087 0b        ________
+       7: 0b        0000       0x  0 0x0087 0b________          STO_s IA-         # save the interrupted accumulator
+       8: 0b        0000       0x  0 0x0088 0b        ________
+       9: 0b        0000       0x  0 0x0088 0b________          XIO_s IA+         # issue Sense Device to console
+      10:
+      11: 0b        0000       0x  0 0x0089 0b________          SLA_s 1           # shift Printer Response into Carry
+      12:
+      13: 0b        0000       0x  0 0x008A 0b________          BRCO_l            # BRanch if Carry is Off (or Carry is zerO)
+      14:
+      15: 0b        0000       0x  0 0x008B 0b________          branch address
+      16:
+      17: 0b        0000       0x  0 0x008C 0b________          STO_l             # store the rest of the device status
+      18: 0b000000100000       0x020 0x008D 0b00000010________
+      19: 0b000000000000       0x000 0x008D 0b________00000000  storage address 0x0200
+      20:
+      21: 0b        0000       0x  0 0x008E 0b________          AND_s IA+         # and it with 0x1800 to mask off everything except the Printer Busy and Printer Not Ready bits
+      22:
+      23: 0b        0000       0x  0 0x008F 0b________          BRAZ_l
+      24: 0b000000000000       0x000 0x0090 0b00000000________  0x00__
+      25: 0b100101000000       0x940 0x0090 0b________10010100  0x__9
+      26:
+      27: 0b        0000       0x  0 0x0091 0b________          LDX_l IA
+      28: 0b000000000000       0x000 0x0092 0b00000000________  0x00__
+      29: 0b        0000       0x  0 0x0092 0b________          0x__              # 
+      30: 0b000110000000       0x180 0x0093 0b00011000________  0x18__
+      31: 0b000000000000       0x000 0x0093 0b________00000000  0x__00            # constant 0x1800
+      32:
+      33: 0b        0000       0x  0 0x0094 0b________          LD_li (X2+0)      # load a char pair into accumulator
+      34: 0b000000000000       0x000 0x0095 0b00000000________  0x00__
+      35: 0b000000000000       0x000 0x0095 0b________00000000  0x__00
+      36:
+      37: 0b        0000       0x  0 0x0096 0b________          STO_l             # store where Console Write IOCC1 points to which is 0x0201
+      38: 0b000000100000       0x020 0x0097 0b00000010_________ 0x02__
+      39: 0b000000010000       0x010 0x0097 0b________000000001 0x__01
+      40:
+      41: 0b        0000       0x  0 0x0098 0b________          LD_l              # load X1 into accumulator
+      42: 0b000000000000       0x000 0x0099 0b00000000_________ 0x00__
+      43: 0b000000010000       0x010 0x0099 0b________000000001 0x__01
+      44: 0b
+      45: 0b        0000       0x  0 0x009A 0b________          BRAE_l            # BRanch if Accumulator is Even
+      46: 0b000000000000       0x000 0x009B 0b00000000________  0x00__
+      47: 0b101001100000       0xA60 0x009B 0b________10100110  0x__A6
+      48:
+      49: 0b        0000       0x  0 0x009C 0b________          LD_l              # load the char pair from 0x0201
+      50: 0b000000100000       0x020 0x009D 0b00000010________  0x02__
+      51: 0b000000010000       0x010 0x009D 0b________00000001  0x__01
+      52:
+      53: 0b        0000       0x  0 0x009E 0b________          SLA_s 8           # shift it left 8 bit places
+      54:
+      55: 0b        0000       0x  0 0x009F 0b________          STO_l             # store it back
+      56:
+      57:
+      58:
+      59: 0b        0000       0x  0 0x00A1 0b________          LD_l              # incr X2
+      60: 0b000000000000       0x000 0x00A2 0b00000000________  0x00__
+      61: 0b000000100000       0x020 0x00A2 0b________00000010  0x__02
+      62:
+      63: 0b        0000       0x  0 0x00A3 0b________          ADD IA-           #
       64:
-      65:
+      65: 0b        0000       0x  0 0x00A4 0b________          STO_l
+      66:
+      67:
+      68:
+      69: 0b        0000       0x  0 0x00A6 0b________          LD_l              # decr X1
 ```
 
 
