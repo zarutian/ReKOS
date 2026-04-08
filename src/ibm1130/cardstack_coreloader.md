@@ -586,37 +586,37 @@ column 0: 0b000000000000       0x000 0x005D 0b00000000________
       39: 0b000000000000 x x   0x000 0x0070 0b________00000000                    # start of the type_lit_str subroutine
       40:
       41: 0b        0000       0x  0 0x0071 0b________          LD_s IA-          # store string address in X2
-      42:
-      43: 0b        0000       0x  0 0x0072 0b________          STO_l
-      44:
+      42: 0b        0000  x x  0x  0 0x0072 0b        ________
+      43: 0b        0000 x  x  0x  0 0x0072 0b________          STO_l
+      44: 0b        0000 x x   0x  0 0x0073 0b        ________
       45: 0b000000100000       0x020 0x0073 0b________          0x__02
-      46: 0b110001000000       0xC40 0x0074 0b11000100________
-      47: 0b100000000000       0x800 0x0074 0b________10000000  LD_li             # load string length and the first char into the accumulator
-      48: 0b000000000000       0x000 0x0075 0b00000000________
+      46: 0b110001000000  xx   0xC40 0x0074 0b11000100________
+      47: 0b100000000000 x  x  0x800 0x0074 0b________10000000  LD_li             # load string length and the first char into the accumulator
+      48: 0b000000000000  xx   0x000 0x0075 0b00000000________
       49: 0b011100000000       0x700 0x0075 0b________01110000
-      50: 0b        0000       0x  0 0x0076 0b        ________
-      51: 0b        0000       0x  0 0x0076 0b________          SRA_s 8           # get rid of the first char and be left with the length
-      52: 0b
+      50: 0b        0000 xxxx  0x  0 0x0076 0b        ________
+      51: 0b        0000 x x   0x  0 0x0076 0b________          SRA_s 8           # get rid of the first char and be left with the length
+      52: 0b        0000  x x
       53: 0b        0000       0x  0 0x0077 0b________          STO_l             # store it in X1
-      54:
-      55: 0b000000010000       0x010 0x0078 0b________00000001  0x__01
-      56:
+      54: 0b000000000000 x     0x000 0x0078 0b00000000________  0x00__
+      55: 0b000000010000 xxxx  0x010 0x0078 0b________00000001  0x__01
+      56: 0b        0000 x     0x  0 0x0079 0b        ________
       57: 0b        0000       0x  0 0x0079 0b________          ADD_s IA+         # incr it by one
-      58:
+      58: 0b        0000 xx    0x  0 0x007A 0b        ________
       59: 0b        0000       0x  0 0x007A 0b________          SRA_s 1           # halv it as the length is in bytes and not cells
-      60:
-      61: 0b        0000       0x  0 0x007B 0b________          ADD_s IA-         # add the subroutine return address to it
-      62:
+      60: 0b        0000 xxxx  0x  0 0x007B 0b        ________
+      61: 0b        0000 x x   0x  0 0x007B 0b________          ADD_s IA-         # add the subroutine return address to it
+      62: 0b        0000  x x  0x  0 0x007C 0b        ________
       63: 0b        0000       0x  0 0x007C 0b________          STO_s IA-         # store it as the new subroutine return address
       64: 0b010001000000       0x440 0x007D 0b01000100________
       65: 0b000000000000       0x000 0x007D 0b________00000000  BSI_l             # subroutine call to
-      66: 0b        0000       0x  0 0x007E 0b        ________                    # interrupt_level_4_setup
-      67: 0b        0000       0x  0 0x007E 0b________
-      68: 0b        0000       0x  0 0x007F 0b        ________ 
+      66: 0b        0000  xx   0x  0 0x007E 0b        ________                    # interrupt_level_4_setup
+      67: 0b        0000 x  x  0x  0 0x007E 0b________
+      68: 0b        0000  xx   0x  0 0x007F 0b        ________ 
       69: 0b        0000       0x  0 0x007F 0b________          LDX_l IA          #
-      70: 0b000000000000       0x000 0x0080 0b00000000________
-      71: 0b        0000       0x940 0x0080 0b________                            # jump forward a bit
-      72: 0b000000000000       0x000 0x0081 0b00000000________  0x00__
+      70: 0b000000000000  xx   0x000 0x0080 0b00000000________
+      71: 0b        0000 x  x  0x940 0x0080 0b________                            # jump forward a bit
+      72: 0b000000000000  xx   0x000 0x0081 0b00000000________  0x00__
       73: 0b000000010000       0x010 0x0081 0b________00000001  0x__01            # constant 1
       74: 0b        0000       0x  0 0x0082 0b        ________
       75: 0b        0000       0x  0 0x0082 0b________                            # accumulator save space
@@ -704,7 +704,7 @@ column 0: 0b000000000000       0x000 0x0084 0b00000000________
       74: 0b        0000       0x  0 0x00A9 0b        ________
       75:
       76:
-      77: 0b        0000       0x  0 0x00AA 0b________          MINUS_S IA-
+      77: 0b        0000       0x  0 0x00AA 0b________          MINUS_S IA-       # decr
       78: 0b100010000000       0x880 0x00AC 0b10001000________                    # 'B'   gets overwritten in core by sorter card 4
       79: 0b000001000000       0x040 0x00AC 0b________00000100                    # '3'   ditto
     END OF CARD
