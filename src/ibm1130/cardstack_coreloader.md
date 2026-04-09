@@ -581,7 +581,7 @@ column 0: 0b000000000000       0x000 0x005D 0b00000000________
       34: 0b        0000       0x  0 0x006E 0b        ________
       35: 0b        0000 xx    0x  0 0x006E 0b________                            # 'Y' in IBM cardcode
       36: 0b        0000       0x  0 0x006F 0b        ________
-      37: 0b        0000  x x  0x  0 0x006F 0b________          LDX_l IA
+      37: 0b        0000  x x  0x  0 0x006F 0b________          LDX_l IA          # : type_lit_str_L0
       38: 0b000000000000 x  x  0x000 0x0070 0b00000000________
       39: 0b000000000000 x x   0x000 0x0070 0b________00000000                    # start of the type_lit_str subroutine
       40:
@@ -615,7 +615,7 @@ column 0: 0b000000000000       0x000 0x005D 0b00000000________
       68: 0b        0000  xx   0x  0 0x007F 0b        ________ 
       69: 0b        0000       0x  0 0x007F 0b________          LDX_l IA          #
       70: 0b000000000000  xx   0x000 0x0080 0b00000000________
-      71: 0b        0000 x  x  0x940 0x0080 0b________                            # jump forward a bit
+      71: 0b        0000 x  x  0x940 0x0080 0b________                            # jump to intlvl4_ISR_L
       72: 0b000000000000  xx   0x000 0x0081 0b00000000________  0x00__
       73: 0b000000010000       0x010 0x0081 0b________00000001  0x__01            # constant 1
       74: 0b        0000       0x  0 0x0082 0b        ________
@@ -630,50 +630,50 @@ Sorter card 3 in format B:
 column 0: 0b000000000000       0x000 0x0084 0b00000000________
        1: 0b000000000000 x  x  0x000 0x0084 0b________00000000  NOP               #
        2: 0b        0000 x xx  0x  0 0x0085 0b        ________
-       3: 0b        0000 xx x  0x  0 0x0085 0b________          BOSC_l            # return from the interrupt
+       3: 0b        0000 xx x  0x  0 0x0085 0b________          BOSC_l            # : intlvl4_ISR_ret   return from the interrupt
        4: 0b        0000 x  x  0x  0 0x0086 0b        ________                    # interrupt level 4 vector will point here
        5: 0b        0000       0x  0 0x0086 0b________                            # also save space for IA
        6: 0b        0000       0x  0 0x0087 0b        ________
        7: 0b        0000       0x  0 0x0087 0b________          STO_s IA-         # save the interrupted accumulator
        8: 0b        0000       0x  0 0x0088 0b        ________
        9: 0b        0000       0x  0 0x0088 0b________          XIO_s IA+         # issue Sense Device to console
-      10:
+      10: 0b        0000       0x  0 0x0089 0b        ________
       11: 0b        0000       0x  0 0x0089 0b________          SLA_s 1           # shift Printer Response into Carry
-      12:
+      12: 0b        0000       0x  0 0x008A 0b        ________
       13: 0b        0000       0x  0 0x008A 0b________          BRCO_l            # BRanch if Carry is Off (or Carry is zerO)
-      14:
-      15: 0b        0000       0x  0 0x008B 0b________          branch address
-      16:
+      14: 0b        0000       0x  0 0x008B 0b        ________
+      15: 0b        0000       0x  0 0x008B 0b________          branch address    # intlvl4_ISR_L
+      16: 0b        0000       0x  0 0x008C 0b        ________
       17: 0b        0000       0x  0 0x008C 0b________          STO_l             # store the rest of the device status
       18: 0b000000100000       0x020 0x008D 0b00000010________
       19: 0b000000000000       0x000 0x008D 0b________00000000  storage address 0x0200
-      20:
+      20: 0b        0000       0x  0 0x008E 0b        ________
       21: 0b        0000       0x  0 0x008E 0b________          AND_s IA+         # and it with 0x1800 to mask off everything except the Printer Busy and Printer Not Ready bits
-      22:
+      22: 0b        0000       0x  0 0x008F 0b        ________
       23: 0b        0000       0x  0 0x008F 0b________          BRAZ_l
       24: 0b000000000000       0x000 0x0090 0b00000000________  0x00__
-      25: 0b100101000000       0x940 0x0090 0b________10010100  0x__9
-      26:
+      25: 0b100101000000       0x940 0x0090 0b________10010100  0x__94            # intlvl4_ISR_L0
+      26: 0b        0000       0x  0 0x0091 0b        ________
       27: 0b        0000       0x  0 0x0091 0b________          LDX_l IA
       28: 0b000000000000       0x000 0x0092 0b00000000________  0x00__
       29: 0b        0000       0x  0 0x0092 0b________          0x__              # 
       30: 0b000110000000       0x180 0x0093 0b00011000________  0x18__
       31: 0b000000000000       0x000 0x0093 0b________00000000  0x__00            # constant 0x1800
-      32:
-      33: 0b        0000       0x  0 0x0094 0b________          LD_li (X2+0)      # load a char pair into accumulator
+      32: 0b        0000       0x  0 0x0094 0b        ________
+      33: 0b        0000       0x  0 0x0094 0b________          LD_li (X2+0)      # : intlvl4_ISR_L0   load a char pair into accumulator
       34: 0b000000000000       0x000 0x0095 0b00000000________  0x00__
       35: 0b000000000000       0x000 0x0095 0b________00000000  0x__00
-      36:
+      36: 0b        0000       0x  0 0x0096 0b        ________
       37: 0b        0000       0x  0 0x0096 0b________          STO_l             # store where Console Write IOCC1 points to which is 0x0201
       38: 0b000000100000       0x020 0x0097 0b00000010_________ 0x02__
       39: 0b000000010000       0x010 0x0097 0b________000000001 0x__01
-      40:
+      40: 0b        0000       0x  0 0x0098 0b        _________
       41: 0b        0000       0x  0 0x0098 0b________          LD_l              # load X1 into accumulator
       42: 0b000000000000       0x000 0x0099 0b00000000_________ 0x00__
       43: 0b000000010000       0x010 0x0099 0b________000000001 0x__01
       44: 0b
       45: 0b        0000       0x  0 0x009A 0b________          BRAE_l            # BRanch if Accumulator is Even
-      46: 0b000000000000       0x000 0x009B 0b00000000________  0x00__
+      46: 0b000000000000       0x000 0x009B 0b00000000________  0x00__            # intlvl4_ISR_L1
       47: 0b101001100000       0xA60 0x009B 0b________10100110  0x__A6
       48:
       49: 0b        0000       0x  0 0x009C 0b________          LD_l              # load the char pair from 0x0201
@@ -694,16 +694,16 @@ column 0: 0b000000000000       0x000 0x0084 0b00000000________
       64:
       65: 0b        0000       0x  0 0x00A4 0b________          STO_l
       66: 0b000000000000       0x000 0x00A5 0b00000000________  0x00__
-      67: 0b000000100000       0x020 0x00A6 0b________00000010  0x__02
+      67: 0b000000100000       0x020 0x00A5 0b________00000010  0x__02
       68:
-      69: 0b        0000       0x  0 0x00A6 0b________          LD_l              # X1 -> A
+      69: 0b        0000       0x  0 0x00A6 0b________          LD_l              # : intlvl4_ISR_L1  X1 -> A
       70: 0b000000000000       0x000 0x00A7 0b00000000________  0x00__
       71: 0b000000010000       0x010 0x00A8 0b________00000001  0x__01
       72:
       73: 0b        0000       0x  0 0x00AD 0b________          BRAZ_l            # branch if the counter reached zero
       74: 0b        0000       0x  0 0x00A9 0b        ________
-      75:
-      76:
+      75: 0b
+      76: 0b        0000       0x  0 0x00AA 0b        ________                    # intlvl4_ISR_L2
       77: 0b        0000       0x  0 0x00AA 0b________          MINUS_S IA-       # decr
       78: 0b100010000000       0x880 0x00AC 0b10001000________                    # 'B'   gets overwritten in core by sorter card 4
       79: 0b000001000000       0x040 0x00AC 0b________00000100                    # '3'   ditto
@@ -721,11 +721,53 @@ column 0: 0b000000000000       0x000 0x00AC 0b00000000________
        8:
        9: 0b        0000       0x  0 0x00B0 0b________          LDX_l IA
       10: 0b
-      11: 0b        0000       0x  0 0x00B1 0b________
+      11: 0b        0000       0x  0 0x00B1 0b________                            # intlvl4_ISR_L2
       12: 0b000000100000       0x020 0x00B2 0b00000010________  0x02__            # Console Write IOCC1
       13: 0b000000010000       0x010 0x00B2 0b________00000001  0x__01
       14: 0b000010010000       0x090 0x00B3 0b00001001________  0x09__            # Console Write IOCC2
       15: 0b000000000000       0x000 0x00B3 0b________00000000  0x__00
+      16: 0b
+      17: 0b        0000       0x  0 0x00B4 0b________          LD_l              # : intlvl4_ISR_L2  load the device status back
+      18: 0b000000100000       0x020 0x00B5 0b00000010________  0x02__
+      19: 0b000000000000       0x000 0x00B5 0b________00000000  0x__00
+      20:
+      21: 0b        0000       0x  0 0x00B6 0b________          SLA_s 1           # shift Keyboard Response bit into carry
+      22:
+      23: 0b        0000       0x  0 0x00B7 0b________          BRCO_l            # branch away if it is off
+      24:
+      25: 0b        0000       0x  0 0x00B8 0b________                            # intlvl4_ISR_ret
+      26:
+      27: 0b        0000       0x  0 0x00B9 0b________          SLA_s 1           
+      28:
+      29: 0b        0000       0x  0 0x00BA 0b________          AND_s IA-         # AND it with 0x1800
+      30:
+      31: 0b        0000       0x  0 0x00BB 0b________          BRAZ_l
+      32:
+      33: 0b        0000       0x  0 0x00BC 0b________                            # intlvl4_ISR_L3
+      34:
+      35: 0b        0000       0x  0 0x00BD 0b________          LDX_l IA
+      36:
+      37: 0b        0000       0x  0 0x00BE 0b________                            # intlvl4_ISR_ret
+      38:
+      39: 0b        0000       0x  0 0x00BF 0b________          XIO_s IA+         # do Keyboard read
+      40:
+      41: 0b        0000       0x  0 0x00C0 0b________          LD_l              # load Keyboard read IOCC1 into the accumulator
+      42:
+      43:
+      44:
+      45: 0b        0000       0x  0 0x00C2 0b________          ADD_l             # incr
+      46:
+      47:
+      48:
+      49: 0b        0000       0x  0 0x00C4 0b________          STO_l             # store it back
+      50:
+      51:
+      52:
+      53: 0b        0000       0x  0 0x00C6 0b________          LDX_l IA
+      54:
+      55: 0b        0000       0x  0 0x00C7 0b________                            # intlvl4_ISR_ret
+      56:
+      57: 0b
       
 ```
 
