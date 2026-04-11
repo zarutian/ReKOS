@@ -796,12 +796,22 @@ Sorter card 5 in format B:
 column 0: 0b000000000000       0x000 0x00D3 0b00000000________
        1: 0b000000000000 x  x  0x000 0x00D3 0b________00000000  NOP               #
        2:
-       3:
+       3: 0b        0000       0x  0 0x00D4 0b________                            # the new level 4 interrupt vector
        4:
-       5:
-       6:
-       7: 0b        0000       0x  0 0x00D6
-      
+       5: 0b        0000       0x  0 0x00D5 0b________                            # the keyboard input buffer resetted pointer
+       6: 0b        0000       0x  0 0x00D6 0b        ________                    #
+       7: 0b        0000       0x  0 0x00D6 0b________          LDX_l             #
+       8: 0b000000000000       0x000 0x00D7 0b        ________
+       9: 0b000000000000       0x000 0x00D7 0b________                            # : read_and_echo_char subroutine start
+      10: 0b        0000       0x  0 0x00D8 0b        ________
+      11: 0b        0000       0x  0 0x00D8 0b________          LD_l              # fetch the keyboard input buffer pointer
+      12: 0b        0000       0x  0 0x00D9 0b        ________  0x  __
+      13: 0b        0000       0x  0 0x00D9 0b________          0x__
+      14: 0b        0000       0x  0 0x00DA 0b        ________
+      15: 0b        0000       0x  0 0x00DA 0b________          XOR_l             # xor the consumed keyboard input buffer pointer with the other one
+      16: 0b        0000       0x  0 0x00DB 0b        ________  0x  __
+      17: 0b        0000       0x  0 0x00DB 0b________          0x__
+      18: 0b        0000       0x  0 0x00DC
 ```
 
 
