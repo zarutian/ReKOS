@@ -798,7 +798,7 @@ column 0: 0b000000000000       0x000 0x00D3 0b00000000________
        2:
        3: 0b        0000       0x  0 0x00D4 0b________                            # the new level 4 interrupt vector
        4:
-       5: 0b        0000       0x  0 0x00D5 0b________                            # the keyboard input buffer resetted pointer
+       5: 0b        0000       0x  0 0x00D5 0b________                            # the consumed keyboard input buffer pointer
        6: 0b        0000       0x  0 0x00D6 0b        ________                    #
        7: 0b        0000       0x  0 0x00D6 0b________          LDX_l             #
        8: 0b000000000000       0x000 0x00D7 0b        ________
@@ -811,7 +811,34 @@ column 0: 0b000000000000       0x000 0x00D3 0b00000000________
       15: 0b        0000       0x  0 0x00DA 0b________          XOR_l             # xor the consumed keyboard input buffer pointer with the other one
       16: 0b        0000       0x  0 0x00DB 0b        ________  0x  __
       17: 0b        0000       0x  0 0x00DB 0b________          0x__
-      18: 0b        0000       0x  0 0x00DC
+      18: 0b        0000       0x  0 0x00DC 0b
+      19: 0b        0000       0x  0 0x00DC 0b________          BRAZ_l            # loopback if they are the same indicating the buffer is empty
+      20: 0b000000000000       0x000 0x00DD 0b00000000________
+      21: 0b110110000000       0xD80 0x00DD 0b________11011000
+      22: 0b        
+      23: 0b        0000       0x  0 0x00DE 0b________          LD_s IA-          # load the return address into the accumulator
+      24:
+      25: 0b        0000       0x  0 0x00DF 0b________          STO_s IA+         # patch a place down the line
+      26
+      27: 0b        0000       0x  0 0x00E0 0b________          ADD_s IA+         # incrment it
+      28:
+      29: 0b        0000       0x  0 0x00E1 0b________          STO_s IA-         # store it back
+      30:
+      31: 0b        0000       0x  0 0x00E2 0b________          LD_l              # load the consumed keyboard pointer
+      32:
+      33: 0b        0000       0x  0 0x00E3 0b________          
+      34:
+      35: 0b        0000       0x  0 0x00E4 0b________          STO_s IA+         # store a copy of it down the line
+      36:
+      37: 0b        0000       0x  0 0x00E5 0b________          ADD_s IA+         # increment it
+      38:
+      39: 0b        0000       0x  0 0x00E6 0b________          STO_l             # store it back
+      40:
+      41: 0b        0000       0x  0 0x00E7 0b________
+      42:
+      43: 0b        0000       0x  0 0x00E8 0b________          LD_l              #
+      44: 0b000000000000       0x000 0x00E9 0b00000000________
+      45: 0b000000000000       0x000 0x00E9 0b________00000000
 ```
 
 
