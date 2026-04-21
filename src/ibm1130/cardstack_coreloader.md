@@ -844,16 +844,30 @@ column 0: 0b000000000000       0x000 0x00D3 0b00000000________
 
 
 
+```js
+
+const f = (item) => "".concat(parseInt(item.slice(0,6), 2).toString(16).padStart(2, "0"), parseInt(item.slice(6), 2).toString(16).padStart(2, "0"));
+const charmap = new Map([
+
+].map([k, v] => [f(k.toString(2)), v]));
 
 const t2 = t1.split("\n").slice(1);
 const t3 = t2.map((item) => item.trimLeft().split(" "));
 const t4 = t3.map((item) => [item[0], item[2]]);
 const t5 = t4.map((item) => item[1].slice(2));
-const t6 = t5.map((item) => parseInt(item, 16).toString(2).padStart(12, "0"));
-const t7 = t6.map((item) => "".concat(parseInt(item.slice(0,6), 2).toString(16).padStart(2, "0"), parseInt(item.slice(6), 2).toString(16).padStart(2, "0")));
-const t8 = t7.reduce((acc, item) => acc.concat(item), "");
-console.log(t8);
-
+const t6 = t5.map((item) => parseInt(item, 16))
+const t7 = t6.map((item) => item.toString(2).padStart(12, "0"));
+const t8 = t7.map(f);
+const t9 = t8.map((item) => {
+  if (charmap.has(item)) {
+    return charmap.get(item);
+  } else {
+    return item;
+  }
+});
+const tA = t9.reduce((acc, item) => acc.concat(item), "");
+console.log(tA);
+```
 
 
 
