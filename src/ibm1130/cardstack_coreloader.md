@@ -848,8 +848,17 @@ column 0: 0b000000000000       0x000 0x00D3 0b00000000________
 
 const f = (item) => "".concat(parseInt(item.slice(0,6), 2).toString(16).padStart(2, "0"), parseInt(item.slice(6), 2).toString(16).padStart(2, "0"));
 const charmap = new Map([
-
-].map([k, v] => [f(k.toString(2)), v]));
+  [0x842, "%2E"],  // .
+  [0x822, "%3C"],  // <
+  [0x812, "%28"],  // (   )
+  [0x80A, "%2B"],  // +
+  [0x806, "%7C"],  // |
+  [0x800, "%26"],  // &
+  [0x482, "%21"],  // !
+  [0x442, "%24"],  // $
+  [0x082, "%3A"],  // :
+  [0x042, "%23"],  // #
+].map([k, v] => [f(k.toString(2)), "%0B".concat(v, "%0B")]));
 
 const t2 = t1.split("\n").slice(1);
 const t3 = t2.map((item) => item.trimLeft().split(" "));
