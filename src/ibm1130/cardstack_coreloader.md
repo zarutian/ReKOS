@@ -94,7 +94,9 @@ Y Q   76: 0b000000101000 0x028 0x004C 0b00000___00101000                    #   
   #   79: 0b001000000000 0x200 0x004F 0b00100___00000000                    # '0'                                                 # gets replaced by loader card 1
     END OF CARD
 ```
-[![Loader card A0](./LoaderCard_A0.png)](https://www.masswerk.at/keypunch/?q=%0B0306040A353E3A0B3409313B)
+[![Loader card A0](./LoaderCard_A0.png)](https://www.masswerk.at/keypunch/?q=%0B3006040a353e3a0b3409313b183400010014000f000f00100034001013001100180e1008313e13000012353b021630152128341330143f2b341212041812300e2527340c34042524340534073000240006083e0020203400201018120034002100001001313e13003b1c351b31073b3b353731073b2b352a31043b2b352a35013b2a352930060405370304023402312804093525020018120028000024000800)
+
+(0306040A353E3A0B3409313B)
 
 ```txt
 Loader card 1 in format B:
@@ -845,7 +847,14 @@ column 0: 0b000000000000       0x000 0x00D3 0b00000000________
 
 
 
-
+const t2 = t1.split("\n").slice(1);
+const t3 = t2.map((item) => item.trimLeft().split(" "));
+const t4 = t3.map((item) => [item[0], item[2]]);
+const t5 = t4.map((item) => item[1].slice(2));
+const t6 = t5.map((item) => parseInt(item, 16).toString(2).padStart(12, "0"));
+const t7 = t6.map((item) => "".concat(parseInt(item.slice(0,6), 2).toString(16).padStart(2, "0"), parseInt(item.slice(6), 2).toString(16).padStart(2, "0")));
+const t8 = t7.reduce((acc, item) => acc.concat(item), "");
+console.log(t8);
 
 
 
