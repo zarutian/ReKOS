@@ -82,21 +82,19 @@ column 0: 0b110000000110 0xC06 0x0000 0b11000___00000110  LD_s  IA+6        # lo
       67: 0b000100000101 0x105 0x0043 0b00010___00000101  SLA_s 5           # shift it left 5 bit places                          # gets replaced by loader card 1
       68: 0b110111000011 0xDC3 0x0044 0b11101___11000011  OR_s  IA-0x3D     # or it with constant 1 ( 0x44 - 0x07 = 0x3D )        # gets replaced by loader card 1
       69: 0b000100000010 0x102 0x0045 0b00010___00000010  SLA_s 2           # shift it left 2 bit places                          # gets replaced by loader card 1
-U C I 70: 0b110100000010 0xD02 0x0046 0b11010___00000010  STO_s IA+2        # store it back                                       # gets replaced by loader card 1
-S A N 71: 0b110001101000 0xC68 0x0047 0b11000___11101000  LD_s  IA-0x18     # load from 0x002F ( 0x47 - 0x2F = 0x40 - 0x29 = 0x20 - 0x09 = 0x18 )
-U R   72: 0b000100001001 0x109 0x0048 0b00010___00001001  SLA_s 9           # shift it left 9 bit places                          # gets replaced by loader card 1
-A D I 73: 0b110101100101 0xD65 0x0049 0b11010___11100101  STO_s IA-0x1B     # store it back                                       # gets replaced by loader card 1
-L S B 74: 0b000010000000 0x080 0x004A 0b00001___00000000  XIO_s IA+0        # do XIO Control Start Read IOCC2                     # gets replaced by loader card 1
-L E M 75: 0b011000010010 0x612 0x004B 0b01100___00010010  LDX_s IA = 12     # try to return from an never happened interrupt      # gets replaced by loader card 1
-Y Q   76: 0b000000101000 0x028 0x004C 0b00000___00101000                    #                                                     # gets replaced by loader card 1
+      70: 0b110100000010 0xD02 0x0046 0b11010___00000010  STO_s IA+2        # store it back                                       # gets replaced by loader card 1
+      71: 0b110001101000 0xC68 0x0047 0b11000___11101000  LD_s  IA-0x18     # load from 0x002F ( 0x47 - 0x2F = 0x40 - 0x29 = 0x20 - 0x09 = 0x18 )
+      72: 0b000100001001 0x109 0x0048 0b00010___00001001  SLA_s 9           # shift it left 9 bit places                          # gets replaced by loader card 1
+      73: 0b110101100101 0xD65 0x0049 0b11010___11100101  STO_s IA-0x1B     # store it back                                       # gets replaced by loader card 1
+      74: 0b000010000000 0x080 0x004A 0b00001___00000000  XIO_s IA+0        # do XIO Control Start Read IOCC2                     # gets replaced by loader card 1
+      75: 0b011000010010 0x612 0x004B 0b01100___00010010  LDX_s IA = 12     # try to return from an never happened interrupt      # gets replaced by loader card 1
+      76: 0b000000101000 0x028 0x004C 0b00000___00101000                    #                                                     # gets replaced by loader card 1
       77: 0b000000000000 0x000 0x004D 0b00000___00000000                    #                                                     # gets replaced by loader card 1
       78: 0b100100000000 0x900 0x004E 0b10010___00000000                    # 'A'                                                 # gets replaced by loader card 1
-  #   79: 0b001000000000 0x200 0x004F 0b00100___00000000                    # '0'                                                 # gets replaced by loader card 1
+      79: 0b001000000000 0x200 0x004F 0b00100___00000000                    # '0'                                                 # gets replaced by loader card 1
     END OF CARD
 ```
 [![Loader card A0](./loader_cardA0.png)](https://www.masswerk.at/keypunch/?q=%0B3006040a353e3a0b3409313b183400010014000f000f00100034001013001100180e1008313e13000012353b021630152128341330143f2b341212041812300e2527340c34042524340534073000240006083e0020203400201018120034002100001001313e13003b1c351b31073b3b353731073b2b352a31043b2b352a35013b2a352930060405370304023402312804093525020018120028000024000800)
-
-(0306040A353E3A0B3409313B)
 
 ```txt
 Loader card 1 in format B:
