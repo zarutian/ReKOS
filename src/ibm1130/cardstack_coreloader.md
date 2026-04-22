@@ -876,6 +876,9 @@ const charmap = new Map([
   [0xA80, "b"],
   [0xA40, "c"],
   [0xA20, "d"],
+  [0xA10, "e"],
+  [0xA08, "f"],
+  [0xA04, "g"],
 ].map([k, v] => [f(k.toString(2)), "%0B".concat(v, "%0B")]));
 
 const t2 = t1.split("\n").slice(1);
@@ -893,7 +896,8 @@ const t9 = t8.map((item) => {
   }
 });
 const tA = t9.reduce((acc, item) => acc.concat(item), "");
-console.log(tA);
+const tB = tA.replaceAll("%0B%0B", "");
+console.log(tB);
 ```
 
 
