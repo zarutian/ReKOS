@@ -879,6 +879,14 @@ const charmap = new Map([
   [0xA10, "e"],
   [0xA08, "f"],
   [0xA04, "g"],
+  [0xA02, "h"],
+  [0xA01, "i"],
+  [0xD00, "j"],
+  [0xC80, "k"],
+  [0xC40, "l"],
+  [0xC20, "m"],
+  [0xC10, "n"],
+  [0xC08, "o"],
 ].map([k, v] => [f(k.toString(2)), "%0B".concat(v, "%0B")]));
 
 const t2 = t1.split("\n").slice(1);
