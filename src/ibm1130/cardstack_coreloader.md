@@ -925,7 +925,7 @@ const charmap = new Map([
   [0x202, "Y"],
   [0x201, "Z"],
   [0x200, "0"],
-  [0x100, "1'],
+  [0x100, "1"],
   [0x080, "2"],
   [0x040, "3"],
   [0x020, "4"],
@@ -934,7 +934,7 @@ const charmap = new Map([
   [0x004, "7"],
   [0x002, "8"],
   [0x001, "9"]
-].map([k, v] => [f(k.toString(2)), "%0B".concat(v, "%0B")]));
+].map(([k, v]) => [f(k.toString(2)), "%0B".concat(v, "%0B")]));
 
 const t2 = t1.split("\n").slice(1);
 const t3 = t2.map((item) => item.trimLeft().split(" "));
