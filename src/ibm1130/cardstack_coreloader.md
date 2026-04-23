@@ -841,7 +841,16 @@ column 0: 0b000000000000       0x000 0x00D3 0b00000000________
       45: 0b000000000000       0x000 0x00E9 0b________00000000
 ```
 
-
+      CDS card types, word 3, first byte:
+      0b0000_0001  Mainline Header Card absolute
+      0b0000_0010  Mainline Header Card relocatable
+      0b0000_0011  Subroutine Header Card   LIBF callable only
+      0b0000_0100  Subroutine Header Card   CALL callable only
+      0b0000_0101  Interrupt Service Subroutine Header Card    LIBF callable only
+      0b0000_0110  Interrupt Service Subroutine Header Card    CALL callable only
+      0b0000_0111  Interrupt Level   Subroutine
+      0b0000_1010  Data Card
+      0b0000_1111  End Of Program Card
 
 
 ```js
