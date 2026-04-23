@@ -455,6 +455,45 @@ C:
      AAAA AAAA AAAA BBBB
      BBBB BBBB CCCC CCCC
      CCCC DDDD DDDD DDDD
+
+D:  The UnitMachinesCompatible Assembler/memory-image format
+    all columns in IBM card code
+columns   1-4: <blank or TBD>
+columns   5-8: memory address in hex (0-1 or A-F), can be blank at certain stages of assembly
+column      9: <always blank space>
+columns 10-13: memory data in hex, can be blank at certain stages of assembly
+column     14: <always blank space>
+column     15: type char, see below
+column     16: <always blank space>
+columns 17-27: symbol, left justifyed, rest blank filled
+column     28: <always blank space>
+columns 29-71: comments, remarks, etc
+column     72: <always blank space>
+columns 73-80: card sequence number (acts like a line number)
+
+type chars:
+  D  the card is a symbol definition. The memory address is the value of the symbol.
+  R  the card is a symbol reference.  The memory data should be, at end of assembly be the value of the symbol.
+
+To assemble:
+  1. first ensure the carddeck is sorted by card sequence number
+  2. pick an origin address. 0x0200 is popular.
+  3. punch that as the memory address on the card.
+  4. after each R card increase the address by one.
+  5. repete from step 3. until you run out of the carddeck
+  6. add in the FCPU-16 instructions definitions deck
+  7. sort the deck by columns 15-27.
+     Each subdeck by symbol should start with a D card followed by R cards with the same symbol.
+  8. for each such subdeck take the memory address of the D card and punch it into the memory data columns of the R cards.
+  9. optionally, sort the whole carddeck by card sequence number.
+
+To get a symbol table from an assembled deck:
+  1. sort out the D cards into a seperate deck
+  2.  sort that deck by symbol
+
+To load it into an ibm1130 or ibm1800 be sure to use apropos loader carddeck in front.
+  Optionally, sort by memory address before combing the asdembled carddeck and the loader carddeck.
+
 ```
 
 [Empty but marked B format punchcard](https://www.masswerk.at/keypunch/?b=DCA2OQwMNjg5DAw2NzkMDDY5DCAMNzg5DAw2OAwMNzg5DCAMNjc4OQwMNjgMDDc5DCAMNzg5NgwMOQwMNjc4OQwgDDYMDDY3ODkMDDYMIAw2OQwMNzg5NgwMNjkMIAw3ODkMDDY4DAw3ODkMIAw2Nzg5DAw3DAw4DAw2Nzg5DCAMNjcMIAw3OQwMNjkMDDY4DCAgIAw2Nzg5DAw5DAw5DCAMNzgMDDY5DAw3OAwgDDc4OQwMNjgMDDc4OQwgDDY3ODkMDDY5DAw3OAwgDDY3DCAMNjc4OQwMNjgMDDc5)
