@@ -1,4 +1,5 @@
-const src = `
+import { src as utf8_src } from "./zeForth_utf8.js";
+const src = utf8_src.concat(`
   # a bit unrelated but wanted to save this from a handwritten note.
 
   :f 3NIP
@@ -46,6 +47,51 @@ const src = `
   .dhw Tcl_list_first_sub0 # ( addr bralvl brclvl inquote addr' )
   .dhw 2NIP                # ( addr addr' )
   .dhw OVER MINUS          # ( addr len' )
+  .dhw EXIT
+
+  # BYTESTR_PREFIX?
+  # ( hay_addr hay_maxlen needle_addr needle_len -- needle_len T | F )
+
+  :f Tcl_const_str_backslash
+  # ( -- addr len )
+  .dhw ($|")
+  .utf8_hwc "\\"
+  .dhw EXIT
+
+  :f Tcl_const_str_doublequote
+  # ( -- addr len )
+  .dhw ($|")
+  .utf8_hwc "\""
+  .dhw EXIT
+
+  :f Tcl_const_str_leftsquarebracket
+  # ( -- addr len )
+  .dhw ($|")
+  .utf8_hwc "["
+  .dhw EXIT
+
+  :f Tcl_const_str_rightsquarebracket
+  # ( -- addr len )
+  .dhw ($|")
+  .utf8_hwc "]"
+  .dhw EXIT
+
+  :f Tcl_const_str_leftcurlybracket
+  # ( -- addr len )
+  .dhw ($|")
+  .utf8_hwc "{"
+  .dhw EXIT
+
+  :f Tcl_const_str_rightcurlybracket
+  # ( -- addr len )
+  .dhw ($|")
+  .utf8_hwc "}"
+  .dhw EXIT
+
+  :f Tcl_const_str_newline
+  # ( -- addr len )
+  .dhw ($|")
+  .utf8_hwc "\n"
   .dhw EXIT
 
   :f Tcl_list_first_sub0
@@ -212,5 +258,5 @@ const src = `
   : Tcl_simple_foreach_L1
   .dhw (JMP) 4DROP
   
-`;
+`);
 export { src };
