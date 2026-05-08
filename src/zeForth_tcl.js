@@ -39,6 +39,21 @@ const src = utf8_src.concat(`
   .dhw R> R> # ( d a b c ) R:( )
   .dhw EXIT
 
+  :f 2R@
+  # ( -- a b ) R:( b a -- b a )
+  .dhw R>    # ( ra ) R:( b a )
+  .dhw R>    # ( ra a ) R:( b )
+  .dhw R>    # ( ra a b ) R:( )
+  .dhw ROT   # ( a b ra ) R:( )
+  .dhw >R    # ( a b ) R:( ra )
+  .dhw 2DUP  # ( a b a b ) R:( ra )
+  .dhw R>    # ( a b a b ra ) R:( )
+  .dhw -ROT  # ( a b ra a b ) R:( )
+  .dhw >R    # ( a b ra a ) R:( b )
+  .dhw >R    # ( a b ra ) R:( b a )
+  .dhw >R    # ( a b ) R:( b a ra )
+  .dhw EXIT  # ( a b ) R:( b a )
+
   :f Tcl_list_first
   # ( addr len -- addr len' )
   # Takes an ASCII string and returns the first 'word' of it per Tcl parsing rules
@@ -104,15 +119,19 @@ const src = utf8_src.concat(`
   .dhw LIT_FALSE SWAP      # ( bracer bralvl brclvl inquote addr ) R:( len )
   .dhw (JMP) Tcl_list_first_sub0_L1
   : Tcl_list_first_sub0_L0
-  .dhw DUP >R              # ( bracer bralvl brclvl inquote addr ) R:( len addr )
-  .dhw C@                  # ( bracer bralvl brclvl inquote addr char ) R:( len addr )
-  .dhw DUP LIT_'\\' =      # ( bracer bralvl brclvl inquote char flag ) R:( len addr )
-  .dhw INVERT              # ( bracer bralvl brclvl inquote char ~flag ) R:( len addr )
-  .dhw (BRZ) Tcl_list_first_sub0_L2
+  .dhw R>                  # ( bracer bralvl brclvl inquote addr len ) R:( )
+  .dhw 2DUP                # ( bracer bralvl brclvl inquote addr len addr len ) R:( )
+  .dhw >R >R               # ( bracer bralvl brclvl inquote addr len ) R:( len addr )
+  .dhw Tcl_const_str_backslash # ( bracer bralvl brclvl inquote hay_addr hay_len needle_addr needle_len ) R:( len addr )
+  .dhw BYTESTR_PREFIX?     # ( bracer bralvl brclvl inquote ( needle_len T | F ) ) R:( len addr )
+  .dhw INVERT (BRZ) Tcl_list_first_sub0_L2
+  .dhw 2R@ -merkill-
+  
   .dhw DUP LIT_'"' =       # ( bracer bralvl brclvl inquote char flag ) R:( len addr )
   .dhw (BRZ) Tcl_list_first_sub0_L3
   .dhw SWAP INVERT SWAP    # ( bracer bralvl brclvl inquote' char ) R:( len addr )
   .dhw (JMP) Tcl_list_first_sub0_L2
+  
   : Tcl_list_first_sub0_L3
   .dhw OVER                # ( bracer bralvl brclvl inquote char inquote ) R:( len addr )
   .dhw (BRZ) Tcl_list_first_sub0_L2
