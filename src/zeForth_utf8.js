@@ -141,6 +141,29 @@ const src = `
   .dhw (NEXT) BYTESTR=_L1
   .dhw >R 2DROP R> EXIT
 
+  :f BYTESTR_PREFIX?
+  # ( hay_addr hay_maxlen needle_addr needle_len -- needle_len T | F )
+  .dhw ROT    # ( ha na nl hml )
+  .dhw 2DUP   # ( ha na nl hml nl hml )
+  .dhw SWAP   # ( ha na nl hml hml nl )
+  .dhw <      # ( ha na nl hml bool )
+  .dhw (BRZ)  # ( ha na nl hml )
+  .dhw BYTESTR_PREFIX?_L0
+  .dhw 4DROP  # ( )
+  .dhw (JMP)
+  .dhw FALSE
+  : BYTESTR_PREFIX?_L0
+  .dhw DROP   # ( ha na nl )
+  .dhw TUCK   # ( ha nl na nl )
+  .dhw DUP    # ( ha nl na nl nl )
+  .dhw >R     # ( ha nl na nl ) R:( nl )
+  .dhw BYTESTR= # ( bool ) R:( nl )
+  .dhw (BRZ)  # ( ) R:( nl )
+  .dhw RDROP
+  .dhw R>     # ( nl ) R:( )
+  .dhw (JMP)
+  .dhw TRUE
+
   :f 4DROP
   # ( a b c d -- )
   .dhw 2DROP 2DROP EXIT
