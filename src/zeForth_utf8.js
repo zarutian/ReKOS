@@ -109,7 +109,7 @@ const src = `
   # getur verið að eftirfarandi sé tvítekið og til annarstaðar? -Zarutian
   :f BYTESTR=
   # ( A_addr A_len B_addr B_len -- bool )
-  # note: this leaks the fact of A_len and B_len being of equal length or not
+  # note: this timing-leaks the fact of A_len and B_len being of equal length or not
   .dhw ROT    # ( A_addr B_addr B_len A_len )
   .dhw 2DUP   #
   .dhw =      #
