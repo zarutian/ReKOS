@@ -125,10 +125,17 @@ const src = utf8_src.concat(`
   .dhw Tcl_const_str_backslash # ( bracer bralvl brclvl inquote hay_addr hay_len needle_addr needle_len ) R:( len addr )
   .dhw BYTESTR_PREFIX?     # ( bracer bralvl brclvl inquote ( needle_len T | F ) ) R:( len addr )
   .dhw INVERT (BRZ) Tcl_list_first_sub0_L2
-  .dhw 2R@ -merkill-
-  
-  .dhw DUP LIT_'"' =       # ( bracer bralvl brclvl inquote char flag ) R:( len addr )
+  .dhw 2R@                 # ( bracer bralvl brclvl inquote addr len ) R:( len addr )
+  .dhw Tcl_const_str_doublequote # ( bracer bralvl brclvl inquote hay_addr hay_len needle_addr needle_len ) R:( len addr )
+  .dhw BYTESTR_PREFIX?     # ( bracer bralvl brclvl inquote ( needle_len T | F ) ) R:( len addr )
   .dhw (BRZ) Tcl_list_first_sub0_L3
+  .dhw DUP                 # ( bracer bralvl brclvl inquote needle_len needle_len ) R:( len addr )
+  .dhw R>                  # ( bracer bralvl brclvl inquote needle_len needle_len addr ) R:( len )
+  .dhw +                   # ( bracer bralvl brclvl inquote needle_len addr+n ) R:( len )
+  .dhw SWAP                # ( bracer bralvl brclvl inquote addr+n needle_len ) R:( len )
+  .dhw R> SWAP             # ( bracer bralvl brclvl inquote addr+n len needle_len ) R:( )
+  .dhw -                   # ( bracer bralvl brclvl inquote addr+n len-n ) R:( )
+    -merkill-
   .dhw SWAP INVERT SWAP    # ( bracer bralvl brclvl inquote' char ) R:( len addr )
   .dhw (JMP) Tcl_list_first_sub0_L2
   
