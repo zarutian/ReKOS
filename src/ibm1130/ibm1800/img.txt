@@ -751,38 +751,38 @@ ADDR DATA IBM1800
 04AD
 04AE      (LUT)       : ASCII_2_EBDIC&CONSOLE_PTRTCODE_LUT ( idx -- val )
 04AF 0080 128
-04B0 __00 NUL
-04B1 __00 SOH
-04B2 __00 STX
-04B3 __00 ETX
-04B4 __00 EOT
-04B5 __00 ENQ
-04B6 __00 ACK
-04B7 __00 BEL
+04B0 __FF NUL
+04B1 __FF SOH
+04B2 __FF STX
+04B3 __FF ETX
+04B4 __FF EOT
+04B5 __FF ENQ
+04B6 __FF ACK
+04B7 __FF BEL
 04B8 __11 BS   backspace
 04B9 __41 TAB  horizational tab
 04BA __03 NL   new line
-04BB __00 VT   vertical tab
-04BC __00 FF   form feed (new page)
-04BD __00 CR
+04BB __FF VT   vertical tab
+04BC __FF FF   form feed (new page)
+04BD __FF CR
 04BE __05 SO   Shift Out (shift to black on console printer)
 04BF __09 SI   Shift In  (shift to red on console printer)
-04C0 __00 DLE
-04C1 __00 DC1
-04C2 __00 DC2
-04C3 __00 DC3
-04C4 __00 DC4
-04C5 __00 NAK
-04C6 __00 SYN
-04C7 __00 ETB
-04C8 __00 CAN
-04C9 __00 EM
-04CA __00 SUB
-04CB __00 ESC
-04CC __00 FS
-04CD __00 GS
-04CE __00 RS
-04CF __00 US
+04C0 __FF DLE
+04C1 __FF DC1
+04C2 __FF DC2
+04C3 __FF DC3
+04C4 __FF DC4
+04C5 __FF NAK
+04C6 __FF SYN
+04C7 __FF ETB
+04C8 __FF CAN
+04C9 __FF EM
+04CA __FF SUB
+04CB __FF ESC
+04CC __FF FS
+04CD __FF GS
+04CE __FF RS
+04CF __FF US
 04D0 __21 Space  
 04D1 __42 !
 04D2 __E2 "
@@ -842,12 +842,12 @@ ADDR DATA IBM1800
 0508 __96 X
 0509 __A6 Y
 050A __A2 Z
-050B __00 [
-050C __00 \
-050D __00 ]
-050E __00 ^
+050B __FF [
+050C __FF \
+050D __FF ]
+050E __FF ^
 050F __BE _
-0510 __00 `
+0510 __FF `
 0511 __3C a
 0512 __18 b
 0513 __1C c
@@ -874,9 +874,9 @@ ADDR DATA IBM1800
 0508 __94 x
 0509 __A4 y
 050A __A0 z
-050B __00 {
+050B __FF {
 050C __C6 |
-050D __00 }
-050E __00 ~
-050F __00 DEL
+050D __FF }
+050E __FF ~
+050F __FF DEL
 
