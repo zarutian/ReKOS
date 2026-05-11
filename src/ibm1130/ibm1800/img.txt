@@ -725,3 +725,125 @@ ADDR DATA IBM1800
 0493      SWAP        : >
 0494      <
 0495      EXIT
+0496      LIT_8       : BYTEXCHNG ( cell -- llce )
+0497      <<>
+0498 000F EXIT
+0499      (CONST)     : LIT_8
+049A 0008
+049B      (CONST)     : LIT_0xFF
+049C 00FF
+049D      LIT_0xFF    : 0xFF&
+049E 0002 &
+049F 000F EXIT
+04A0      0xFF&       : ASCII_2_CONSOLE_PRTRCODE ( ascii -- prtrcode )
+04A1      (LIT)
+04A2      error_handler 
+04A3 000A SWAP 
+04A4      ASCII_2_EBDIC&CONSOLE_PTRTCODE_LUT
+04A5      NIP
+04A6      0xFF&
+04A7      BYTEXCHNG
+04A8 000F EXIT
+04A9 000A SWAP        : NIP ( a b -- b )
+04AA 0009 DROP
+04AB 000F EXIT
+04AC      (CONST)
+04AD
+04AE      (LUT)       : ASCII_2_EBDIC&CONSOLE_PTRTCODE_LUT ( error_handler idx -- error_handler val )
+04AF 0080 128
+04B0 __00 NUL
+04B1 __01 SOH
+04B2 __02 STX
+04B3 __03 ETX
+04B4 __00 EOT
+04B5 __00 ENQ
+04B6 __00 ACK
+04B7 __00 BEL
+04B8 __11 BS   backspace
+04B9 __41 TAB  horizational tab
+04BA __03 NL   new line
+04BB __00 VT   vertical tab
+04BC __00 FF   form feed (new page)
+04BD __00 CR
+04BE __05 SO   Shift Out (shift to black on console printer)
+04BF __09 SI   Shift In  (shift to red on console printer)
+04C0 __00 DLE
+04C1 __00 DC1
+04C2 __00 DC2
+04C3 __00 DC3
+04C4 __00 DC4
+04C5 __00 NAK
+04C6 __00 SYN
+04C7 __00 ETB
+04C8 __00 CAN
+04C9 __00 EM
+04CA __00 SUB
+04CB __00 ESC
+04CC __00 FS
+04CD __00 GS
+04CE __00 RS
+04CF __00 US
+04D0 __21 Space  
+04D1 __42 !
+04D2 __E2 "
+04D3 __C0 #
+04D4 __40 $
+04D5 __06 %
+04D6 __44 &
+04D7 __E6 '
+04D8 __FE (
+04D9 __F6 )
+04DA __D6 *
+  .dhw 0xDA00 # 0x021C 0xDA00   +                0b1101_1010
+  .dhw 0x8000 # 0x021D 0x8000   ,                0b1000_0000
+  .dhw 0x8400 # 0x021E 0x8400   -                0b1000_0100
+  .dhw 0x0000 # 0x021F 0x0000   .                0b0000_0000
+  .dhw 0xBC00 # 0x0220 0xBC00   /                0b1011_1100
+  .dhw 0xC400 # 0x0221 0xC400   0                0b1100_0100
+  .dhw 0xFC00 # 0x0222 0xFC00   1                0b1111_1100
+  .dhw 0xD800 # 0x0223 0xD800   2                0b1101_1000
+  .dhw 0xDC00 # 0x0224 0xDC00   3                0b1101_1100
+  .dhw 0xF000 # 0x0225 0xF000   4                0b1111_0000
+  .dhw 0xF400 # 0x0226 0xF400   5                0b1111_0100
+  .dhw 0xD000 # 0x0227 0xD000   6                0b1101_0000
+  .dhw 0xD400 # 0x0228 0xD400   7                0b1101_0100
+  .dhw 0xE400 # 0x0229 0xE400   8                0b1110_0100
+  .dhw 0xE000 # 0x022A 0xE000   9                0b1110_0000
+  .dhw 0x8200 # 0x022B 0x8200   :                0b1000_0010
+  .dhw 0xD200 # 0x022C 0xD200   ;                0b1101_0010
+  .dhw 0xDE00 # 0x022D 0xDE00   <                0b1101_1110
+  .dhw 0xC200 # 0x022E 0xC200   =                0b1100_0010
+  .dhw 0x4600 # 0x022F 0x4600   >                0b0100_0110
+  .dhw 0x8600 # 0x0230 0x8600   ?                0b1000_0110
+  .dhw 0x0400 # 0x0231 0x0400   @                0b0100_0000
+  .dhw 0x3E00 # 0x0232 0x3E00   A                0b0011_1110
+  .dhw 0x1A00 # 0x0233 0x1A00   B                0b0001_1010
+  .dhw 0x1E00 # 0x0234 0x1E00   C                0b0001_1110
+  .dhw 0x3200 # 0x0235 0x3200   D                0b0011_0010
+  .dhw 0x3600 # 0x0236 0x3600   E                0b0011_0110
+  .dhw 0x1200 # 0x0237 0x1200   F                0b0001_0010
+  .dhw 0x1600 # 0x0238 0x1600   G                0b0001_0110
+  .dhw 0x2600 # 0x0239 0x2600   H                0b0010_0110
+  .dhw 0x2200 # 0x023A 0x2200   I                0b0010_0010
+  .dhw 0xCE00 # 0x023B 0xCE00   J                0b1100_1110
+  .dhw 0x5A00 # 0x023C 0x5A00   K                0b0101_1010
+  .dhw 0x5E00 # 0x023D 0x5E00   L                0b0101_1110
+  .dhw 0x7200 # 0x023E 0x7200   M                0b0111_0010
+  .dhw 0x7600 # 0x023F 0x7600   N                0b0111_0110
+  .dhw 0x5200 # 0x0240 0x5200   O                0b0101_0010
+  .dhw 0x5600 # 0x0241 0x5600   P                0b0101_0110
+  .dhw 0x6600 # 0x0242 0x6600   Q                0b0110_0110
+  .dhw 0x6200 # 0x0243 0x6200   R                0b0110_0010
+  .dhw 0x9A00 # 0x0244 0x9A00   S                0b1001_1010
+  .dhw 0x9E00 # 0x0245 0x9E00   T                0b1001_1110
+  .dhw 0xB200 # 0x0246 0xB200   U                0b1011_0010
+  .dhw 0xB600 # 0x0247 0xB600   V                0b1011_0110
+  .dhw 0x9200 # 0x0248 0x9200   W                0b1001_0010
+  .dhw 0x9600 # 0x0249 0x9600   X                0b1001_0110
+  .dhw 0xA600 # 0x024A 0xA600   Y                0b1010_0110
+  .dhw 0xA200 # 0x024B 0xA200   Z
+
+
+04AC 000A SWAP        : TUCK ( a b -- b a b )
+04AD      OVER
+04AE 000F EXIT
