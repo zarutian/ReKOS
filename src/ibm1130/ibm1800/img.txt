@@ -462,7 +462,7 @@ ADDR DATA IBM1800
 038B      LDD_s I+D+_L0
 038C      ADDD_s I+D+_L2
 038D      STD_s I+D+_L0
-038E      LD_s I+D+_L0
+038E      LD_s I+D+_L0 :F_PRIM_COMMON5
 038F      STO_s XR2-4
 0390      LD_s I+D+_L1
 0391      STO_s XR2-3
@@ -473,7 +473,29 @@ ADDR DATA IBM1800
 0396 xxxx D+_L2
 0397 xxxx D+_L3
 0398      (IBM1800)    :* ( a b -- pu pl )
-0399
-          (IBM1800)    :/% ( dividend divisor -- reminder quotent )
+0399      LD_s XR2-2
+039A      MULT_s XR2-1
+039B      STD_s-D+_L0
+039C      LD_s I-D+_L0
+039D      STO_s XR2-2
+039E      LD_s I-D+_L0
+039F      STO_s XR2-1
+03A0      BSC_l any cond
+03A1 028E F_INNER
+03A2      (IBM1800)    :D/% ( dividendu dividenl divisor -- reminder quotent )
+03A3      LD_s XR2-3
+03A4      STO_s I-D+_L0
+03A5      LD_s XR2-2
+03A6      STO_s I-D+_L1
+03A7      LDD_s I-D+_L0
+03A8      DIV_s XR2-1
+03A9      STD_s I-D+_L0
+03AA      LD_l
+03AB 0002 XR2
+03AC      ADD_s I-const_1
+03AD      STO_l
+03AE 0002 XR2
+03AF      BSC_l any cond
+03B0 038E F_PRIM_COMMON5
 
 
