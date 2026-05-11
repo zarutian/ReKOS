@@ -695,3 +695,33 @@ ADDR DATA IBM1800
 0475      NIP
 0476      (JMP)
 0477      (LUT)_L0
+0478      (CONST)      : TRUE ( -- T )
+0479 FFFF
+047A      (CONST)      : FALSE ( -- F )  : ZERO ( -- 0 )
+047B 0000
+047C      (BRZ)        : CLEANBOOL ( dirty -- clean (
+047D      FALSE
+047E      (JMP)
+047F      TRUE
+0480      TRUE         : NOT ( bool -- ~bool )
+0481 0003 ⨁
+0482 000F EXIT
+0483 0003 ⨁           : ~= ( a b -- bool )
+0484      (JMP)
+0485      CLEANBOOL
+0486 000F EXIT
+0487      ~=          : = ( a b -- bool )
+0488      (JMP)
+0489      NOT
+048A      (CONST)     : LIT_0x8000 ( -- 0x8000 )
+048B 8000
+048C      LIT_0x8000  : 0< ( n -- bool )
+048D 0002 &
+048E      (JMP)
+048F      CLEANBOOL
+0490      -           : <  ( a b -- bool )
+0491      0<
+0492 000F EXIT
+0493      SWAP        : >
+0494      <
+0495      EXIT
