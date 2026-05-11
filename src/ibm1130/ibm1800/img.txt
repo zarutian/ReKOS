@@ -227,30 +227,78 @@ ADDR DATA IBM1800
 029E      BSC_l any condition
 02A0 028E F_INNER
 02A1      LD_s XR1 + 0
-02A2      ADD_s I+
-02A3      STO_s I+1
-02A4      LDX_l I
-02A5 xxxx
-02A6      (CONST)
-02A7 0001
-02A8      (CONST)
-02A9 FFF0 opmask
-02AA      (VAR)
-02AB 0010
-02AC 028E NOP  :F_PRIM_TBL
-02AD      +
-02AE      &
-02AF      ⨁
-02B0      1<<>
-02B1      1+
-02B2      @
-02B3      !
-02B4      DUP
-02B5      DROP
-02B6      SWAP
-02B7      SKZ
-02B8      >R
-02B9      R>
-02BA      EXT
-02BB      EXIT
+02A2      ADD_s I+F_PRIM_TBL
+02A3      STO_s I+6
+02A4      LD_l
+02A5 0001
+02A6      ADD_s I+const_1
+02A7      STO_l
+02A8 0001
+02A9      LDX_l I
+02AA xxxx
+02AB      (CONST)
+02AC 0001
+02AD      (CONST)
+02AE FFF0 opmask
+02AF      (VAR)
+02B0 028E NOP  :F_PRIM_TBL
+02B1      +
+02B2      &
+02B3      ⨁
+02B4      1<<>
+02B5      1+
+02B6      @
+02B7      !
+02B8      DUP
+02B9      DROP
+02BA      SWAP
+02BB      SKZ
+02BC      >R
+02BD      R>
+02BE      EXT
+02BF      EXIT
+02C0      LD_s XR2-1   :1+
+02C2      ADD_s I-const_1
+02C3      STO_s XR2-1  :F_PRIM_COMMON2
+02C4      BSC_l any condition
+02C5 028E F_INNER
+02C6      LD_s XR2-2   :+
+02C7      ADD_s XR2-1
+02C8      STO_s XR2-2  :F_PRIM_COMMON1
+02C9      LD_l         :DROP
+02CA 0002 XR2
+02CB      SUBT_s I-const_1
+02CC      STO_l
+02CD 0002 XR2
+02CE      BSC_l any condition
+02CF 028E F_INNER
+02D0      LD_s XR2-2   :⨁
+02D2      EOR_s XR2-1
+02D3      BSC_l any condition
+02D4 02C8 F_PRIM_COMMON1
+02D5      LD_s XR2-1   :1<<>
+02D6      SRA 15
+02D7      STO_s XR2+0
+02D8      LD_s XR2-1
+02D9      SLA 1
+02DA      OR_s XR2+0
+02DB      BSC_l any cond
+02DC 02C3 F_PRIM_COMMON2
+02DD      LD_s XR2-2   :&
+02DE      AND_s XR-1
+02DF      BSC_l any condition
+02E0 02C8 F_PRIM_COMMON1
+02E1      LD_s XR2-1   :@
+02E2      STO_s I+1
+02E3      LD_l
+02E4 xxxx
+02E5      BSC_l any condition
+02E6 02C3 F_PRIM_COMMON2
+02E3      LD_s XR2-1   :!
+02E4      STO_s I+2
+02E5      LD_s XR2-2
+02E6      STO_l
+02E7 xxxx
+02E8      BSC_l any condition
+02E9 028E F_INNER
 
