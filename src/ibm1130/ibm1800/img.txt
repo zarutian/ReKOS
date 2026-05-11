@@ -393,6 +393,47 @@ ADDR DATA IBM1800
 0346 0003 XR3
 0347      BSC_l
 0348 xxxx
+0349      (IBM1800)    :1-
+034A      LD_s XR2-1
+034B      SUBT_s I-const_1
+034C      BSC_l any cond
+034D 028E F_INNER
+034E      (IBM1800)    :OR
+034F      LD_s XR2-1
+0350      OR_s XR2-2
+0351      BSC_l any cond
+0352 02C8 F_PRIM_COMMON1
+0353      (IBM1800)    :-
+0354      LD_s XR2-2
+0355      SUBT_s XR2-1
+0356      BSC_l any cond
+0357 02C8 F_PRIM_COMMON1
+0358      (IBM1800)    :<<
+0359      LD_l
+035A 0001 XR1
+035B      STO_s I+<<_L0
+035C      LD_l XR2-1
+035D      STO_l
+035E 0001 XR1
+035F      LD_l XR2-2
+0360      SLA XR1
+0361      STO_s XR2-2
+0362      LD_l
+0363 xxxx <<_L0
+0364      STO_l
+0365 0001 XR1
+0366      BSC_l any cond
+0367 02C9 DROP
+0368      (IBM1800)    :(XIO)
+0369      LD_s XR2-2
+036A      STO_s I+(XIO)_L0
+036B      LD_s XR2-1
+036C      STO_s I+(XIO)_L1
+036D      XIO_s I+(XIO)_L0
+036E      BSC_l any cond
+036F 02C8 F_PRIM_COMMON1
+0370 xxxx (XIO)_L0
+0371 xxxx (XIO)_L1
 
 
 
