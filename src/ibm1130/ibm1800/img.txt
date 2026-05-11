@@ -42,4 +42,141 @@ ADDR DATA IBM1800
 0028 4037 BSI_s I+0x37
 0029      interrupted I
 002A 4035 BSI_s I+0x35
+002B      interrupted I
+002C 4033 BSI_s I+0x33
+002D      interrupted I
+002E 4031 BSI_s I+0x31
+002F      interrupted I
+0030 402F BSI_s I+0x2F
+0031      interrupted I
+0032 402D BSI_s I+0x2D
+0033      interrupted I
+0034 402B BSI_s I+0x2B
+0035      interrupted I
+0036 4029 BSI_s I+0x29
+0037      interrupted I
+0038 4027 BSI_s I+0x27
+0039      interrupted I
+003A 4025 BSI_s I+0x25
+003B      interrupted I
+003C 4023 BSI_s I+0x23
+003D      interrupted I
+003E 4021 BSI_s I+0x21
+003F      interrupted I
+0040 401F BSI_s I+0x1F
+0041      interrupted I
+0042 401D BSI_s I+0x1D
+0043      interrupted I
+0044 401B BSI_s I+0x1B
+0045      interrupted I
+0046 4019 BSI_s I+0x19
+0047      interrupted I
+0048 4017 BSI_s I+0x17
+0049      interrupted I
+004A 4015 BSI_s I+0x15
+004B      interrupted I
+004C 4013 BSI_s I+0x13
+004D      interrupted I
+004E 4011 BSI_s I+0x11
+004F      interrupted I
+0050 400F BSI_s I+0x0F
+0051      interrupted I
+0052 400D BSI_s I+0x0D
+0053      interrupted I
+0054 400B BSI_s I+0x0B
+0055      interrupted I
+0056 4009 BSI_s I+0x09
+0057      interrupted I
+0058 4007 BSI_s I+0x07
+0059      saved status
+005A      saved A
+005B      saved Q
+005C      saved XR1
+005D      saved XR2
+005E      saved XR3
+005F      saved I
+0060 0C00 XIO_l
+0061      MASK_INT1
+0062 0C00 XIO_l
+0063      MASK_INT2
+0064 28F8 STS_s I-12
+0065 D8F8 STD_s I-12
+0066      STX_l XR1
+0067 005C save  XR1
+0068      STX_l XR2
+0069 005D save  XR2
+006A      STX_l XR3
+006B 005E save  XR3
+006C C0   LD_s I-14
+006D 90   SUBT_s I+54
+006E 1801 SRA 1
+006F 1004 SLA 6
+0070      ADD_l
+0071 00A7 INT_TBL
+0072 D400 STO_l
+0073 0001 XR1
+0074 0C00 XIO_l
+0075 00B0 SENSE_INT
+0076 6600 LDX_l XR3 
+0077 00A6 const_16
+0078 1340 SLCA XR3  :ISR_L0
+0079 D400 STO_l
+007A 00B2 save ISL
+007B      STX_l XR3
+007C 007E
+007D      LD_l XR1 +
+007E      the offset
+007F D400 STO_l
+0080 0082
+0081      BSI_l
+0082      specific interrupt vector
+0083      LDX_l XR3
+0084 007E
+0085 C400 LD_l
+0086 00B2 save ISL
+0087 4C20 BSC_l A=0?
+0088 0089
+0089 4C3F BSC_l all conditions
+008A 0076 ISR_L0
+008B      LDX_l XR1
+008C 005C saved XR1
+008D      LDX_l XR2
+008E 005D saved XR2
+008F      LDX_l XR3
+0090 005E saved XR3
+0091 C400 LD_l
+0092 005F saved I
+0093 9010 SUBT_s I+16
+0094 D400 STO_l
+0095 0097
+0096 C400 LD_l
+0097
+0098 D400 STO_l
+009A 00A4
+009B      LDD_l
+009C 005A
+009D      LDS_l
+009E 0059
+009F      XIO_l
+00A0      UNMASK_INT1
+00A1      XIO_l
+00A2      UNMASK_INT2
+00A3      BOSC_l
+00A4      interrupted I
+00A5 0003 const_3
+00A6 0010 const_16
+00A7 00B4
+00A8      MASK_INT1
+00A9
+00AA      MASK_INT2
+00AB
+00AC      UNMASK_INT1
+00AD
+00AE      UNMASK_INT2
+00AF
+00B0      SENSE_INT
+00B1
+00B2      saved ISL
+00B3
+00B4      INT_TBL
 
