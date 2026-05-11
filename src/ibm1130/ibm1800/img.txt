@@ -321,4 +321,17 @@ ADDR DATA IBM1800
 0300      STO_s XR2-2
 0301      BSC_l any cond
 0302 028E F_INNER
+0303      LD_s XR2-1   :SKZ
+0304      BSC_l A=0?
+0305 0308 SKZ_L0
+0306      BSC_l any cond
+0307 02C9 DROP
+0308      LD_l
+0309 0001 XR1
+030A      ADD_s I-const_1
+030B      STO_l
+030C 0001 XR1
+030D      BSC_l any cond
+030E 02C9 DROP
+030F
 
