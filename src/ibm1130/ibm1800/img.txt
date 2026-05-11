@@ -299,7 +299,7 @@ ADDR DATA IBM1800
 02E9      LD_s XR2-2
 02EA      STO_l
 02EB xxxx
-02EC      LD_l
+02EC      LD_l         :(2DROP)
 02ED 0002 XR2
 02EE      SUBT_s I-const1
 02EF      STO_l
@@ -361,7 +361,7 @@ ADDR DATA IBM1800
 0328 0001 XR1
 0329      BSC_l any cond
 032A 031D F_PRIM_COMMON4
-032B      (CONST)
+032B      (CONST)      :IBM1800_marker
 032C 1800
 032D      (VAR)
 032E      EXT_handler
@@ -434,6 +434,46 @@ ADDR DATA IBM1800
 036F 02C8 F_PRIM_COMMON1
 0370 xxxx (XIO)_L0
 0371 xxxx (XIO)_L1
-
+0372      (IBM1800)    :>>
+0373      LD_l
+0374 0001 XR1
+0375      STO_s I+>>_L0
+0376      LD_l XR2-1
+0377      STO_l
+0378 0001 XR1
+0379      LD_l XR2-2
+037A      SRA XR1
+037B      STO_s XR2-2
+037C      LD_l
+037D xxxx >>_L0
+037E      STO_l
+037F 0001 XR1
+0380      BSC_l any cond
+0381 02C9 DROP
+0382      (IBM1800)    :D+ ( au al bu bl -- sumu suml )
+0383      LD_s XR2-4
+0384      STO_s I+D+_L0
+0385      LD_s XR2-3
+0386      STO_s I+D+_L1
+0387      LD_s XR2-2
+0388      STO_s I+D+_L2
+0389      LD_s XR2-1
+038A      STO_s I+D+_L3
+038B      LDD_s I+D+_L0
+038C      ADDD_s I+D+_L2
+038D      STD_s I+D+_L0
+038E      LD_s I+D+_L0
+038F      STO_s XR2-4
+0390      LD_s I+D+_L1
+0391      STO_s XR2-3
+0392      BSC_l any cond
+0393 02EC (2DROP)
+0394 xxxx D+_L0
+0395 xxxx D+_L1
+0396 xxxx D+_L2
+0397 xxxx D+_L3
+0398      (IBM1800)    :* ( a b -- pu pl )
+0399
+          (IBM1800)    :/% ( dividend divisor -- reminder quotent )
 
 
