@@ -333,5 +333,66 @@ ADDR DATA IBM1800
 030C 0001 XR1
 030D      BSC_l any cond
 030E 02C9 DROP
-030F
+030F      LD_s XR2-1   :>R
+0310      STO_s XR3+0
+0311      LD_l
+0312 0003 XR3
+0313      ADD_s I-const1
+0314      STO_s
+0315 0003 XR3
+0316      BSC_l any cond
+0317 02C9 DROP
+0318      LD_l         :R>
+0319 0002 XR2
+031A      ADD_s I-const_1
+031B      STO_l
+031C 0002 XR2
+031D      LD_s XR3-1   :F_PRIM_COMMON4
+031E      STO_s XR2+0
+031F      LD_l
+0320 0003 XR3
+0321      SUBT_s I-const1
+0322      STO_l
+0323 0003 XR3
+0324      BSC_l
+0325 028E F_INNER
+0326      LD_s XR3-1   :EXIT
+0327      STO_l
+0328 0001 XR1
+0329      BSC_l any cond
+032A 031D F_PRIM_COMMON4
+032B      (CONST)
+032C 1800
+032D      (VAR)
+032E      EXT_handler
+032F      LD_s XR2-1   :EXT
+0330      EOR_s I-5
+0331      BSC_l A=0?
+0332 033F EXT_L0
+0333      LD_l
+0334 0001 XR1
+0335      STO_s XR3+0
+0336      LD_l
+0337 032E EXT_handler
+0338      STO_l
+0339 0001 XR1
+033A      LD_l
+0339 0003 XR3
+033A      ADD_s I+const_1
+033B      STO_l
+033C 0003 XR3
+033D      BSC_l any cond
+033E 028E F_INNER
+033F      LD_s XR3-1
+0340      STO_l
+0341 0348 EXT_L1
+0342      LD_l
+0343 0003 XR3
+0344      SUBT_s I-const1
+0345      STO_l
+0346 0003 XR3
+0347      BSC_l
+0348 xxxx
+
+
 
