@@ -156,7 +156,7 @@ ADDR DATA IBM1800
 009B 00A4
 009C CC00 LDD_l
 009D 005A
-009E 20xx LDS
+009E 20xx LDS          :saved_status
 009F 0C00 XIO_l
 00A0 00AC UNMASK_INT1
 00A1 0C00 XIO_l
@@ -497,5 +497,125 @@ ADDR DATA IBM1800
 03AE 0002 XR2
 03AF      BSC_l any cond
 03B0 038E F_PRIM_COMMON5
-
+03B1      2DUP         :<<> ( a times -- a<<>times )
+03B2      <<
+03B3      >R
+03B4      (LIT)_16
+03B5 000A SWAP
+03B6      -
+03B7      >>
+03B8      R>
+03B9      OR
+03BA      EXIT
+03BB      (LIT)_16     :<>> ( a times -- a<>>times )
+03BC 000A SWAP
+03BD      -
+03BE      (JMP)
+03BF      <<
+03C0      R>           :(JMP) ( -- )
+03C1      @            :@EXECUTE
+03C2      >R           :EXECUTE
+03C3      EXIT
+03C4 000A SWAP         : OVER ( a b -- a b a )
+03C5 0008 DUP
+03C6 000C >R
+03C7 000A SWAP
+03C8 000D R>
+03C9 000F EXIT
+03CA 03C4 OVER        : 2DUP ( a b -- a b a b )
+03CB 03C4 OVER
+03CC 000F EXIT
+03CD xxxx             :WAITED-ON-FIRED
+03CE      LD_l
+03CF      saved I
+03D0      SUBT_s I+const_2
+03D1      SLA 1
+03D3      STO_s I+3
+03D4      LDX_l X1
+03D5      waiters_tbl
+03D6      LD_l X1+
+03D7 xxxx
+03D8      STO_s I+28
+03D9      LD_s I+patch1_L0
+03DA      STO_l
+03DB 028E F_INNER
+03DC      LD_s I+patch1_L1
+03DD      STO_l
+03DE 028F F_INNER+1
+03DF      LDX_l XR1
+03E0      saved XR1
+03E1      LDX_l XR2
+03E2      saved XR2
+03E3      LDX_l XR3
+03E4      saved XR3
+03E5      LD_l
+03E6 009E saved_status
+03E7      STO_s I+7
+03E8      LD_l
+03E9      saved I
+03EA      SUBT_s I+const_2
+03EB      STO_s I+1
+03EC      LD_l
+03ED xxxx 
+03EE      STO_s I+2
+03EF xxxx
+03F0      BSC_l any cond  :patch1_L0
+03F1 xxxx
+03F2      (CONST)
+03F3 0002 2
+03F4 03F6 :patch1_L1
+03F5 xxxx
+03F6      LDX XR1  :WAITED-ON-FIRED_L0
+03F7      USER_PTR
+03F8      LD_l
+03F9      saved XR1
+03FA      STO_s XR1+1
+03FB      LD_l
+03FC      saved XR2
+03FD      STO_s XR1+2
+03FE      LD_l
+03FF      saved XR3
+0400      STO_s XR1+3
+0401      LD_s I-
+0402      STO_l
+0403      USER_PTR
+0404      LD_s XR1+3
+0405      STX_s XR3
+0406      LD_s XR1+2
+0407      STX_s XR2
+0408      LD_s IA+patch2_L0
+0409      STO_l
+040A      F_INNER
+040B      LD_s IA+patch2_L1
+040C      STO_l
+040D      F_INNER+1
+040E      LD_s XR1+1
+040F      STO_s I+1
+0410      LDX_l XR1
+0411 xxxx
+0412      BSC_l any cond
+0413      F_INNER
+0414      (IBM1800)    : RETURN_FROM_INTERRUPT ( -- )
+0415      LD_l
+0416 03CD WAITED-ON-FIRED
+0417      STO_s I+1
+0418      BSC_l any cond
+0419 xxxx
+041A      :patch2_L0
+041B      :patch3_L1
+041C      USER_PTR@    : PAUSE ( -- )
+041D      @
+041E      (LIT)
+041F 03F5
+0420      !
+0421      PAUSE_L0
+0422      EXIT
+0423      (IBM1800)
+0424      LD_l
+0425 0001 XR1
+0426      ADD_s I+const_1
+0427      STO_l
+0428 0001 XR1
+0429      BSC_l any cond
+042A 03F6 WAITED-ON-FIRED_L0
 
