@@ -268,7 +268,7 @@ ADDR DATA IBM1800
 02C9      LD_l         :DROP
 02CA 0002 XR2
 02CB      SUBT_s I-const_1
-02CC      STO_l
+02CC      STO_l        :F_PRIM_COMMON3
 02CD 0002 XR2
 02CE      BSC_l any condition
 02CF 028E F_INNER
@@ -294,11 +294,31 @@ ADDR DATA IBM1800
 02E4 xxxx
 02E5      BSC_l any condition
 02E6 02C3 F_PRIM_COMMON2
-02E3      LD_s XR2-1   :!
-02E4      STO_s I+2
-02E5      LD_s XR2-2
-02E6      STO_l
-02E7 xxxx
-02E8      BSC_l any condition
-02E9 028E F_INNER
+02E7      LD_s XR2-1   :!
+02E8      STO_s I+2
+02E9      LD_s XR2-2
+02EA      STO_l
+02EB xxxx
+02EC      LD_l
+02ED 0002 XR2
+02EE      SUBT_s I-const1
+02EF      STO_l
+02F0 0002 XR2
+02F2      BSC_l any condition
+02F3 02C9 DROP
+02F4      LD_s XR2-1   :DUP
+02F5      STO_s XR2+0
+02F6      LD_s
+02F7 0002 XR2
+02F8      ADD_s I-const_1
+02F9      BSC_l any cond
+02FA 02CC
+02FB      LD_s XR2-1   :SWAP
+02FC      STO_s XR2+0
+02FD      LD_s XR2-2
+02FE      STO_s XR2-1
+02FF      LD_s XR2+0
+0300      STO_s XR2-2
+0301      BSC_l any cond
+0302 028E F_INNER
 
