@@ -178,5 +178,79 @@ ADDR DATA IBM1800
 00B1
 00B2      saved ISL
 00B3
-00B4      INT_TBL
+00B4      INT_TBL level 0
+00B5
+00B6
+00B7
+00B8
+00B9
+00BA
+00BB
+00BC
+00BD
+00BE
+00BF
+00C0
+00C1
+00C2
+00C3      
+00C4      INT_TBL level 1
+00C5
+00C6
+
+0284 4C40 BOSC_l
+0285 xxxx :INT_IGNORE
+0286      LDX_l I
+0287 0284
+0288      LDX_l XR1  set FIP
+0289
+028A      LDX_l XR2  set DSP
+028B
+028C      LDX_l XR3  set RSP
+028D
+028E      LD_s XR1 + 0 :F_INNER
+028F      AND_s I+opmask
+0290      BSC_l A=0?
+0291 02A1 F_INNER_PRIM
+0292      LD_l
+0293 0001 XR1
+0294      ADD_s I+const_1
+0295      STO_s XR3 + 0
+0296      LD_l
+0297 0003 XR3
+0298      ADD_s I+const_1
+0299      STO_l
+029A 0003 XR3
+029B      LD_s XR1 + 0
+029C      STO_l
+029D 0001 XR1
+029E      BSC_l any condition
+02A0 028E F_INNER
+02A1      LD_s XR1 + 0
+02A2      ADD_s I+
+02A3      STO_s I+1
+02A4      LDX_l I
+02A5 xxxx
+02A6      (CONST)
+02A7 0001
+02A8      (CONST)
+02A9 FFF0 opmask
+02AA      (VAR)
+02AB 0010
+02AC 028E NOP  :F_PRIM_TBL
+02AD      +
+02AE      &
+02AF      ⨁
+02B0      1<<>
+02B1      1+
+02B2      @
+02B3      !
+02B4      DUP
+02B5      DROP
+02B6      SWAP
+02B7      SKZ
+02B8      >R
+02B9      R>
+02BA      EXT
+02BB      EXIT
 
