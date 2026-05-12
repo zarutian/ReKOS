@@ -8,8 +8,8 @@ ADDR DATA IBM1800
 0006
 0007
 0008 0023 Internal          Interrupt Vector
-0009 0025 Trace             Interrupt Vector
-000A 0027 Customer Engineer Interrupt Vector
+0009      Trace             Interrupt Vector
+000A      Customer Engineer Interrupt Vector
 000B 0029 External 0        Interrupt Vector
 000C 002B          1
 000D 002D          2
@@ -195,9 +195,40 @@ ADDR DATA IBM1800
 00C1      unassigned
 00C2      unassigned
 00C3      unassigned      
-00C4      INT_TBL level 1
+00C4      not used, free space    INT_TBL level 1
 00C5
 00C6
+00C7
+00C8
+00C9
+00CA
+00CB
+00CC
+00CD
+00CE
+00CF
+00D0
+00D1
+00D2
+00D3
+00D4      not used, free space    INT_TBL level 2
+00D5
+00D6
+00D7
+00D8
+00D9
+00DA
+00DB
+00DC
+00DD
+00DE
+00DF
+00E0
+00E1
+00E2
+00E3
+00E4          used, free space    INT_TBL level 1
+00E4      
 
 0284 4C40 BOSC_l
 0285 xxxx :INT_IGNORE
