@@ -1017,3 +1017,6 @@ Devices
 0b11101          ???
 0b11110          ???
 0b11111          ???
+
+http://media.ibm1130.org/1130-025-ocr.pdf
+
