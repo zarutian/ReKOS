@@ -179,22 +179,22 @@ ADDR DATA IBM1800
 00B1
 00B2      saved ISL
 00B3
-00B4      INT_TBL level 0
-00B5
-00B6
-00B7
-00B8
-00B9
-00BA
-00BB
-00BC
-00BD
-00BE
-00BF
-00C0
-00C1
-00C2
-00C3      
+00B4      Invalid opcode           INT_TBL level 0
+00B5      B-Register Parity Error
+00B6      Storage Protect Violation
+00B7      CAR Check Error
+00B8      CE (auxiliary) Storage Error
+00B9      unassigned
+00BA      unassigned
+00BB      unassigned
+00BC      unassigned
+00BD      unassigned
+00BE      unassigned
+00BF      unassigned
+00C0      unassigned
+00C1      unassigned
+00C2      unassigned
+00C3      unassigned      
 00C4      INT_TBL level 1
 00C5
 00C6
