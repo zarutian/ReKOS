@@ -184,8 +184,8 @@ ADDR DATA IBM1800
 00B6      Storage Protect Violation
 00B7      CAR Check Error
 00B8      CE (auxiliary) Storage Error
-00B9      unassigned
-00BA      unassigned
+00B9      TI  Timer Interrupt      assigned by customer engineer
+00BA      CI  Console Interrupt    assigned by customer engineer
 00BB      unassigned
 00BC      unassigned
 00BD      unassigned
@@ -227,7 +227,7 @@ ADDR DATA IBM1800
 00E1
 00E2
 00E3
-00E4          used, free space    INT_TBL level 1
+00E4          used,      space    INT_TBL level 1
 00E4      
 
 0284 4C40 BOSC_l
