@@ -987,17 +987,27 @@ Devices
    Area Fun Mod
 0b00000          Console and internal
 0b00001          1816 Console Printer&Keyboards and 1053 Printers (first four)
-0b00010          1442 Card Read Punch
+0b00010          1442 Card Read Punch 1
 0b00011          1054 & 1055 PaperTape Reader & Punch
-0b00100          1810 Disk Storage Device
+0b00100          1810 Disk Storage Device/Drive 1
 0b00101          1627 Plotter
 0b00110          1443 Printer
 0b00111          2790 Adapter
-0b01000          ???
-0b01001          ???
+0b01000          1810 Disk Storage Device/Drive 2
+0b01001          1442 Card Read Punch 2  ( or 1810 drive 3)
 0b01010          Analog Input
 0b01011          Digital Input
 0b01100          Digital & Analog Output
-0b01101
+0b01101          SYSTEM/360 Adapter  (note: the other end can be also 370 380 390 or Z )
+0b01110          2401 OR 2402 Magnetic Tape
+0b01111          1816 Console Printer&Keyboards and 1053 Printers (second four)
+0b10000          ???
+0b10001          ???
+0b10010          SELECTOR CHANNEL
+0b10011          ???
+0b10100          Communications Adapter 4
+0b10101          Communications Adapter 1
+0b10110          Communications Adapter 2
+0b10111          Communications Adapter 3
 
 
