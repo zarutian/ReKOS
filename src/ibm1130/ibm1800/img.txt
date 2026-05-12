@@ -1009,5 +1009,11 @@ Devices
 0b10101          Communications Adapter 1
 0b10110          Communications Adapter 2
 0b10111          Communications Adapter 3
-
-
+0b11000          ???
+0b11001          ???
+0b11010          2250 Display Unit, Model 4
+0b11011          ???
+0b11100          ???
+0b11101          ???
+0b11110          ???
+0b11111          ???
