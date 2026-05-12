@@ -244,7 +244,14 @@ ADDR DATA IBM1800
 00F2
 00F3
 00F4      PaperTape Reader&Punch  INT_TBL level 3
-00F5      Console
+00F5      1816  Console Printer&Keyboard 1 (or 1053 Printer)
+00F6      1816  Console Printer&Keyboard 2 (or 1053 Printer)
+00F7      1816  Console Printer&Keyboard 3 (or 1053 Printer)
+00F8      1816  Console Printer&Keyboard 4 (or 1053 Printer)
+00F9      1816  Console Printer&Keyboard 5 (or 1053 Printer)
+00FA      1816  Console Printer&Keyboard 6 (or 1053 Printer)
+00FB      1816  Console Printer&Keyboard 7 (or 1053 Printer)
+00FC      1816  Console Printer&Keyboard 8 (or 1053 Printer)
 
 0284 4C40 BOSC_l
 0285 xxxx :INT_IGNORE
