@@ -883,6 +883,32 @@ ADDR DATA IBM1800
 0511      (LIT)
 0512 __FF
 0513 000F EXIT
+0514      (CONST)       : LIT_3
+0515 0003
+0516      LIT_3         : 3&
+0517 0002 &
+0518 000F EXIT
+0519      3&            : CONSOLE_PRINTERNR2IOSEL ( printernr -- iosel )
+051A      (LUT)
+051B 0008 8
+051C 0802 printer 1
+051D 0804 printer 2
+051E 0808 printer 3
+051F 0810 printer 4
+0520 7802 printer 5
+0521 7804 printer 6
+0522 7808 printer 7
+0523 7810 printer 8
+0524 0009 DROP
+0525      (LIT)
+0526 0802 printer 1
+0527 000F EXIT
+0528 000D R>            : (LIT) ( -- cell )
+0529 0008 DUP
+052A 0005 1+
+052B 000C >R
+052C 0006 @
+052D 000F EXIT
 0514   : CONSOLE_PRINTER_EMIT_COMMON ( ascii printernr -- )
 0515
 
