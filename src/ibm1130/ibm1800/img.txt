@@ -984,10 +984,20 @@ ADDR DATA IBM1800
 
 ####
 Devices
-  Area Fun Mod
-0b0000_111_010   Console switches data to accumulator
-0b0000_010_010   Console switches data to core location
-0b
-
+   Area Fun Mod
+0b00000          Console and internal
+0b00001          1816 Console Printer&Keyboards and 1053 Printers (first four)
+0b00010          1442 Card Read Punch
+0b00011          1054 & 1055 PaperTape Reader & Punch
+0b00100          1810 Disk Storage Device
+0b00101          1627 Plotter
+0b00110          1443 Printer
+0b00111          2790 Adapter
+0b01000          ???
+0b01001          ???
+0b01010          Analog Input
+0b01011          Digital Input
+0b01100          Digital & Analog Output
+0b01101
 
 
