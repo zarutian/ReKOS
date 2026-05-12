@@ -8,8 +8,8 @@ ADDR DATA IBM1800
 0006
 0007
 0008 0023 Internal          Interrupt Vector
-0009      Trace             Interrupt Vector
-000A      Customer Engineer Interrupt Vector
+0009 0285 Trace             Interrupt Vector
+000A 0285 Customer Engineer Interrupt Vector
 000B 0029 External 0        Interrupt Vector
 000C 002B          1
 000D 002D          2
@@ -980,3 +980,14 @@ ADDR DATA IBM1800
 053A      (BRZ)
 053B
 053C      
+
+
+####
+Devices
+  Area Fun Mod
+0b0000_111_010   Console switches data to accumulator
+0b0000_010_010   Console switches data to core location
+0b
+
+
+
