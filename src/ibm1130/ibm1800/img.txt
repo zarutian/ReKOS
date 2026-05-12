@@ -227,8 +227,24 @@ ADDR DATA IBM1800
 00E1
 00E2
 00E3
-00E4          used,      space    INT_TBL level 1
-00E4      
+00E4      1627 Plotter            INT_TBL level 3
+00E5
+00E6
+00E7
+00E8
+00E9
+00EA
+00EB
+00EC
+00ED
+00EE
+00EF
+00F0
+00F1
+00F2
+00F3
+00F4      PaperTape Reader&Punch  INT_TBL level 3
+00F5      Console
 
 0284 4C40 BOSC_l
 0285 xxxx :INT_IGNORE
