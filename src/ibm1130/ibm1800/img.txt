@@ -1012,7 +1012,7 @@ Devices
 0b11000          ???
 0b11001          ???
 0b11010          2250 Display Unit, Model 4
-0b11011          ???
+0b11011          Attachment Channel (see http://media.ibm1130.org/E0004.pdf ) basically allows you to attach IBM360/370/390/Z compatible devices
 0b11100          ???
 0b11101          ???
 0b11110          ???
