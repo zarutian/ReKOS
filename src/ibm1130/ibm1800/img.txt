@@ -240,9 +240,9 @@ ADDR DATA IBM1800
 00EE
 00EF
 00F0
-00F1
-00F2
-00F3
+00F1      2401 OR 2402 Magnetic Tape
+00F2      1810 Disk drive 1
+00F3      1810 Disk drive 2
 00F4      PaperTape Reader&Punch  INT_TBL level 3
 00F5      1816 Console Printer&Keyboard 1 (or 1053 Printer)
 00F6      1442 Card Read Punch 1
@@ -254,12 +254,24 @@ ADDR DATA IBM1800
 00FC      1816 Console Printer&Keyboard 7 (or 1053 Printer)
 00FD      1816 Console Printer&Keyboard 8 (or 1053 Printer)
 00FE      1442 Card Read Punch 2
-00FF      2401 OR 2402 Magnetic Tape
-0100      1810 Disk drive 1
-0101      1810 Disk drive 2
+00FF
+0100
+0101
 0102
 0103
 0104      INT_TBL level 4
+0105
+0106
+0107
+0108
+0109
+010A
+010B
+010C
+010D
+010E
+010F
+0110
 
 0284 4C40 BOSC_l
 0285 xxxx :INT_IGNORE
