@@ -253,6 +253,13 @@ ADDR DATA IBM1800
 00FB      1816 Console Printer&Keyboard 6 (or 1053 Printer)
 00FC      1816 Console Printer&Keyboard 7 (or 1053 Printer)
 00FD      1816 Console Printer&Keyboard 8 (or 1053 Printer)
+00FE      1442 Card Read Punch 2
+00FF      2401 OR 2402 Magnetic Tape
+0100      1810 Disk drive 1
+0101      1810 Disk drive 2
+0102
+0103
+0104      INT_TBL level 4
 
 0284 4C40 BOSC_l
 0285 xxxx :INT_IGNORE
