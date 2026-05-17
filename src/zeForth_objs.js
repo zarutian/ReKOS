@@ -465,7 +465,37 @@ const src = `
   .dhw zobj_ptr_within
   .dhw EXIT
   
-  
+  : zobj_gc
+  # ( -- )
+  .dhw zobj_newspace_start
+  .dhw @
+  .dhw zobj_oldspace_start
+  .dhw ! #
+  .dhw zobj_HERE
+  .dhw @
+  .dhw DUP
+  .dhw zobj_newspace_start
+  .dhw ! #
+  .dhw zobj_scanptr
+  .dhw ! #
+  .dhw zobj_root_optr
+  .dhw @
+  .dhw DUP
+  .dhw zobj_migrate2new
+  .dhw zobj_follow_brokenhearts #
+  .dhw zobj_root_optr
+  .dhw ! #
+  : zobj_gc_L0
+  .dhw zobj_gc_scan #
+  .dhw zobj_scanptr
+  .dhw @
+  .dhw zobj_HERE
+  .dhw @
+  .dhw =
+  .dhw (BRZ)
+  .dhw zobj_gc_L0
+  .dhw zobj_flush_watchedRefEvents2event_queue
+  .dhw EXIT
 `;
 export { src };
 
