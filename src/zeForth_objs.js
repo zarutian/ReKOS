@@ -413,6 +413,31 @@ const src = `
   .dhw zobj_move_L0
   .dhw 2DROP
   .dhw EXIT
+
+  : zobj_move2new
+  # ( old_optr -- new_optr  )
+  .dhw zobj_HERE  # ( old_optr addr )
+  .dhw @          # ( old_optr new_optr )
+  .dhw SWAP       # ( new_optr old_optr )
+  .dhw 2DUP       # ( new_optr old_optr new_optr old_optr )  
+  .dhw zobj_size@ # ( new_optr old_optr new_optr osize )
+  .dhw 2DUP       # ( new_optr old_optr new_optr osize new_optr osize )
+  .dhw zobj_ptr+  # ( new_optr old_optr new_optr osize optr )
+  .dhw zobj_HERE  # ( new_optr old_optr new_optr osize optr addr )
+  .dhw !          # ( new_optr old_optr new_optr osize )
+  .dhw (JMP)      #
+  .dhw zobj_move  # ( new_optr )
+  
+  : zobj_become:       # ( a_optr b_optr -- )
+  .dhw OVER            # ( a_optr b_optr a_optr )
+  .dhw zobj_move2new   # ( old_a_optr b_optr new_a_optr )
+  .dhw OVER            # ( old_a_optr b_optr new_a_optr b_optr )
+  .dhw zobj_move2new   # ( old_a_optr old_b_optr new_a_optr new_b_optr )
+  .dhw >R              # ( old_a_optr old_b_optr new_a_optr )
+  .dhw zobj_breakheart # ( old_a_optr )
+  .dhw R>              # ( old_a_optr new_b_optr )
+  .dhw zobj_breakheart # ( )
+  .dhw EXIT
   
 `;
 export { src };
