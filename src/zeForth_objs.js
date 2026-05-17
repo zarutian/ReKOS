@@ -189,7 +189,30 @@ const src = `
   .dhw 2<<>
   .dhw 2&
   .dhw EXIT
+
+  : zobj_is_object
+  # ( optr -- bool )
+  .dhw zobj_typ@
+  .dhw 0=
+  .dhw EXIT
   
+  : zobj_is_refWatchingObject
+  # ( optr -- bool )
+  .dhw zobj_typ@
+  .dhw 1=
+  .dhw EXIT
+  
+  : zobj_is_brokenheart
+  # ( optr -- bool )
+  .dhw zobj_typ@
+  .dhw 2=
+  .dhw EXIT
+  
+  : zobj_is_refWatchEvent
+  # ( optr -- bool )
+  .dhw zobj_typ@
+  .dhw 3=
+  .dhw EXIT
 `;
 export { src };
 
