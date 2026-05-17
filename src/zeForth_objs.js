@@ -622,6 +622,47 @@ const src = `
   .dhw zobj_follow_brokenhearts
   .dhw (JMP)
   .dhw zobj_gc_scan_L0
+  : zobj_gc_scan_L_refWatchEvent
+  # ( optr )
+  .dhw LIT_4
+  .dhw zobj_scanptr
+  .dhw zobj_ptr+!    #
+  .dhw DUP
+  .dhw LIT_1
+  .dhw zobj_ptr+
+  .dhw DUP
+  .dhw zobj_@
+  .dhw zobj_follow_brokenhearts
+  .dhw SWAP
+  .dhw zobj_!   #
+  .dhw LIT_4
+  .dhw zobj_ptr+
+  .dhw (JMP)
+  .dhw zobj_gc_scan_L1
+  
+  : zobj_get_nilObjecten
+  # ( -- optr2nil )
+  .dhw zobj_root_optr
+  .dhw @
+  .dhw LIT_1
+  .dhw zobj_ref@
+  .dhw EXIT
+  
+  : zobj_get_symbolsInterningRoot
+  # ( -- optr )
+  .dhw zobj_root_optr
+  .dhw @
+  .dhw LIT_2
+  .dhw zobj_ref@
+  .dhw EXIT
+  
+  : zobj_get_primordialsRoot
+  # ( -- optr )
+  .dhw zobj_root_optr
+  .dhw @
+  .dhw LIT_3
+  .dhw zobj_ref@
+  .dhw EXIT
   
 `;
 export { src };
