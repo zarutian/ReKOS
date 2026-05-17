@@ -347,6 +347,73 @@ const src = `
   : zobj_HERE
   .dhw (VAR)
   .dhw 0x4000
+
+  : zobj_newspace_start
+  .dhw (VAR)
+  .dhw 0x0000
+  
+  : zobj_oldspace_start
+  .dhw (VAR)
+  .dhw 0x0000
+  
+  : zobj_scanptr
+  .dhw (VAR)
+  .dhw 0x0000
+  
+  : zobj_root_optr
+  .dhw (VAR)
+  .dhw 0x0000
+  
+  : zobj_watchedRefEvent_tail
+  .dhw (VAR)
+  .dhw 0x0000
+  
+  : zobj_ptr+!
+  # ( increment addr -- )
+  .dhw DUP
+  .dhw >R
+  .dhw @
+  .dhw zobj_ptr+
+  .dhw R>
+  .dhw !
+  .dhw EXIT
+  
+  : zobj_ptr++!
+  # ( addr -- )
+  .dhw LIT_1
+  .dhw SWAP
+  .dhw zobj_ptr+!
+  .dhw EXIT
+  
+  : zobj_,
+  # ( cell -- )
+  .dhw zobj_HERE
+  .dhw @
+  .dhw zobj_!
+  .dhw zobj_HERE
+  .dhw zobj_ptr++!
+  .dhw EXIT
+  
+  : zobj_move
+  # ( src dst count -- )
+  .dhw >R
+  .dhw (JMP)
+  .dhw zobj_move_L1
+  : zobj_move_L0
+  .dhw OVER
+  .dhw zobj_@
+  .dhw OVER
+  .dhw zobj_!
+  .dhw zobj_ptr++
+  .dhw SWAP
+  .dhw zobj_ptr++
+  .dhw SWAP
+  : zobj_move_L1
+  .dhw (NEXT)
+  .dhw zobj_move_L0
+  .dhw 2DROP
+  .dhw EXIT
+  
 `;
 export { src };
 
