@@ -213,6 +213,52 @@ const src = `
   .dhw zobj_typ@
   .dhw 3=
   .dhw EXIT
+
+  : zobj_breakheart
+  # ( old_optr new_optr -- )
+  .dhw OVER
+  .dhw (LIT)
+  .dhw 0x8000
+  .dhw SWAP
+  .dhw zobj_!
+  .dhw SWAP
+  .dhw zobj_ptr++
+  .dhw zobj_!
+  .dhw EXIT
+  
+  : zobj_remove_watchedRefEvent
+  # ( optr -- optr+4 )
+  # refWatchEvent structure:
+  #  0b01 refNr of the ref that went linear reference (that is, only one ref exists to the reffed object)
+  #  optr to the refWatching object
+  #  ptr  to prev refWatchEvent
+  #  ptr  to next refWatchEvent
+  #  original reffed to object follows
+  .dhw DUP             # ( optr optr )
+  .dhw LIT_2           # ( optr optr 2 )
+  .dhw zobj_ptr+       # ( optr optr+2 )
+  .dhw DUP             # ( optr optr+2 optr+2 )
+  .dhw zobj_@          # ( optr optr+2 prev )
+  .dhw SWAP            # ( optr prev optr+2 )
+  .dhw LIT_1           #
+  .dhw zobj_ptr+       # ( optr prev optr+3 )
+  .dhw zobj_@          # ( optr prev next )
+  .dhw 2DUP            # ( optr prev next prev next )
+  .dhw LIT_2           #
+  .dhw zobj_ptr+       # ( optr prev next prev next+2 )
+  .dhw zobj_!          #
+  .dhw SWAP            # ( optr next prev )
+  .dhw LIT_3           #
+  .dhw zobj_ptr+       # ( optr next prev+3 )
+  .dhw zobj_!          #
+  .dhw DUP             # ( optr optr )
+  .dhw LIT_4           # ( optr optr 4 )
+  .dhw zobj_ptr+       # ( optr optr+4 )
+  .dhw DUP             #
+  .dhw >R              # ( optr optr+4 ) R:( optr+4 )
+  .dhw zobj_breakheart # ( )
+  .dhw R>              # ( optr+4 )
+  .dhw EXIT
 `;
 export { src };
 
