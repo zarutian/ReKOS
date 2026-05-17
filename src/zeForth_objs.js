@@ -1,4 +1,38 @@
 const src = `
+  : generate_bitmask
+  # ( nrOfBits -- mask )
+  .dhw DUP
+  .dhw 0=
+  .dhw (BRZ)
+  .dhw generate_bitmask_L0
+  .dhw DROP
+  .dhw (JMP)
+  .dhw LIT_0
+  : generate_bitmask_L0
+  .dhw 1-
+  .dhw 0xF&
+  .dhw 1+
+  .dhw >R
+  .dhw LIT_1
+  .dhw (JMP)
+  .dhw generate_bitmask_L2
+  : generate_bitmask_L1
+  .dhw 1<<>
+  .dhw LIT_1
+  .dhw OR
+  : generate_bitmask_L2
+  .dhw (NEXT)
+  .dhw generate_bitmask_L1
+  .dhw EXIT
+  
+  : 3RD_DEEP
+  # ( a b c -- a b c a )
+  .dhw >R
+  .dhw OVER
+  .dhw R>
+  .dhw SWAP
+  .dhw EXIT
+  
   # zobj version whatever
   : zobj_@
   # ( ptr -- cell )
