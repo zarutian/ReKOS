@@ -115,6 +115,44 @@ const src = `
   .dhw >>                    # ( mask cell )
   .dhw &
   .dhw EXIT
+
+  : zobj_size@
+  # ( optr -- nrOfCells )
+  .dhw DUP
+  .dhw zobj_data_size@
+  .dhw SWAP
+  .dhw zobj_refs_size@
+  .dhw zobj_sizeof_ref
+  .dhw *
+  .dhw +
+  .dhw 2+
+  .dhw EXIT
+  
+  : zobj_raw_ref_common
+  # ( optr refNr -- ptr )
+  .dhw OVER
+  .dhw zobj_refs_size@
+  .dhw OVER
+  .dhw <=
+  .dhw SKZ
+  .dhw zobj_throw_refnr_out_of_bounds
+  .dhw zobj_sizeof_ref
+  .dhw *
+  .dhw 2+
+  .dhw zobj_ptr+
+  .dhw EXIT
+  
+  : zobj_raw_ref@
+  # ( optr refNr -- reffed_optr )
+  .dhw zobj_raw_ref_common
+  .dhw zobj_@
+  .dhw EXIT
+  
+  : zobj_raw_ref!
+  # ( reffed_optr optr refNr -- )
+  .dhw zobj_raw_ref_common
+  .dhw zobj_!
+  .dhw EXIT
   
 `;
 export { src };
