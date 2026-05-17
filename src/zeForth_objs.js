@@ -153,6 +153,42 @@ const src = `
   .dhw zobj_raw_ref_common
   .dhw zobj_!
   .dhw EXIT
+
+  : zobj_raw_datum_common
+  # ( optr datumNr -- ptr )
+  .dhw OVER
+  .dhw zobj_data_size@
+  .dhw OVER
+  .dhw <=
+  .dhw SKZ
+  .dhw zobj_throw_datumnr_out_of_bounds
+  .dhw OVER
+  .dhw zobj_refs_size@
+  .dhw zobj_sizeof_ref
+  .dhw *
+  .dhw 2+
+  .dhw +
+  .dhw zobj_ptr+
+  .dhw EXIT
+  
+  : zobj_raw_datum@
+  # ( optr datumNr -- cell )
+  .dhw zobj_raw_datum_common
+  .dhw zobj_@
+  .dhw EXIT
+  
+  : zobj_raw_datum!
+  # ( cell optr datumNr -- )
+  .dhw zobj_raw_datum_common
+  .dhw zobj_!
+  .dhw EXIT
+  
+  : zobj_typ@
+  # ( optr -- typ )
+  .dhw zobj_header@
+  .dhw 2<<>
+  .dhw 2&
+  .dhw EXIT
   
 `;
 export { src };
