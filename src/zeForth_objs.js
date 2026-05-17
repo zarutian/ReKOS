@@ -293,6 +293,60 @@ const src = `
   .dhw zobj_breakheart # ( )
   .dhw R>              # ( optr+4 )
   .dhw EXIT
+
+  : zobj_follow_brokenhearts
+  # ( optr -- optr )
+  .dhw DUP
+  .dhw zobj_is_brokenheart
+  .dhw (BRZ)
+  .dhw zobj_follow_brokenhearts_L0
+  .dhw LIT_1
+  .dhw zobj_ptr+
+  .dhw (JMP)
+  .dhw zobj_follow_brokenhearts
+  : zobj_follow_brokenhearts_L0
+  .dhw DUP
+  .dhw zobj_is_refWatchEvent
+  .dhw SKZ
+  .dhw zobj_remove_watchedRefEvent
+  .dhw EXIT
+  
+  : zobj_ref@
+  # ( optr refNr -- reffed_optr )
+  .dhw >R
+  .dhw zobj_follow_brokenhearts
+  .dhw R>
+  .dhw zobj_raw_ref@
+  .dhw zobj_follow_brokenhearts
+  .dhw EXIT
+  
+  : zobj_ref!
+  # ( new_reffed_optr optr refNr -- )
+  .dhw >R
+  .dhw zobj_follow_brokenhearts
+  .dhw R>
+  .dhw zobj_raw_ref!
+  .dhw EXIT
+  
+  : zobj_datum@
+  # ( optr datumNr -- cell )
+  .dhw >R
+  .dhw zobj_follow_brokenhearts
+  .dhw R>
+  .dhw zobj_raw_datum@
+  .dhw EXIT
+  
+  : zobj_datum!
+  # ( cell optr datumNr -- )
+  .dhw >R
+  .dhw zobj_follow_brokenhearts
+  .dhw R>
+  .dhw zobj_raw_datum!
+  .dhw EXIT
+  
+  : zobj_HERE
+  .dhw (VAR)
+  .dhw 0x4000
 `;
 export { src };
 
