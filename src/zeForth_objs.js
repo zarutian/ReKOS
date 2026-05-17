@@ -82,6 +82,39 @@ const src = `
   : zobj_sizeof_ref
   .dhw (CONST)
   .dhw 1
+
+  : zobj_refs_size_size@
+  # ( optr -- u )
+  .dhw zobj_header@
+  .dhw 7<<>
+  .dhw 7&
+  .dhw EXIT
+  
+  : zobj_refs_size@
+  # ( optr -- nrOfRefs )
+  .dhw DUP
+  .dhw zobj_refs_size_size@
+  .dhw generate_bitmask
+  .dhw SWAP
+  .dhw zobj_header@
+  .dhw &
+  .dhw EXIT
+  
+  : zobj_data_size@
+  # ( optr -- nrOfCells )
+  .dhw DUP
+  .dhw zobj_refs_size_size@  # ( optr rss )
+  .dhw DUP
+  .dhw LIT_10
+  .dhw SWAP
+  .dhw -                     # ( optr rss dss )
+  .dhw generate_bitmask
+  .dhw ROT                   # ( rss mask optr )
+  .dhw zobj_header@
+  .dhw ROT
+  .dhw >>                    # ( mask cell )
+  .dhw &
+  .dhw EXIT
   
 `;
 export { src };
