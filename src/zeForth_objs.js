@@ -526,48 +526,102 @@ const src = `
   .dhw zobj_gc_scan_L2
   : zobj_gc_scan_L1
   # ( optr refNr )
-  dat("2DUP", "zobj_ref@"); // ( optr refNr reffed_optr )
-  dat("DUP");               // ( optr refNr reffed_optr reffed_optr )
-  dat("zobj_ptr_in_oldspace"); // ( optr refNr reffed_optr bool )
-  dat("(BRZ)", "zobj_gc_scan_L3"); // ( optr refNr reffed_optr )
-  dat("DUP", "zobj_migrate2new");  // ( optr refNr reffed_optr )
-  def("zobj_gc_scan_L3");
-  dat("zobj_follow_brokenhearts"); // ( optr refNr new_reffed_optr )
-  dat("3DUP", "DROP");             // ( optr refNr new_reffed_optr optr refNr )
-  dat("zobj_ref!", "1+");          // ( optr refNr+1 )
-  def("zobj_gc_scan_L2");   // ( optr refNr )
-  dat("(NEXT)", "zobj_gc_scan_L1");
-  dat("(JMP)", "2DROP");
-  def("zobj_gc_scan_L_refWatcher"); // ( optr )
-  dat("DUP", "zobj_size@", "zobj_scanptr", "zobj_ptr+!");
-  dat("DUP", "zobj_refs_size@", ">R", "LIT_0", "(JMP)", "zobj_gc_scan_L5");
-  def("zobj_gc_scan_L4");   // ( optr refNr )
-  dat("2DUP", "zobj_ref@"); // ( optr refNr reffed_optr )
-  dat("DUP");               // ( optr refNr reffed_optr reffed_optr )
-  dat("zobj_ptr_in_oldspace"); // ( optr refNr reffed_optr bool )
-  dat("(BRZ)", "zobj_gc_scan_L6"); // ( optr refNr reffed_optr )
-  dat("zobj_HERE", "@", ">R"); // ( optr refNr reffed_optr ) R:( count new_optr )
-  dat("OVER", "(LIT)", 0xC000, "OR", "zobj_,");
-  dat("3RD_DEEP", "zobj_,");   // ( optr refNr reffrd_optr ) R:( count new_optr )
-  dat("zobj_watchedRefEvent_tail", "@", "zobj_,");
-  dat("zobj_watchedRefEvent_tail", "@"); // ( optr refNr reffed_optr ptr )
-  dat("LIT_3", "zobj_ptr+");   // ( optr refNr reffed_optr ptr+3 )
-  dat("DUP", "zobj_@", "DUP"); // ( optr refNr reffed_optr ptr+3 tail_next tail_next )
-  dat("zobj_,");               // ( optr refNr reffed_optr ptr+3 tail_next )
-  dat("LIT_2", "zobj_ptr+");   // ( optr refNr reffed_optr ptr+3 tail_next_prev )
-  dat("R@", "SWAP", "zobj_!"); // ( optr refNr reffed_optr ptr+3 )
-  dat("R@", "SWAP", "zobj_!"); // ( optr refNr reffed_optr )
-  dat("DUP", "R@", "LIT_4", "zobj_ptr+", "OVER", "zobj_size@", "zobj_move2new");
-  dat("R@", "zobj_breakheart"); // ( optr refNr )
-  dat("2DUP", "R>", "-ROT", "zobj_ref!");
-  def("zobj_gc_scan_L6");
-  dat("1+");                // ( optr refNr+1 )
-  def("zobj_gc_scan_L5");
-  dat("(NEXT)", "zobj_gc_scan_L4");
-  dat("(JMP)", "2DROP");
-  def("zobj_gc_scan_L_brokenheart"); // ( optr )
-  dat("LIT_2", "zobj_scanptr", "zobj_ptr+!");
-  dat("zobj_follow_brokenhearts", "(JMP)", "zobj_gc_scan_L0");
+  .dhw 2DUP
+  .dhw zobj_ref@    # ( optr refNr reffed_optr )
+  .dhw DUP          # ( optr refNr reffed_optr reffed_optr )
+  .dhw zobj_ptr_in_oldspace # ( optr refNr reffed_optr bool )
+  .dhw (BRZ)        #
+  .dhw zobj_gc_scan_L3 # ( optr refNr reffed_optr )
+  .dhw DUP
+  .dhw zobj_migrate2new # ( optr refNr reffed_optr )
+  .dhw zobj_gc_scan_L3
+  .dhw zobj_follow_brokenhearts # ( optr refNr new_reffed_optr )
+  .dhw 3DUP
+  .dhw DROP         # ( optr refNr new_reffed_optr optr refNr )
+  .dhw zobj_ref!
+  .dhw 1+           # ( optr refNr+1 )
+  : zobj_gc_scan_L2 # ( optr refNr )
+  .dhw (NEXT)
+  .dhw zobj_gc_scan_L1
+  .dhw (JMP)
+  .dhw 2DROP
+  : zobj_gc_scan_L_refWatcher
+  # ( optr )
+  .dhw DUP
+  .dhw zobj_size@
+  .dhw zobj_scanptr
+  .dhw zobj_ptr+!   #
+  .dhw DUP
+  .dhw zobj_refs_size@
+  .dhw >R
+  .dhw LIT_0
+  .dhw (JMP)
+  .dhw zobj_gc_scan_L5 #
+  : zobj_gc_scan_L4
+  # ( optr refNr )
+  .dhw 2DUP
+  .dhw zobj_ref@             # ( optr refNr reffed_optr )
+  .dhw DUP                   # ( optr refNr reffed_optr reffed_optr )
+  .dhw zobj_ptr_in_oldspace  # ( optr refNr reffed_optr bool )
+  .dhw (BRZ)
+  .dhw zobj_gc_scan_L6       # ( optr refNr reffed_optr )
+  .dhw zobj_HERE
+  .dhw @
+  .dhw >R                    # ( optr refNr reffed_optr ) R:( count new_optr )
+  .dhw OVER
+  .dhw (LIT)
+  .dhw 0xC000
+  .dhw OR
+  .dhw zobj_,                #
+  .dhw 3RD_DEEP
+  .dhw zobj_,                # ( optr refNr reffrd_optr ) R:( count new_optr )
+  .dhw zobj_watchedRefEvent_tail
+  .dhw @
+  .dhw zobj_,                #
+  .dhw zobj_watchedRefEvent_tail
+  .dhw @                     # ( optr refNr reffed_optr ptr )
+  .dhw LIT_3
+  .dhw zobj_ptr+             # ( optr refNr reffed_optr ptr+3 )
+  .dhw DUP
+  .dhw zobj_@
+  .dhw DUP                   # ( optr refNr reffed_optr ptr+3 tail_next tail_next )
+  .dhw zobj_,                # ( optr refNr reffed_optr ptr+3 tail_next )
+  .dhw LIT_2
+  .dhw zobj_ptr+             # ( optr refNr reffed_optr ptr+3 tail_next_prev )
+  .dhw R@
+  .dhw SWAP
+  .dhw zobj_!                # ( optr refNr reffed_optr ptr+3 )
+  .dhw R@
+  .dhw SWAP
+  .dhw zobj_!                # ( optr refNr reffed_optr )
+  .dhw DUP
+  .dhw R@
+  .dhw LIT_4
+  .dhw zobj_ptr+
+  .dhw OVER
+  .dhw zobj_size@
+  .dhw zobj_move2new         #
+  .dhw R@
+  .dhw zobj_breakheart       # ( optr refNr )
+  .dhw 2DUP
+  .dhw R>
+  .dhw -ROT
+  .dhw zobj_ref!             #
+  : zobj_gc_scan_L6
+  .dhw 1+                    # ( optr refNr+1 )
+  : zobj_gc_scan_L5
+  .dhw (NEXT)
+  .dhw zobj_gc_scan_L4
+  .dhw (JMP)
+  .dhw 2DROP
+  : zobj_gc_scan_L_brokenheart
+  # ( optr )
+  .dhw LIT_2
+  .dhw zobj_scanptr
+  .dhw zobj_ptr+!            #
+  .dhw zobj_follow_brokenhearts
+  .dhw (JMP)
+  .dhw zobj_gc_scan_L0
   
 `;
 export { src };
