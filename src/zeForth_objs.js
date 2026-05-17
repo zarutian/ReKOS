@@ -438,6 +438,33 @@ const src = `
   .dhw R>              # ( old_a_optr new_b_optr )
   .dhw zobj_breakheart # ( )
   .dhw EXIT
+
+  : zobj_migrate2new
+  # ( old_optr -- )
+  .dhw DUP
+  .dhw zobj_move2new
+  .dhw zobj_breakheart
+  .dhw EXIT
+  
+  : zobj_ptr_within
+  # ( ptr lower upper -- T | F )
+  .dhw OVER      # ( ptr lower upper lower )
+  .dhw zobj_ptr- # ( ptr lower u-l )
+  .dhw >R        # ( ptr lower )
+  .dhw zobj_ptr- # ( p-l )
+  .dhw R>        # ( p-l u-l )
+  .dhw <
+  .dhw EXIT
+  
+  : zobj_ptr_in_oldspace
+  # ( ptr -- flag )
+  .dhw zobj_oldspace_start
+  .dhw @
+  .dhw zobj_newspace_start
+  .dhw @
+  .dhw zobj_ptr_within
+  .dhw EXIT
+  
   
 `;
 export { src };
