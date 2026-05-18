@@ -210,7 +210,34 @@ const src = objs_src.concat(`
   .utf8_hwc "SubRect does not understand method selector or verb"
   : zgfx_(SubRect)_xxxPixel
   # ( (colour) x y (2|3) verb objref -- )
-  
+  .dhw SWAP        # ( (colour) x y (2|3) objref verb ) R:( )
+  .dhw >R          # ( (colour) x y (2|3) objref ) R:( verb )
+  .dhw SWAP        # ( (colour) x y objref (2|3) ) R:( verb )
+  .dhw >R          # ( (colour) x y objref ) R:( verb arity )
+  .dhw >R          # ( (colour) x y ) R:( verb arity objref )
+  .dhw LIT_0       # ( (colour) x y 0 ) R:( verb arity objref )
+  .dhw zgfx_verb_getHeight # ( (colour) x y 0 v ) R:( verb arity objref )
+  .dhw R@          # ( (colour) x y 0 v objref ) R:( verb arity objref )
+  .dhw zobj_invoke # ( (colour) x y height 1 ) R:( verb arity objref )
+  .dhw DROP        # ( (colour) x y height ) R:( verb arity objref )
+  .dhw %           # ( (colour) x y_%ed ) R:( verb arity objref )
+  .dhw SWAP        # ( (colour) y_%ed x ) R:( verb arity objref )
+  .dhw LIT_0       #
+  .dhw zgfx_verb_getWidth #
+  .dhw R@
+  .dhw zobj_invoke # ( (colour) y_%ed x width 1 ) R:( verb arity objref )
+  .dhw DROP
+  .dhw %
+  .dhw SWAP        # ( (colour) x_%ed y_%ed ) R:( verb arity objref )
+  .dhw R>          # ( (colour) x_%ed y_%ed objref ) R:( verb arity )
+  .dhw R>          # ( (colour) x_%ed y_%ed objref arity ) R:( verb )
+  .dhw SWAP
+  .dhw R>
+  .dhw SWAP        # ( (colour) x_%ed y_%ed arity verb objref ) R:( )
+  .dhw LIT_0
+  .dhw zobj_refs@  # ( (colour) x_%ed y_%ed arity verb delegated_to )
+  .dhw (JMP)
+  .dhw zobj_invoke
   
 `);
 export { src };
