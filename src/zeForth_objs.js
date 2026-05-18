@@ -668,6 +668,7 @@ const src = `
   // ref 0:
   // ref 1: watchedRefEventObject_script
   // ref 2: verb_symbol_enqueue
+  // ref 3: verb_symbol_dequeue
   
   : zobj_get_eventQueueHead
   # ( -- optr )
@@ -776,7 +777,60 @@ const src = `
   .dhw zobj_flush_watchedRefEvents2event_queue_L0
   .dhw (JMP)
   .dhw 2DROP
+
+  : zobj_make_watchedRefEventObject
+  # ( watcher_optr refNr -- optr )
+  .dhw zobj_HERE
+  .dhw @
+  .dhw >R            # ( watcher refNr ) R:( optr )
+  .dhw (LIT)
+  .dhw 0x0806
+  .dhw zobj_,        # write object header
+  .dhw (LIT)
+  .dhw zobj_invocationHandler_for_objscript_list
+  .dhw zobj_,        # write xt
+  .dhw zobj_get_primordialsRoot
+  .dhw LIT_1
+  .dhw zobj_ref@     # get optr to watchedRefEventObject_script
+  .dhw zobj_,        # ( watcher refNr )
+  .dhw SWAP
+  .dhw zobj_,
+  .dhw zobj_,        # ( ) R:( optr )
+  .dhw R>
+  .dhw EXIT
   
+  : zobj_eventQueue_enqueue
+  # ( callback_optr -- )
+  .dhw LIT_1
+  .shw zobj_get_primordialsRoot
+  .dhw LIT_2
+  .dhw zobj_refs@
+  .dhw zobj_get_eventQueueTail
+  .dhw zobj_invoke
+  .dhw DROP
+  .dhw EXIT
+  
+  : zobj_eventQueue_dequeue
+  # ( -- callback_optr )
+  .dhw LIT_0
+  .dhw zobj_get_primordialsRoot
+  .dhw LIT_3
+  .dhw zobj_refs@
+  .dhw zobj_get_eventQueueHead
+  .dhw zobj_invoke
+  .dhw 1=
+  .dhw SKNZ
+  .dhw zobj_throwWrongArity
+  .dhw EXIT
+  
+  : zobj_eventloop_turn
+  # ( -- )
+  .dhw zobj_eventQueue_dequeue # ( callback_optr )
+  # start watchdog timer, throws if it runs out
+  # invoke callback_optr with run/0
+  # stop watchdog timer
+  .dhw zobj_gc
+  .dhw EXIT
 `;
 export { src };
 
