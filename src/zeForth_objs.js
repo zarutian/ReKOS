@@ -693,6 +693,55 @@ const src = `
   .dhw (JMP)
   .dhw EXECUTE
 
+  : zobj_invocationHandler_for_objscript_list
+  # meant as an xt for objects
+  # same stack diagram as zobj_invoke
+  # all except for the 0th and nth refs in objscript_list
+  # are pair of symbol_optr and method_optr
+  .dhw DUP
+  .dhw LIT_0
+  .dhw zobj_ref@     # ( ... a ac v t objscript_optr )
+  .dhw DUP
+  .dhw zobj_refs_size@
+  .dhw 2/
+  .dhw 1-
+  .dhw >R
+  .dhw LIT_1
+  .dhw (JMP)
+  .dhw zobj_invocationHandler_for_objscript_list_L1
+  : zobj_invocationHandler_for_objscript_list_L0
+                  # ( ... a ac v t os idx )
+  .dhw 4TH_DEEP   # ( ... a ac v t os idx v )
+  .dhw 3RD_DEEP   # ( ... a ac v t os idx v os )
+  .dhw 3RD_DEEP   # ( ... a ac v t os idx v os idx )
+  .dhw zobj_ref@  # ( ... a ac v t os idx verb sym )
+  .dhw =          # ( ... a ac v t os idx bool )
+  .dhw (BRZ)      # ( ... a ac v t os idx )
+  .dhw zobj_invocationHandler_for_objscript_list_L2");
+  .dhw 1+         # ( ... a ac v t os idx+1 )
+  .dhw zobj_ref@  # ( ... a ac v t method_optr )
+  # todo: ? tbdecided ?
+  # 1. find the symbol object for the string "[apply]"
+  # 2. invoke the method with that as verb
+  # but for now, assume datum 0 is xt to handling invocations
+  .dhw DUP
+  : zobj_invocationHandler_for_objscript_list_L3
+  .dhw LIT_0
+  .dhw zobj_datum@   #
+  .dhw R>
+  .dhw DROP          #
+  .dhw (JMP)
+  .dhw EXECUTE       #
+  : zobj_invocationHandler_for_objscript_list_L2
+  .dhw 2+
+  : zobj_invocationHandler_for_objscript_list_L1
+  .dhw (NEXT)
+  .dhw zobj_invocationHandler_for_objscript_list_L0
+  .dhw zobj_ref@
+  .dhw (JMP)
+  .dhw zobj_invocationHandler_for_objscript_list_L3
+ 
+
   
 `;
 export { src };
