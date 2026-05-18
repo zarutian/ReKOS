@@ -83,37 +83,47 @@ const src = objs_src.concat(`
   .dhw zobj_ALOT      # ( ) R:( objref )
   .dhw R> EXIT        # ( objref )
 
-  def("zgfx_(PixBuff)");   // ( ... argN verb self -- ... )
-  dat("OVER", "zgfx_verb_getWidth",  "=", "NOT", "(BRZ)", "zgfx_common_getWidth");
-  dat("OVER", "zgfx_verb_getHeight", "=", "NOT", "(BRZ)", "zgfx_common_getHeight");
-  dat("OVER", "zgfx_verb_getPixel",  "=", "NOT", "(BRZ)", "zfgx_(PixBuff)_getPixel");
-  dat("OVER", "zgfx_verb_putPixel",  "=", "NOT", "(BRZ)", "zfgx_(PixBuff)_putPixel");
-  dat("(ABORT\")");
-  asciic("PixBuff does not understand method selector or verb");
-  def("zgfx_(PixBuff)_xxxPixel"); // ( (colour) x y objref -- (colour) offset r objref )
-  dat(">R");          // ( (colour) x y ) R:( objref )
-  dat("LIT_0");       // ( (colour) x y 0 ) R:( objref )
-  dat("zgfx_verb_getWidth"); //
-  dat("R@");          // ( (colour) x y 0 getWidth_verb or ) R:( objref )
-  dat("zobj_invoke"); // ( (colour) x y width 1 ) R:( objref )
-  dat("DROP");        // ( (colour) x y width ) R:( objref )
-  dat("*");           // ( (colour) x y*w ) R:( objref )
-  dat("+");           // ( (colour) x+y*w )
-  dat("R@", "LIT_2", "zobj_dat@"); // ( (colour) pixelNr bbp )
-  dat("/%");          // ( (colour) offset r )
-  dat("SWAP");        // ( (colour) r offset )
-  dat("3+",);         // ( (colour) r offset+3 )
-  dat("SWAP");        // ( (colour) offset+3 r )
-  dat("R>");          // ( (colour) offset+3 r objref )
-  dat("EXIT");        //
-  def("zgfx_(PixBuff)_getPixel"); // ( x y 2 zgfx_verb_getPixel objref -- colour )
-  dat("LIT_2");                   // ( x y 2 v objref 2 )
-  dat("zgfx_too_few_or_many_args?"); // ( x y 2 v objref )
-  dat(">R");                      // ( x y 2 v ) R:( objref )
-  dat("2DROP");                   // ( x y ) R:( objref )
-  dat("R@");                      // ( x y objref ) R:( objref )
-  dat("zgfx_(PixBuff)_xxxPixel"); // ( offset r objref )
-  dat("ROT");                     // ( r objref offset )
-  dat("zobj_dat@");
+  : zgfx_(PixBuff)
+  # ( ... argN verb self -- ... )
+  .dhw OVER zgfx_verb_getWidth  = NOT (BRZ) zgfx_common_getWidth
+  .dhw OVER zgfx_verb_getHeight = NOT (BRZ) zgfx_common_getHeight
+  .dhw OVER zgfx_verb_getPixel  = NOT (BRZ) zfgx_(PixBuff)_getPixel
+  .dhw OVER zgfx_verb_putPixel  = NOT (BRZ) zfgx_(PixBuff)_putPixel
+  .dhw (ABORT\")
+  .utf8_hwc "PixBuff does not understand method selector or verb
+  : zgfx_(PixBuff)_xxxPixel
+  # ( (colour) x y objref -- (colour) offset r objref )
+  .dhw >R          # ( (colour) x y ) R:( objref )
+  .dhw LIT_0       # ( (colour) x y 0 ) R:( objref )
+  .dhw zgfx_verb_getWidth
+  .dhw R@          # ( (colour) x y 0 getWidth_verb or ) R:( objref )
+  .dhw zobj_invoke # ( (colour) x y width 1 ) R:( objref )
+  .dhw DROP        # ( (colour) x y width ) R:( objref )
+  .dhw *           # ( (colour) x y*w ) R:( objref )
+  .dhw +           # ( (colour) x+y*w )
+  .dhw R@ LIT_2 zobj_dat@ # ( (colour) pixelNr bbp )
+  .dhw /%          # ( (colour) offset r )
+  .dhw SWAP        # ( (colour) r offset )
+  .dhw 3+          # ( (colour) r offset+3 )
+  .dhw SWAP        # ( (colour) offset+3 r )
+  .dhw R>          # ( (colour) offset+3 r objref )
+  .dhw EXIT        #
+  : zgfx_(PixBuff)_getPixel
+  # ( x y 2 zgfx_verb_getPixel objref -- colour )
+  .dhw LIT_2                      # ( x y 2 v objref 2 )
+  .dhw zgfx_too_few_or_many_args? # ( x y 2 v objref )
+  .dhw >R                         # ( x y 2 v ) R:( objref )
+  .dhw 2DROP                      # ( x y ) R:( objref )
+  .dhw R@                         # ( x y objref ) R:( objref )
+  .dhw zgfx_(PixBuff)_xxxPixel    # ( offset r objref )
+  .dhw ROT                        # ( r objref offset )
+  .dhw zobj_dat@                  # ( r cell )
+  .dhw OVER                       # ( r cell r )
+  .dhw LIT_16 # ætti að vera CELL_butsize  # ( r cell r 16 )
+  .dhw SWAP                       # ( r cell 16 r )
+  .dhw -                          # ( r cell 16-r )
+  .dhw >>                         # ( r cell>>x )
+  .dhw SWAP                       # ( cell>>x r )
+  --merkill--
 `);
 export { src };
