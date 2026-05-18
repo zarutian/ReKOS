@@ -300,6 +300,11 @@ const src = objs_src.concat(`
   .dhw SWAP           # ( (colour) x_offsetted y_offsetted arity verb self ) R:( )
   .dhw (JMP)
   .dhw zgfx_common_delegate
-  
+
+  // 90°rotate  ref to PixBuff, rotate coordnates clockwise 90°
+  : zgfx_make90°rotate_clockwise
+  # ( src -- objref )
+  .dhw zobj_HERE
+  .dhw @
 `);
 export { src };
