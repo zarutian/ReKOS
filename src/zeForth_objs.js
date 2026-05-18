@@ -663,6 +663,36 @@ const src = `
   .dhw LIT_3
   .dhw zobj_ref@
   .dhw EXIT
+
+  # primordials:
+  // ref 0:
+  // ref 1: watchedRefEventObject_script
+  // ref 2: verb_symbol_enqueue
+  
+  : zobj_get_eventQueueHead
+  # ( -- optr )
+  .dhw zobj_root_optr
+  .dhw @
+  .dhw LIT_4
+  .dhw zobj_ref@
+  .dhw EXIT
+  
+  : zobj_get_eventQueueTail
+  # ( -- optr )
+  .dhw zobj_root_optr
+  .dhw @
+  .dhw LIT_5
+  .dhw zobj_ref@
+  .dhw EXIT
+  
+  : zobj_invoke
+  # ( ... arg(s) argc verb target_optr -- ... result(s) resultc )
+  .dhw zobj_follow_brokenhearts
+  .dhw DUP
+  .dhw zobj_xt@
+  .dhw (JMP)
+  .dhw EXECUTE
+
   
 `;
 export { src };
