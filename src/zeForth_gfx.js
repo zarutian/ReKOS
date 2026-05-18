@@ -119,7 +119,7 @@ const src = objs_src.concat(`
   .dhw ROT                        # ( r objref offset )
   .dhw zobj_dat@                  # ( r cell )
   .dhw OVER                       # ( r cell r )
-  .dhw LIT_16 # ætti að vera CELL_butsize  # ( r cell r 16 )
+  .dhw LIT_16 # ætti að vera CELL_bitsize  # ( r cell r 16 )
   .dhw SWAP                       # ( r cell 16 r )
   .dhw -                          # ( r cell 16-r )
   .dhw >>                         # ( r cell>>x )
@@ -136,8 +136,9 @@ const src = objs_src.concat(`
   .dhw 2DROP                      # ( colour x y ) R:( objref )
   .dhw R@                         # ( colour x y objref ) R:( objref )
   .dhw zgfx_(PixBuff)_xxxPixel    # ( colour offset r objref ) R:( objref )
-  .dhw 3RD                        # ( colour r objref offset ) R:( objref )
-  .dhw zobj_dat@                  # (
+  .dhw 3RD_DEEP                   # ( colour offset r objref offset ) R:( objref )
+  .dhw zobj_dat@                  # ( colour offset r cell ) R:( objref )
+  .dhw 
 
 `);
 export { src };
