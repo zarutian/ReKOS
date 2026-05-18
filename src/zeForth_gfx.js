@@ -256,7 +256,7 @@ const src = objs_src.concat(`
   .dhw <header tbc>
   .dhw zobj_,         # ( src offset_x offset_y ) R:( objref )
   .dhw (LIT)
-  .dhw zobj_(Translate)
+  .dhw zgfx_(Translate)
   .dhw zobj_,
   .dhw SWAP
   .dhw R@             # ( s h w objref ) R:( objref )
@@ -271,7 +271,7 @@ const src = objs_src.concat(`
   .dhw R>
   .dhw EXIT
   
-  : zobj_(Translate)
+  : zgfx_(Translate)
   # ( ... argN verb self -- ... )
   .dhw OVER zgfx_verb_getPixel  = NOT (BRZ) zfgx_(Translate)_xxxPixel
   .dhw OVER zgfx_verb_putPixel  = NOT (BRZ) zfgx_(Translate)_xxxPixel
@@ -293,6 +293,7 @@ const src = objs_src.concat(`
   .dhw zobj_dat@      #
   .dhw +              #
   .dhw SWAP           # ( (colour) x_offsetted y_offsetted ) R:( verb arity self )
+  : zgfx_(Translate)_xxxPixel_L0
   .dhw R>
   .dhw R>
   .dhw SWAP           # ( (colour) x_offsetted y_offsetted arity self ) R:( verb )
@@ -301,10 +302,46 @@ const src = objs_src.concat(`
   .dhw (JMP)
   .dhw zgfx_common_delegate
 
-  // 90°rotate  ref to PixBuff, rotate coordnates clockwise 90°
+  # 90°rotate  ref to PixBuff, rotate coordnates clockwise 90°
   : zgfx_make90°rotate_clockwise
   # ( src -- objref )
   .dhw zobj_HERE
   .dhw @
+  .dhw >R             # ( src ) R:( objref )
+  .dhw (LIT)
+  .dhw <header tbc>
+  .dhw zobj_,
+  .dhw (LIT)
+  .dhw zgfx_(90°rotate_clockwise)
+  .dhw zobj_,
+  .dhw LIT_0
+  .dhw R@
+  .dhw zobj_refs!     # ( ) R:( objref )
+  .dhw R>
+  .dhw EXIT
+
+  : zgfx_(90°rotate_clockwise)
+  # ( ... argN verb self -- ... )
+  .dhw OVER zgfx_verb_getPixel  = NOT (BRZ) zgfx_(90°rotate_clockwise)_xxxPixel
+  .dhw OVER zgfx_verb_putPixel  = NOT (BRZ) zgfx_(90°rotate_clockwise)_xxxPixel
+  .dhw (JMP) zgfx_common_delegate
+  : zgfx_(90°rotate_clockwise)_xxxPixel
+  # ( (colour) x y arity verb self )
+  .dhw SWAP           # ( (colour) x y arity self verb ) R:( )
+  .dhw >R
+  .dhw SWAP
+  .dhw >R
+  .dhw >R             # ( (colour) x y ) R:( verb arity self )
+  .dhw LIT_0
+  .dhw (LIT)
+  .dhw zgfx_verb_getWidth
+  .dhw R@
+  .dhw zobj_invoke
+  .dhw DROP           # ( (colour) x y width ) R:( verb arity self )
+  .dhw SWAP           # ( (colour) x width y ) R:( verb arity self )
+  .dhw -              # ( (colour) x new_x ) R:( verb arity self )
+  .dhw SWAP           # ( (colour) new_x new_y ) R:( verb arity self )
+  .dhw (JMP)
+  .dhw zgfx_(Translate)_xxxPixel_L0
 `);
 export { src };
