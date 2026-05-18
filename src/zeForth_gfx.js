@@ -174,5 +174,30 @@ const src = objs_src.concat(`
   .dhw zobj_dat!                  # ( )
   .dhw LIT_0                      # ( 0 )
   .dhw EXIT
+
+  // Subrect references PixBuff compatible obj and only gives pixels from that subrect
+  : zgfx_makeSubRect
+  # ( src width height -- objref )
+  .dhw zobj_HERE
+  .dhw @
+  .dhw >R             # ( s w h ) R:( objref )
+  .dhw (LIT)
+  .dhw <header tbc>
+  .dhw zobj_,         # ( s w h ) R:( objref )
+  .dhw (LIT)
+  .dhw zobj_(SubRect) # ( s w h xt ) R:( objref )
+  .dhw zobj_,         # ( s w h ) R:( objref )
+  .dhw SWAP
+  .dhw R@             # ( s h w objref ) R:( objref )
+  .dhw LIT_0
+  .dhw zobj_dat!      # ( s h ) R:( objref )
+  .dhw R@
+  .dhw LIT_1          # ( s h objref 1 ) R:( objref )
+  .dhw zobj_dat!      # ( s ) R:( objref )
+  .dhw R@
+  .dhw LIT_0
+  .dhw zobj_ref!      # ( ) R:( objref )
+  .dhw R>
+  .dgw EXIT
 `);
 export { src };
