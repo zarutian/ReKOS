@@ -157,5 +157,22 @@ const src = objs_src.concat(`
   .dhw -                          # ( colour_masked offset r bitmask 16-r ) R:( objref cell )
   .dhw >>                         # ( colour_masked offset r bitmask>>x )   R:( objref cell )
   # -lok-
+  .dhw INVERT                     # ( colour_masked offset r ~(bitmask>>x) ) R:( objref cell )
+  .dhw R>                         # ( colour_masked offset r ~(bitmask>>x) cell ) R:( objref )
+  .dhw &                          # ( colour_masked offset r cell_masked ) R:( objref )
+  .dhw >R                         # ( colour_masked offset r ) R:( objref cell_masked )
+  .dhw ROT                        # ( offset r colour_masked ) R:( objref cell_masked )
+  .dhw LIT_16 # ætti að vera CELL_bitsize 
+  .dhw SWAP                       # ( offset colour_masked 16 r ) R:( objref cell_masked )
+  .dhw -                          # ( offset colour_masked 16-r ) R:( objref cell_masked )
+  .dhw <<                         # ( offset colour_masked<<x ) R:( objref cell_masked )
+  .dhw R>                         # ( offset colour_masked<<x cell_masked ) R:( objref )
+  .dhw OR                         # ( offset new_cell ) R:( objref )
+  .dhw SWAP                       # ( new_cell offset ) R:( objref )
+  .dhw R>                         # ( new_cell offset objref ) R:( )
+  .dhw SWAP                       # ( new_cell objref offset )
+  .dhw zobj_dat!                  # ( )
+  .dhw LIT_0                      # ( 0 )
+  .dhw EXIT
 `);
 export { src };
