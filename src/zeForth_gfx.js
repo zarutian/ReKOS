@@ -114,7 +114,7 @@ const src = objs_src.concat(`
   .dhw zgfx_too_few_or_many_args? # ( x y 2 v objref )
   .dhw >R                         # ( x y 2 v ) R:( objref )
   .dhw 2DROP                      # ( x y ) R:( objref )
-  .dhw R@                         # ( x y objref ) R:( objref )
+  .dhw R>                         # ( x y objref ) R:( objref )
   .dhw zgfx_(PixBuff)_xxxPixel    # ( offset r objref )
   .dhw ROT                        # ( r objref offset )
   .dhw zobj_dat@                  # ( r cell )
@@ -128,5 +128,16 @@ const src = objs_src.concat(`
   .dhw &                          # ( colour )
   .dhw LIT_1                      # ( colour 1 )
   .dhw EXIT
+  : zgfx_(PixBuff)_putPixel
+  # ( colour x y 3 zgfx_verb_putPixel objref -- 0 )
+  .dhw LIT_3
+  .dhw zgfx_too_few_or_many_args? # ( colour x y 3 v objref )
+  .dhw >R                         # ( colour x y 3 v ) R:( objref )
+  .dhw 2DROP                      # ( colour x y ) R:( objref )
+  .dhw R@                         # ( colour x y objref ) R:( objref )
+  .dhw zgfx_(PixBuff)_xxxPixel    # ( colour offset r objref ) R:( objref )
+  .dhw 3RD                        # ( colour r objref offset ) R:( objref )
+  .dhw zobj_dat@                  # (
+
 `);
 export { src };
