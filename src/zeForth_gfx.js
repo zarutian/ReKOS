@@ -278,6 +278,28 @@ const src = objs_src.concat(`
   .dhw (JMP) zgfx_common_delegate
   : zgfx_(Translate)_xxxPixel
   # ( (colour) x y arity verb self )
+  .dhw SWAP           # ( (colour) x y arity self verb ) R:( )
+  .dhw >R
+  .dhw SWAP
+  .dhw >R
+  .dhw >R             # ( (colour) x y ) R:( verb arity self )
+  .dhw LIT_1          # ( (colour) x y 1 ) R:( verb arity self )
+  .dhw R@             # ( (colour) x y 1 self ) R:( verb arity self )
+  .dhw zobj_dat@      # ( (colour) x y offset_y ) R:( verb arity self )
+  .dhw +              #
+  .dhw SWAP           #
+  .dhw LIT_0          #
+  .dhw R@             #
+  .dhw zobj_dat@      #
+  .dhw +              #
+  .dhw SWAP           # ( (colour) x_offsetted y_offsetted ) R:( verb arity self )
+  .dhw R>
+  .dhw R>
+  .dhw SWAP           # ( (colour) x_offsetted y_offsetted arity self ) R:( verb )
+  .dhw R>
+  .dhw SWAP           # ( (colour) x_offsetted y_offsetted arity verb self ) R:( )
+  .dhw (JMP)
+  .dhw zgfx_common_delegate
   
 `);
 export { src };
