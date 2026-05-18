@@ -118,11 +118,13 @@ const src = objs_src.concat(`
   .dhw zgfx_(PixBuff)_xxxPixel    # ( offset r objref )
   .dhw ROT                        # ( r objref offset )
   .dhw zobj_dat@                  # ( r cell )
+  # -byrjun-
   .dhw OVER                       # ( r cell r )
   .dhw LIT_16 # ætti að vera CELL_bitsize  # ( r cell r 16 )
   .dhw SWAP                       # ( r cell 16 r )
   .dhw -                          # ( r cell 16-r )
   .dhw >>                         # ( r cell>>x )
+  # -lok-
   .dhw SWAP                       # ( cell>>x r )
   .dhw generate_bitmask           # ( cell>>x bitmask )
   .dhw &                          # ( colour )
@@ -140,8 +142,20 @@ const src = objs_src.concat(`
   .dhw zobj_dat@                  # ( colour offset r cell ) R:( objref )
   .dhw OVER                       # ( colour offset r cell r ) R:( objref )
   .dhw generate_bitmask           # ( colour offset r cell bitmask ) R:( objref )
-  .dhw INVERT                     # ( colour offset r cell ~bitmask ) R:( objref )
-  .dhw &                          # ( colour offset r cell_masked ) R:( objref )
-
+  .dhw SWAP
+  .dhw >R                         # ( colour offset r bitmask ) R:( objref cell )
+  .dhw >R                         # ( colour offset r ) R:( objref cell bitmask )
+  .dhw ROT                        # ( offset r colour ) R:( objref cell bitmask )
+  .dhw R@                         # ( offset r colour bitmask ) R:( objref cell bitmask )
+  .dhw &                          # ( offset r colour_masked ) R:( objref cell bitmask )
+  .dhw -ROT                       # ( colour_masked offset r ) R:( objref cell bitmask )
+  .dgw R>                         # ( colour_masked offset r bitmask ) R:( objref cell )
+  # -byrjun-
+  .dhw OVER                       # ( colour_masked offset r bitmask r ) R:( objref cell )
+  .dhw LIT_16 # ætti að vera CELL_bitsize  # ( colour_masked offset r bitmask r 16) R:( objref cell )
+  .dhw SWAP                       # ( colour_masked offset r bitmask 16 r ) R:( objref cell )
+  .dhw -                          # ( colour_masked offset r bitmask 16-r ) R:( objref cell )
+  .dhw >>                         # ( colour_masked offset r bitmask>>x )   R:( objref cell )
+  # -lok-
 `);
 export { src };
