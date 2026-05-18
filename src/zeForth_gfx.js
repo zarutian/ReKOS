@@ -138,7 +138,10 @@ const src = objs_src.concat(`
   .dhw zgfx_(PixBuff)_xxxPixel    # ( colour offset r objref ) R:( objref )
   .dhw 3RD_DEEP                   # ( colour offset r objref offset ) R:( objref )
   .dhw zobj_dat@                  # ( colour offset r cell ) R:( objref )
-  .dhw 
+  .dhw OVER                       # ( colour offset r cell r ) R:( objref )
+  .dhw generate_bitmask           # ( colour offset r cell bitmask ) R:( objref )
+  .dhw INVERT                     # ( colour offset r cell ~bitmask ) R:( objref )
+  .dhw &                          # ( colour offset r cell_masked ) R:( objref )
 
 `);
 export { src };
