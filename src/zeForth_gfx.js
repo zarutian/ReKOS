@@ -346,5 +346,9 @@ const src = objs_src.concat(`
 
   # FlipVert   ref to PixBuff, flip y axis so positive x coords are negative from right edge
   # FlipHorz   ref to PixBuff, flip x axis so positive y coords are negative from bottom edge
+
+  # Like bitplanes but if a pixel bit is on then the colour is spefic opaque
+  # if it is off then its delegated.
+  # Achived by 1x1 PixBuff, bitmask, and Blit
 `);
 export { src };
