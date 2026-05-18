@@ -741,7 +741,27 @@ const src = `
   .dhw (JMP)
   .dhw zobj_invocationHandler_for_objscript_list_L3
  
-
+  : zobj_flush_watchedRefEvents2event_queue
+  # ( -- )
+  .dhw zobj_watchedRefEvent_tail
+  .dhw @
+  .dhw DUP   # ( wRE_tail wRE_tail )
+  : zobj_flush_watchedRefEvents2event_queue_L0
+  # ( start_tail struct )
+  # struct.next -> struct
+  # --merkill--
+  dat("DUP", "LIT_3", "zobj_ptr+", "zobj_@", "SWAP"); // ( st next struct )
+  // make an watchedRef event object from struct
+  dat("DUP", "LIT_1", "zobj_ptr+", "zobj_@"); // ( st nt struct watcher )
+  dat("OVER", "zobj_@", "(LIT)", 0x0FFF, "&"); // ( st nt struct watcher refNr )
+  dat("zobj_make_watchedRefEventObject"); // ( st nt struct event )
+  // add the callback object to eventQueue
+  dat("zobj_eventQueue_enqueue");         // ( st nt struct )
+  // remove struct from the doubly linked list
+  dat("zobj_remove_watchedRefEvent", "DROP");
+  dat("2DUP", "="); // ( start_tail struct bool )
+  dat("(BRZ)", "zobj_flush_watchedRefEvents2event_queue_L0");
+  dat("(JMP)", "2DROP");
   
 `;
 export { src };
