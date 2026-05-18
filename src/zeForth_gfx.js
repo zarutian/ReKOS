@@ -90,7 +90,7 @@ const src = objs_src.concat(`
   .dhw OVER zgfx_verb_getPixel  = NOT (BRZ) zfgx_(PixBuff)_getPixel
   .dhw OVER zgfx_verb_putPixel  = NOT (BRZ) zfgx_(PixBuff)_putPixel
   .dhw (ABORT\")
-  .utf8_hwc "PixBuff does not understand method selector or verb
+  .utf8_hwc "PixBuff does not understand method selector or verb"
   : zgfx_(PixBuff)_xxxPixel
   # ( (colour) x y objref -- (colour) offset r objref )
   .dhw >R          # ( (colour) x y ) R:( objref )
@@ -199,5 +199,18 @@ const src = objs_src.concat(`
   .dhw zobj_ref!      # ( ) R:( objref )
   .dhw R>
   .dgw EXIT
+
+  : zobj_(SubRect)
+  # ( ... argN verb self -- ... )
+  .dhw OVER zgfx_verb_getWidth  = NOT (BRZ) zgfx_common_getWidth
+  .dhw OVER zgfx_verb_getHeight = NOT (BRZ) zgfx_common_getHeight
+  .dhw OVER zgfx_verb_getPixel  = NOT (BRZ) zfgx_(SubRect)_xxxPixel
+  .dhw OVER zgfx_verb_putPixel  = NOT (BRZ) zfgx_(SubRect)_xxxPixel
+  .dhw (ABORT\")
+  .utf8_hwc "SubRect does not understand method selector or verb"
+  : zgfx_(SubRect)_xxxPixel
+  # ( (colour) x y (2|3) verb objref -- )
+  
+  
 `);
 export { src };
