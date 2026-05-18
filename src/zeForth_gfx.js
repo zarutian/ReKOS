@@ -23,9 +23,16 @@ const src = objs_src.concat(`
   : zgfx_verb_getColour
   # ( idxIntoPalette )
   .dhw (CONST) 0x4205
+
+  : zgfx_common_delegate
+  # ( ... argN verb obj -- ... )
+  .dhw LIT_0
+  .dhw zobj_refs@
+  .dhw (JMP)
+  .dhw zobj_invoke
   
   : zgfx_common_getWidth
-  # ( ... argN verb obj -- width )
+  # ( ... argN verb obj -- width 1 )
   .dhw LIT_0
   .dhw zgfx_too_few_or_many_args?
   .dhw 2NIP
@@ -35,7 +42,7 @@ const src = objs_src.concat(`
   .dhw EXIT
   
   : zgfx_common_getHeight
-  # ( verb obj -- height )
+  # ( verb obj -- height 1 )
   .dhw LIT_0
   .dhw zgfx_too_few_or_many_args?
   .dhw 2NIP
@@ -198,7 +205,7 @@ const src = objs_src.concat(`
   .dhw LIT_0
   .dhw zobj_ref!      # ( ) R:( objref )
   .dhw R>
-  .dgw EXIT
+  .djw EXIT
 
   : zobj_(SubRect)
   # ( ... argN verb self -- ... )
@@ -242,5 +249,35 @@ const src = objs_src.concat(`
   // Translate  ref to PixBuff, translates coordnates by offset
   : zfgx_makeTranslate
   # ( src offset_x offset_y -- objref )
+  .dhw zobj_HERE
+  .dhw @
+  .dhw >R             # ( src offset_x ) R:( objref )
+  .dhw (LIT)
+  .dhw <header tbc>
+  .dhw zobj_,         # ( src offset_x offset_y ) R:( objref )
+  .dhw (LIT)
+  .dhw zobj_(Translate)
+  .dhw zobj_,
+  .dhw SWAP
+  .dhw R@             # ( s h w objref ) R:( objref )
+  .dhw LIT_0
+  .dhw zobj_dat!      # ( s h ) R:( objref )
+  .dhw R@
+  .dhw LIT_1          # ( s h objref 1 ) R:( objref )
+  .dhw zobj_dat!      # ( s ) R:( objref )
+  .dhw R@
+  .dhw LIT_0
+  .dhw zobj_ref!      # ( ) R:( objref )
+  .dhw R>
+  .dhw EXIT
+  
+  : zobj_(Translate)
+  # ( ... argN verb self -- ... )
+  .dhw OVER zgfx_verb_getPixel  = NOT (BRZ) zfgx_(Translate)_xxxPixel
+  .dhw OVER zgfx_verb_putPixel  = NOT (BRZ) zfgx_(Translate)_xxxPixel
+  .dhw (JMP) zgfx_common_delegate
+  : zgfx_(Translate)_xxxPixel
+  # ( (colour) x y arity verb self )
+  
 `);
 export { src };
