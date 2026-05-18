@@ -109,7 +109,7 @@ const src = objs_src.concat(`
   .dhw R>          # ( (colour) offset+3 r objref )
   .dhw EXIT        #
   : zgfx_(PixBuff)_getPixel
-  # ( x y 2 zgfx_verb_getPixel objref -- colour )
+  # ( x y 2 zgfx_verb_getPixel objref -- colour 1 )
   .dhw LIT_2                      # ( x y 2 v objref 2 )
   .dhw zgfx_too_few_or_many_args? # ( x y 2 v objref )
   .dhw >R                         # ( x y 2 v ) R:( objref )
@@ -124,6 +124,9 @@ const src = objs_src.concat(`
   .dhw -                          # ( r cell 16-r )
   .dhw >>                         # ( r cell>>x )
   .dhw SWAP                       # ( cell>>x r )
-  --merkill--
+  .dhw generate_bitmask           # ( cell>>x bitmask )
+  .dhw &                          # ( colour )
+  .dhw LIT_1                      # ( colour 1 )
+  .dhw EXIT
 `);
 export { src };
