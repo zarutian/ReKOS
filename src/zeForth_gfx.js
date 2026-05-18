@@ -238,6 +238,9 @@ const src = objs_src.concat(`
   .dhw zobj_refs@  # ( (colour) x_%ed y_%ed arity verb delegated_to )
   .dhw (JMP)
   .dhw zobj_invoke
-  
+
+  // Translate  ref to PixBuff, translates coordnates by offset
+  : zfgx_makeTranslate
+  # ( src offset_x offset_y -- objref )
 `);
 export { src };
