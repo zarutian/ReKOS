@@ -343,5 +343,8 @@ const src = objs_src.concat(`
   .dhw SWAP           # ( (colour) new_x new_y ) R:( verb arity self )
   .dhw (JMP)
   .dhw zgfx_(Translate)_xxxPixel_L0
+
+  # FlipVert   ref to PixBuff, flip y axis so positive x coords are negative from right edge
+  # FlipHorz   ref to PixBuff, flip x axis so positive y coords are negative from bottom edge
 `);
 export { src };
