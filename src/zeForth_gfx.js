@@ -362,6 +362,29 @@ const src = objs_src.concat(`
   .dhw R>
   .dhw EXIT
 
+  : zgfx_(FlipVert)
+  # ( ... argN verb self -- ... )
+  .dhw OVER zgfx_verb_getPixel  = NOT (BRZ) zgfx_(FlipVert)_xxxPixel
+  .dhw OVER zgfx_verb_putPixel  = NOT (BRZ) zgfx_(FlipVert)_xxxPixel
+  .dhw (JMP) zgfx_common_delegate
+  : zgfx_(FlipVert)_xxxPixel
+  # ( (colour) x y arity verb self )
+  .dhw SWAP           # ( (colour) x y arity self verb ) R:( )
+  .dhw >R
+  .dhw SWAP
+  .dhw >R
+  .dhw >R             # ( (colour) x y ) R:( verb arity self )
+  .dhw LIT_0
+  .dhw (LIT)
+  .dhw zgfx_verb_getHeight
+  .dhw R@
+  .dhw zobj_invoke
+  .dhw DROP           # ( (colour) x y height ) R:( verb arity self )
+  .dhw SWAP
+  .dhw -
+  .dhw (JMP)
+  .dhw zgfx_(Translate)_xxxPixel_L0
+
   
   # FlipHorz   ref to PixBuff, flip the x axis so positive y coords are negative from right edge
 
