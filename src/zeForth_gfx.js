@@ -485,6 +485,25 @@ const src = objs_src.concat(`
   .dhw zobj_refs!    # ( )
   .dhw R>
   .dhw EXIT
+
+  : zgfx_(PaletteTranslate)
+    # ( ... argN verb self -- ... )
+  .dhw OVER zgfx_verb_getPixel  = NOT (BRZ) zgfx_(PaletteTranslate)_getPixel
+  .dhw OVER zgfx_verb_putPixel  = NOT (BRZ) zgfx_(PaletteTranslate)_putPixel
+  .dhw (JMP) zgfx_common_delegate
+  : zgfx_(PaletteTranslate)_getPixel
+  # ( x y 2 verb self -- colour 1 )
+  .dhw >R            # ( x y 2 verb ) R:( self )
+  .dhw LIT_0         # ( x y 2 verb 0 ) R:( self )
+  .dhw R@            # ( x y 2 verb 0 self ) R:( self )
+  .dhw zobj_refs@    # ( x y 2 verb src ) R:( self )
+  .dhw zobj_invoke   # ( idx 1 ) R:( self )
+  .dhw zobj_verb_at  # ( idx 1 at ) R:( self )
+  .dhw LIT_1         # ( idx 1 at 1 ) R:( self )
+  .dhw R>            # ( idx 1 at 1 self ) R:( )
+  .dhw zobj_refs@    # ( idx 1 at pal ) R:( )
+  .dhw zobj_invoke   # ( colour 1 ) R:( )
+  .dhw EXIT
   
   # Like bitplanes but if a pixel bit is on then the colour is spefic opaque
   # if it is off then its delegated.
