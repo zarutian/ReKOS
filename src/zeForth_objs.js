@@ -831,6 +831,28 @@ const src = `
   # stop watchdog timer
   .dhw zobj_gc
   .dhw EXIT
+
+  # ---
+  # Array based of https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
+  : zobj_verb_at
+  : zobj_verb_@
+  .dhw (CONST) 0x4210
+
+  : zobj_verb_!
+  .dhw (CONST) 0x4211
+
+  : zobj_verb_getLength
+  .dhw (CONST) 0x4212
+
+  : zobj_makeArray 
+  # ( starting_size -- objref )
+
+  : zobj_makeArraySlice
+  # ( src start end -- objref )
+
+  : zobj_makeArraySpliceTwogether
+  # ( src_A src_B -- objref )
+  
 `;
 export { src };
 
