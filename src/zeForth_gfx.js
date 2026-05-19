@@ -302,23 +302,28 @@ const src = objs_src.concat(`
   .dhw (JMP)
   .dhw zgfx_common_delegate
 
+  : zgfx_make_common1
+  # ( src invocation_handler_xt -- objref )
+  .dhw zobj_HERE      # ( src xt varaddr )
+  .dhw @              # ( src xt objref )
+  .dhw >R             # ( src xt ) R:( objref )
+  .dhw (LIT)          # ( src xt hdr ) R:( objref )
+  .dhw <header tbc>
+  .dhw zobj_,         # ( src xt ) R:( objref )
+  .dhw zobj_,         # ( src ) R:( objref )
+  .dhw LIT_0          # ( src 0 ) R:( objref )
+  .dhw R@             # ( src 0 objref ) R:( objref )
+  .dhw zobj_refs!     # ( ) R:( objref )
+  .dhw R>             # ( objref ) R:( )
+  .dhw EXIT
+
   # 90°rotate  ref to PixBuff, rotate coordnates clockwise 90°
   : zgfx_make90°rotate_clockwise
   # ( src -- objref )
-  .dhw zobj_HERE
-  .dhw @
-  .dhw >R             # ( src ) R:( objref )
-  .dhw (LIT)
-  .dhw <header tbc>
-  .dhw zobj_,
   .dhw (LIT)
   .dhw zgfx_(90°rotate_clockwise)
-  .dhw zobj_,
-  .dhw LIT_0
-  .dhw R@
-  .dhw zobj_refs!     # ( ) R:( objref )
-  .dhw R>
-  .dhw EXIT
+  .dhw (JMP)
+  .dhw zgfx_make_common1
 
   : zgfx_(90°rotate_clockwise)
   # ( ... argN verb self -- ... )
@@ -347,20 +352,10 @@ const src = objs_src.concat(`
   # FlipVert   ref to PixBuff, flip the y axis so positive x coords are negative from bottom edge
   : zgfx_makeFlipVert
   # ( src -- objref )
-  .dhw zobj_HERE
-  .dhw @
-  .dhw >R             # ( src ) R:( objref )
-  .dhw (LIT)
-  .dhw <header tbc>
-  .dhw zobj_,
   .dhw (LIT)
   .dhw zgfx_(FlipVert)
-  .dhw zobj_,
-  .dhw LIT_0
-  .dhw R@
-  .dhw zobj_refs!     # ( ) R:( objref )
-  .dhw R>
-  .dhw EXIT
+  .dhw (JMP)
+  .dhw zgfx_make_common1
 
   : zgfx_(FlipVert)
   # ( ... argN verb self -- ... )
@@ -385,8 +380,38 @@ const src = objs_src.concat(`
   .dhw (JMP)
   .dhw zgfx_(Translate)_xxxPixel_L0
 
-  
   # FlipHorz   ref to PixBuff, flip the x axis so positive y coords are negative from right edge
+  : zgfx_makeFlipHorz
+  # ( src -- objref )
+  .dhw (LIT)
+  .dhw zgfx_(FlipHorz)
+  .dhw (JMP)
+  .dhw zgfx_make_common1
+
+ : zgfx_(FlipHorz)
+  # ( ... argN verb self -- ... )
+  .dhw OVER zgfx_verb_getPixel  = NOT (BRZ) zgfx_(FlipHorz)_xxxPixel
+  .dhw OVER zgfx_verb_putPixel  = NOT (BRZ) zgfx_(FlipHorz)_xxxPixel
+  .dhw (JMP) zgfx_common_delegate
+  : zgfx_(FlipVert)_xxxPixel
+  # ( (colour) x y arity verb self )
+  .dhw SWAP           # ( (colour) x y arity self verb ) R:( )
+  .dhw >R
+  .dhw SWAP
+  .dhw >R
+  .dhw >R             # ( (colour) x y ) R:( verb arity self )
+  .dhw SWAP           # ( (colour) y x ) R:( verb arity self )
+  .dhw LIT_0
+  .dhw (LIT)
+  .dhw zgfx_verb_getWidth
+  .dhw R@
+  .dhw zobj_invoke
+  .dhw DROP           # ( (colour) y x width ) R:( verb arity self )
+  .dhw SWAP
+  .dhw -
+  .dhw SWAP
+  .dhw (JMP)
+  .dhw zgfx_(Translate)_xxxPixel_L0
 
   # Like bitplanes but if a pixel bit is on then the colour is spefic opaque
   # if it is off then its delegated.
