@@ -84,7 +84,7 @@ const src = `
   .dhw zobj_ptr+
   .dhw EXIT
 
-  # obj header: 0b ttzz zzSS SSSS SSSS
+  # obj header: 0b ttzz zSSS SSSS SSSS
   #   t: type
   #   z: size of refs size in S
   #   S: datum size in words | refs size in refs
@@ -120,7 +120,7 @@ const src = `
   : zobj_refs_size_size@
   # ( optr -- u )
   .dhw zobj_header@
-  .dhw 7<<>
+  .dhw 5<<>
   .dhw 7&
   .dhw EXIT
   
@@ -139,7 +139,7 @@ const src = `
   .dhw DUP
   .dhw zobj_refs_size_size@  # ( optr rss )
   .dhw DUP
-  .dhw LIT_10
+  .dhw LIT_11
   .dhw SWAP
   .dhw -                     # ( optr rss dss )
   .dhw generate_bitmask
@@ -161,6 +161,11 @@ const src = `
   .dhw +
   .dhw 2+
   .dhw EXIT
+
+  : zobj_makeObjectHDR
+  # ( ref_nrs dat_nrs -- hdr )
+  .dhw 
+  .dhw LIT_0
   
   : zobj_raw_ref_common
   # ( optr refNr -- ptr )
