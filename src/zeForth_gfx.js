@@ -433,7 +433,39 @@ const src = objs_src.concat(`
   .dhw SWAP
   .dhw (JMP)
   .dhw zgfx_(Translate)_xxxPixel_L0
-   
+
+  # ScaleDown integerwise
+    : zgfx_makeScaleDownInt
+  # ( src x_divider y_divider -- objref )
+  .dhw (LIT)
+  .dhw zgfx_(ScaleDownInt)
+  .dhw (JMP)
+  .dhw zgfx_make_common2
+
+  : zgfx_(ScaleDownInt)
+  # ( ... argN verb self -- ... )
+  .dhw OVER zgfx_verb_getPixel  = NOT (BRZ) zgfx_(ScaleDownInt)_xxxPixel
+  .dhw OVER zgfx_verb_putPixel  = NOT (BRZ) zgfx_(ScaleDownInt)_xxxPixel
+  .dhw (JMP) zgfx_common_delegate
+  : zgfx_(ScaleDownInt)_xxxPixel
+  # ( (colour) x y arity verb self )
+  .dhw SWAP           # ( (colour) x y arity self verb ) R:( )
+  .dhw >R
+  .dhw SWAP
+  .dhw >R
+  .dhw >R             # ( (colour) x y ) R:( verb arity self )
+  .dhw LIT_1          # ( (colour) x y 1 ) R:( verb arity self )
+  .dhw R@             # ( (colour) x y 1 self ) R:( verb arity self )
+  .dhw zobj_dat@      # ( (colour) x y y_divider ) R:( verb arity self )
+  .dhw *
+  .dhw LIT_0
+  .dhw R@
+  .dhw zobj_dat@      # ( (colour) new_y x x_multiplier ) R:( verb arity self )
+  .dhw *
+  .dhw SWAP
+  .dhw (JMP)
+  .dhw zgfx_(Translate)_xxxPixel_L0
+  
   # Like bitplanes but if a pixel bit is on then the colour is spefic opaque
   # if it is off then its delegated.
   # Achived by 1x1 PixBuff, bitmask, and BlitComposer
