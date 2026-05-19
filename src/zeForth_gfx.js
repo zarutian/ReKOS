@@ -465,6 +465,26 @@ const src = objs_src.concat(`
   .dhw SWAP
   .dhw (JMP)
   .dhw zgfx_(Translate)_xxxPixel_L0
+
+  # PaletteTranslate  ref to PixBuff  ref to Palette
+  : zgfx_makePaletteTranslate
+  # ( src palette -- obj )
+  .dhw zobj_HERE
+  .dhw @             # ( src pal objref )
+  .dhw (LIT)
+  .dhw <header tbc>
+  .dhw zobj_,
+  .dhw (LIT)
+  .dhw zgfx_(PaletteTranslate)
+  .dhw zobj_,
+  .dhw LIT_1
+  .dhw R@            # ( src pal 1 objref ) R:( objref )
+  .dhw zobj_refs!    # ( src ) R:( objref )
+  .dhw LIT_0
+  .dhw R@            # ( src 0 objref ) R:( objref )
+  .dhw zobj_refs!    # ( )
+  .dhw R>
+  .dhw EXIT
   
   # Like bitplanes but if a pixel bit is on then the colour is spefic opaque
   # if it is off then its delegated.
