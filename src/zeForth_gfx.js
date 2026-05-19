@@ -344,11 +344,29 @@ const src = objs_src.concat(`
   .dhw (JMP)
   .dhw zgfx_(Translate)_xxxPixel_L0
 
-  # FlipVert   ref to PixBuff, flip y axis so positive x coords are negative from right edge
-  # FlipHorz   ref to PixBuff, flip x axis so positive y coords are negative from bottom edge
+  # FlipVert   ref to PixBuff, flip the y axis so positive x coords are negative from bottom edge
+  : zgfx_makeFlipVert
+  # ( src -- objref )
+  .dhw zobj_HERE
+  .dhw @
+  .dhw >R             # ( src ) R:( objref )
+  .dhw (LIT)
+  .dhw <header tbc>
+  .dhw zobj_,
+  .dhw (LIT)
+  .dhw zgfx_(FlipVert)
+  .dhw zobj_,
+  .dhw LIT_0
+  .dhw R@
+  .dhw zobj_refs!     # ( ) R:( objref )
+  .dhw R>
+  .dhw EXIT
+
+  
+  # FlipHorz   ref to PixBuff, flip the x axis so positive y coords are negative from right edge
 
   # Like bitplanes but if a pixel bit is on then the colour is spefic opaque
   # if it is off then its delegated.
-  # Achived by 1x1 PixBuff, bitmask, and Blit
+  # Achived by 1x1 PixBuff, bitmask, and BlitComposer
 `);
 export { src };
