@@ -182,17 +182,14 @@ const src = objs_src.concat(`
   .dhw LIT_0                      # ( 0 )
   .dhw EXIT
 
-  // Subrect references PixBuff compatible obj and only gives pixels from that subrect
-  : zgfx_makeSubRect
-  # ( src width height -- objref )
+  : zgfx_make_common2
+  # ( src datum1 datum2 invication_handler_xt -- objref )
   .dhw zobj_HERE
-  .dhw @
-  .dhw >R             # ( s w h ) R:( objref )
-  .dhw (LIT)
+  .dhw @              # ( s w h xt objref ) R:( )
+  .dhw >R             # ( s w h xt ) R:( objref )
+  .dhw (LIT)          # ( s w h xt hdr ) R:( objref )
   .dhw <header tbc>
-  .dhw zobj_,         # ( s w h ) R:( objref )
-  .dhw (LIT)
-  .dhw zobj_(SubRect) # ( s w h xt ) R:( objref )
+  .dhw zobj_,         # ( s w h xt ) R:( objref )
   .dhw zobj_,         # ( s w h ) R:( objref )
   .dhw SWAP
   .dhw R@             # ( s h w objref ) R:( objref )
@@ -205,7 +202,15 @@ const src = objs_src.concat(`
   .dhw LIT_0
   .dhw zobj_ref!      # ( ) R:( objref )
   .dhw R>
-  .djw EXIT
+  .dhw EXIT
+
+  // Subrect references PixBuff compatible obj and only gives pixels from that subrect
+  : zgfx_makeSubRect
+  # ( src width height -- objref )
+  .dhw (LIT)
+  .dhw zobj_(SubRect) # ( s w h xt ) R:( objref )
+  .dhw (JMP)
+  .dhw zgfx_make_common2
 
   : zobj_(SubRect)
   # ( ... argN verb self -- ... )
@@ -249,27 +254,10 @@ const src = objs_src.concat(`
   // Translate  ref to PixBuff, translates coordnates by offset
   : zfgx_makeTranslate
   # ( src offset_x offset_y -- objref )
-  .dhw zobj_HERE
-  .dhw @
-  .dhw >R             # ( src offset_x ) R:( objref )
-  .dhw (LIT)
-  .dhw <header tbc>
-  .dhw zobj_,         # ( src offset_x offset_y ) R:( objref )
   .dhw (LIT)
   .dhw zgfx_(Translate)
-  .dhw zobj_,
-  .dhw SWAP
-  .dhw R@             # ( s h w objref ) R:( objref )
-  .dhw LIT_0
-  .dhw zobj_dat!      # ( s h ) R:( objref )
-  .dhw R@
-  .dhw LIT_1          # ( s h objref 1 ) R:( objref )
-  .dhw zobj_dat!      # ( s ) R:( objref )
-  .dhw R@
-  .dhw LIT_0
-  .dhw zobj_ref!      # ( ) R:( objref )
-  .dhw R>
-  .dhw EXIT
+  .dhw (JMP)
+  .dhw zgfx_make_common2
   
   : zgfx_(Translate)
   # ( ... argN verb self -- ... )
@@ -388,7 +376,7 @@ const src = objs_src.concat(`
   .dhw (JMP)
   .dhw zgfx_make_common1
 
- : zgfx_(FlipHorz)
+  : zgfx_(FlipHorz)
   # ( ... argN verb self -- ... )
   .dhw OVER zgfx_verb_getPixel  = NOT (BRZ) zgfx_(FlipHorz)_xxxPixel
   .dhw OVER zgfx_verb_putPixel  = NOT (BRZ) zgfx_(FlipHorz)_xxxPixel
@@ -412,6 +400,28 @@ const src = objs_src.concat(`
   .dhw SWAP
   .dhw (JMP)
   .dhw zgfx_(Translate)_xxxPixel_L0
+
+  # ScaleUp integerwise
+  : zgfx_makeScaleUp
+  # ( src x_multiplier y_multiplier -- objref )
+  .dhw (LIT)
+  .dhw zgfx_(ScaleUp)
+  .dhw (JMP)
+  .dhw zgfx_make_common2
+
+  : zgfx_(ScaleUp)
+  # ( ... argN verb self -- ... )
+  .dhw OVER zgfx_verb_getPixel  = NOT (BRZ) zgfx_(ScaleUp)_xxxPixel
+  .dhw OVER zgfx_verb_putPixel  = NOT (BRZ) zgfx_(ScaleUp)_xxxPixel
+  .dhw (JMP) zgfx_common_delegate
+  : zgfx_(ScaleUp)_xxxPixel
+  # ( (colour) x y arity verb self )
+  .dhw SWAP           # ( (colour) x y arity self verb ) R:( )
+  .dhw >R
+  .dhw SWAP
+  .dhw >R
+  .dhw >R             # ( (colour) x y ) R:( verb arity self )
+  --merkill--
 
   # Like bitplanes but if a pixel bit is on then the colour is spefic opaque
   # if it is off then its delegated.
