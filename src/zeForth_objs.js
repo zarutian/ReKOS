@@ -218,7 +218,31 @@ const src = `
   .dhw SWAP        # ( d r )
   .dhw DUP         # ( d r r )
   .dhw within_which_powers_of_2 # ( d r pr )
-  --merkill--
+  .dhw ROT         # ( r pr d )
+  .dhw DUP         # ( r pr d d )
+  .dhw within_which_powers_of_2 # ( r pr d pd )
+  .dhw 3RD_DEEP    # ( r pr d pd pr )
+  .dhw +
+  .dhw (LIT)
+  .dhw 11
+  .dhw <=          # ( r pr d bool )
+  .dhw NOT
+  .dhw (BRZ)       # ( r pr d )
+  .dhw zobj_makeObjectHDR_L1
+  .dhw (ABORT")
+  .utf8_hwc "mutually too big number of refs and number of datums"
+  : zobj_makeObjectHDR_L1
+  .dhw ROT         # ( pr d r )
+  .dhw LIT_0       # ( pr d r typ )
+  .dhw OR          # ( pr d hdr )
+  .dhw 3RD_DEEP    # ( pr d hdr pr )
+  .dhw 6<>>        # ( pr d hdr pr<>>6 )
+  .dhw OR          # ( pr d hdr )
+  .dhw -ROT        # ( hdr d pr )
+  .dhw <<          # ( hdr d<<pr )
+  .dhw OR          # ( hdr )
+  .dhw EXIT
+  
   
   : zobj_raw_ref_common
   # ( optr refNr -- ptr )
