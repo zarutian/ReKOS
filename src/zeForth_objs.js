@@ -960,11 +960,26 @@ const src = `
   .dhw R>
   .dhw EXIT
 
-  : zobj_makeArraySlice
-  # ( src start end -- objref )
+  : zobj_(Array)
+  # ( ... arity verb self -- ...
+  .dhw OVER zobj_verb_getLength = NOT (BRZ) zobj_(Array)_getLength
+  .dhw OVER zobj_verb_@         = NOT (BRZ) zobj_(Array)_@
+  .dhw OVER zobj_verb_!         = NOT (BRZ) zobj_(Array)_!
+  .dhw (ABORT")
+  .utf8_hwc "array did not understand invocation"
+  : zobj_(Array)_getLength
+  # ( ... 0 getLength self -- length 1 )
+  .dhw >R 2DROP R>      # ( self )
+  .dhw zobj_refs_size@  # ( length )
+  .dhw LIT_1 EXIT
 
+
+ -tbd-byrjun-
   : zobj_makeArraySpliceTwogether
   # ( src_A src_B -- objref )
+
+  : zobj_makeArraySlice
+  # ( src start end -- objref )
   
 `;
 export { src };
