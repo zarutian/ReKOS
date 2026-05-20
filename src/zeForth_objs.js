@@ -930,9 +930,35 @@ const src = `
   # ( starting_size -- objref )
   .dhw DUP LIT_32 <
   .dhw (BRZ) zobj_makeArray_L0
-  .dhw zobj_HERE @ >R     # ( ss ) R:( objref )
-  .dhw DUP DUP 2+         # ( ss ss ss+2 ) R:( objref )
-  .dhw zobj_makeObjectHDR
+  .dhw zobj_HERE @ >R       # ( ss ) R:( objref )
+  .dhw DUP DUP 2+           # ( ss ss ss+2 ) R:( objref )
+  .dhw zobj_makeObjectHDR   # ( ss hdr ) R:( objref )
+  .dhw zobj_,               # ( ss ) R:( objref )
+  .dhw (LIT)                # ( ss xt ) R:( objref )
+  .dhw zobj_(Array)
+  .dhw zobj_,               # ( ss ) R:( objref )
+  .dhw zobj_get_nilObjecten # ( ss nil ) R:( objref )
+  .dhw (JMP) zobj_makeArray_L2
+  : zobj_makeArray_L1
+  .dhw 2DUP                 # ( ss nil ss nil ) R:( objref )
+  .dhw SWAP                 # ( ss nil nil ss ) R:( objref )
+  .dhw R@
+  .dhw zobj_refs!           # ( ss nil )
+  .dhw SWAP 1- SWAP         # ( ss-1 nil )
+  : zobj_makeArray_L2
+  .dhw OVER 0=
+  .dhw (BRZ) zobj_makeArray_L1
+  .dhw 2DROP
+  .shw LIT_0
+  .dhw DUP
+  .dhw R@
+  .dhw zobj_dat!
+  .dhw LIT_0
+  .dhw LIT_1
+  .dhw R@
+  .dhw zobj_dat!
+  .dhw R>
+  .dhw EXIT
 
   : zobj_makeArraySlice
   # ( src start end -- objref )
