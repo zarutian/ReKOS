@@ -84,7 +84,7 @@ const src = `
   .dhw zobj_ptr+
   .dhw EXIT
 
-  # obj header: 0b ttzz zSSS SSSS SSSS
+  # obj header: 0b ttzz zzSS SSSS SSSS
   #   t: type
   #   z: size of refs size in S
   #   S: datum size in words | refs size in refs
@@ -120,8 +120,8 @@ const src = `
   : zobj_refs_size_size@
   # ( optr -- u )
   .dhw zobj_header@
-  .dhw 5<<>
-  .dhw 7&
+  .dhw 6<<>
+  .dhw 0xF&
   .dhw EXIT
   
   : zobj_refs_size@
@@ -164,8 +164,53 @@ const src = `
 
   : zobj_makeObjectHDR
   # ( ref_nrs dat_nrs -- hdr )
-  .dhw 
-  .dhw LIT_0
+  .dhw (LIT)
+  .dhw 0x03FF
+  .dhw OVER        # ( r d 0x07FF d )
+  .dhw <           # ( r d bool )
+  .dhw 3RD_DEEP    # ( r d bool r )
+  .dhw (LIT)
+  .dhw 0x03FF
+  .dhw >
+  .dhw OR          # ( r d bool )
+  .dhw (BRZ)
+  .dhw zobj_makeObjectHDR_L0
+  .dhw (ABORT")
+  .utf8_hwc "either number of refs or number of datums wont fit in object header"
+  : zobj_makeObjectHDR_L0
+  .dhw SWAP        # ( d r )
+  .dhw DUP         # ( d r r )
+  .dhw 0=          # ( d r bool )
+  .dhw (BRZ)       # ( d r )
+  .dhw zobj_makeObjectHDR_L1
+  .dhw LIT_0       # ( d r 0 )
+  .dhw (JMP)
+  .dhw zobj_makeObjectHDR_Lx
+  : zobj_makeObjectHDR_L1
+  .dhw DUP         # ( d r r )
+  .dhw 1=          # ( d r bool )
+  .dhw (BRZ)       # ( d r )
+  .dhw zobj_makeObjectHDR_L2
+  .dhw LIT_1       # ( d r 1 )
+  .dhw (JMP)
+  .dhw zobj_makeObjectHDR_Lx
+  : zobj_makeObjectHDR_L2
+  .dhw DUP         # ( d r r )
+  .dhw LIT_4       # ( d r r 4 )
+  .dhw <           # ( d r bool )
+  .dhw (BRZ)       # ( d r )
+  .dhw zobj_makeObjectHDR_L3
+  .dhw LIT_2       # ( d r 2 )
+  .dhw (JMP)
+  .dhw zobj_makeObjectHDR_Lx
+  : zobj_makeObjectHDR_L3
+  .dhw DUP         # ( d r r )
+  .dhw LIT_8       # ( d r r 8 )
+  .dhw <           # ( d r bool )
+  .dhw (BRZ)
+  .dhw zobj_makeObjectHDR_L4
+  .dhw LIT_3
+  --merkill--
   
   : zobj_raw_ref_common
   # ( optr refNr -- ptr )
