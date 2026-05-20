@@ -928,6 +928,11 @@ const src = `
 
   : zobj_makeArray 
   # ( starting_size -- objref )
+  .dhw DUP LIT_32 <
+  .dhw (BRZ) zobj_makeArray_L0
+  .dhw zobj_HERE @ >R     # ( ss ) R:( objref )
+  .dhw DUP DUP 2+         # ( ss ss ss+2 ) R:( objref )
+  .dhw zobj_makeObjectHDR
 
   : zobj_makeArraySlice
   # ( src start end -- objref )
