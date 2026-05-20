@@ -162,6 +162,43 @@ const src = `
   .dhw 2+
   .dhw EXIT
 
+  : make_powers_of_2
+  # ( veldi -- num )
+  .dhw LIT_1 SWAP 1- << EXIT
+  
+  : within_which_powers_of_2
+  # ( num -- veldi )
+  .dhw DUP
+  .dhw 0=
+  .dhw OVER
+  .dhw 1=
+  .dhw EXIT
+  .dhw (BRZ)
+  .dhw within_which_powers_of_2_L3
+  .dhw EXIT
+  : within_which_powers_of_2_L3
+  .dhw LIT_2            # ( num veldi )
+  : within_which_powers_of_2_L0
+  .dhw 2DUP             # ( num veldi num veldi )
+  .dhw make_powers_of_2 # ( num veldi num test )
+  .dhw <                # ( num veldi bool )
+  .dhw (BRZ)            # ( num veldi )
+  .dhw within_which_powers_of_2_L1
+  .dhw NIP
+  .dhw EXIT
+  : within_which_powers_of_2_L1
+  .dhw 1+               # ( num veldi+1 )
+  .dhw DUP
+  .dhw LIT_16
+  .dhw >=
+  .dhw (BRZ)
+  .dhw within_which_powers_of_2_L0
+  .dhw 2DROP
+  .dhw LIT_16
+  .dhw EXIT
+
+  
+
   : zobj_makeObjectHDR
   # ( ref_nrs dat_nrs -- hdr )
   .dhw (LIT)
@@ -180,36 +217,7 @@ const src = `
   : zobj_makeObjectHDR_L0
   .dhw SWAP        # ( d r )
   .dhw DUP         # ( d r r )
-  .dhw 0=          # ( d r bool )
-  .dhw (BRZ)       # ( d r )
-  .dhw zobj_makeObjectHDR_L1
-  .dhw LIT_0       # ( d r 0 )
-  .dhw (JMP)
-  .dhw zobj_makeObjectHDR_Lx
-  : zobj_makeObjectHDR_L1
-  .dhw DUP         # ( d r r )
-  .dhw 1=          # ( d r bool )
-  .dhw (BRZ)       # ( d r )
-  .dhw zobj_makeObjectHDR_L2
-  .dhw LIT_1       # ( d r 1 )
-  .dhw (JMP)
-  .dhw zobj_makeObjectHDR_Lx
-  : zobj_makeObjectHDR_L2
-  .dhw DUP         # ( d r r )
-  .dhw LIT_4       # ( d r r 4 )
-  .dhw <           # ( d r bool )
-  .dhw (BRZ)       # ( d r )
-  .dhw zobj_makeObjectHDR_L3
-  .dhw LIT_2       # ( d r 2 )
-  .dhw (JMP)
-  .dhw zobj_makeObjectHDR_Lx
-  : zobj_makeObjectHDR_L3
-  .dhw DUP         # ( d r r )
-  .dhw LIT_8       # ( d r r 8 )
-  .dhw <           # ( d r bool )
-  .dhw (BRZ)
-  .dhw zobj_makeObjectHDR_L4
-  .dhw LIT_3
+  .dhw within_which_powers_of_2 # ( d r pr )
   --merkill--
   
   : zobj_raw_ref_common
