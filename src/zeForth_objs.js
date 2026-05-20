@@ -197,7 +197,9 @@ const src = `
   .dhw LIT_16
   .dhw EXIT
 
-  
+  : GET_BIT_NR
+  # ( cell bitnr -- bit )
+  .dhw 1+ <<> 1& EXIT
 
   : zobj_makeObjectHDR
   # ( ref_nrs dat_nrs -- hdr )
@@ -972,7 +974,35 @@ const src = `
   .dhw >R 2DROP R>      # ( self )
   .dhw zobj_refs_size@  # ( length )
   .dhw LIT_1 EXIT
-
+  : zobj_(Array)_@
+  # ( idx 1 at self -- item refflag 2 )
+  .dhw >R 2DROP DUP     # ( idx idx ) R:( self )
+  .dhw LIT_0
+  .dhw zobj_verb_getLength 
+  .dhw R@
+  .dhw zobj_invoke
+  .dhw DROP             # ( idx idx length ) R:( self )
+  .dhw > (BRZ) zobj_(Array)_@_L0
+  .dhw DROP
+  .dhw zobj_get_nilObjecten
+  .dhw TRUE
+  .dhw LIT_2
+  .dhw EXIT
+  : zobj_(Array)_@_L0
+  .dhw DUP DUP           # ( idx idx idx ) R:( self )
+  .dhw LIT_16 < >R       # ( idx idx ) R:( self bool )
+  .dhw LIT_1 LIT_0 R@ ?: # ( idx idx 1|0 ) R:( self bool )
+  .dhw R> ROT            # ( idx bool idx 1|0 ) R:( self )
+  .dhw R@ zobj_dat@      # ( idx bool idx bitmap ) R:( self )
+  .dhw SWAP GET_BIT_NR   # ( idx bool bit ) R:( self )
+  .dhw >R
+  .dhw NOT SKZ 16-       # ( idx-x ) R:( self bit )
+  .dhw R> (BRZ) zobj_(Array)_@_L1
+  .dhw 2+ R> zobj_dat@
+  .dhw FALSE LIT_2 EXIT
+  : zobj_(Array)_@_L1
+  .dhw R> zobj_refs@
+  .dhe TRUE LIT_2 EXIT
 
  -tbd-byrjun-
   : zobj_makeArraySpliceTwogether
