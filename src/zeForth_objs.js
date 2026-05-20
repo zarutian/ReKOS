@@ -985,6 +985,7 @@ const src = `
   .dhw > (BRZ) zobj_(Array)_@_L0
   .dhw DROP
   .dhw zobj_get_nilObjecten
+  : zobj_(Array)_@_L2
   .dhw TRUE
   .dhw LIT_2
   .dhw EXIT
@@ -1002,7 +1003,10 @@ const src = `
   .dhw FALSE LIT_2 EXIT
   : zobj_(Array)_@_L1
   .dhw R> zobj_refs@
-  .dhe TRUE LIT_2 EXIT
+  .dhw (JMP) zobj_(Array)_@_L2
+  : zobj_(Array)_!
+  # ( item refflag idx 3 store self -- 0 )
+  --merkill--
 
  -tbd-byrjun-
   : zobj_makeArraySpliceTwogether
