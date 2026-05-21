@@ -971,7 +971,15 @@ const src = `
   .utf8_hwc "array did not understand invocation"
   : zobj_(Array)_getLength
   # ( ... 0 getLength self -- length 1 )
-  .dhw >R 2DROP R>      # ( self )
+  .dhw >R
+  .dhw zobj_verb_getLength = NOT
+  .dhw SWAP 0= NOT
+  .dhw OR
+  .dhw (BRZ) zobj_(Array)_getLength_L0
+  .dhw (ABORT")
+  .utf8_hwc "arity or verb of invocation didnt match getLength/0"
+  : zobj_(Array)_getLength_L0
+  .dhw R>      # ( self )
   .dhw zobj_refs_size@  # ( length )
   .dhw LIT_1 EXIT
   : zobj_(Array)_@
