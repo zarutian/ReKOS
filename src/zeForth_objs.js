@@ -1014,6 +1014,32 @@ const src = `
   .dhw (JMP) zobj_(Array)_@_L2
   : zobj_(Array)_!
   # ( item refflag idx 3 store self -- 0 )
+  .dhw >R
+  .dhw 2DROP
+  .dhw DUP
+  .dhw LIT_0
+  .dhw zobj_verb_getLength 
+  .dhw R@
+  .dhw zobj_invoke
+  .dhw DROP              # ( item refflag idx idx length ) R:( self )
+  .dhw <                 # ( item refflag idx bool ) R:( self )
+  .dhw (BRZ)             # ( item refflag idx ) R:( self )
+  .dhw zobj_(Array)_!_L0
+  .dhw 2DUP              # ( item refflag idx refflag idx ) R:( self )
+  .dhw GET_BIT_NR        # ( item refflag idx refflag bit ) R:( self )
+  .dhw DUP               # ( item refflag idx refflag bit bit ) R:( self )
+  .dhw INVERT            # ( item refflag idx refflag bit ~bit ) R:( self )
+  .dhw >R                # ( item refflag idx refflag bit ) R:( self ~bit )
+  .dhw LIT_0             # ( item refflag idx refflag bit 0 ) R:( self ~bit )
+  .dhw ROT               # ( item refflag idx bit 0 refflag ) R:( self ~bit )
+  .dhw ?:                # ( item refflag idx bit' ) R:( self ~bit )
+  .dhw R>                # ( item refflag idx bit' ~bit ) R:( self )
+  .dhw 3RD_DEEP          # ( item refflag idx bit' ~bit idx ) R:( self )
+  .dhw >R                # ( item refflag idx bit' ~bit ) R:( self idx )
+  .dhw LIT_1 LIT_0 R>    # ( item refflag idx bit' ~bit
+  
+
+  : zobj_(Array)_!_L0
   --merkill--
 
  -tbd-byrjun-
