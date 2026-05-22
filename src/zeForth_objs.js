@@ -512,7 +512,8 @@ const src = `
   .dhw (JMP)      #
   .dhw zobj_move  # ( new_optr )
   
-  : zobj_become:       # ( a_optr b_optr -- )
+  : zobj_become:
+  # ( a_optr b_optr -- )
   .dhw OVER            # ( a_optr b_optr a_optr )
   .dhw zobj_move2new   # ( old_a_optr b_optr new_a_optr )
   .dhw OVER            # ( old_a_optr b_optr new_a_optr b_optr )
