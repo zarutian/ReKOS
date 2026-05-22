@@ -1060,6 +1060,28 @@ const src = `
   : zobj_(Array)_!_L0
   --merkill--
 
+  : zobj_make_array_copy
+  # ( src length -- objref )
+  .dhw DUP              # ( src len len )
+  .dhw zobj_makeArray   # ( src len objref )
+  .dhw SWAP >R          # ( src objref ) R:( count )
+  .dhw (JMP) zobj_make_array_copy_L1
+  : zobj_make_array_copy_L0
+  .dhw OVER             # ( src objref src ) R:( count )
+  .dhw R@ SWAP          # ( src objref count src ) R:( count )
+  .dhw LIT_1 SWAP       # ( src objref count 1 src ) R:( count )
+  .dhw zobj_verb_@ SWAP # ( src objref count 1 verb src ) R:( count )
+  .dhw zobj_invoke      # ( src objref item refflag 2 ) R:( count )
+  .dhw DROP             # ( src objref item refflag ) R:( count )
+  .dhw 3RD_DEEP         # ( src objref item refflag objref ) R:( count )
+  .dhw LIT_3 SWAP       # ( src objref item refflag 3 objref ) R:( count )
+  .dhw zobj_invoke      # ( src objref 0 ) R:( count )
+  .dhw DROP             # ( src objref ) R:( count )
+  : zobj_make_array_copy_L1
+  .dhw (NEXT) zobj_make_array_copy_L0
+  .dhw NIP              # ( objref ) R:( )
+  .dhw EXIT
+  
  -tbd-byrjun-
   : zobj_makeArraySpliceTwogether
   # ( src_A src_B -- objref )
