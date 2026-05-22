@@ -962,6 +962,8 @@ const src = `
   .dhw zobj_dat!
   .dhw R>
   .dhw EXIT
+  : zobj_makeArray_L0
+  --merkill--
 
   : zobj_(Array)
   # ( ... arity verb self -- ...
@@ -1065,8 +1067,17 @@ const src = `
   .dhw R@
   .dhw zobj_invoke       # ( item refflag idx self length 0 ) R:( self )
   .dhw DROP              # ( item refflag idx self length ) R:( self )
-  .dhw zobj_make_array_copy # ( item refflag idx copy ) R:( self )
-  --merkill--
+  .dhw TUCK              # ( item refflag idx length self length ) R:( self )
+  .dhw zobj_make_array_copy # ( item refflag idx length copy ) R:( self )
+  .dhw SWAP              # ( item refflag idx copy length ) R:( self )
+  .dhw zobj_makeArray    # ( item refflag idx copy new ) R:( self )
+  .dhw zobj_makeArraySpliceTwogether # ( item refflag idx bigger ) R:( self )
+  .dhw DUP               # ( item refflag idx bigger bigger ) R:( self )
+  .dhw R>                # ( item refflag idx bigger bigger self ) R:( )
+  .dhw zobj_become:      # ( item refflag idx bigger ) R:( )
+  .dhw LIT_3 SWAP
+  .dhw zobj_verb_! SWAP  # ( item refflag idx 3 store bigger ) R:( )
+  .dhw (JMP) zobj_invoke
 
   : zobj_make_array_copy
   # ( src length -- objref )
