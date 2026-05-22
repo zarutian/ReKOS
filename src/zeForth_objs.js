@@ -929,6 +929,14 @@ const src = `
   : zobj_verb_getLength
   .dhw (CONST) 0x4212
 
+  # -
+  : zobj_verb_concat
+  .dhw (CONST) 0x4220
+  : zobj_verb_every
+  .dhw (CONST) 0x4221
+  : zobj_verb_fill
+  .dhw (CONST) 0x4222
+
   : zobj_makeArray 
   # ( starting_size -- objref )
   .dhw DUP LIT_32 <
@@ -985,14 +993,13 @@ const src = `
   : zobj_makeArray_L0_L2
   .dhw DROP
   .dhw EXIT
-  
-  --merkill--
 
   : zobj_(Array)
   # ( ... arity verb self -- ...
   .dhw OVER zobj_verb_getLength = NOT (BRZ) zobj_(Array)_getLength
   .dhw OVER zobj_verb_@         = NOT (BRZ) zobj_(Array)_@
   .dhw OVER zobj_verb_!         = NOT (BRZ) zobj_(Array)_!
+  .dhe OVER zobj_verb_concat    = NOT (BRZ) zobj_(Array_common)_concat
   .dhw (ABORT")
   .utf8_hwc "array did not understand invocation"
   : zobj_(Array)_getLength
@@ -1126,6 +1133,10 @@ const src = `
   
   : zobj_makeArraySpliceTwogether
   # ( src_A src_B -- objref )
+  --merkill--
+
+  : zobj_(Array_common)_concat
+  # ( ... arity verb self -- new 1 )
 
   : zobj_makeArraySlice
   # ( src start end -- objref )
