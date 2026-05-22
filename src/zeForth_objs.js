@@ -999,7 +999,6 @@ const src = `
   .dhw OVER zobj_verb_getLength = NOT (BRZ) zobj_(Array)_getLength
   .dhw OVER zobj_verb_@         = NOT (BRZ) zobj_(Array)_@
   .dhw OVER zobj_verb_!         = NOT (BRZ) zobj_(Array)_!
-  .dhe OVER zobj_verb_concat    = NOT (BRZ) zobj_(Array_common)_concat
   .dhw (ABORT")
   .utf8_hwc "array did not understand invocation"
   : zobj_(Array)_getLength
@@ -1152,9 +1151,8 @@ const src = `
   : zobj_(Array_2splice)
   # ( .. arity verb self -- ... )
   .dhw OVER zobj_verb_getLength = NOT (BRZ) zobj_(Array_2splice)_getLength
-  .dhw OVER zobj_verb_@         = NOT (BRZ) zobj_(Array_2splice)_@
-  .dhw OVER zobj_verb_!         = NOT (BRZ) zobj_(Array_2splice)_!
-  .dhe OVER zobj_verb_concat    = NOT (BRZ) zobj_(Array_common)_concat
+  .dhw OVER zobj_verb_@         = NOT (BRZ) zobj_(Array_2splice)_@|!
+  .dhw OVER zobj_verb_!         = NOT (BRZ) zobj_(Array_2splice)_@|!
   .dhw (ABORT")
   .utf8_hwc "array did not understand invocation"
   : zobj_(Array)_getLength
@@ -1170,7 +1168,11 @@ const src = `
   .dhw zobj_invoke      # ( len_A len_B ) R:( )
   .dhw +
   .dhw (JMP) LIT_1
-
+  : zobj_(Array_2splice)_@|!
+  # ( ... arity verb self -- ... )
+  # ( idx 1 fetch self -- item refflag 2 )
+  # ( item refflag idx 3 store self -- 0 )
+  
   
   --merkill--
 
