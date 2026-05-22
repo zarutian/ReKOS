@@ -1026,6 +1026,7 @@ const src = `
   .dhw (BRZ)             # ( item refflag idx ) R:( self )
   .dhw zobj_(Array)_!_L0
   .dhw 2DUP              # ( item refflag idx refflag idx ) R:( self )
+  .dhw DUP LIT_16 > SLZ 16-
   .dhw GET_BIT_NR        # ( item refflag idx refflag bit ) R:( self )
   .dhw DUP               # ( item refflag idx refflag bit bit ) R:( self )
   .dhw INVERT            # ( item refflag idx refflag bit ~bit ) R:( self )
@@ -1036,9 +1037,26 @@ const src = `
   .dhw R>                # ( item refflag idx bit' ~bit ) R:( self )
   .dhw 3RD_DEEP          # ( item refflag idx bit' ~bit idx ) R:( self )
   .dhw >R                # ( item refflag idx bit' ~bit ) R:( self idx )
-  .dhw LIT_1 LIT_0 R>    # ( item refflag idx bit' ~bit
-  
-
+  .dhw LIT_1 LIT_0 R>    # ( item refflag idx bit' ~bit 1 0 idx ) R:( self )
+  .dhw < LIT_16          # ( item refflag idx bit' ~bit 1 0 bool ) R:( self )
+  .dhw ?:                # ( item refflag idx bit' ~bit 1|0 ) R:( self )
+  .dhw R@ OVER >R        # ( item refflag idx bit' ~bit 1|0 self ) R:( self 1|0 )
+  .dhw zobj_dat@         # ( item refflag idx bit' ~bit cell ) R:( self 1|0 )
+  .dhw &                 # ( item refflag idx bit' cell_masked ) R:( self 1|0 )
+  .dhw OR                # ( item refflag idx cell' ) R:( self 1|0 )
+  .dhw R> R@             # ( item refflag idx cell' 1|0 self ) R:( self )
+  .dhw zobj_dat!         # ( item refflag idx ) R:( self )
+  .dhw SWAP              # ( item idx refflag ) R:( self )
+  .dhw (BRZ)             # ( item idx ) R:( self )
+  .dhw zobj_(Array)_!_L1
+  .dhw R>
+  .dhw zobj_refs!        # ( ) R:( self )
+  .dhw (JMP) LIT_0
+  : zobj_(Array)_!_L1
+  .dhw 2+
+  .dhw R>
+  .dhw zobj_dat!
+  .dhw (JMP) LIT_0
   : zobj_(Array)_!_L0
   --merkill--
 
