@@ -1058,6 +1058,13 @@ const src = `
   .dhw zobj_dat!
   .dhw (JMP) LIT_0
   : zobj_(Array)_!_L0
+  .dhw R@                # ( item refflag idx self ) R:( self )
+  .dhw LIT_0             # ( item refflag idx self 0 ) R:( self )
+  .dhw zobj_verb_getLength 
+  .dhw R@
+  .dhw zobj_invoke       # ( item refflag idx self length 0 ) R:( self )
+  .dhw DROP              # ( item refflag idx self length ) R:( self )
+  .dhw zobj_make_array_copy # ( item refflag idx copy ) R:( self )
   --merkill--
 
   : zobj_make_array_copy
@@ -1082,7 +1089,6 @@ const src = `
   .dhw NIP              # ( objref ) R:( )
   .dhw EXIT
   
- -tbd-byrjun-
   : zobj_makeArraySpliceTwogether
   # ( src_A src_B -- objref )
 
