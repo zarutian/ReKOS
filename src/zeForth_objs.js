@@ -1133,10 +1133,27 @@ const src = `
   
   : zobj_makeArraySpliceTwogether
   # ( src_A src_B -- objref )
+  .dhw zobj_HERE @ >R   # ( ) R:( objref )
+  .dhw LIT_2 LIT_0
+  .dhw zobj_makeObjectHDR
+  .dhw zobj_,
+  .dhw (LIT)
+  .dhw zobj_(Array_2splice)
+  .dhw zobj_,
+  .dhw LIT_1
+  .dhw R@
+  .dhw zobj_refs!
+  .dhw LIT_0
+  .dhw R@
+  .dhw zobj_refs!
+  .dhw R>
+  .dhw EXIT
+
+  
   --merkill--
 
   : zobj_(Array_common)_concat
-  # ( ... arity verb self -- new 1 )
+  # ( ... arity verb self -- newArray 1 )
 
   : zobj_makeArraySlice
   # ( src start end -- objref )
