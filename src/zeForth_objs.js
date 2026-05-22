@@ -963,6 +963,29 @@ const src = `
   .dhw R>
   .dhw EXIT
   : zobj_makeArray_L0
+  .dhw LIT_32 /%            # ( ss_r ss_q )
+  .dhw 1- >R
+  .dhw LIT_32
+  .dhw zobj_makeArray       # ( ss_r car )
+  .dhw (JMP)
+  .dhw zobj_makeArray_L0_L1
+  : zobj_makeArray_L0_L0
+  .dhw LIT_32               # ( ss_r car 32 )
+  .dhw zobj_makeArray       # ( ss_r car cdr )
+  .dhw zobj_makeArraySpliceTwogether # ( ss_r car' )
+  : zobj_makeArray_L0_L1
+  .dhw (NEXT) zobj_makeArray_L0_L0
+  .dhw SWAP                 # ( car" ss_r )
+  .dhw DUP
+  .dhw (BRZ)
+  .dhw zobj_makeArray_L0_L2
+  .dhw zobj_makeArray
+  .dhw zobj_makeArraySpliceTwogether
+  .dhw EXIT
+  : zobj_makeArray_L0_L2
+  .dhw DROP
+  .dhw EXIT
+  
   --merkill--
 
   : zobj_(Array)
