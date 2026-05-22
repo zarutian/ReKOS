@@ -995,7 +995,7 @@ const src = `
   .dhw EXIT
 
   : zobj_(Array)
-  # ( ... arity verb self -- ...
+  # ( ... arity verb self -- ... )
   .dhw OVER zobj_verb_getLength = NOT (BRZ) zobj_(Array)_getLength
   .dhw OVER zobj_verb_@         = NOT (BRZ) zobj_(Array)_@
   .dhw OVER zobj_verb_!         = NOT (BRZ) zobj_(Array)_!
@@ -1148,6 +1148,28 @@ const src = `
   .dhw zobj_refs!
   .dhw R>
   .dhw EXIT
+
+  : zobj_(Array_2splice)
+  # ( .. arity verb self -- ... )
+  .dhw OVER zobj_verb_getLength = NOT (BRZ) zobj_(Array_2splice)_getLength
+  .dhw OVER zobj_verb_@         = NOT (BRZ) zobj_(Array_2splice)_@
+  .dhw OVER zobj_verb_!         = NOT (BRZ) zobj_(Array_2splice)_!
+  .dhe OVER zobj_verb_concat    = NOT (BRZ) zobj_(Array_common)_concat
+  .dhw (ABORT")
+  .utf8_hwc "array did not understand invocation"
+  : zobj_(Array)_getLength
+  # ( ... 0 getLength self -- length 1 )
+  .dhw >R               # ( 0 getLength ) R:( self )
+  .dhw 2DUP             # ( 0 getLength 0 getLength ) R:( self )
+  .dhw LIT_0 R@         # ( 0 getLength 0 getLength 0 self ) R:( self )
+  .dhw zobj_refs@       # ( 0 getLength 0 getLength src_A ) R:( self )
+  .dhw zobj_invoke      # ( 0 getLength len_A 1 ) R:( self )
+  .dhw DROP -ROT        # ( len_A 0 getLength ) R:( self )
+  .dhw LIT_1 R>         # ( len_A 0 getLength 1 self ) R:( )
+  .dhw zobj_refs@       # ( len_A 0 getLength src_B ) R:( )
+  .dhw zobj_invoke      # ( len_A len_B ) R:( )
+  .dhw +
+  .dhw (JMP) LIT_1
 
   
   --merkill--
