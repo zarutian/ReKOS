@@ -932,10 +932,24 @@ const src = `
   # -
   : zobj_verb_concat
   .dhw (CONST) 0x4220
-  : zobj_verb_every
+  : zobj_verb_copyWithin
   .dhw (CONST) 0x4221
+  : zobj_verb_entries
+  .dhw (CONST) 0x4223
+  : zobj_verb_every
+  .dhw (CONST) 0x4224
   : zobj_verb_fill
-  .dhw (CONST) 0x4222
+  .dhw (CONST) 0x4225
+  : zobj_verb_filter
+  .dhw (CONST) 0x4226
+  : zobj_verb_find
+  .dhw (CONST) 0x4227
+  : zobj_verb_findIndex
+  .dhw (CONST) 0x4228
+  : zobj_verb_findLast
+  .dhw (CONST) 0x4229
+  : zobj_verb_findLastIndex
+  .dhw (CONST) 0x422A
 
   : zobj_makeArray 
   # ( starting_size -- objref )
@@ -1228,6 +1242,10 @@ const src = `
   .dhw zobj_(Array_common)_concat_L0
   .dhw NIP
   .dhw EXIT
+
+  : zobj_(Array_common)_copyWithin
+  # ( target_idx start_idx end_idx 3 copyWithin self -- self 1 )
+  # ( target_idx start_idx 2 copyWithin self -- self 1 )
 
 
   : zobj_makeArraySlice
