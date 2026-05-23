@@ -1193,7 +1193,7 @@ const src = `
   .dhw (JMP)
   .dhw zobj_invoke
   : zobj_(Array_2splice)_@|!_L1
-  .dhw +                # ( ... idx+len_A )
+  .dhw -                # ( ... idx-len_A )
   .dhw LIT_1
   .dhw (JMP)
   .dhw zobj_(Array_2splice)_@|!_L0
