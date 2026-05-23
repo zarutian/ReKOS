@@ -1183,15 +1183,20 @@ const src = `
   .dhw 2DUP             # ( ... idx len_A idx len_A ) R:( verb arity self )
   .dhw <                # ( ... idx len_A bool ) R:( verb arity self )
   .dhw (BRZ)            # ( ... idx len_A ) R:( verb arity self )
-  .dhw zobj_(Array_2splice)_@|!
+  .dhw zobj_(Array_2splice)_@|!_L1
   .dhw DROP             # ( ... idx ) R:( verb arity self )
   .dhw LIT_0
+  : zobj_(Array_2splice)_@|!_L0
   .dhw R>
   .dhw zobj_refs@       # ( ... idx src_A ) R:( verb arity )
   .dhw R> SWAP R> SWAP  # ( ... idx arity verb src_A ) R:( )
   .dhw (JMP)
   .dhw zobj_invoke
-  --merkill--
+  : zobj_(Array_2splice)_@|!_L1
+  .dhw +                # ( ... idx+len_A )
+  .dhw LIT_1
+  .dhw (JMP)
+  .dhw zobj_(Array_2splice)_@|!_L0
 
   : zobj_(Array_common)_concat
   # ( ... arity verb self -- newArray 1 )
