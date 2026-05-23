@@ -1179,7 +1179,8 @@ const src = `
   .dhw LIT_0            # ( ... idx 0 getLength 0 ) R:( verb arity self )
   .dhw R@               # ( ... idx 0 getLength 0 self ) R:( verb arity self )
   .dhw zobj_refs@       # ( ... idx 0 getLength src_A ) R:( verb arity self )
-  .dhw zobj_invoke      # ( ... idx len_A ) R:( verb arity self )
+  .dhw zobj_invoke      # ( ... idx len_A 1 ) R:( verb arity self )
+  .dhw DROP
   .dhw 2DUP             # ( ... idx len_A idx len_A ) R:( verb arity self )
   .dhw <                # ( ... idx len_A bool ) R:( verb arity self )
   .dhw (BRZ)            # ( ... idx len_A ) R:( verb arity self )
@@ -1200,6 +1201,34 @@ const src = `
 
   : zobj_(Array_common)_concat
   # ( ... arity verb self -- newArray 1 )
+  .dhw NIP              # ( ... arity self )
+  .dhw LIT_0            # ( ... arity self 0 )
+  .dhw zobj_verb_getLength
+  .dhw 3RD_DEEP         # ( ... arity self 0 getLength self )
+  .dhw zobj_invoke      # ( ... arity self len 1 )
+  .dhw DROP             # ( ... arity self len )
+  .dhw >R OVER R@       # ( ... arity self len arity ) R:( len )
+  .dhw +                # ( ... arity self new_len ) R:( len )
+  .dhw zobj_make_array_copy # ( ... arity new ) R:( len )
+  .dhw SWAP R> SWAP >R  # ( ... new idx ) R:( count )
+  .dhw (JMP)
+  .dhw zobj_(Array_common)_concat_L1
+  : zobj_(Array_common)_concat_L0
+  .dhw OVER >R >R       # ( ... idx ) R:( count idx new )
+  .dhw LIT_3            # ( ... idx 3 ) R:( count idx new )
+  .dhw zobj_verb_!      # ( ... idx 3 store ) R:( count idx new )
+  .dhw R@               # ( ... idx 3 store new ) R:( count idx new )
+  .dhw zobj_invoke      # ( ... 0 ) R:( count idx new )
+  .dhw DROP             # ( ... ) R:( count idx new )
+  .dhw R> R>            # ( ... new idx ) R:( count )
+  .dhw 1+               # ( ... new idx+1 ) R:( count )
+  : zobj_(Array_common)_concat_L1
+  .dhw SWAP             # ( ... idx new ) R:( count )
+  .dhw (NEXT)
+  .dhw zobj_(Array_common)_concat_L0
+  .dhw NIP
+  .dhw EXIT
+
 
   : zobj_makeArraySlice
   # ( src start end -- objref )
