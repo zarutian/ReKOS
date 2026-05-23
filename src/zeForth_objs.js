@@ -1172,8 +1172,25 @@ const src = `
   # ( ... arity verb self -- ... )
   # ( idx 1 fetch self -- item refflag 2 )
   # ( item refflag idx 3 store self -- 0 )
-  
-  
+  .dhw SWAP >R SWAP >R  # ( ... idx self ) R:( verb arity )
+  .dhw >R               # ( ... idx ) R:( verb arity self )
+  .dhw LIT_0            # ( ... idx 0 ) R:( verb arity self )
+  .dhw zobj_verb_getLength
+  .dhw LIT_0            # ( ... idx 0 getLength 0 ) R:( verb arity self )
+  .dhw R@               # ( ... idx 0 getLength 0 self ) R:( verb arity self )
+  .dhw zobj_refs@       # ( ... idx 0 getLength src_A ) R:( verb arity self )
+  .dhw zobj_invoke      # ( ... idx len_A ) R:( verb arity self )
+  .dhw 2DUP             # ( ... idx len_A idx len_A ) R:( verb arity self )
+  .dhw <                # ( ... idx len_A bool ) R:( verb arity self )
+  .dhw (BRZ)            # ( ... idx len_A ) R:( verb arity self )
+  .dhw zobj_(Array_2splice)_@|!
+  .dhw DROP             # ( ... idx ) R:( verb arity self )
+  .dhw LIT_0
+  .dhw R>
+  .dhw zobj_refs@       # ( ... idx src_A ) R:( verb arity )
+  .dhw R> SWAP R> SWAP  # ( ... idx arity verb src_A ) R:( )
+  .dhw (JMP)
+  .dhw zobj_invoke
   --merkill--
 
   : zobj_(Array_common)_concat
