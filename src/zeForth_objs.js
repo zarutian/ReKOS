@@ -1246,7 +1246,9 @@ const src = `
   : zobj_(Array_common)_copyWithin
   # ( target_idx start_idx end_idx 3 copyWithin self -- self 1 )
   # ( target_idx start_idx 2 copyWithin self -- self 1 )
-
+  .dhw NIP >R           # ( ... target start (end) arity ) R:( self )
+  .dhw DUP 2=           # ( ... target start (end) arity bool ) R:( self )
+  .dhw 
 
   : zobj_makeArraySlice
   # ( src start end -- objref )
