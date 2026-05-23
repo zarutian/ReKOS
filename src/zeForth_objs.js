@@ -1248,6 +1248,8 @@ const src = `
   # ( target_idx start_idx 2 copyWithin self -- self 1 )
   .dhw NIP >R           # ( ... target start (end) arity ) R:( self )
   .dhw DUP 2=           # ( ... target start (end) arity bool ) R:( self )
+  .dhw (BRZ)
+  .dhw zobj_(Array_common)_copyWithin_L0
   .dhw 
 
   : zobj_makeArraySlice
