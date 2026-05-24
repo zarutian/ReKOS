@@ -1264,6 +1264,16 @@ const src = `
   .dhw zobj_(Array_common)_copyWithin_L2
   : zobj_(Array_common)_copyWithin_L1
   .dhw R> R> SWAP >R >R # ( target idx ) R:( count self )
+  .dhw 2DUP             # ( target idx target idx ) R:( count self )
+  .dhw LIT_1            # ( target idx target idx 1 ) R:( count self )
+  .dhw zobj_verb_@      # ( target idx target idx 1 fetch ) R:( count self )
+  .dhw R@               # ( target idx target idx 1 fetch self ) R:( count self )
+  .dhw zobj_invoke      # ( target idx target item refflag 2 ) R:( count self )
+  .dhw 1+               # ( target idx target item refflag 3 ) R:( count self )
+  .dhw >R ROT R> SWAP   # ( target idx item refflag target 3 ) R:( count self )
+  .dhw zobj_verb_!      # ( target idx item refflag target 3 store ) R:( count self )
+  .dhw R@               # ( target idx item refflag target 3 store self ) R:( count self )
+  .dhw 
 
   .dhw R> R> SWAP >R >R # ( target idx ) R:( self count )
   :  zobj_(Array_common)_copyWithin_L2
