@@ -1256,6 +1256,16 @@ const src = `
   .dhw zobj_invoke      # ( target start length 1 ) R:( self )
   .dhw DROP             # ( target start length ) R:( self )
   : zobj_(Array_common)_copyWithin_L0
+  .dhw DUP 0<
+  .dhw (BRZ)
+  .dhw  zobj_(Array_common)_copyWithin_L3
+  .dhw LIT_0            # ( target start end 0 ) R:( self )
+  .dhw zobj_verb_getLength
+  .dhw R@               # ( target start end 0 getLength self ) R:( self )
+  .dhw zobj_invoke      # ( target start end length 1 ) R:( self )
+  .dhw DROP             # ( target start end length ) R:( self )
+  .dhw +                # ( target start end' ) R:( self )
+  :  zobj_(Array_common)_copyWithin_L3
   .dhw 2DUP             # ( target start end start end ) R:( self )
   .dhw -                # ( target start end count ) R:( self  )
   .dhw >R               # ( target start end ) R:( self count )
