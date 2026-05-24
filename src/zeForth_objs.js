@@ -1273,12 +1273,16 @@ const src = `
   .dhw >R ROT R> SWAP   # ( target idx item refflag target 3 ) R:( count self )
   .dhw zobj_verb_!      # ( target idx item refflag target 3 store ) R:( count self )
   .dhw R@               # ( target idx item refflag target 3 store self ) R:( count self )
-  .dhw 
-
+  .dhw zobj_invoke      # ( target idx 0 ) R:( count self )
+  .dhw DROP             # ( target idx ) R:( count self )
+  .dhw 1+ SWAP 1+ SWAP  # ( target+1 idx+1 ) R:( count self )
   .dhw R> R> SWAP >R >R # ( target idx ) R:( self count )
   :  zobj_(Array_common)_copyWithin_L2
   .dhw (NEXT)
   .dhw  zobj_(Array_common)_copyWithin_L1
+  .dhw 2DROP            # ( ) R:( self )
+  .dhw R>               # ( self ) R:( )
+  .dhw (JMP) LIT_1
 
   : zobj_makeArraySlice
   # ( src start end -- objref )
