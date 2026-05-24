@@ -1250,15 +1250,25 @@ const src = `
   .dhw 2=               # ( ... target start (end) bool ) R:( self )
   .dhw (BRZ)
   .dhw zobj_(Array_common)_copyWithin_L0
-  .dhw LIT_0            # ( ... target start 0 ) R:( self )
+  .dhw LIT_0            # ( target start 0 ) R:( self )
   .dhw zobj_verb_getLength
-  .dhw R@               # ( ... target start 0 getLength self ) R:( self )
-  .dhw zobj_invoke      # ( ... target start length ) R:( self )
-  .dhw DROP
+  .dhw R@               # ( target start 0 getLength self ) R:( self )
+  .dhw zobj_invoke      # ( target start length 1 ) R:( self )
+  .dhw DROP             # ( target start length ) R:( self )
   : zobj_(Array_common)_copyWithin_L0
-  .dhw 2DUP             # ( ... target start end start end ) R:( self )
-  .dhw -                # ( ... target start end count ) R:( self  )
-  .dhw >R               # ( ... target start end ) R:( self count )
+  .dhw 2DUP             # ( target start end start end ) R:( self )
+  .dhw -                # ( target start end count ) R:( self  )
+  .dhw >R               # ( target start end ) R:( self count )
+  .dhw DROP             # ( target idx ) R:( self count )
+  .dhw (JMP)
+  .dhw zobj_(Array_common)_copyWithin_L2
+  : zobj_(Array_common)_copyWithin_L1
+  .dhw R> R> SWAP >R >R # ( target idx ) R:( count self )
+
+  .dhw R> R> SWAP >R >R # ( target idx ) R:( self count )
+  :  zobj_(Array_common)_copyWithin_L2
+  .dhw (NEXT)
+  .dhw  zobj_(Array_common)_copyWithin_L1
 
   : zobj_makeArraySlice
   # ( src start end -- objref )
