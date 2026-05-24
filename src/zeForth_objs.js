@@ -1252,9 +1252,13 @@ const src = `
   .dhw zobj_(Array_common)_copyWithin_L0
   .dhw LIT_0            # ( ... target start 0 ) R:( self )
   .dhw zobj_verb_getLength
-  .dhw R@
-  .dhw zobj_invoke
+  .dhw R@               # ( ... target start 0 getLength self ) R:( self )
+  .dhw zobj_invoke      # ( ... target start length ) R:( self )
   .dhw DROP
+  : zobj_(Array_common)_copyWithin_L0
+  .dhw 2DUP             # ( ... target start end start end ) R:( self )
+  .dhw -                # ( ... target start end count ) R:( self  )
+  .dhw >R               # ( ... target start end ) R:( self count )
 
   : zobj_makeArraySlice
   # ( src start end -- objref )
