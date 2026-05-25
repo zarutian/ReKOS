@@ -1301,9 +1301,9 @@ const src = `
   # ( callbackFn 1 every self -- bool 1 )
   # ( callbackFn thisArg 2 every self -- bool 1 )
   .dhw >R DROP 1=       # ( ... bool ) R:( self )
-  .dhw (BRZ)            # ( ... ) R:( self )
-  .dhw zobj_(Array_common)_every_L0
-  .dhw zobj_
+  .dhw SKZ              # ( ... ) R:( self )
+  .dhw zobj_get_nilObjecten
+  .dhw LIT_0            # ( cbFn thA idx ) R:( self )
 
   : zobj_makeArraySlice
   # ( src start end -- objref )
