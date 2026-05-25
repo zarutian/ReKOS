@@ -984,6 +984,28 @@ const src = `
   .dhw (CONST) 0x4229
   : zobj_verb_findLastIndex
   .dhw (CONST) 0x422A
+  : zobj_verb_flat
+  .dhw (CONST) 0x422B
+  : zobj_verb_flatMap
+  .dhw (CONST) 0x422C
+  : zobj_verb_forEach
+  .dhw (CONST) 0x422D
+  : zobj_verb_includes
+  .dhw (CONST) 0x422E
+  : zobj_verb_indexOf
+  .dhw (CONST) 0x422F
+  : zobj_verb_join
+  .dhw (CONST) 0x4230
+  : zobj_verb_keys
+  .dhw (CONST) 0x4231
+  : zobj_verb_lastIndexOf
+  .dhw (CONST) 0x4232
+  : zobj_verb_map
+  .dhw (CONST) 0x4233
+  : zobj_verb_pop
+  .dhw (CONST) 0x4234
+  : zobj_verb_push
+  .dhw (CONST) 0x4235
 
   : zobj_makeArray 
   # ( starting_size -- objref )
