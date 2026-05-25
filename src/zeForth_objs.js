@@ -928,7 +928,10 @@ const src = `
 
   : zobj_verb_getLength
   .dhw (CONST) 0x4212
-
+  
+  : zobj_verb_apply
+  .dhw (CONST) 0x4214
+  
   # -
   : zobj_verb_concat
   .dhw (CONST) 0x4220
@@ -1293,6 +1296,14 @@ const src = `
   .dhw 2DROP            # ( ) R:( self )
   .dhw R>               # ( self ) R:( )
   .dhw (JMP) LIT_1
+
+  : zobj_(Array_common)_every
+  # ( callbackFn 1 every self -- bool 1 )
+  # ( callbackFn thisArg 2 every self -- bool 1 )
+  .dhw >R DROP 1=       # ( ... bool ) R:( self )
+  .dhw (BRZ)            # ( ... ) R:( self )
+  .dhw zobj_(Array_common)_every_L0
+  .dhw zobj_
 
   : zobj_makeArraySlice
   # ( src start end -- objref )
