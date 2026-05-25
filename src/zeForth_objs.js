@@ -1304,6 +1304,30 @@ const src = `
   .dhw SKZ              # ( ... ) R:( self )
   .dhw zobj_get_nilObjecten
   .dhw LIT_0            # ( cbFn thA idx ) R:( self )
+  .dhw LIT_0            # ( cbFn thA idx 0 ) R:( self )
+  .dhw zobj_verb_getLength # ( cbFn thA idx 0 getLength ) R:( self )
+  .dhw R@
+  .dhw zobj_invoke      # ( cbFn thA idx length 1 ) R:( self )
+  .dhw DROP             # ( cbFn thA idx lengd ) R:( sjálf )
+  .dhw >R               # ( cbFn thA idx ) R:( sjálf tal )
+  .dhw (JMP)
+  .dhw zobj_(Array_common)_every_L1
+  : zobj_(Array_common)_every_L0
+  .dhw R> R> SWAP >R >R # ( cbFn thA idx ) R:( tal sjálf )
+  .dhw DUP LIT_1        # ( cbFn thA idx idx 1 ) R:( tal sjálf )
+  .dhw zobj_verb_@      # ( cbFn thA idx idx 1 fetch ) R:( tal sjálf )
+  .dhw R@ zobj_invoke   # ( cbFn thA idx item refflag 2 ) R:( tal sjálf )
+  .dhw DROP 3RD_DEEP R@ # ( cbFn thA idx item refflag idx sjálf ) R:( tal sjálf )
+  .dhw 6TH_DEEP         # ( cbFn thA idx item refflag idx sjálf thA ) R:( tal sjálf )
+  .dhw LIT_5            # ( cbFn thA idx item refflag idx sjálf thA 5 ) R:( tal sjálf )
+  .dhw zobj_verb_apply  # ( cbFn thA idx item refflag idx sjálf thA 5 apply ) R:( tal sjálf )
+  .dhw 10TH_DEEP        # ( cbFn thA idx item refflag idx sjálf thA 5 apply cbFn ) R:( tal sjálf )
+  .dhw zobj_invoke      # ( cbFn
+
+  .dhw R> R> SWAP >R >R # ( cbFn thA idx ) R:( sjálf tal )
+  : zobj_(Array_common)_every_L1
+  .dhw (NEXT)
+  .dhw zobj_(Array_common)_every_L0
 
   : zobj_makeArraySlice
   # ( src start end -- objref )
