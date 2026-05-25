@@ -1117,11 +1117,8 @@ const src = `
   : zobj_(Array)_@
   # ( idx 1 at self -- item refflag 2 )
   .dhw >R 2DROP DUP     # ( idx idx ) R:( self )
-  .dhw LIT_0
-  .dhw zobj_verb_getLength 
   .dhw R@
-  .dhw zobj_invoke
-  .dhw DROP             # ( idx idx length ) R:( self )
+  .dhw zobj_invoke_getLength  # ( idx idx length ) R:( self )
   .dhw > (BRZ) zobj_(Array)_@_L0
   .dhw DROP
   .dhw zobj_get_nilObjecten
@@ -1149,11 +1146,8 @@ const src = `
   .dhw >R
   .dhw 2DROP
   .dhw DUP
-  .dhw LIT_0
-  .dhw zobj_verb_getLength 
   .dhw R@
-  .dhw zobj_invoke
-  .dhw DROP              # ( item refflag idx idx length ) R:( self )
+  .dhw zobj_invoke_getLength # ( item refflag idx idx length ) R:( self )
   .dhw <                 # ( item refflag idx bool ) R:( self )
   .dhw (BRZ)             # ( item refflag idx ) R:( self )
   .dhw zobj_(Array)_!_L0
@@ -1191,11 +1185,8 @@ const src = `
   .dhw (JMP) LIT_0
   : zobj_(Array)_!_L0
   .dhw R@                # ( item refflag idx self ) R:( self )
-  .dhw LIT_0             # ( item refflag idx self 0 ) R:( self )
-  .dhw zobj_verb_getLength 
-  .dhw R@
-  .dhw zobj_invoke       # ( item refflag idx self length 0 ) R:( self )
-  .dhw DROP              # ( item refflag idx self length ) R:( self )
+  .dhw DUP
+  .dhw zobj_invoke_getLength # ( item refflag idx self length ) R:( self )
   .dhw TUCK              # ( item refflag idx length self length ) R:( self )
   .dhw zobj_make_array_copy # ( item refflag idx length copy ) R:( self )
   .dhw SWAP              # ( item refflag idx copy length ) R:( self )
@@ -1274,12 +1265,10 @@ const src = `
   # ( item refflag idx 3 store self -- 0 )
   .dhw SWAP >R SWAP >R  # ( ... idx self ) R:( verb arity )
   .dhw >R               # ( ... idx ) R:( verb arity self )
-  .dhw LIT_0            # ( ... idx 0 ) R:( verb arity self )
-  .dhw zobj_verb_getLength
   .dhw LIT_0            # ( ... idx 0 getLength 0 ) R:( verb arity self )
   .dhw R@               # ( ... idx 0 getLength 0 self ) R:( verb arity self )
   .dhw zobj_refs@       # ( ... idx 0 getLength src_A ) R:( verb arity self )
-  .dhw zobj_invoke      # ( ... idx len_A 1 ) R:( verb arity self )
+  .dhw zobj_invoke_getLength  # ( ... idx len_A ) R:( verb arity self )
   .dhw DROP
   .dhw 2DUP             # ( ... idx len_A idx len_A ) R:( verb arity self )
   .dhw <                # ( ... idx len_A bool ) R:( verb arity self )
@@ -1302,11 +1291,8 @@ const src = `
   : zobj_(Array_common)_concat
   # ( ... arity verb self -- newArray 1 )
   .dhw NIP              # ( ... arity self )
-  .dhw LIT_0            # ( ... arity self 0 )
-  .dhw zobj_verb_getLength
-  .dhw 3RD_DEEP         # ( ... arity self 0 getLength self )
-  .dhw zobj_invoke      # ( ... arity self len 1 )
-  .dhw DROP             # ( ... arity self len )
+  .dhw DUP              # ( ... arity self self )
+  .dhw zobj_invoke_getLength # ( ... arity self len )
   .dhw >R OVER R@       # ( ... arity self len arity ) R:( len )
   .dhw +                # ( ... arity self new_len ) R:( len )
   .dhw zobj_make_array_copy # ( ... arity new ) R:( len )
@@ -1336,20 +1322,14 @@ const src = `
   .dhw 2=               # ( ... target start (end) bool ) R:( self )
   .dhw (BRZ)
   .dhw zobj_(Array_common)_copyWithin_L0
-  .dhw LIT_0            # ( target start 0 ) R:( self )
-  .dhw zobj_verb_getLength
-  .dhw R@               # ( target start 0 getLength self ) R:( self )
-  .dhw zobj_invoke      # ( target start length 1 ) R:( self )
-  .dhw DROP             # ( target start length ) R:( self )
+  .dhw R@               # ( target start self ) R:( self )
+  .dhw zobj_invoke_getLength # ( target start length ) R:( self )
   : zobj_(Array_common)_copyWithin_L0
   .dhw DUP 0<
   .dhw (BRZ)
   .dhw  zobj_(Array_common)_copyWithin_L3
-  .dhw LIT_0            # ( target start end 0 ) R:( self )
-  .dhw zobj_verb_getLength
-  .dhw R@               # ( target start end 0 getLength self ) R:( self )
-  .dhw zobj_invoke      # ( target start end length 1 ) R:( self )
-  .dhw DROP             # ( target start end length ) R:( self )
+  .dhw R@               # ( target start end self ) R:( self )
+  .dhw zobj_invoke_getLength  # ( target start end length ) R:( self )
   .dhw +                # ( target start end' ) R:( self )
   :  zobj_(Array_common)_copyWithin_L3
   .dhw 2DUP             # ( target start end start end ) R:( self )
@@ -1387,11 +1367,8 @@ const src = `
   .dhw SKZ              # ( ... ) R:( self )
   .dhw zobj_get_nilObjecten
   .dhw LIT_0            # ( cbFn thA idx ) R:( self )
-  .dhw LIT_0            # ( cbFn thA idx 0 ) R:( self )
-  .dhw zobj_verb_getLength # ( cbFn thA idx 0 getLength ) R:( self )
   .dhw R@
-  .dhw zobj_invoke      # ( cbFn thA idx length 1 ) R:( self )
-  .dhw DROP             # ( cbFn thA idx lengd ) R:( sjálf )
+  .dhw zobj_invoke_getLength # ( cbFn thA idx lengd ) R:( sjálf )
   .dhw >R               # ( cbFn thA idx ) R:( sjálf tal )
   .dhw (JMP)
   .dhw zobj_(Array_common)_every_L1
@@ -1433,11 +1410,8 @@ const src = `
   .dhw DUP 3=           # ( ... arity bool ) R:( sjálf )
   .dhw (BRZ)            # ( ... arity ) R:( sjálf )
   .dhw zobj_(Array_common)_fill_L1
-  .dhw LIT_0
-  .dhw zobj_verb_getLength
   .dhw R@
-  .dhw zobj_invoke      # ( ... arity length 1 ) R:( sjálf )
-  .dhw DROP             # ( ... arity length ) R:( sjálf )
+  .dhw zobj_invoke_getLength # ( ... arity length ) R:( sjálf )
   .dhw 1-               # ( ... arity end_idx ) R:( sjálf )
   .dhw SWAP 1+          # ( ... end_idx arity ) R:( sjálf )
   : zobj_(Array_common)_fill_L1
