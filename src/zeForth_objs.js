@@ -1369,6 +1369,27 @@ const src = `
   .dhw R> 4DROP
   .dhw (JMP) LIT_1
 
+  : zobj_(Array_common)_fill
+  # ( value refflag 2 fill self -- self 1 )
+  # ( value refflag start_idx 3 fill self -- self 1 )
+  # ( value refflag start_idx end_idx 4 fill self -- self 1 )
+  .dhw >R DROP DUP 2=   # ( ... arity bool ) R:( sjálf )
+  .dhw (BRZ)            # ( ... arity bool ) R:( sjálf )
+  .dhw zobj_(Array_common)_fill_L0
+  .dhw LIT_0 SWAP 1+
+  : zobj_(Array_common)_fill_L0
+  .dhw DUP 3=           # ( ... arity bool ) R:( sjálf )
+  .dhw (BRZ)            # ( ... arity ) R:( sjálf )
+  .dhw zobj_(Array_common)_fill_L1
+  .dhw LIT_0
+  .dhw zobj_verb_getLength
+  .dhw R@
+  .dhw zobj_invoke      # ( ... arity length 1 ) R:( sjálf )
+  .dhw DROP             # ( ... arity length ) R:( sjálf )
+  .dhw 1-               # ( ... arity end_idx ) R:( sjálf )
+  .dhw SWAP 1+          # ( ... end_idx arity ) R:( sjálf )
+  : zobj_(Array_common)_fill_L1
+
   : zobj_makeArraySlice
   # ( src start end -- objref )
   
