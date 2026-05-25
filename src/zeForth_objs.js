@@ -55,6 +55,11 @@ const src = `
   .dhw R> SWAP     # ( a b c d e f a ) R:( j i h g f )
   .dhw (JMP) xTH_DEEP_common
 
+  : 3DROP
+  .dhw DROP
+  .dhw 2DROP
+  .dhw EXIT
+
   : 5DROP
   # ( a b c d e -- )
   .dhw DROP
