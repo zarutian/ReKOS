@@ -1322,12 +1322,21 @@ const src = `
   .dhw LIT_5            # ( cbFn thA idx item refflag idx sjálf thA 5 ) R:( tal sjálf )
   .dhw zobj_verb_apply  # ( cbFn thA idx item refflag idx sjálf thA 5 apply ) R:( tal sjálf )
   .dhw 10TH_DEEP        # ( cbFn thA idx item refflag idx sjálf thA 5 apply cbFn ) R:( tal sjálf )
-  .dhw zobj_invoke      # ( cbFn
-
+  .dhw zobj_invoke      # ( cbFn thA idx bool 1 ) R:( tal sjálf )
+  .dhw DROP             # ( cbFn thA idx bool ) R:( tal sjálf )
+  .dhw (BRZ)            # ( cbFn thA idx ) R:( tal sjálf )
+  .dhw zobj_(Array_common)_every_L2
+  .dhw R> R> 5DROP      # ( ) R:( )
+  .dhw FALSE            # ( false )
+  .dhw (JMP) LIT_1
+  : zobj_(Array_common)_every_L2
+  .dhw 1+               # ( cbFn thA idx+1 ) R:( tal sjálf )
   .dhw R> R> SWAP >R >R # ( cbFn thA idx ) R:( sjálf tal )
   : zobj_(Array_common)_every_L1
   .dhw (NEXT)
   .dhw zobj_(Array_common)_every_L0
+  .dhw R> 4DROP
+  .dhw (JMP) LIT_1
 
   : zobj_makeArraySlice
   # ( src start end -- objref )
