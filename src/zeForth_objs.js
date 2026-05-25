@@ -32,6 +32,37 @@ const src = `
   .dhw R>
   .dhw SWAP
   .dhw EXIT
+
+  : 6TH_DEEP
+  # ( a b c d e f -- a b c d e f a )
+  .dhw >R >R >R >R # ( a b ) R:( f e d c )
+  .dhw OVER        # ( a b a ) R:( f e d c )
+  : xTH_DEEP_common
+  .dhw R> SWAP     # ( a b c a ) R:( f e d )
+  .dhw R> SWAP     # ( a b c d a ) R:( f e )
+  .dhw R> SWAP     # ( a b c d e a ) R:( f )
+  .dhw R> SWAP     # ( a b c d e f a ) R:( )
+  .dhw EXIT
+
+  : 10TH_DEEP
+  # ( a b c d e f g h i j -- a b c d e f g h i j a )
+  .dhw >R >R >R >R # ( a b c d e f ) R:( j i h g )
+  .dhw >R >R >R >R # ( a b ) R:( j i h g f e d c )
+  .dhw OVER        # ( a b a ) R:( j i h g f e d c )
+  .dhw R> SWAP     # ( a b c a ) R:( j i h g f e d )
+  .dhw R> SWAP     # ( a b c d a ) R:( j i h g f e )
+  .dhw R> SWAP     # ( a b c d e a ) R:( j i h g f )
+  .dhw R> SWAP     # ( a b c d e f a ) R:( j i h g f )
+  .dhw (JMP) xTH_DEEP_common
+
+  : 5DROP
+  # ( a b c d e -- )
+  .dhw DROP
+  : 4DROP
+  # ( a b c d -- )
+  .dhw 2DROP
+  .dhw 2DROP
+  .dhw EXIT
   
   # zobj version whatever
   : zobj_@
