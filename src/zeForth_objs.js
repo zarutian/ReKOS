@@ -1028,6 +1028,15 @@ const src = `
   : zobj_verb_splice
   .dhw (CONST) 0x423D
 
+  : zobj_invoke_getLength
+  # ( target -- length )
+  .dhw LIT_0               # ( target 0 )
+  .dhw zobj_verb_getLength # ( target 0 getLength )
+  .dhw ROT                 # ( 0 getLength target )
+  .dhw zobj_invoke         # ( length 1 )
+  .dhw DROP                # ( length )
+  .dhw EXIT
+
   : zobj_makeArray 
   # ( starting_size -- objref )
   .dhw DUP LIT_32 <
