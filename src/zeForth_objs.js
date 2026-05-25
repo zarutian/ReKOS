@@ -1011,6 +1011,22 @@ const src = `
   .dhw (CONST) 0x4234
   : zobj_verb_push
   .dhw (CONST) 0x4235
+  : zobj_verb_reduce
+  .dhw (CONST) 0x4236
+  : zobj_verb_reduceRight
+  .dhw (CONST) 0x4237
+  : zobj_verb_reverse
+  .dhw (CONST) 0x4238
+  : zobj_verb_shift
+  .dhw (CONST) 0x4239
+  : zobj_verb_slice
+  .dhw (CONST) 0x423A
+  : zobj_verb_some
+  .dhw (CONST) 0x423B
+  : zobj_verb_sort
+  .dhw (CONST) 0x423C
+  : zobj_verb_splice
+  .dhw (CONST) 0x423D
 
   : zobj_makeArray 
   # ( starting_size -- objref )
