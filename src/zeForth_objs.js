@@ -1466,7 +1466,11 @@ const src = `
   .dhw R>               # ( sjálf ) R:( )
   .dhw (JMP) LIT_1
    
-
+  : zobj_(Array_common)_filter
+  # ( callbackFn 1 filter self -- newArry 1 )
+  # ( callbackFn thisArg 2 filter self -- newArray 1 )
+  
+  
   : zobj_makeArraySlice
   # ( src start end -- objref )
   
