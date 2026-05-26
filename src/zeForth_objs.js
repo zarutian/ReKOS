@@ -448,7 +448,8 @@ const src = `
   .dhw R>
   .dhw zobj_raw_ref!
   .dhw EXIT
-  
+
+  : zobj_dat@
   : zobj_datum@
   # ( optr datumNr -- cell )
   .dhw >R
@@ -456,7 +457,8 @@ const src = `
   .dhw R>
   .dhw zobj_raw_datum@
   .dhw EXIT
-  
+
+  : zobj_dat!
   : zobj_datum!
   # ( cell optr datumNr -- )
   .dhw >R
@@ -1054,22 +1056,22 @@ const src = `
   : zobj_makeArray_L1
   .dhw 2DUP                 # ( ss nil ss nil ) R:( objref )
   .dhw SWAP                 # ( ss nil nil ss ) R:( objref )
-  .dhw R@
-  .dhw zobj_refs!           # ( ss nil )
-  .dhw SWAP 1- SWAP         # ( ss-1 nil )
+  .dhw R@                   # ( ss nil nil ss objref ) R:( objref )
+  .dhw SWAP zobj_ref!       # ( ss nil ) R:( objref )
+  .dhw SWAP 1- SWAP         # ( ss-1 nil ) R:( objref )
   : zobj_makeArray_L2
-  .dhw OVER 0=
-  .dhw (BRZ) zobj_makeArray_L1
-  .dhw 2DROP
-  .shw LIT_0
-  .dhw DUP
-  .dhw R@
-  .dhw zobj_dat!
-  .dhw LIT_0
-  .dhw LIT_1
-  .dhw R@
-  .dhw zobj_dat!
-  .dhw R>
+  .dhw OVER 0=              # ( ss nil bool ) R:( objref )
+  .dhw (BRZ) zobj_makeArray_L1 # ( ss nil ) R:( objref )
+  .dhw 2DROP                # ( ) R:( objref )
+  .dhw LIT_0                # ( 0 ) R:( objref )
+  .dhw R@                   # ( 0 objref ) R:( objref )
+  .dhw OVER                 # ( 0 objref 0 ) R:( objref )
+  .dhw zobj_dat!            # ( ) R:( objref )
+  .dhw LIT_0                # ( 0 ) R:( objref )
+  .dhw R@                   # ( 0 objref ) R:( objref )
+  .dhw LIT_1                # ( 0 objref 1 ) R:( objref )
+  .dhw zobj_dat!            # ( ) R:( objref )
+  .dhw R>                   # ( objref ) R:( )
   .dhw EXIT
   : zobj_makeArray_L0
   .dhw LIT_32 /%            # ( ss_r ss_q )
@@ -1112,36 +1114,63 @@ const src = `
   .dhw (ABORT")
   .utf8_hwc "arity or verb of invocation didnt match getLength/0"
   : zobj_(Array)_getLength_L0
-  .dhw R>      # ( self )
+  .dhw R>               # ( self )
   .dhw zobj_refs_size@  # ( length )
   .dhw LIT_1 EXIT
   : zobj_(Array)_@
   # ( idx 1 at self -- item refflag 2 )
-  .dhw >R 2DROP DUP     # ( idx idx ) R:( self )
-  .dhw R@
+  .dhw >R               # ( idx 1 at ) R:( self )
+  .dhw 2DROP            # ( idx ) R:( self )
+  .dhw DUP              # ( idx idx ) R:( self )
+  .dhw R@               # ( idx idx self ) R:( self )
   .dhw zobj_invoke_getLength  # ( idx idx length ) R:( self )
-  .dhw > (BRZ) zobj_(Array)_@_L0
-  .dhw DROP
-  .dhw zobj_get_nilObjecten
+  .dhw >                # ( idx bool ) R:( self )
+  .dhw (BRZ)            # ( idx ) R:( self )
+  .dhw zobj_(Array)_@_L0
+  .dhw DROP             # ( ) R:( self )
+  .dhw zobj_get_nilObjecten # ( nil ) R:( self )
   : zobj_(Array)_@_L2
-  .dhw TRUE
-  .dhw LIT_2
+  .dhw TRUE             # ( item refflag )
+  .dhw LIT_2            # ( item refflag 2 )
   .dhw EXIT
   : zobj_(Array)_@_L0
-  .dhw DUP DUP           # ( idx idx idx ) R:( self )
-  .dhw LIT_16 < >R       # ( idx idx ) R:( self bool )
-  .dhw LIT_1 LIT_0 R@ ?: # ( idx idx 1|0 ) R:( self bool )
-  .dhw R> ROT            # ( idx bool idx 1|0 ) R:( self )
-  .dhw R@ zobj_dat@      # ( idx bool idx bitmap ) R:( self )
-  .dhw SWAP GET_BIT_NR   # ( idx bool bit ) R:( self )
-  .dhw >R
-  .dhw NOT SKZ 16-       # ( idx-x ) R:( self bit )
-  .dhw R> (BRZ) zobj_(Array)_@_L1
-  .dhw 2+ R> zobj_dat@
-  .dhw FALSE LIT_2 EXIT
+  .dhw DUP              # ( idx idx ) R:( self )
+  .dhw DUP              # ( idx idx idx ) R:( self )
+  .dhw LIT_16           # ( idx idx idx cellSizeInBits ) R:( self )
+  .dhw <                # ( idx idx bool ) R:( self )
+  .dhw >R               # ( idx idx ) R:( self bool )
+  .dhw LIT_1            # ( idx idx 1 ) R:( self bool )
+  .dhw LIT_0            # ( idx idx 1 0 ) R:( self bool )
+  .dhw R@               # ( idx idx 1 0 bool ) R:( self bool )
+  .dhw ?:               # ( idx idx 1|0 ) R:( self bool )
+  .dhw R>               # ( idx idx 1|0 bool ) R:( self )
+  .dhw ROT              # ( idx bool idx 1|0 ) R:( self )
+  .dhw R@               # ( idx bool idx 1|0 self ) R:( self )
+  .dhw SWAP             # ( idx bool idx self 1|0 ) R:( self )
+  .dhw zobj_dat@        # ( idx bool idx bitmap ) R:( self )
+  .dhw SWAP             # ( idx bool bitmap idx ) R:( self )
+  .dhw GET_BIT_NR       # ( idx bool bit ) R:( self )
+  .dhw >R               # ( idx bool ) R:( self bit )
+  .dhw NOT              # ( idx ~bool ) R:( self bit )
+  .dhw SKZ              # ( idx ) R:( self bit )
+  .dhw 16-              # ( idx-cellSizeInBits ) R:( self bit )
+  .dhw R>               # ( idx-cellSizeInBits bit ) R:( self )
+  .dhw (BRZ)            # ( idx-cellSizeInBits ) R:( self )
+  .dhw zobj_(Array)_@_L1
+  .dhw 2+               # ( offset ) R:( self )
+  .dhw R>               # ( offset self ) R:( )
+  .dhw SWAP             # ( self offset )
+  .dhw zobj_dat@        # ( item )
+  .dhw FALSE            # ( item refflag )
+  .dhw LIT_2            # ( item refflag 2 )
+  .dhw EXIT
   : zobj_(Array)_@_L1
-  .dhw R> zobj_refs@
-  .dhw (JMP) zobj_(Array)_@_L2
+  .dhw R>               # ( offset self ) R:( )
+  .dhw SWAP             # ( self offset )
+  .dhw zobj_ref@        # ( item )
+  .dhw (JMP)
+  .dhw zobj_(Array)_@_L2
+  --merkill-- var að leiðrétta dat@ og ref@ staflaröðun
   : zobj_(Array)_!
   # ( item refflag idx 3 store self -- 0 )
   .dhw >R
