@@ -68,6 +68,46 @@ const src = `
   .dhw 2DROP
   .dhw 2DROP
   .dhw EXIT
+
+  : make_powers_of_2
+  # ( veldi -- num )
+  .dhw LIT_1 SWAP 1- << EXIT
+
+  : within_which_powers_of_2
+  # ( num -- veldi )
+  .dhw DUP
+  .dhw 0=
+  .dhw OVER
+  .dhw 1=
+  .dhw EXIT
+  .dhw (BRZ)
+  .dhw within_which_powers_of_2_L3
+  .dhw EXIT
+  : within_which_powers_of_2_L3
+  .dhw LIT_2            # ( num veldi )
+  : within_which_powers_of_2_L0
+  .dhw 2DUP             # ( num veldi num veldi )
+  .dhw make_powers_of_2 # ( num veldi num test )
+  .dhw <                # ( num veldi bool )
+  .dhw (BRZ)            # ( num veldi )
+  .dhw within_which_powers_of_2_L1
+  .dhw NIP
+  .dhw EXIT
+  : within_which_powers_of_2_L1
+  .dhw 1+               # ( num veldi+1 )
+  .dhw DUP
+  .dhw LIT_16
+  .dhw >=
+  .dhw (BRZ)
+  .dhw within_which_powers_of_2_L0
+  .dhw 2DROP
+  .dhw LIT_16
+  .dhw EXIT
+
+  : GET_BIT_NR
+  # ( cell bitnr -- bit )
+  .dhw 1+ <<> 1& EXIT
+  
   
   # zobj version whatever
   : zobj_@
@@ -197,45 +237,6 @@ const src = `
   .dhw +
   .dhw 2+
   .dhw EXIT
-
-  : make_powers_of_2
-  # ( veldi -- num )
-  .dhw LIT_1 SWAP 1- << EXIT
-  
-  : within_which_powers_of_2
-  # ( num -- veldi )
-  .dhw DUP
-  .dhw 0=
-  .dhw OVER
-  .dhw 1=
-  .dhw EXIT
-  .dhw (BRZ)
-  .dhw within_which_powers_of_2_L3
-  .dhw EXIT
-  : within_which_powers_of_2_L3
-  .dhw LIT_2            # ( num veldi )
-  : within_which_powers_of_2_L0
-  .dhw 2DUP             # ( num veldi num veldi )
-  .dhw make_powers_of_2 # ( num veldi num test )
-  .dhw <                # ( num veldi bool )
-  .dhw (BRZ)            # ( num veldi )
-  .dhw within_which_powers_of_2_L1
-  .dhw NIP
-  .dhw EXIT
-  : within_which_powers_of_2_L1
-  .dhw 1+               # ( num veldi+1 )
-  .dhw DUP
-  .dhw LIT_16
-  .dhw >=
-  .dhw (BRZ)
-  .dhw within_which_powers_of_2_L0
-  .dhw 2DROP
-  .dhw LIT_16
-  .dhw EXIT
-
-  : GET_BIT_NR
-  # ( cell bitnr -- bit )
-  .dhw 1+ <<> 1& EXIT
 
   : zobj_makeObjectHDR
   # ( ref_nrs dat_nrs -- hdr )
