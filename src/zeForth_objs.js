@@ -1527,7 +1527,16 @@ const src = `
   : zobj_(Array_common)_filter_L1
   .dhw (NEXT)
   .dhw zobj_(Array_common)_filter_L0
-  
+
+  : zobj_invoke_push/2
+  # ( item refflag array -- )
+  .dhw LIT_2 SWAP       # ( item refflag 2 array )
+  .dhw zobj_verb_apply  # ( item refflag 2 array apply )
+  .dhw SWAP             # ( item refflag 2 apply array )
+  .dhw zobj_invoke      # ( newLength 1 )
+  .dhw 2DROP
+  .dhw EXIT
+      
   : zobj_makeArraySlice
   # ( src start end -- objref )
   
