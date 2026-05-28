@@ -1380,7 +1380,7 @@ const src = `
   .dhw (JMP)
   .dhw zobj_(Array_common)_copyWithin_L2
   : zobj_(Array_common)_copyWithin_L1
-  .dhw R> R> SWAP >R >R # ( target idx ) R:( count self )
+  .dhw RSWAP            # ( target idx ) R:( count self )
   .dhw 2DUP             # ( target idx target idx ) R:( count self )
   .dhw LIT_1            # ( target idx target idx 1 ) R:( count self )
   .dhw zobj_verb_@      # ( target idx target idx 1 fetch ) R:( count self )
@@ -1393,7 +1393,7 @@ const src = `
   .dhw zobj_invoke      # ( target idx 0 ) R:( count self )
   .dhw DROP             # ( target idx ) R:( count self )
   .dhw 1+ SWAP 1+ SWAP  # ( target+1 idx+1 ) R:( count self )
-  .dhw R> R> SWAP >R >R # ( target idx ) R:( self count )
+  .dhw RSWAP            # ( target idx ) R:( self count )
   :  zobj_(Array_common)_copyWithin_L2
   .dhw (NEXT)
   .dhw  zobj_(Array_common)_copyWithin_L1
@@ -1414,7 +1414,7 @@ const src = `
   .dhw (JMP)
   .dhw zobj_(Array_common)_every_L1
   : zobj_(Array_common)_every_L0
-  .dhw R> R> SWAP >R >R # ( cbFn thA idx ) R:( tal sjálf )
+  .dhw RSWAP            # ( cbFn thA idx ) R:( tal sjálf )
   .dhw DUP LIT_1        # ( cbFn thA idx idx 1 ) R:( tal sjálf )
   .dhw zobj_verb_@      # ( cbFn thA idx idx 1 fetch ) R:( tal sjálf )
   .dhw R@ zobj_invoke   # ( cbFn thA idx item refflag 2 ) R:( tal sjálf )
@@ -1432,7 +1432,7 @@ const src = `
   .dhw (JMP) LIT_1
   : zobj_(Array_common)_every_L2
   .dhw 1+               # ( cbFn thA idx+1 ) R:( tal sjálf )
-  .dhw R> R> SWAP >R >R # ( cbFn thA idx ) R:( sjálf tal )
+  .dhw RSWAP            # ( cbFn thA idx ) R:( sjálf tal )
   : zobj_(Array_common)_every_L1
   .dhw (NEXT)
   .dhw zobj_(Array_common)_every_L0
@@ -1462,14 +1462,14 @@ const src = `
   .dhw (JMP)
   .dhw zobj_(Array_common)_fill_L3
   : zobj_(Array_common)_fill_L2
-  .dhw R> R> SWAP >R >R # ( value refflag idx ) R:( tal sjálf )
+  .dhw RSWAP            # ( value refflag idx ) R:( tal sjálf )
   .dhw 3DUP             # ( value refflag idx value refflag idx ) R:( tal sjálf )
   .dhw LIT_3            # ( value refflag idx value refflag idx 3 ) R:( tal sjálf )
   .dhw zobj_verb_!      # ( value refflag idx value refflag idx 3 store ) R:( tal sjálf )
   .dhw zobj_invoke      # ( value refflag idx 0 ) R:( tal sjálf )
   .dhw DROP
   .dhw 1+
-  .dhw R> R> SWAP >R >R # ( value refflag idx+1 ) R:( sjálf tal )
+  .dhw RSWAP            # ( value refflag idx+1 ) R:( sjálf tal )
   : zobj_(Array_common)_fill_L3
   .dhw (NEXT)
   .dhw zobj_(Array_common)_fill_L2
@@ -1495,8 +1495,8 @@ const src = `
   .dhw (JMP)
   .dhw zobj_(Array_common)_filter_L1
   : zobj_(Array_common)_filter_L0
-  .dhw R> R> SWAP >R >R # ( res cbFn thA idx ) R:( count self )
-  .dhw R> R> SWAP >R >R # ( res cbFn thA idx ) R:( self count )
+  .dhw RSWAP            # ( res cbFn thA idx ) R:( count self )
+  .dhw RSWAP            # ( res cbFn thA idx ) R:( self count )
   : zobj_(Array_common)_filter_L1
   .dhw (NEXT)
   .dhw zobj_(Array_common)_filter_L0
