@@ -107,6 +107,17 @@ const src = `
   : GET_BIT_NR
   # ( cell bitnr -- bit )
   .dhw 1+ <<> 1& EXIT
+
+  : RSWAP
+  # ( -- ) R:( a b ra -- b a ra )
+  .dhw R>               # ( ra ) R:( a b )
+  .dhw R>               # ( ra b ) R:( a )
+  .dhw R>               # ( ra b a ) R:( )
+  .dhw SWAP             # ( ra a b ) R:( )
+  .dhw >R               # ( ra a ) R:( b )
+  .dhw >R               # ( ra ) R:( b a )
+  .dhw >R               # ( ) R:( b a ra )
+  .dhw EXIT
   
   
   # zobj version whatever
