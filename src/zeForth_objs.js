@@ -1469,7 +1469,26 @@ const src = `
   : zobj_(Array_common)_filter
   # ( callbackFn 1 filter self -- newArry 1 )
   # ( callbackFn thisArg 2 filter self -- newArray 1 )
-  
+  .dhw >R               # ( ... arity filter ) R:( self )
+  .dhw DROP             # ( ... arity ) R:( self )
+  .dhw 1= NOT           # ( ... bool ) R:( self )
+  .dhw SKZ              # ( ... ) R:( self )
+  .dhw zobj_get_nilObjecten
+  .dhw LIT_0            # ( cbFn thA 0 ) R:( self )
+  .dhw zobj_makeArray   # ( cbFn thA res ) R:( self )
+  .dhw -ROT             # ( res cbFn thA ) R:( self )
+  .dhw R@               # ( res cbFn thA self ) R:( self )
+  .dhw zobj_invoke_getLength # ( res cbFn thA length ) R:( self )
+  .dhw >R               # ( res cbFn thA ) R:( self count )
+  .dhw LIT_0            # ( res cbFn thA idx ) R:( self count )
+  .dhw (JMP)
+  .dhw zobj_(Array_common)_filter_L1
+  : zobj_(Array_common)_filter_L0
+  .dhw R> R> SWAP >R >R # ( res cbFn thA idx ) R:( count self )
+  .dhw R> R> SWAP >R >R # ( res cbFn thA idx ) R:( self count )
+  : zobj_(Array_common)_filter_L1
+  .dhw (NEXT)
+  .dhw zobj_(Array_common)_filter_L0
   
   : zobj_makeArraySlice
   # ( src start end -- objref )
