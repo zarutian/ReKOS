@@ -1496,6 +1496,33 @@ const src = `
   .dhw zobj_(Array_common)_filter_L1
   : zobj_(Array_common)_filter_L0
   .dhw RSWAP            # ( res cbFn thA idx ) R:( count self )
+  .dhw DUP              # ( res cbFn thA idx idx ) R:( count self )
+  .dhw LIT_1 zobj_verb_@ R@ zobj_invoke DROP # ( res cbFn thA idx item refflag ) R:( count self )
+  .dhw 2DUP             # ( res cbFn thA idx item refflag item refflag ) R:( count self )
+  .dhw R> -ROT >R >R >R # ( res cbFn thA idx item refflag ) R:( count refflag item self )
+  # -
+  .dhw 3RD_DEEP         # ( res cbFn thA idx item refflag idx ) R:( count refflag item self )
+  .dhw R@               # ( res cbFn thA idx item refflag idx self ) R:( count refflag item self )
+  .dhw 6TH_DEEP         # ( res cbFn thA idx item refflag idx self thA ) R:( count refflag item self )
+  .dhw LIT_5
+  .dhw zobj_verb_apply  # ( res cbFn thA idx item refflag idx self thA 5 apply ) R:( count refflag item self )
+  .dhw 10TH_DEEP        # ( res cbFn thA idx item refflag idx self thA 5 apply cbFn ) R:( count refflag item self )
+  .dhw zobj_invoke      # ( res cbFn thA idx bool 1 ) R:( count refflag item self )
+  # -
+  .dhw DROP             # ( res cbFn thA idx bool ) R:( count refflag item self )
+  .dhw R> R> R>         # ( res cbFn thA idx bool self item refflag ) R:( count )
+  .dhw ROT >R           # ( res cbFn thA idx bool item refflag ) R:( count self )
+  .dhw ROT              # ( res cbFn thA idx item refflag bool )
+  .dhw (BRZ)            # ( res cbFn thA idx item refflag ) R:( count refflag item self )
+  .dhw zobj_(Array_common)_filter_L2
+  .dhw 6TH_DEEP         # ( res cbFn thA idx item refflag res ) R:( count self )
+  .dhw zobj_invoke_push/2 # ( res cbFn thA idx ) R:( count self )
+  .dhw (JMP)
+  .dhw zobj_(Array_common)_filter_L3
+  : zobj_(Array_common)_filter_L2
+  .dhw 2DROP            # ( res cbFn thA idx ) R:( count self )
+  : zobj_(Array_common)_filter_L3
+  .dhw 1+               # ( res cbFn thA idx+1 ) R:( count self )
   .dhw RSWAP            # ( res cbFn thA idx ) R:( self count )
   : zobj_(Array_common)_filter_L1
   .dhw (NEXT)
