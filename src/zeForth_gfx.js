@@ -504,6 +504,31 @@ const src = objs_src.concat(`
   .dhw zobj_refs@    # ( idx 1 at pal ) R:( )
   .dhw zobj_invoke   # ( colour 1 ) R:( )
   .dhw EXIT
+
+  : zgfx_make_SlantVert
+  # ( src stepsize -- objref )
+  .dhw zobj_HERE @   # ( src stepsize objref )
+  .dhw >R            # ( src stepsize ) R:( objref )
+  .dhw LIT_1 DUP     # ( src stepsize 1 1 ) R:( objref )
+  .dhw zobj_makeHDR  # ( src stepsize hdr ) R:( objref )
+  .dhw zobj_,        # ( src stepsize ) R:( objref )
+  .dhw (LIT)
+  .dhw zgfx_(SlantVert)
+  .dhw zobj_,        # ( src stepsize ) R:( objref )
+  .dhw LIT_2         # ( src stepsize 2 ) R:( objref )
+  .dhw zobj_allot    # ( src stepsize ) R:( objref )
+  .dhw R@            # ( src stepsize objref ) R:( objref )
+  .dhw LIT_0         # ( src stepsize objref 0 ) R:( objref )
+  .dhw zobj_dat!     # ( src ) R:( objref )
+  .dhw R@            # ( src objref ) R:( objref )
+  .dhw LIT_0         # ( src objref 0 ) R:( objref )
+  .dhw zobj_ref!     # ( ) R:( objref )
+  .dhw R>            # ( objref ) R:( )
+  .dhw EXIT
+
+  : zgfx_(SlantVert)
+  # ( ... arity verb self -- ... return_arity )
+  .dhw
   
   # Like bitplanes but if a pixel bit is on then the colour is spefic opaque
   # if it is off then its delegated.
