@@ -528,7 +528,15 @@ const src = objs_src.concat(`
 
   : zgfx_(SlantVert)
   # ( ... arity verb self -- ... return_arity )
-  .dhw
+  .dhw OVER zgfx_verb_getPixel  = NOT (BRZ) zgfx_(SlantVert)_xxxPixel
+  .dhw OVER zgfx_verb_putPixel  = NOT (BRZ) zgfx_(SlantVert)_xxxPixel
+  .dhw (JMP) zgfx_common_delegate
+  : zgfx_(SlantVert)_xxxPixel
+  # ( (color) x y arity verb self )
+  .dhw -ROT          # ( (color) x y self arity verb ) R:( )
+  .dhw >R >R >R      # ( (color) x y ) R:( verb arity self )
+  .dhw --merkill--
+
   
   # Like bitplanes but if a pixel bit is on then the colour is spefic opaque
   # if it is off then its delegated.
