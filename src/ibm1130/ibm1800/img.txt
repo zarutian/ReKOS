@@ -1133,13 +1133,13 @@ Devices
 http://media.ibm1130.org/1130-025-ocr.pdf
 
 Zarutians bitmapped screen + alphanumeric keyboard (ISO) + 32 key function keypad + mouse.
-  the screen is 512x384 pixels in size monochrome (basically Apple Machintosh SE screen)
+  the screen is 512x384 pixels in size monochrome (basically Apple Machintosh SpecialEdition screen)
   when XIO  Initialize Write is executed, a 12 KibiCell framebuffer is established at the address the IOCC points to.
   that is, the device snoops on the memory bus, listening for any address that falls into the range of the framebuffer
   and copies any data read or written to the screen.
   2 cells beyond 12 KibiCells control which functionkeypad indicator lights are on (1) or off (0)
   when XIO  Initialize Read is executed following datablock is put where the IOCC points to:
-  8 cells bitmap of which alphanumeric keys are down. (Each key has its own bit)
+  8 cells bitmap of which alphanumeric keys are down. (Each key has its own bit, see USB HID keyboard full key rollover key bitmap)
   2 cells bitmap of which functionkeypad keys are down. ( Ditto )
   1 cell  bitmap of overlay notches sense bits of functionkeypad (Which overlay being used)
   1 cell  bitmap of which mouse buttons are pressed. ( See USB HID mouse standard )
