@@ -1145,3 +1145,9 @@ Zarutians bitmapped screen + alphanumeric keyboard (ISO) + 32 key function keypa
   1 cell  bitmap of which mouse buttons are pressed. ( See USB HID mouse standard )
   1 cell  x coordnates of mouse
   1 cell  y coordnates of mouse
+
+  The functionkeypad is compatble with overlays for 2250 functionkeypad.
+  Just there are possibility for extra notches.
+  Four on each side of the eight possible notches on overlays meant for 2250 fkpds.
+
+
