@@ -1539,7 +1539,7 @@ const src = `
 
   : zobj_(Array_common)_find
   # ( callbackFn 1 find self -- item refflag 2 )
-  # ( callbackFn thisArg 2 find self -- item refflag )
+  # ( callbackFn thisArg 2 find self -- item refflag 2 )
   .dhw >R               # ( ... arity find ) R:( self )
   .dhw DROP             # ( ... arity ) R:( self )
   .dhw zobj_verb_findIndex
@@ -1549,6 +1549,10 @@ const src = `
   .dhw R>               # ( index 1 @ self ) R:( )
   .dhw (JMP)
   .dhw zobj_invoke
+
+  : zobj_(Array_common)_findIndex
+  # ( callbackFn 1 findIndex self -- index 1 )
+  # ( callbackFn thisArg 2 findIndex self -- index 1 )
   
   : zobj_makeArraySlice
   # ( src start end -- objref )
