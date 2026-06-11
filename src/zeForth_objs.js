@@ -1545,6 +1545,18 @@ const src = `
   .dhw zobj_verb_findIndex
   .dhw R@               # ( ... arity findIndex self ) R:( self )
   .dhw zobj_invoke      # ( index 1 ) R:( self )
+  .dhw OVER             # ( index 1 index )
+  .dhw LIT_-1           # ( index 1 index -1 )
+  .dhw =                # ( index 1 bool )
+  .dhw (BRZ)
+  .dhw zobj_(Array_common)_find_L0
+  .dhw 2DROP            # ( ) R:( self )
+  .dhw R> DROP          # ( ) R:( )
+  .dhw zobj_get_nilObjecten # ( null ) R:( )
+  .dhw TRUE
+  .dhw LIT_2
+  .dhw EXIT
+  : zobj_(Array_common)_find_L0
   .dhw zobj_verb_@      # ( index 1 @ ) R:( self )
   .dhw R>               # ( index 1 @ self ) R:( )
   .dhw (JMP)
@@ -1553,6 +1565,26 @@ const src = `
   : zobj_(Array_common)_findIndex
   # ( callbackFn 1 findIndex self -- index 1 )
   # ( callbackFn thisArg 2 findIndex self -- index 1 )
+  .dhw >R               # ( ... arity findIndex ) R:( self )
+  .dhw DROP             # ( ... arity ) R:( self )
+  .dhw 1= NOT           # ( ... bool ) R:( self )
+  .dhw SKZ              # ( ... ) R:( self )
+  .dhw zobj_get_nilObjecten
+                        # ( callbackFn thisArg ) R:( self )
+  .dhw LIT_0            # ( callbackFn thisArg idx ) R:( self )
+  .dhw R> DUP           # ( callbackFn thisArg idx self self ) R:( )
+  .dhw zobj_invoke_getLength # ( callbackFn thisArg idx self length ) R:( )
+  .dhw SWAP >R >R       # ( callbackFn thisArg idx ) R:( self length )
+  .dhw (JMP)
+  .dhw zobj_(Array_common)_findIndex_L1
+  : zobj_(Array_common)_findIndex_L0
+  .dhw RSWAP            # ( callbackFn thisArg idx ) R:( count self )
+
+  .dhw RSWAP
+  : zobj_(Array_common)_findIndex_L1
+  .dhw (NEXT)
+  .dhw zobj_(Array_common)_findIndex_L0
+  
   
   : zobj_makeArraySlice
   # ( src start end -- objref )
