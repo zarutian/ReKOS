@@ -1041,6 +1041,21 @@ const src = `
   .dhw (CONST) 0x423C
   : zobj_verb_splice
   .dhw (CONST) 0x423D
+  : zobj_verb_toLocaleString
+  .dhw (CONST) 0x423E
+  : zobj_verb_toReversed
+  .dhw (CONST) 0x423F
+  : zobj_verb_toSorted
+  .dhw (CONST) 0x4240
+  : zobj_verb_toSpliced
+  .dhw (CONST) 0x4241
+  : zobj_verb_toString
+  .dhw (CONST) 0x4242
+  : zobj_verb_unshift
+  .dhw (CONST) 0x4243
+  : zobj_verb_with
+  .dhw (CONST) 0x4244
+  
 
   : zobj_invoke_getLength
   # ( target -- length )
