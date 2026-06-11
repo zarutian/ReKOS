@@ -1594,7 +1594,9 @@ const src = `
   .dhw zobj_(Array_common)_findIndex_L1
   : zobj_(Array_common)_findIndex_L0
   .dhw RSWAP            # ( callbackFn thisArg idx ) R:( count self )
-
+  .dhw DUP              # ( callbackFn thisArg idx idx ) R:( count self )
+  .dhw LIT_1 zobj_verb_@ R@ zobj_invoke DROP # ( callbackFn thisArg idx item refflag ) R:( count self )
+  --merkill--
   .dhw RSWAP
   : zobj_(Array_common)_findIndex_L1
   .dhw (NEXT)
