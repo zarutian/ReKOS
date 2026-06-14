@@ -1596,11 +1596,36 @@ const src = `
   .dhw RSWAP            # ( callbackFn thisArg idx ) R:( count self )
   .dhw DUP              # ( callbackFn thisArg idx idx ) R:( count self )
   .dhw LIT_1 zobj_verb_@ R@ zobj_invoke DROP # ( callbackFn thisArg idx item refflag ) R:( count self )
-  --merkill--
-  .dhw RSWAP
+  # -
+  .dhw 3RD_DEEP         # ( cbFn thA idx item refflag idx ) R:( count self )
+  .dhw R@               # ( cbFn thA idx item refflag idx self ) R:( count self )
+  .dhw 6TH_DEEP         # ( cbFn thA idx item refflag idx self thA ) R:( count self )
+  .dhw LIT_5
+  .dhw zobj_verb_apply  # ( cbFn thA idx item refflag idx self thA 5 apply ) R:( count self )
+  .dhw 10TH_DEEP        # ( cbFn thA idx item refflag idx self thA 5 apply cbFn ) R:( count self )
+  .dhw zobj_invoke      # ( cbFn thA idx bool 1 ) R:( count self )
+  # -
+  .dhw DROP             # ( cbFn thA idx bool ) R:( count self )
+  .dhw (BRZ)            # ( cbFn thA idx ) R:( count self )
+  .dhw zobj_(Array_common)_findIndex_L2
+  .dhw -ROT             # ( idx cbFn thA ) R:( count self )
+  .dhw 2DROP            # ( idx ) R:( count self )
+  .dhw R>               # ( idx self ) R:( count )
+  .dhw R>               # ( idx self count ) R:( )
+  .dhw 2DROP            # ( idx ) R:( )
+  .dhw (JMP)            # ( idx 1 ) R:( )
+  .dhw LIT_1
+  : zobj_(Array_common)_findIndex_L2
+  .dhw 1+               # ( cbFn thA idx+1 ) R:( count self )
+  .dhw RSWAP            # ( cbFn thA idx+1 ) R:( self count )
   : zobj_(Array_common)_findIndex_L1
   .dhw (NEXT)
   .dhw zobj_(Array_common)_findIndex_L0
+  .dhw 3DROP            # ( ) R:( self )
+  .dhw R> DROP          # ( ) R:( )
+  .dhw LIT_-1           # ( -1 ) R:( )
+  .dhw (JMP)            # ( -1 1 ) R:( )
+  .dhw LIT_1
   
   
   : zobj_makeArraySlice
