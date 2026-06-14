@@ -1626,6 +1626,23 @@ const src = `
   .dhw LIT_-1           # ( -1 ) R:( )
   .dhw (JMP)            # ( -1 1 ) R:( )
   .dhw LIT_1
+
+  : zobj_(Array_common)_findLast
+  # ( callbackFn 1 find self -- item refflag 2 )
+  # ( callbackFn thisArg 2 find self -- item refflag 2 )
+  .dhw >R               # ( ... arity find ) R:( self )
+  .dhw DROP             # ( ... arity ) R:( self )
+  .dhw zobj_verb_findLastIndex
+  .dhw R@               # ( ... arity findIndex self ) R:( self )
+  .dhw zobj_invoke      # ( index 1 ) R:( self )
+  .dhw OVER             # ( index 1 index )
+  .dhw LIT_-1           # ( index 1 index -1 )
+  .dhw =                # ( index 1 bool )
+  .dhw (BRZ)
+  .dhw zobj_(Array_common)_find_L1
+ @ self ) R:( )
+  .dhw (JMP)
+  .dhw zobj_invoke
   
   
   : zobj_makeArraySlice
