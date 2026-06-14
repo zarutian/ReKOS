@@ -1565,6 +1565,7 @@ const src = `
   .dhw =                # ( index 1 bool )
   .dhw (BRZ)
   .dhw zobj_(Array_common)_find_L0
+  : zobj_(Array_common)_find_L1
   .dhw 2DROP            # ( ) R:( self )
   .dhw R> DROP          # ( ) R:( )
   .dhw zobj_get_nilObjecten # ( null ) R:( )
@@ -1639,10 +1640,9 @@ const src = `
   .dhw LIT_-1           # ( index 1 index -1 )
   .dhw =                # ( index 1 bool )
   .dhw (BRZ)
-  .dhw zobj_(Array_common)_find_L1
- @ self ) R:( )
+  .dhw zobj_(Array_common)_find_L0
   .dhw (JMP)
-  .dhw zobj_invoke
+  .dhw zobj_(Array_common)_find_L1
   
   
   : zobj_makeArraySlice
