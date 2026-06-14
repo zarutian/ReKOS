@@ -1609,6 +1609,7 @@ const src = `
   .dhw DROP             # ( cbFn thA idx bool ) R:( count self )
   .dhw (BRZ)            # ( cbFn thA idx ) R:( count self )
   .dhw zobj_(Array_common)_findIndex_L2
+  : zobj_(Array_common)_findIndex_L3
   .dhw -ROT             # ( idx cbFn thA ) R:( count self )
   .dhw 2DROP            # ( idx ) R:( count self )
   .dhw R>               # ( idx self ) R:( count )
@@ -1622,6 +1623,7 @@ const src = `
   : zobj_(Array_common)_findIndex_L1
   .dhw (NEXT)
   .dhw zobj_(Array_common)_findIndex_L0
+  : zobj_(Array_common)_findIndex_L4
   .dhw 3DROP            # ( ) R:( self )
   .dhw R> DROP          # ( ) R:( )
   .dhw LIT_-1           # ( -1 ) R:( )
@@ -1643,6 +1645,51 @@ const src = `
   .dhw zobj_(Array_common)_find_L0
   .dhw (JMP)
   .dhw zobj_(Array_common)_find_L1
+  
+  : zobj_(Array_common)_findLastIndex
+  # ( callbackFn 1 findIndex self -- index 1 )
+  # ( callbackFn thisArg 2 findIndex self -- index 1 )
+  .dhw >R               # ( ... arity findIndex ) R:( self )
+  .dhw DROP             # ( ... arity ) R:( self )
+  .dhw 1= NOT           # ( ... bool ) R:( self )
+  .dhw SKZ              # ( ... ) R:( self )
+  .dhw zobj_get_nilObjecten
+                        # ( callbackFn thisArg ) R:( self )
+  .dhw R> DUP           # ( callbackFn thisArg self self ) R:( )
+  .dhw zobj_invoke_getLength # ( callbackFn thisArg self length ) R:( )
+  .dhw SWAP             # ( callbackFn thisArg length self ) R:( )
+  .dhw OVER             # ( callbackFn thisArg length self length ) R:( )
+  .dhw SWAP >R >R       # ( callbackFn thisArg length ) R:( self length )
+  .dhw DUP              # ( callbackFn thisArg length length ) R:( self length )
+  .dhw (BRZ)            # ( callbackFn thisArg length ) R:( self length )
+  .dhe zobj_(Array_common)_findIndex_L4
+  .dhw 1-               # ( callbackFn thisArg idx ) R:( self length )
+  .dhw (JMP)
+  .dhw zobj_(Array_common)_findLastIndex_L1
+  : zobj_(Array_common)_findLastIndex_L0
+  .dhw RSWAP            # ( callbackFn thisArg idx ) R:( count self )
+  .dhw DUP              # ( callbackFn thisArg idx idx ) R:( count self )
+  .dhw LIT_1 zobj_verb_@ R@ zobj_invoke DROP # ( callbackFn thisArg idx item refflag ) R:( count self )
+  # -
+  .dhw 3RD_DEEP         # ( cbFn thA idx item refflag idx ) R:( count self )
+  .dhw R@               # ( cbFn thA idx item refflag idx self ) R:( count self )
+  .dhw 6TH_DEEP         # ( cbFn thA idx item refflag idx self thA ) R:( count self )
+  .dhw LIT_5
+  .dhw zobj_verb_apply  # ( cbFn thA idx item refflag idx self thA 5 apply ) R:( count self )
+  .dhw 10TH_DEEP        # ( cbFn thA idx item refflag idx self thA 5 apply cbFn ) R:( count self )
+  .dhw zobj_invoke      # ( cbFn thA idx bool 1 ) R:( count self )
+  # -
+  .dhw DROP             # ( cbFn thA idx bool ) R:( count self )
+  .dhw INVERT
+  .dhw (BRZ)            # ( cbFn thA idx ) R:( count self )
+  .dhw zobj_(Array_common)_findIndex_L3
+  .dhw 1-               # ( cbFn thA idx-1 ) R:( count self )
+  .dhw RSWAP            # ( cbFn thA idx-1 ) R:( self count )
+  : zobj_(Array_common)_findLastIndex_L1
+  .dhw (NEXT)
+  .dhw zobj_(Array_common)_findLastIndex_L0
+  .dhw (JMP)
+  .dhw zobj_(Array_common)_findIndex_L4
   
   
   : zobj_makeArraySlice
