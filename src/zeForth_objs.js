@@ -1690,7 +1690,24 @@ const src = `
   .dhw zobj_(Array_common)_findLastIndex_L0
   .dhw (JMP)
   .dhw zobj_(Array_common)_findIndex_L4
-  
+
+  : zobj_(Array_common)_flat
+  # ( depth 1 flat self -- newArray 1 )
+  # ( 0 flat self -- newArray 1 )
+  .dhw >R               # ( .. n flat ) R:( self )
+  .dhw DROP             # ( .. n ) R:( self )
+  .dhw DUP              # ( .. n n ) R:( self )
+  .dhw 0=               # ( .. n bool ) R:( self )
+  .dhw (BRZ)            # ( .. n ) R:( self )
+  .dhw zobj_(Array_common)_flat_L0
+  .dhw DROP             # ( ) R:( self )
+  .dhw LIT_1            # ( 1 ) R:( self )
+  .dhw (JMP)
+  .dhw zobj_(Array_common)_flat_L1
+  : zobj_(Array_common)_flat_L0
+  .dhw DROP             # ( depth ) R:( self )
+  : zobj_(Array_common)_flat_L1
+  .dhw 
   
   : zobj_makeArraySlice
   # ( src start end -- objref )
