@@ -1707,7 +1707,19 @@ const src = `
   : zobj_(Array_common)_flat_L0
   .dhw DROP             # ( depth ) R:( self )
   : zobj_(Array_common)_flat_L1
-  .dhw 
+  .dhw LIT_0            # ( depth 0 ) R:( self )
+  .dhw zobj_makeArray   # ( depth res ) R:( self )
+  .dhw R@               # ( depth res self ) R:( self )
+  .dhw zobj_invoke_getLength # ( depth res length ) R:( self )
+  .dhw R>               # ( depth res ) R:( self length )
+  .dhw LIT_0            # ( depth res idx ) R:( self length )
+  .dhw (JMP)
+  .dhw zobj_(Array_common)_flat_L3
+  : zobj_(Array_common)_flat_L2
+  .dhw 1+               # ( depth res idx+1 ) R:( self length )
+  : zobj_(Array_common)_flat_L3
+  .dhw (NEXT)
+  .dhe zobj_(Array_common)_flat_L2
   
   : zobj_makeArraySlice
   # ( src start end -- objref )
