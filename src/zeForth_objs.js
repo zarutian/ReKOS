@@ -118,7 +118,16 @@ const src = `
   .dhw >R               # ( ra ) R:( b a )
   .dhw >R               # ( ) R:( b a ra )
   .dhw EXIT
-  
+
+  : 2nd_R@
+  # ( -- a ) R:( a b ra -- a b ra )
+  .dhw R>               # ( ra ) R:( a b )
+  .dhw R>               # ( ra b ) R:( a )
+  .dhw R@               # ( ra b a ) R:( a )
+  .dhw -ROT             # ( a ra b ) R:( a )
+  .dhw >R               # ( a ra ) R:( a b )
+  .dhw >R               # ( a ) R:( a b ra )
+  .dhw EXIT
   
   # zobj version whatever
   : zobj_@
