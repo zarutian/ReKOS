@@ -1716,6 +1716,13 @@ const src = `
   .dhw (JMP)
   .dhw zobj_(Array_common)_flat_L3
   : zobj_(Array_common)_flat_L2
+  .dhw DUP              # ( depth res idx idx ) R:( self length )
+  .dhw LIT_1            # ( depth res idx idx 1 ) R:( self length )
+  .dhw zobj_verb_@      # ( depth res idx idx 1 @ ) R:( self length )
+  .dhw 2nd_R@           # ( depth res idx idx 1 @ self ) R:( self length )
+  .dhw zobj_invoke      # ( depth res idx item refflag 2 ) R:( self length )
+  .dhw DROP             # ( depth res idx item refflag ) R:( self length )
+  =merkill=
   .dhw 1+               # ( depth res idx+1 ) R:( self length )
   : zobj_(Array_common)_flat_L3
   .dhw (NEXT)
