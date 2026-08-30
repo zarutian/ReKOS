@@ -199,6 +199,27 @@ const assemble = (opts = {}) => {
             stack.push(and(a, b));
           }
           return;
+        case "*":
+          {
+            const b = stack.pop();
+            const a = stack.pop();
+            stack.push(mult(a, b));
+          }
+          return;
+        case "^":
+          {
+            const b = stack.pop();
+            const a = stack.pop();
+            stack.push(xor(a, b));
+          }
+          return;
+        case "-":
+          {
+            const b = stack.pop();
+            const a = stack.pop();
+            stack.push(decr(a, b));
+          }
+          return;
       }
     });
     return stack.pop();
