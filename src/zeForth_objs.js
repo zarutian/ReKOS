@@ -1719,6 +1719,7 @@ const src = `
   .dhw LIT_0            # ( depth 0 ) R:( self )
   .dhw zobj_makeArray   # ( depth res ) R:( self )
   .dhw R@               # ( depth res self ) R:( self )
+  : zobj_(Array_common)_flat_recurseTarget
   .dhw zobj_invoke_getLength # ( depth res length ) R:( self )
   .dhw R>               # ( depth res ) R:( self length )
   .dhw LIT_0            # ( depth res idx ) R:( self length )
@@ -1731,6 +1732,13 @@ const src = `
   .dhw 2nd_R@           # ( depth res idx idx 1 @ self ) R:( self length )
   .dhw zobj_invoke      # ( depth res idx item refflag 2 ) R:( self length )
   .dhw DROP             # ( depth res idx item refflag ) R:( self length )
+  .dhw DUP              # ( depth res idx item refflag refflag ) R:( self length )
+  .dhw (BRZ)            # ( depth res idx item refflag ) R:( self length )
+  .dhw zobj_(Array_common)_flat_pushItem
+  .dhw 5th_on_stack     # ( depth res idx item refflag depth ) R:( self length )
+  .dhw 0=               # ( depth res idx item refflag bool ) R:( self length )
+  .dhw (BRZ)            # ( depth res idx item refflag ) R:( self length )
+  .dhw zobj_(Array_common)_flat_pushItem
   =merkill=
   .dhw 1+               # ( depth res idx+1 ) R:( self length )
   : zobj_(Array_common)_flat_L3
