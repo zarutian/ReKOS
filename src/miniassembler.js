@@ -18,36 +18,42 @@ const makeThenable = () => {
     return p.then(callback, errback);
   };
 };
-const incr = (a, b) => {
+const binop = (a, b, op) => {
   const ta = typeof(a);
   const tb = typeof(b);
   if (((ta == "number") || (ta == "bigint")) && ((tb == "number") || (tb == "bigint"))) {
-    return a + b;
+    return op(a, b);
   }
   if ((ta == "object") && ((tb == "number") || (tb == "bigint"))) {
     if (ta.then == undefined) {
-      throw new Error("incremented is not a thenable, number, or bigint");
+      throw new Error("argument a is not a thenable, number, or bigint");
     }
-    return ta.then((resolved_a) => incr(resolved_a, b));
+    return ta.then((resolved_a) => binop(resolved_a, b, op));
   }
   if ((tb == "object") && ((ta == "number") || (ta == "bigint"))) {
     if (tb.then == undefined) {
-      throw new Error("increment is not a thenable, number, or bigint");
+      throw new Error("argument b is not a thenable, number, or bigint");
     }
-    return tb.then((resolved_b) => incr(a, resolved_b));
+    return tb.then((resolved_b) => binop(a, resolved_b, op));
   }
   if ((ta == "object") && (tb == "object")) {
     if (ta.then == undefined) {
-      throw new Error("incremented is not a thenable, number, or bigint");
+      throw new Error("argument a is not a thenable, number, or bigint");
     }
     if (tb.then == undefined) {
-      throw new Error("increment is not a thenable, number, or bigint");
+      throw new Error("argument b is not a thenable, number, or bigint");
     }
     return ta.then((resolved_a) => {
-      return tb.then((resolved_b) => incr(resolved_a, resolved_b));
+      return tb.then((resolved_b) => binop(resolved_a, resolved_b, op));
     });
   }
 };
+const incr = (a, b) => binop(a, b, (a, b) => (a + b));
+const decr = (a, b) => binop(a, b, (a, b) => (a - b));
+const and  = (a, b) => binop(a, b, (a, b) => (a & b));
+const or   = (a, b) => binop(a, b, (a, b) => (a | b));
+const xor  = (a, b) => binop(a, b, (a, b) => (a ^ b));
+const mult = (a, b) => binop(a, b, (a, b) => (a * b));
 const assemble = (opts = {}) => {
   if (opts.src == undefined) {
     throw new Error("no source given to assemble!");
