@@ -1089,9 +1089,34 @@ ADDR DATA IBM1800
 0593      LIT_7  : CONSOLE_PRINTER8_EMIT
 0594      (JMP)
 0595      CONSOLE_PRINTER_EMIT_COMMON
-0596 0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON ( keyboardnr -- ascii T | F )
-0597      CONSOLE_PRINTERNR2IOSEL
-0598 
+0596      R>     : (LUT_t2)  ( key -- value T | F )
+0597      DUP                ( key ra ra )
+0598      @                  ( key ra nrOfEntries )
+0599      >R                 ( key ra ) R:( nrOfEntries )
+059A      1+                 ( key ra+1 ) R:( nrOfEntries )
+059B      (JMP)
+059C      (LUT_t2)_L1
+059D      2DUP   : (LUT_t2)_L0
+059E      @                  ( key ra+n key candidate )
+059F      =                  ( key ra+n bool )
+05A0      (BRZ)              ( key ra+n )
+05A1      (LUT_t2)_L2
+05A2      NIP                ( ra+n )
+05A3      1+                 ( ra+n+1 )
+05A4      @                  ( value ) R:( nrOfEntriesLeft )
+05A5      RDROP              ( value ) R:( )
+05A6      (JMP)
+05A7      TRUE
+05A8      2+     : (LUT_t2)_L2
+05A9      (NEXT) : (LUT_t2)_L1
+05AA      (LUT_t2)_L0
+05AB      2DROP
+05AC      (JMP)
+05AD      FALSE
+
+     0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON ( keyboardnr -- ascii T | F )
+          CONSOLE_PRINTERNR2IOSEL
+ 
 
 
 ####
