@@ -1255,6 +1255,8 @@ ADDR DATA IBM1800
 0639 00   "
 063A 2820
 064B 00   0-8-2
+064C 4110
+064D 00   NL New Line  should be tied to the Return key
 
      0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON ( keyboardnr -- ascii T | F )
           CONSOLE_PRINTERNR2IOSEL
@@ -1299,6 +1301,7 @@ Devices
 0b11111          ???
 
 http://media.ibm1130.org/1130-025-ocr.pdf
+https://www.ibm1130.net/functional/index.html
 
 Zarutians bitmapped screen + alphanumeric keyboard (ISO) + 32 key function keypad + mouse.
   the screen is 512x384 pixels in size monochrome (basically Apple Machintosh SpecialEdition screen)
