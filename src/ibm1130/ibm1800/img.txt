@@ -1116,7 +1116,8 @@ ADDR DATA IBM1800
 05AE      DROP   : 2DROP
 05AF      DROP
 05B0      EXIT
-
+05B1      (LUT_t2) : CONSOLE_KEYBOARD_2_ASCII ( key -- ascii T | F )
+05B2      
      0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON ( keyboardnr -- ascii T | F )
           CONSOLE_PRINTERNR2IOSEL
  
