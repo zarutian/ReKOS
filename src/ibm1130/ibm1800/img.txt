@@ -1225,7 +1225,36 @@ ADDR DATA IBM1800
 061B 0020 space
 061C 8820
 061D      cent symbol
-061E 
+061E 8220
+061F 00   <
+0620 8060
+0621 00   |
+0622 8000
+0623 00   &
+0624 4820
+0625 00   !
+0626 40A0
+0627 00   ;
+0628 4060
+0629 00   the not symbol
+062A 2220
+062B 00   %
+062C 2120
+062D 00   _
+062E 20A0
+062F 00   >
+0630 2060
+0631 00   ?
+0632 0820
+0633 00   :
+0634 0420
+0635 00   #
+0636 0220
+0637 00   @
+0638 0060
+0639 00   "
+063A 2820
+064B 00   0-8-2
 
      0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON ( keyboardnr -- ascii T | F )
           CONSOLE_PRINTERNR2IOSEL
@@ -1234,6 +1263,7 @@ ADDR DATA IBM1800
 
 ####
 Devices
+
    Area Fun Mod
 0b00000          Console and internal
 0b00001          1816 Console Printer&Keyboards and 1053 Printers (first four)
