@@ -111,59 +111,59 @@ ADDR DATA IBM1800
 006D C0FA LD_s I-14      \ load saved I into accumulator  ( 0xFF&0x0E -> 0xF8 + 1 -> 0xF9 )
 006E 90   SUBT_s I+53    \ subtract 3 from it
 006F 1801 SRA 1          \ divide it by 2
-0070 1004 SLA 6          \ multiply it by 64
+0070 1004 SLA 4          \ multiply it by 16 and get the interrupt level
 0071 8400 ADD_l          \ add it as offset into the interrupts table
-0072      INT_TBL
+0072 00B4 INT_TBL
 0073 D400 STO_l          \ store it into XR1
 0074 0001 XR1
-0075 0C00 XIO_l
+0075 0C00 XIO_l          \ get spefic ISLW into the accumulator
 0076 00B0 SENSE_INT
-0077 6600 LDX_l XR3 
-0078      const_16
-0079 1340 SLCA XR3  :ISR_L0
-007A D400 STO_l
+0077 6600 LDX_l XR3      \ set XR3 to 16
+0078 00A6 const_16
+0079 1340 SLCA XR3  : ISR_L0  \ shift accumulator left until front most bit is on (1)
+007A D400 STO_l          \ save the, possibly shifted ISLW
 007B 00B2 saved ISLW
-007C 6F00 STX_l XR3
-007D 0080
+007C 6F00 STX_l XR3      \ store XR3 to ISR_L1
+007D 0080 ISR_L1
 007E      LD_s I+const_16
-007F      SUBT_l
-0080 xxxx 16 - the offset
+007F      SUBT_l         \ offset = 16 - (16 - offset)
+0080 xxxx 16 - the offset  : ISR_L1
 0081      STO_s I+1
-0082 C500 LD_l XR1 +
+0082 C500 LD_l XR1 +     \ accumulator = memory[ int_tbl + interrupt level + offset ]
 0083 xxxx the offset
 0084      STO_s I+1
-0085 4400 BSI_l
+0085 4400 BSI_l          \ call that
 0086 xxxx specific interrupt vector
-0087 6700 LDX_l XR3
-0088 0080
-0089 C400 LD_l
-008A 00B2 save ISLW
-008B 4C20 BSC_l A=0?
-008C 008F
+0087 6700 LDX_l XR3      \ restore XR3 to the remaining count
+0088 0080 ISR_L1
+0089 C400 LD_l           \ restore accumulator to saved ISLW
+008A 00B2 saved ISLW
+008B 4C20 BSC_l A=0?     \ have we exhausted all on bits in the ISLW ?
+008C 008F ISR_L2
 008D 4C3F BSC_l all conditions
-008E      ISR_L0
-008F 6500 LDX_l XR1
+008E 0079 ISR_L0         \ no we have not so loop around
+008F 6500 LDX_l XR1      : ISR_L2  \ yes we have so restore XR1
 0090 005C saved XR1
-0091 6600 LDX_l XR2
+0091 6600 LDX_l XR2      \ restore XR2
 0092 005D saved XR2
-0093 6700 LDX_l XR3
+0093 6700 LDX_l XR3      \ restore XR1
 0094 005E saved XR3
-0095 C400 LD_l
+0095 C400 LD_l           \ load saved I
 0096 005F saved I
-0097 9010 SUBT_s I+16
-0098      STO_s I+1
-0099 C400 LD_l
-009A xxxx
-009B      STO_s I+8
-009C CC00 LDD_l
+0097 9010 SUBT_s I+16    \ subtract 3 from it
+0098      STO_s I+1      \ store it at ISR_L3
+0099 C400 LD_l           \ load the interrupted I into the accumulator
+009A xxxx                : ISR_L3
+009B      STO_s I+8      \ store that at ISR_L4
+009C CC00 LDD_l          \ restore the accumulator (A) and the extension (Q)
 009D 005A
-009E 20xx LDS          : saved_status
+009E 20xx LDS            : saved_status
 009F 0C00 XIO_l
 00A0 00AC UNMASK_INT1
 00A1 0C00 XIO_l
 00A2 00AE UNMASK_INT2
 00A3 4C40 BOSC_l
-00A4 xxxx interrupted I
+00A4 xxxx interrupted I  : ISR_L4
 00A5 0003 const_3
 00A6 0010 const_16
 00A7 00B4
@@ -175,8 +175,8 @@ ADDR DATA IBM1800
 00AD
 00AE      UNMASK_INT2
 00AF
-00B0      SENSE_INT
-00B1
+00B0 0000 SENSE_INT
+00B1 0300
 00B2      saved ISL
 00B3
 00B4      Invalid opcode           INT_TBL level 0
