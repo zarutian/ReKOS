@@ -1257,6 +1257,12 @@ ADDR DATA IBM1800
 064B 00   0-8-2
 064C 4110
 064D 00   NL New Line  should be tied to the Return key
+064E 0090
+064F 00   UC Upper Case  should be tied to when Caps Lock is turned on or when Shift is pressed.
+0650 8090
+0651 00   LC Lower Case  should be tied
+to when Caps Lock is turned off or when Shift is released.
+
 
      0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON ( keyboardnr -- ascii T | F )
           CONSOLE_PRINTERNR2IOSEL
