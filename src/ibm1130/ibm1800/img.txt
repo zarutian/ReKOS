@@ -94,27 +94,27 @@ ADDR DATA IBM1800
 005C xxxx saved XR1
 005D xxxx saved XR2
 005E xxxx saved XR3
-005F xxxx saved I
-0060 0C00 XIO_l
+005F xxxx saved I        : general_interrupt_handler
+0060 0C00 XIO_l          \ turn off interrupts
 0061 00A8 MASK_INT1
 0062 0C00 XIO_l
 0063 00AA MASK_INT2
-0064 2C00 STS_l
+0064 2C00 STS_l          \ save processor status into saved_status
 0065 009E
-0066 D8F9 STD_s I-13
-0067 6D00 STX_l XR1
-0068 005C save  XR1
-0069 6E00 STX_l XR2
-006A 005D save  XR2
-006B 6F00 STX_l XR3
-006C 005E save  XR3
-006D C0FA LD_s I-14  ( 0xFF&0x0E -> 0xF8 + 1 -> 0xF9 )
-006E 90   SUBT_s I+53
-006F 1801 SRA 1
-0070 1004 SLA 6
-0071 8400 ADD_l
+0066 D8F9 STD_s I-13     \ save Acummulator (A) and its extension (Q)
+0067 6D00 STX_l XR1      \ save XR1
+0068 005C saved XR1
+0069 6E00 STX_l XR2      \ save XR2
+006A 005D saved XR2
+006B 6F00 STX_l XR3      \ save XR3
+006C 005E saved XR3
+006D C0FA LD_s I-14      \ load saved I into accumulator  ( 0xFF&0x0E -> 0xF8 + 1 -> 0xF9 )
+006E 90   SUBT_s I+53    \ subtract 3 from it
+006F 1801 SRA 1          \ divide it by 2
+0070 1004 SLA 6          \ multiply it by 64
+0071 8400 ADD_l          \ add it as offset into the interrupts table
 0072      INT_TBL
-0073 D400 STO_l
+0073 D400 STO_l          \ store it into XR1
 0074 0001 XR1
 0075 0C00 XIO_l
 0076 00B0 SENSE_INT
@@ -122,7 +122,7 @@ ADDR DATA IBM1800
 0078      const_16
 0079 1340 SLCA XR3  :ISR_L0
 007A D400 STO_l
-007B 00B2 save ISLW
+007B 00B2 saved ISLW
 007C 6F00 STX_l XR3
 007D 0080
 007E      LD_s I+const_16
@@ -157,7 +157,7 @@ ADDR DATA IBM1800
 009B      STO_s I+8
 009C CC00 LDD_l
 009D 005A
-009E 20xx LDS          :saved_status
+009E 20xx LDS          : saved_status
 009F 0C00 XIO_l
 00A0 00AC UNMASK_INT1
 00A1 0C00 XIO_l
