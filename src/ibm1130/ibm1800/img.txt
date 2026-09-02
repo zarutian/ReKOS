@@ -274,16 +274,16 @@ ADDR DATA IBM1800
 0110
 
 0284 4C40 BOSC_l
-0285 xxxx :INT_IGNORE
-0286      LDX_l I
-0287 0284
-0288      LDX_l XR1  set FIP
-0289
-028A      LDX_l XR2  set DSP
+0285 xxxx : INT_IGNORE
+0286 6400 LDX_l I
+0287 0284 
+0288 6500 LDX_l XR1  set FIP : __start
+0289      COLD_START
+028A 6600 LDX_l XR2  set DSP
 028B
-028C      LDX_l XR3  set RSP
+028C 6700 LDX_l XR3  set RSP
 028D
-028E      LD_s XR1 + 0 :F_INNER
+028E      LD_s XR1 + 0 : F_INNER
 028F      AND_s I+opmask
 0290      BSC_l A=0?
 0291 02A1 F_INNER_PRIM
@@ -301,16 +301,16 @@ ADDR DATA IBM1800
 029D 0001 XR1
 029E      BSC_l any condition
 02A0 028E F_INNER
-02A1      LD_s XR1 + 0
+02A1      LD_s XR1 + 0       : F_INNER_PRIM
 02A2      ADD_s I+F_PRIM_TBL
-02A3      STO_s I+6
+02A3      STO_s I+6          \ store the jump vector at F_INNER_PRIM
 02A4      LD_l
-02A5 0001
+02A5 0001 XR1
 02A6      ADD_s I+const_1
 02A7      STO_l
-02A8 0001
+02A8 0001 XR1
 02A9      LDX_l I
-02AA xxxx
+02AA xxxx                    : F_INNER_PRIM_L0
 02AB      (CONST)
 02AC 0001
 02AD      (CONST)
