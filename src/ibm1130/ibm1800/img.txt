@@ -3,10 +3,10 @@ ADDR DATA IBM1800
 0001      XR1
 0002      XR2
 0003      XR3
-0004
-0005
-0006
-0007
+0004      timer A  (timebase 1 millisecond)
+0005      timer B  (ditto)
+0006      timer C  (ditto)
+0007      tbd: timer D, synthesized (timebase 1 second)
 0008 0023 Internal          Interrupt Vector
 0009 0285 Trace             Interrupt Vector
 000A 0285 Customer Engineer Interrupt Vector
