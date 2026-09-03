@@ -156,7 +156,7 @@ ADDR DATA IBM1800
 009A xxxx                : ISR_L3
 009B D008 STO_s I+8      \ store that at ISR_L4
 009C CC00 LDD_l          \ restore the accumulator (A) and the extension (Q)
-009D 005A
+009D 005A saved A
 009E 20xx LDS            : saved_status \ restore saved status
 009F 0C00 XIO_l          \ re-enable interrupts
 00A0 00AC UNMASK_INT1
@@ -285,156 +285,156 @@ ADDR DATA IBM1800
 028D
 028E C100 LD_s XR1 + 0 : F_INNER
 028F E0   AND_s I+opmask
-0290 4C0  BSC_l A=0?
+0290 4C06 BSC_l   ( BRZ )
 0291 02A1 F_INNER_PRIM
 0292 C400 LD_l
 0293 0001 XR1
-0294      ADD_s I+const_1
-0295      STO_s XR3 + 0
+0294 80   ADD_s I+const_1
+0295 D700 STO_s XR3 + 0
 0296 C400 LD_l
 0297 0003 XR3
-0298      ADD_s I+const_1
-0299      STO_l
+0298 80   ADD_s I+const_1
+0299 D400 STO_l
 029A 0003 XR3
-029B      LD_s XR1 + 0
-029C      STO_l
+029B C100 LD_s XR1 + 0
+029C D400 STO_l
 029D 0001 XR1
-029E      BSC_l any condition
+029E 4C00 BSC_l any condition
 02A0 028E F_INNER
-02A1      LD_s XR1 + 0       : F_INNER_PRIM
-02A2      ADD_s I+F_PRIM_TBL
-02A3      STO_s I+6          \ store the jump vector at F_INNER_PRIM
+02A1 C100 LD_s XR1 + 0       : F_INNER_PRIM
+02A2 80   ADD_s I+F_PRIM_TBL
+02A3 D006 STO_s I+6          \ store the jump vector at F_INNER_PRIM
 02A4 C400 LD_l
 02A5 0001 XR1
-02A6      ADD_s I+const_1
-02A7      STO_l
+02A6 80   ADD_s I+const_1
+02A7 D400 STO_l
 02A8 0001 XR1
-02A9      LDX_l I
+02A9 6400 LDX_l I
 02AA xxxx                    : F_INNER_PRIM_L0
 02AB      (CONST)            : LIT_1
 02AC 0001
 02AD      (CONST)            : OPMASK
 02AE FFF0 opmask
 02AF      (VAR)
-02B0 028E NOP  :F_PRIM_TBL
-02B1      +
-02B2      &
-02B3      ⨁
-02B4      1<<>
-02B5      1+
-02B6      @
-02B7      !
-02B8      DUP
-02B9      DROP
-02BA      SWAP
-02BB      SKZ
-02BC      >R
-02BD      R>
-02BE      EXT
-02BF      EXIT
-02C0      LD_s XR2-1   :1+
-02C2      ADD_s I-const_1
-02C3      STO_s XR2-1  :F_PRIM_COMMON2
-02C4      BSC_l any condition
+02B0 028E NOP                :F_PRIM_TBL
+02B1 02C6 +
+02B2 02DD &
+02B3 02D0 ⨁
+02B4 02D5 1<<>
+02B5 02C0 1+
+02B6 02E1 @
+02B7 02E7 !
+02B8 02F4 DUP
+02B9 02C9 DROP
+02BA 02FB SWAP
+02BB 0303 SKZ
+02BC 030F >R
+02BD 0318 R>
+02BE 032F EXT
+02BF 0326 EXIT
+02C0 C2FF LD_s XR2-1   :1+
+02C2 80   ADD_s I-const_1
+02C3 D2FF STO_s XR2-1  :F_PRIM_COMMON2
+02C4 4C00 BSC_l any condition
 02C5 028E F_INNER
-02C6      LD_s XR2-2   :+
-02C7      ADD_s XR2-1
-02C8      STO_s XR2-2  :F_PRIM_COMMON1
+02C6 C2FE LD_s XR2-2   :+
+02C7 82FF ADD_s XR2-1
+02C8 D2FE STO_s XR2-2  :F_PRIM_COMMON1
 02C9 C400 LD_l         :DROP
 02CA 0002 XR2
-02CB      SUBT_s I-const_1
-02CC      STO_l        :F_PRIM_COMMON3
+02CB 90   SUBT_s I-const_1
+02CC D400 STO_l        :F_PRIM_COMMON3
 02CD 0002 XR2
-02CE      BSC_l any condition
+02CE 4C00 BSC_l any condition
 02CF 028E F_INNER
-02D0      LD_s XR2-2   :⨁
-02D2      EOR_s XR2-1
-02D3      BSC_l any condition
+02D0 C2FE LD_s XR2-2   :⨁
+02D2 F2FF EOR_s XR2-1
+02D3 4C00 BSC_l any condition
 02D4 02C8 F_PRIM_COMMON1
-02D5      LD_s XR2-1   :1<<>
-02D6      SRA 15
-02D7      STO_s XR2+0
-02D8      LD_s XR2-1
-02D9      SLA 1
-02DA      OR_s XR2+0
-02DB      BSC_l any cond
+02D5 C2FF LD_s XR2-1   :1<<>
+02D6 180F SRA 15
+02D7 D200 STO_s XR2+0
+02D8 C2FF LD_s XR2-1
+02D9 1001 SLA 1
+02DA EA00 OR_s XR2+0
+02DB 4C00 BSC_l any cond
 02DC 02C3 F_PRIM_COMMON2
-02DD      LD_s XR2-2   :&
-02DE      AND_s XR-1
-02DF      BSC_l any condition
+02DD C2FE LD_s XR2-2   :&
+02DE E2FF AND_s XR2-1
+02DF 4C00 BSC_l any condition
 02E0 02C8 F_PRIM_COMMON1
-02E1      LD_s XR2-1   :@
-02E2      STO_s I+1
+02E1 C2FF LD_s XR2-1   :@
+02E2 D001 STO_s I+1
 02E3 C400 LD_l
 02E4 xxxx
-02E5      BSC_l any condition
+02E5 4C00 BSC_l any condition
 02E6 02C3 F_PRIM_COMMON2
-02E7      LD_s XR2-1   :!
-02E8      STO_s I+2
-02E9      LD_s XR2-2
-02EA      STO_l
+02E7 C2FF LD_s XR2-1   :!
+02E8 D002 STO_s I+2
+02E9 C2FE LD_s XR2-2
+02EA D400 STO_l
 02EB xxxx
 02EC C400 LD_l         :(2DROP)
 02ED 0002 XR2
-02EE      SUBT_s I-const1
-02EF      STO_l
+02EE 90   SUBT_s I-const1
+02EF D400 STO_l
 02F0 0002 XR2
-02F2      BSC_l any condition
+02F2 4C00 BSC_l any condition
 02F3 02C9 DROP
-02F4      LD_s XR2-1   :DUP
-02F5      STO_s XR2+0
-02F6      LD_l
+02F4 C2FF LD_s XR2-1   :DUP
+02F5 D200 STO_s XR2+0
+02F6 C400 LD_l
 02F7 0002 XR2
-02F8      ADD_s I-const_1
-02F9      BSC_l any cond
-02FA 02CC
-02FB      LD_s XR2-1   :SWAP
-02FC      STO_s XR2+0
-02FD      LD_s XR2-2
-02FE      STO_s XR2-1
-02FF      LD_s XR2+0
-0300      STO_s XR2-2
-0301      BSC_l any cond
+02F8 80   ADD_s I-const_1
+02F9 4C00 BSC_l any cond
+02FA 02CC F_PRIM_COMMON3
+02FB C2FF LD_s XR2-1   :SWAP
+02FC D200 STO_s XR2+0
+02FD C2FE LD_s XR2-2
+02FE D2FF STO_s XR2-1
+02FF C200 LD_s XR2+0
+0300 D2FE STO_s XR2-2
+0301 4C00 BSC_l any cond
 0302 028E F_INNER
-0303      LD_s XR2-1   :SKZ
-0304      BSC_l A=0?
+0303 C2FF LD_s XR2-1   :SKZ
+0304 4C06 BSC_l A=0?
 0305 0308 SKZ_L0
-0306      BSC_l any cond
+0306 4C00 BSC_l any cond
 0307 02C9 DROP
-0308 C400 LD_l
+0308 C400 LD_l         :SKZ_L0
 0309 0001 XR1
-030A      ADD_s I-const_1
-030B      STO_l
+030A 80   ADD_s I-const_1
+030B D400 STO_l
 030C 0001 XR1
-030D      BSC_l any cond
+030D 4C00 BSC_l any cond
 030E 02C9 DROP
-030F      LD_s XR2-1   :>R
-0310      STO_s XR3+0
-0311      LD_l
+030F C2FF LD_s XR2-1   :>R
+0310 D300 STO_s XR3+0
+0311 C400 LD_l
 0312 0003 XR3
-0313      ADD_s I-const1
-0314      STO_s
+0313 80   ADD_s I-const1
+0314 D400 STO_s
 0315 0003 XR3
-0316      BSC_l any cond
+0316 4C00 BSC_l any cond
 0317 02C9 DROP
-0318      LD_l         :R>
+0318 C400 LD_l         :R>
 0319 0002 XR2
-031A      ADD_s I-const_1
-031B      STO_l
+031A 80   ADD_s I-const_1
+031B D400 STO_l
 031C 0002 XR2
-031D      LD_s XR3-1   :F_PRIM_COMMON4
-031E      STO_s XR2+0
-031F      LD_l
+031D C3FF LD_s XR3-1   :F_PRIM_COMMON4
+031E D200 STO_s XR2+0
+031F C400 LD_l
 0320 0003 XR3
-0321      SUBT_s I-const1
-0322      STO_l
+0321 80   SUBT_s I-const1
+0322 D400 STO_l
 0323 0003 XR3
-0324      BSC_l
+0324 4C00 BSC_l any condition
 0325 028E F_INNER
-0326      LD_s XR3-1   :EXIT
-0327      STO_l
+0326 C3FF LD_s XR3-1   :EXIT
+0327 D400 STO_l
 0328 0001 XR1
-0329      BSC_l any cond
+0329 4C00 BSC_l any cond
 032A 031D F_PRIM_COMMON4
 032B      (CONST)      :IBM1800_marker
 032C 1800
