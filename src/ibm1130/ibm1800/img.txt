@@ -283,15 +283,15 @@ ADDR DATA IBM1800
 028B
 028C 6700 LDX_l XR3  set RSP
 028D
-028E      LD_s XR1 + 0 : F_INNER
-028F      AND_s I+opmask
-0290      BSC_l A=0?
+028E C100 LD_s XR1 + 0 : F_INNER
+028F E0   AND_s I+opmask
+0290 4C0  BSC_l A=0?
 0291 02A1 F_INNER_PRIM
-0292      LD_l
+0292 C400 LD_l
 0293 0001 XR1
 0294      ADD_s I+const_1
 0295      STO_s XR3 + 0
-0296      LD_l
+0296 C400 LD_l
 0297 0003 XR3
 0298      ADD_s I+const_1
 0299      STO_l
@@ -304,16 +304,16 @@ ADDR DATA IBM1800
 02A1      LD_s XR1 + 0       : F_INNER_PRIM
 02A2      ADD_s I+F_PRIM_TBL
 02A3      STO_s I+6          \ store the jump vector at F_INNER_PRIM
-02A4      LD_l
+02A4 C400 LD_l
 02A5 0001 XR1
 02A6      ADD_s I+const_1
 02A7      STO_l
 02A8 0001 XR1
 02A9      LDX_l I
 02AA xxxx                    : F_INNER_PRIM_L0
-02AB      (CONST)
+02AB      (CONST)            : LIT_1
 02AC 0001
-02AD      (CONST)
+02AD      (CONST)            : OPMASK
 02AE FFF0 opmask
 02AF      (VAR)
 02B0 028E NOP  :F_PRIM_TBL
@@ -340,7 +340,7 @@ ADDR DATA IBM1800
 02C6      LD_s XR2-2   :+
 02C7      ADD_s XR2-1
 02C8      STO_s XR2-2  :F_PRIM_COMMON1
-02C9      LD_l         :DROP
+02C9 C400 LD_l         :DROP
 02CA 0002 XR2
 02CB      SUBT_s I-const_1
 02CC      STO_l        :F_PRIM_COMMON3
@@ -365,7 +365,7 @@ ADDR DATA IBM1800
 02E0 02C8 F_PRIM_COMMON1
 02E1      LD_s XR2-1   :@
 02E2      STO_s I+1
-02E3      LD_l
+02E3 C400 LD_l
 02E4 xxxx
 02E5      BSC_l any condition
 02E6 02C3 F_PRIM_COMMON2
@@ -374,7 +374,7 @@ ADDR DATA IBM1800
 02E9      LD_s XR2-2
 02EA      STO_l
 02EB xxxx
-02EC      LD_l         :(2DROP)
+02EC C400 LD_l         :(2DROP)
 02ED 0002 XR2
 02EE      SUBT_s I-const1
 02EF      STO_l
@@ -383,7 +383,7 @@ ADDR DATA IBM1800
 02F3 02C9 DROP
 02F4      LD_s XR2-1   :DUP
 02F5      STO_s XR2+0
-02F6      LD_s
+02F6      LD_l
 02F7 0002 XR2
 02F8      ADD_s I-const_1
 02F9      BSC_l any cond
@@ -401,7 +401,7 @@ ADDR DATA IBM1800
 0305 0308 SKZ_L0
 0306      BSC_l any cond
 0307 02C9 DROP
-0308      LD_l
+0308 C400 LD_l
 0309 0001 XR1
 030A      ADD_s I-const_1
 030B      STO_l
