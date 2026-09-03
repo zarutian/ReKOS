@@ -469,95 +469,95 @@ ADDR DATA IBM1800
 0347 4C00 BSC_l any condition
 0348 xxxx              :EXT_L1
 0349      (IBM1800)    :1-
-034A      LD_s XR2-1
-034B      SUBT_s I-const_1
-034C      BSC_l any cond
-034D 028E F_INNER
+034A C2FF LD_s XR2-1
+034B 90   SUBT_s I-const_1
+034C 4C00 BSC_l any cond
+034D 02C3 F_PRIM_COMMON2
 034E      (IBM1800)    :OR
-034F      LD_s XR2-1
-0350      OR_s XR2-2
-0351      BSC_l any cond
+034F C2FF LD_s XR2-1
+0350 EAFE OR_s XR2-2
+0351 4C00 BSC_l any cond
 0352 02C8 F_PRIM_COMMON1
 0353      (IBM1800)    :-
-0354      LD_s XR2-2
-0355      SUBT_s XR2-1
-0356      BSC_l any cond
+0354 C2FE LD_s XR2-2
+0355 92FF SUBT_s XR2-1
+0356 4C00 BSC_l any cond
 0357 02C8 F_PRIM_COMMON1
 0358      (IBM1800)    :<<
-0359      LD_l
+0359 C400 LD_l
 035A 0001 XR1
-035B      STO_s I+<<_L0
-035C      LD_l XR2-1
-035D      STO_l
+035B D007 STO_s I+<<_L0
+035C C2FF LD_l XR2-1
+035D D400 STO_l
 035E 0001 XR1
-035F      LD_l XR2-2
-0360      SLA XR1
-0361      STO_s XR2-2
-0362      LD_l
-0363 xxxx <<_L0
-0364      STO_l
+035F C2FE LD_l XR2-2
+0360 1100 SLA XR1
+0361 D2FE STO_s XR2-2
+0362 C400 LD_l
+0363 xxxx              :<<_L0
+0364 D400 STO_l
 0365 0001 XR1
-0366      BSC_l any cond
+0366 4C00 BSC_l any cond
 0367 02C9 DROP
 0368      (IBM1800)    :(XIO)
-0369      LD_s XR2-2
-036A      STO_s I+(XIO)_L0
-036B      LD_s XR2-1
-036C      STO_s I+(XIO)_L1
-036D      XIO_s I+(XIO)_L0
-036E      BSC_l any cond
+0369 C2FE LD_s XR2-2
+036A D005 STO_s I+(XIO)_L0
+036B C2FF LD_s XR2-1
+036C D004 STO_s I+(XIO)_L1
+036D 0802 XIO_s I+(XIO)_L0
+036E 4C00 BSC_l any cond
 036F 02C8 F_PRIM_COMMON1
 0370 xxxx (XIO)_L0
 0371 xxxx (XIO)_L1
 0372      (IBM1800)    :>>
-0373      LD_l
+0373 C400 LD_l
 0374 0001 XR1
-0375      STO_s I+>>_L0
-0376      LD_l XR2-1
-0377      STO_l
+0375 D007 STO_s I+>>_L0
+0376 C2FF LD_s XR2-1
+0377 D400 STO_l
 0378 0001 XR1
-0379      LD_l XR2-2
-037A      SRA XR1
-037B      STO_s XR2-2
-037C      LD_l
-037D xxxx >>_L0
-037E      STO_l
+0379 C2FE LD_l XR2-2
+037A 1900 SRA XR1
+037B D2FE STO_s XR2-2
+037C C400 LD_l
+037D xxxx              :>>_L0
+037E D400 STO_l
 037F 0001 XR1
-0380      BSC_l any cond
+0380 4C00 BSC_l any cond
 0381 02C9 DROP
 0382      (IBM1800)    :D+ ( au al bu bl -- sumu suml )
-0383      LD_s XR2-4
-0384      STO_s I+D+_L0
-0385      LD_s XR2-3
-0386      STO_s I+D+_L1
-0387      LD_s XR2-2
-0388      STO_s I+D+_L2
-0389      LD_s XR2-1
-038A      STO_s I+D+_L3
-038B      LDD_s I+D+_L0
-038C      ADDD_s I+D+_L2
-038D      STD_s I+D+_L0
-038E      LD_s I+D+_L0 :F_PRIM_COMMON5
-038F      STO_s XR2-4
-0390      LD_s I+D+_L1
-0391      STO_s XR2-3
-0392      BSC_l any cond
+0383 C2FC LD_s XR2-4
+0384 D00F STO_s I+D+_L0
+0385 C2FD LD_s XR2-3
+0386 D00F STO_s I+D+_L1
+0387 C2FE LD_s XR2-2
+0388 D00B STO_s I+D+_L2
+0389 C2FF LD_s XR2-1
+038A D00F STO_s I+D+_L3
+038B C808 LDD_s I+D+_L0
+038C 8809 ADDD_s I+D+_L2
+038D D806 STD_s I+D+_L0
+038E C005 LD_s I+D+_L0 :F_PRIM_COMMON5
+038F D2FC STO_s XR2-4
+0390 C004 LD_s I+D+_L1
+0391 D2FD STO_s XR2-3
+0392 4C00 BSC_l any cond
 0393 02EC (2DROP)
-0394 xxxx D+_L0
-0395 xxxx D+_L1
-0396 xxxx D+_L2
-0397 xxxx D+_L3
+0394 xxxx              :D+_L0
+0395 xxxx              :D+_L1
+0396 xxxx              :D+_L2
+0397 xxxx              :D+_L3
 0398      (IBM1800)    :* ( a b -- pu pl )
-0399      LD_s XR2-2
-039A      MULT_s XR2-1
-039B      STD_s-D+_L0
-039C      LD_s I-D+_L0
-039D      STO_s XR2-2
-039E      LD_s I-D+_L0
-039F      STO_s XR2-1
-03A0      BSC_l any cond
+0399 C2FE LD_s XR2-2
+039A A2FF MULT_s XR2-1      
+039B D8F8 STD_s I+D+_L0
+039C C0F7 LD_s I+D+_L0
+039D D2FE STO_s XR2-2
+039E C0F7 LD_s I+D+_L1
+039F D2FF STO_s XR2-1
+03A0 4C00 BSC_l any cond
 03A1 028E F_INNER
-03A2      (IBM1800)    :D/% ( dividendu dividenl divisor -- reminder quotent )
+03A2      (IBM1800)    :D/% ( dividendu dividendl divisor -- reminder quotent )
 03A3      LD_s XR2-3
 03A4      STO_s I-D+_L0
 03A5      LD_s XR2-2
