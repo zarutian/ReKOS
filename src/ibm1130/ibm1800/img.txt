@@ -6,7 +6,7 @@ ADDR DATA IBM1800
 0004      timer A  (timebase 1 millisecond)
 0005      timer B  (ditto)
 0006      timer C  (ditto)
-0007      tbd: timer D, synthesized (timebase 1 second)
+0007      tbd: timer D, synthesized using timer C (timebase 1 second)
 0008 0023 Internal          Interrupt Vector
 0009 0285 Trace             Interrupt Vector
 000A 0285 Customer Engineer Interrupt Vector
@@ -125,13 +125,13 @@ ADDR DATA IBM1800
 007B 00B2 saved ISLW
 007C 6F00 STX_l XR3      \ store XR3 to ISR_L1
 007D 0080 ISR_L1
-007E      LD_s I+const_16
-007F      SUBT_l         \ offset = 16 - (16 - offset)
+007E C0   LD_s I+const_16
+007F 9000 SUBT_s I+0     \ offset = 16 - (16 - offset)
 0080 xxxx 16 - the offset  : ISR_L1
-0081      STO_s I+1
+0081 D001 STO_s I+1
 0082 C500 LD_l XR1 +     \ accumulator = memory[ int_tbl + interrupt level + offset ]
 0083 xxxx the offset
-0084      STO_s I+1
+0084 D001 STO_s I+1
 0085 4400 BSI_l          \ call that
 0086 xxxx specific interrupt vector
 0087 6700 LDX_l XR3      \ restore XR3 to the remaining count
@@ -151,10 +151,10 @@ ADDR DATA IBM1800
 0095 C400 LD_l           \ load saved I
 0096 005F saved I
 0097 9010 SUBT_s I+16    \ subtract 3 from it
-0098      STO_s I+1      \ store it at ISR_L3
+0098 D001 STO_s I+1      \ store it at ISR_L3
 0099 C400 LD_l           \ load the interrupted I into the accumulator
 009A xxxx                : ISR_L3
-009B      STO_s I+8      \ store that at ISR_L4
+009B D008 STO_s I+8      \ store that at ISR_L4
 009C CC00 LDD_l          \ restore the accumulator (A) and the extension (Q)
 009D 005A
 009E 20xx LDS            : saved_status \ restore saved status
@@ -177,7 +177,7 @@ ADDR DATA IBM1800
 00AF
 00B0 0000 SENSE_INT
 00B1 0300
-00B2      saved ISLW
+00B2 xxxx saved ISLW
 00B3
 00B4      Invalid opcode           INT_TBL level 0
 00B5      B-Register Parity Error
