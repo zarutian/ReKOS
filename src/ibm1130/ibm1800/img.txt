@@ -100,7 +100,7 @@ ADDR DATA IBM1800
 0062 0C00 XIO_l
 0063 00AA MASK_INT2
 0064 2C00 STS_l          \ save processor status into saved_status
-0065 009E
+0065 009E saved_status
 0066 D8F9 STD_s I-13     \ save Acummulator (A) and its extension (Q)
 0067 6D00 STX_l XR1      \ save XR1
 0068 005C saved XR1
@@ -109,7 +109,7 @@ ADDR DATA IBM1800
 006B 6F00 STX_l XR3      \ save XR3
 006C 005E saved XR3
 006D C0FA LD_s I-14      \ load saved I into accumulator  ( 0xFF&0x0E -> 0xF8 + 1 -> 0xF9 )
-006E 90   SUBT_s I+53    \ subtract 3 from it
+006E 9035 SUBT_s I+53    \ subtract 3 from it  ( 53 = 48 + 5 = 0x35 )
 006F 1801 SRA 1          \ divide it by 2
 0070 1004 SLA 4          \ multiply it by 16 and get the interrupt level
 0071 8400 ADD_l          \ add it as offset into the interrupts table
@@ -125,7 +125,7 @@ ADDR DATA IBM1800
 007B 00B2 saved ISLW
 007C 6F00 STX_l XR3      \ store XR3 to ISR_L1
 007D 0080 ISR_L1
-007E C0   LD_s I+const_16
+007E C027 LD_s I+const_16    ( 39 = 32 + 7 = 0x27 )
 007F 9000 SUBT_s I+0     \ offset = 16 - (16 - offset)
 0080 xxxx 16 - the offset  : ISR_L1
 0081 D001 STO_s I+1
@@ -227,7 +227,7 @@ ADDR DATA IBM1800
 00E1
 00E2
 00E3
-00E4      1627 Plotter            INT_TBL level 3
+00E4      1627 Plotter (step 0.01mm)   INT_TBL level 3
 00E5
 00E6
 00E7
@@ -243,7 +243,7 @@ ADDR DATA IBM1800
 00F1      2401 OR 2402 Magnetic Tape
 00F2      1810 Disk drive 1
 00F3      1810 Disk drive 2
-00F4      PaperTape Reader&Punch  INT_TBL level 3
+00F4      PaperTape Reader&Punch  INT_TBL level 4
 00F5      1816 Console Printer&Keyboard 1 (or 1053 Printer)
 00F6      1442 Card Read Punch 1
 00F7      1816 Console Printer&Keyboard 2 (or 1053 Printer)
@@ -259,7 +259,7 @@ ADDR DATA IBM1800
 0101
 0102
 0103
-0104      INT_TBL level 4
+0104      INT_TBL level 5
 0105
 0106
 0107
@@ -275,7 +275,7 @@ ADDR DATA IBM1800
 0111
 0112
 0113
-0114      INT_TBL level 5
+0114      INT_TBL level 6
 
 
 
