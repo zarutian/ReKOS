@@ -565,38 +565,38 @@ ADDR DATA IBM1800
 03A1 028E F_INNER
 03A2      (IBM1800)    :D/% ( dividendu dividendl divisor -- reminder quotent )
 03A3 C2FD LD_s XR2-3
-03A4      STO_s I-D+_L0
+03A4 D0EF STO_s I-D+_L0  ( -17 = -( 0x11 ) = 0xEF )
 03A5 C2FE LD_s XR2-2
-03A6      STO_s I-D+_L1
-03A7      LDD_s I-D+_L0
-03A8      DIV_s XR2-1
-03A9      STD_s I-D+_L0
+03A6 D0EE STO_s I-D+_L1  ( -18 = -( 0x12 ) = 0xEE )
+03A7 C8   LDD_s I-D+_L0
+03A8 AAFF DIV_s XR2-1
+03A9 C0   STD_s I-D+_L0
 03AA C400 LD_l
 03AB 0002 XR2
-03AC      ADD_s I-const_1
+03AC 80   ADD_s I-const_1
 03AD D400 STO_l
 03AE 0002 XR2
 03AF 4C00 BSC_l any cond
 03B0 038E F_PRIM_COMMON5
-03B1      2DUP         :<<> ( a times -- a<<>times )
-03B2      <<
-03B3      >R
+03B1 03CA 2DUP         :<<> ( a times -- a<<>times )
+03B2 0358 <<
+03B3 000C >R
 03B4      (LIT)_16
 03B5 000A SWAP
-03B6      -
-03B7      >>
-03B8      R>
-03B9      OR
-03BA      EXIT
+03B6 0353 -
+03B7 0372 >>
+03B8 000D R>
+03B9 034E OR
+03BA 000F EXIT
 03BB      (LIT)_16     :<>> ( a times -- a<>>times )
 03BC 000A SWAP
-03BD      -
-03BE      (JMP)
-03BF      <<
-03C0      R>           :(JMP) ( -- )
-03C1      @            :@EXECUTE
-03C2      >R           :EXECUTE
-03C3      EXIT
+03BD 0353 -
+03BE 03C0 (JMP)
+03BF 0358 <<
+03C0 000D R>           :(JMP) ( -- )
+03C1 0006 @            :@EXECUTE
+03C2 000C >R           :EXECUTE
+03C3 000F EXIT
 03C4 000A SWAP         : OVER ( a b -- a b a )
 03C5 0008 DUP
 03C6 000C >R
