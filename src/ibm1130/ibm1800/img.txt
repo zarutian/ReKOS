@@ -838,6 +838,12 @@ ADDR DATA IBM1800
 04A3 000A SWAP        : TUCK ( a b -- b a b )
 04A4 03C4 OVER
 04A5 000F EXIT
+04A6 000D R>          : (CONST) ( -- a )
+04A7 0006 @
+04A8 000F EXIT
+04A9 000D R>          : (VAR) ( -- addr )
+04AA 000F EXIT
+04AB                  : (IBM1800)
 
 
 ------
