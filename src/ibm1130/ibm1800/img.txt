@@ -607,45 +607,45 @@ ADDR DATA IBM1800
 03CB 03C4 OVER
 03CC 000F EXIT
 03CD xxxx             :WAITED-ON-FIRED
-03CE      LD_l
-03CF      saved I
-03D0      SUBT_s I+const_2
-03D1      SLA 1
-03D3      STO_s I+3
-03D4      LDX_l X1
+03CE C400 LD_l
+03CF 005F saved I
+03D0 9021 SUBT_s I+const_2  ( 33 = 32 + 1 = 0x21 )
+03D1 1001 SLA 1
+03D3 D003 STO_s I+3
+03D4 6100 LDX_l X1
 03D5      waiters_tbl
-03D6      LD_l X1+
+03D6 C500 LD_l X1+n
 03D7 xxxx
-03D8      STO_s I+28
-03D9      LD_s I+patch1_L0
-03DA      STO_l
+03D8 D01A STO_s I+28  WAITED-ON-FIRED_L1 ( 28 = 16 + 12 = 0x1A )
+03D9 C016 LD_s I+patch1_L0  ( 22 = 16 + 6 = 0x16 )
+03DA D400 STO_l
 03DB 028E F_INNER
-03DC      LD_s I+patch1_L1
-03DD      STO_l
+03DC C017 LD_s I+patch1_L1  ( 23 = 16 + 7 = 0x17 )
+03DD D400 STO_l
 03DE 028F F_INNER+1
-03DF      LDX_l XR1
-03E0      saved XR1
-03E1      LDX_l XR2
-03E2      saved XR2
-03E3      LDX_l XR3
-03E4      saved XR3
-03E5      LD_l
+03DF 6100 LDX_l XR1
+03E0 005C saved XR1
+03E1 6200 LDX_l XR2
+03E2 005D saved XR2
+03E3 6300 LDX_l XR3
+03E4 005E saved XR3
+03E5 C400 LD_l
 03E6 009E saved_status
-03E7      STO_s I+7
-03E8      LD_l
-03E9      saved I
-03EA      SUBT_s I+const_2
-03EB      STO_s I+1
-03EC      LD_l
+03E7 D007 STO_s I+7
+03E8 C400 LD_l
+03E9 005F saved I
+03EA 9008 SUBT_s I+const_2
+03EB D001 STO_s I+1
+03EC C400 LD_l
 03ED xxxx 
-03EE      STO_s I+2
-03EF xxxx
-03F0      BSC_l any cond  :patch1_L0
+03EE D002 STO_s I+2
+03EF xxxx the patched in Load Status instruction
+03F0 4C00 BSC_l any cond  :patch1_L0
 03F1 xxxx
 03F2      (CONST)
 03F3 0002 2
 03F4 03F6 :patch1_L1
-03F5 xxxx
+03F5 xxxx          :WAITED-ON-FIRED_L1
 03F6      LDX XR1  :WAITED-ON-FIRED_L0
 03F7      USER_PTR
 03F8      LD_l
