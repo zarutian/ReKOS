@@ -276,6 +276,22 @@ ADDR DATA IBM1800
 0112
 0113
 0114      INT_TBL level 6
+0115
+0116
+0117
+0118
+0119
+011A
+011B
+011C
+011D
+011E
+011F
+0120
+0121
+0122
+0123
+0124      INT_TBL level 7
 
 
 
@@ -660,60 +676,60 @@ ADDR DATA IBM1800
 0401 C0?? LD_s I- ?
 0402 D400 STO_l
 0403      USER_PTR
-0404 C103 LD_s XR1+3
+0404 C103 LD_s XR1+3 I+
 0405      STX_s XR3
 0406 C102 LD_s XR1+2
-0407      STX_s XR2
-0408      LD_s IA+patch2_L0
-0409      STO_l
-040A      F_INNER
-040B      LD_s IA+patch2_L1
-040C      STO_l
-040D      F_INNER+1
-040E      LD_s XR1+1
-040F      STO_s I+1
-0410      LDX_l XR1
+0407      STX_s XR2 I+
+0408 C0   LD_s I+patch2_L0
+0409 D400 STO_l
+040A 028E F_INNER
+040B C0   LD_s I+patch2_L1
+040C D400 STO_l
+040D 028F F_INNER+1
+040E C101 LD_s XR1+1
+040F D001 STO_s I+1
+0410 6500 LDX_l XR1
 0411 xxxx
-0412      BSC_l any cond
-0413      F_INNER
+0412 4C00 BSC_l any cond
+0413 028E F_INNER
 0414      (IBM1800)    : RETURN_FROM_INTERRUPT ( -- )
-0415      LD_l
+0415 C400 LD_l
 0416 03CD WAITED-ON-FIRED
-0417      STO_s I+1
-0418      BSC_l any cond
+0417 D001 STO_s I+1
+0418 4C00 BSC_l any cond
 0419 xxxx
 041A      :patch2_L0
-041B      :patch3_L1
-041C      USER_PTR@    : PAUSE ( -- )
-041D      @
-041E      (LIT)
-041F 03F5
-0420      !
-0421      PAUSE_L0
-0422      EXIT
-0423      (IBM1800)    : PAUSE_L0
-0424      LD_l
-0425 0001 XR1
-0426      ADD_s I+const_1
-0427      STO_l
+041B      :patch2_L1
+041C      
+041D
+041E      USER_PTR@    : PAUSE ( -- )
+041F 0006 @
+0420      (LIT)
+0421 03F5 WAITED-ON-FIRED_L1
+0422 0007 !
+0423      (IBM1800)
+0424 C400 LD_l
+0425 0001 XR1 also const_1
+0426 80FE ADD_s I-const_1
+0427 D400 STO_l
 0428 0001 XR1
-0429      BSC_l any cond
+0429 4C00 BSC_l any cond
 042A 03F6 WAITED-ON-FIRED_L0
 042B      (LIT)        : WAIT-ON ( interrupt_nr -- )
 042C      waiters_tbl
-042D      +
+042D 0001 +
 042E 0008 DUP
 042F      USER_PTR@
 0430 000A SWAP
 0431 0007 !
-0432      PAUSE
+0432 041E PAUSE        : WAIT-ON_L0
 0433 0008 DUP
 0434      (LIT)
-0435 03F5
+0435 03F5 WAITED-ON-FIRED_L1
 0436 0006 @
 0437      =
-0438      (BRZ)
-0439 0432
+0438 0440 (BRZ)
+0439 0432 WAIT-ON_L0
 043A 0009 DROP
 043B 000F EXIT
 043C 000B SKZ           : ?: ( alt conseq cond -- alt | conseq )
@@ -728,28 +744,28 @@ ADDR DATA IBM1800
 0445 000A SWAP
 0446 0005 1+
 0447 000D R>
-0448      ?:
+0448 043C ?:
 0449 000C >R
 044A 000F EXIT
 044B 000D R>            : (NEXT) ( -- ) R:( counter ra -- )
 044C 000D R>
 044D 0008 DUP
-044E      (BRZ)
-044F      (NEXT)_L0
+044E 0440 (BRZ)
+044F 0455 (NEXT)_L0
 0450      1-
 0451 000C >R
 0452 0006 @
 0453 000C >R
 0454 000F EXIT
-0455 0009 DROP
+0455 0009 DROP         : (NEXT)_L0
 0456 0005 1+
 0457 000C >R
 0458 000F EXIT
 0459 000D R>           : (LUT) ( idx -- val )
 045A      2DUP
-045B      @
+045B 0006 @
 045C      >
-045D      (BRZ)
+045D 0440 (BRZ)
 045E      (LUT)_L0
 045F 0005 1+
 0460 0001 +
@@ -766,48 +782,48 @@ ADDR DATA IBM1800
 046B      2DUP
 046C 0006 @
 046D      >
-046E      (BRZ)
-046F      (JMPTBL)_L0
+046E 0440 (BRZ)
+046F 0475 (JMPTBL)_L0
 0470 0005 1+
 0471 0001 +
 0472 0006 @
 0473 000C >R
 0474 000F EXIT
-0475      NIP
-0476      (JMP)
+0475      NIP          : (JMPTBL)_L0
+0476 03C0 (JMP)
 0477      (LUT)_L0
 0478      (CONST)      : TRUE ( -- T )
 0479 FFFF
 047A      (CONST)      : FALSE ( -- F )  : ZERO ( -- 0 )
 047B 0000
-047C      (BRZ)        : CLEANBOOL ( dirty -- clean (
-047D      FALSE
-047E      (JMP)
-047F      TRUE
-0480      TRUE         : NOT ( bool -- ~bool )
+047C 0440 (BRZ)        : CLEANBOOL ( dirty -- clean (
+047D 047A FALSE
+047E 03C0 (JMP)
+047F 0478 TRUE
+0480 0478 TRUE         : NOT ( bool -- ~bool )
 0481 0003 ⨁
 0482 000F EXIT
 0483 0003 ⨁           : ~= ( a b -- bool )
-0484      (JMP)
-0485      CLEANBOOL
+0484 03C0 (JMP)
+0485 047C CLEANBOOL
 0486 000F EXIT
-0487      ~=          : = ( a b -- bool )
-0488      (JMP)
-0489      NOT
+0487 0483 ~=          : = ( a b -- bool )
+0488 03C0 (JMP)
+0489 0480 NOT
 048A      (CONST)     : LIT_0x8000 ( -- 0x8000 )
 048B 8000
-048C      LIT_0x8000  : 0< ( n -- bool )
+048C 048A LIT_0x8000  : 0< ( n -- bool )
 048D 0002 &
-048E      (JMP)
-048F      CLEANBOOL
-0490      -           : <  ( a b -- bool )
-0491      0<
+048E 03C0 (JMP)
+048F 047C CLEANBOOL
+0490 0353 -           : <  ( a b -- bool )
+0491 048C 0<
 0492 000F EXIT
-0493      SWAP        : >
-0494      <
-0495      EXIT
-0496      LIT_8       : BYTEXCHNG ( cell -- llce )
-0497      <<>
+0493 000A SWAP        : >
+0494 0490 <
+0495 000F EXIT
+0496 0499 LIT_8       : BYTEXCHNG ( cell -- llce )
+0497 03B1 <<>
 0498 000F EXIT
 0499      (CONST)     : LIT_8
 049A 0008
@@ -816,6 +832,10 @@ ADDR DATA IBM1800
 049D      LIT_0xFF    : 0xFF&
 049E 0002 &
 049F 000F EXIT
+
+
+
+------
 04A0      0xFF&       : ASCII_2_CONSOLE_PRTRCODE ( ascii -- prtrcode )
 04A1            ASCII_2_EBDIC&CONSOLE_PTRTCODE_LUT
 04A2      0xFF&
