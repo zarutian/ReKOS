@@ -6,7 +6,7 @@ ADDR DATA IBM1800
 0004      timer A  (timebase 1 millisecond)
 0005      timer B  (ditto)
 0006      timer C  (ditto)
-0007      tbd: timer D, synthesized using timer C (timebase 1 second)
+0007      USER_PTR
 0008 0023 Internal          Interrupt Vector
 0009 0285 Trace             Interrupt Vector
 000A 0285 Customer Engineer Interrupt Vector
@@ -850,10 +850,22 @@ ADDR DATA IBM1800
 04AF 000F EXIT
 04B0 032B IBM1800_marker  : (IBM1800)  ( -- ) R:( code_addr -- )
 04B1 000E EXT
-04B2 : NEW-TASK ( userarea_ptr -- )
+04B2      (LIT)       : USER_PTR@
+04B3 0007 USER_PTR
+04B4 0006 @
+04B5 000F EXIT
+04B6      (LIT)       : USER_PTR!
+04B7 0007 USER_PTR
+04B8 0007 !
+04B9 000F EXIT
+04BA
+04BB
+: NEW-TASK ( userarea_ptr -- )
 
 
 ------
+tbd: timer D, synthesized using timer C (timebase 1 second)
+
 04A0      0xFF&       : ASCII_2_CONSOLE_PRTRCODE ( ascii -- prtrcode )
 04A1            ASCII_2_EBDIC&CONSOLE_PTRTCODE_LUT
 04A2      0xFF&
