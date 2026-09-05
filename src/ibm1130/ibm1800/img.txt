@@ -458,7 +458,7 @@ ADDR DATA IBM1800
 0328 0001 XR1 also const_1
 0329 4C00 BSC_l any cond
 032A 031D F_PRIM_COMMON4
-032B      (CONST)      :IBM1800_marker
+032B      (CONST)      : IBM1800_marker
 032C 1800
 032D      (VAR)        :EXT_handler_vector
 032E      EXT_handler
@@ -843,7 +843,14 @@ ADDR DATA IBM1800
 04A8 000F EXIT
 04A9 000D R>          : (VAR) ( -- addr )
 04AA 000F EXIT
-04AB                  : (IBM1800)
+04AB 000D R>          : RDROP
+04AC 000D R>
+04AD 0009 DROP
+04AE 000C >R
+04AF 000F EXIT
+04B0 032B IBM1800_marker  : (IBM1800)  ( -- ) R:( code_addr -- )
+04B1 000E EXT
+04B2 : NEW-TASK ( userarea_ptr -- )
 
 
 ------
