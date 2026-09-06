@@ -860,10 +860,16 @@ ADDR DATA IBM1800
 04B9 000F EXIT
 04BA      USER_PTR@   : saved_FIP
 04BB      LIT_1
-04BC      +
+04BC 0001 +
 04BD 000F EXIT
-: saved_DSP
-saved_RSP
+04BE      USER_PTR@   : saved_DSP
+04BF      LIT_2
+04C0 0001 +
+04C1 000F EXIT
+04C2      USER_PTR@   : saved_RSP
+04C3      LIT_3
+04C4 0001 +
+04C5 000F EXIT
 : NEW-TASK ( userarea_ptr -- )
 
 
