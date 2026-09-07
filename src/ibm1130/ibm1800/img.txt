@@ -625,46 +625,41 @@ ADDR DATA IBM1800
 03CD xxxx             :WAITED-ON-FIRED
 03CE C400 LD_l
 03CF 005F saved I
-03D0 9021 SUBT_s I+const_2  ( 33 = 32 + 1 = 0x21 )
+03D0 90   SUBT_s I+const_2  
 03D1 1001 SLA 1
 03D3 D003 STO_s I+3
 03D4 6100 LDX_l X1
 03D5      waiters_tbl
 03D6 C500 LD_l X1+n
 03D7 xxxx
-03D8 D01A STO_s I+  WAITED-ON-FIRED_L1 ( 28 = 16 + 12 = 0x1A )
-
-03DF 6100 LDX_l XR1
-03E0 005C saved XR1
-03E1 6200 LDX_l XR2
-03E2 005D saved XR2
-03E3 6300 LDX_l XR3
-03E4 005E saved XR3
-03E5 C400 LD_l
-03E6 009E saved_status
-03E7 D007 STO_s I+7
+03D8 D01A STO_s I+  WAITED-ON-FIRED_L1 ( )
+03D9 C400 LD_l
+03DA 009E saved_status
+03DB D400 STO_l
+03DC 0059
+03DD 6200 LDX_l XR2  \ save interrupted task
+03DE 0007 USER_PTR
+03DF C400 LD_l
+03E0 0059
+03E1 D400 STO_l
+03E2 0001 XR1
+03E3 C100 LD_s  XR1+0 :_L0
+03E4 D200 STO_s XR2+0
+03E5 7101 MDX XR1  +1
+03E6 7201 MDX XR2  +1
+03E7 4800 BSC_s no condition or never skip  = NOP
 03E8 C400 LD_l
-03E9 005F saved I
-03EA 9008 SUBT_s I+const_2
-03EB D001 STO_s I+1
-03EC C400 LD_l
-03ED xxxx 
-03EE D002 STO_s I+2
-03EF xxxx the patched in Load Status instruction
-03F0 4C00 BSC_l any cond  :patch1_L0
-03F1 xxxx
-
-03FC 6100 LDX_l XR1  
-03FD 0007 USER_PTR
-03FE C400 LD_l
-03FF 005C saved XR1
-0400 D101 STO_s XR1+1
-0401 C400 LD_l
-0402 005D saved XR2
-0403 D102 STO_s XR1+2
-0404 C400 LD_l
-0405 005E saved XR3
-0406 D103 STO_s XR1+3
+03E9 0001 XR1
+03EA F003 XOR I+4
+03EB 4820 BSC_s skip if A is zero
+03EC 70F6 MDX I _L0
+03ED D400 LD_l           \ load saved I
+03EE 005F saved I
+03EF 90   SUBT_s I+      \ subtract 3 from it
+03F0 D001 STO_s I+1      \ store it down the code stream
+03F1 C400 LD_l           \ load the interrupted I into the accumulator
+03F2 xxxx
+03F3 D200 STO_s XR2+0
 
 040D C0   LD_s I- WAITED-ON-FIRED_L1
 040E D400 STO_l
