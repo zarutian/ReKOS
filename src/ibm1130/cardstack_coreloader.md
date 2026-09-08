@@ -97,6 +97,28 @@ column 0: 0b110000000110 0xC06 0x0000 0b11000___00000110  LD_s  IA+6        # lo
 [![Loader card A0](./loader_cardA0.png)](https://www.masswerk.at/keypunch/?q=%0B3006040a353e3a0b3409313b183400010014000f000f00100034001013001100180e1008313e13000012353b021630152128341330143f2b341212041812300e2527340c34042524340534073000240006083e0020203400201018120034002100001001313e13003b1c351b31073b3b353731073b2b352a31043b2b352a35013b2a352930060405370304023402312804093525020018120028000024000800)
 
 ```txt
+Loader card 0 in format A2:
+           rows on card                  cell in core
+            11                                          111111
+            210123456789        data   addr   0123456789012345  code
+coulmn 0: 0b        xxxx .... 0x__   0x0000
+       1: 0b        xxxx x..x 0x  __ 0x0000
+       2: 0b        xxxx xxxx 0x__   0x0001
+       3: 0b        xxxx x..x 0x  __ 0x0001
+       4: 0b        xxxx .... 0x__   0x0002
+       5: 0b        xxxx xxxx 0x  __ 0x0002
+       6: 0b        xxxx .x.x 0x__   0x0003
+       7: 0b        xxxx ..x. 0x  __ 0x0003
+       8: 0b        xxxx .... 0x__   0x0004
+       9: 0b        xxxx xxxx 0x  __ 0x0004
+      10: 0b        xxxx .x.. 0x__   0x0005
+      11: 0b        xxxx ..x. 0x  __ 0x0005
+      12: 0b        xxxx .x.. 0x__   0x0006
+      13: 0b        xxxx xxxx 0x  __ 0x0006
+      14: 0b        xxxx .... 0x__   0x0007
+```
+
+```txt
 Loader card 1 in format B:
 column 0: 0b000000000000 ....  0x000 0x0034 0b00000000________
        1: 0b000000000000 x..x  0x000 0x0034 0b________00000000  NOP               # gets replaced by saved IA during the CARD COMPLETE interrupt
