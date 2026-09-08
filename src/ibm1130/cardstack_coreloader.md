@@ -8,7 +8,7 @@ The restrictions on the 1130 loader card:
 
 ```txt
 
-Loader card 0 in format A1:             op      ss displ 
+Loader card 0 in format A0:             op      ss displ 
            rows on card                 cell in core
             11    ______                     000==111111
             210123456789   dat   addr   0123456789012345
