@@ -101,7 +101,7 @@ Loader card 0 in format A2:
            rows on card                  cell in core
             11                                          111111
             210123456789        data   addr   0123456789012345  code
-coulmn 0: 0b        xxxx .... 0x__   0x0000
+column 0: 0b        xxxx .... 0x__   0x0000
        1: 0b        xxxx x..x 0x  __ 0x0000
        2: 0b        xxxx xxxx 0x__   0x0001
        3: 0b        xxxx x..x 0x  __ 0x0001
@@ -116,6 +116,23 @@ coulmn 0: 0b        xxxx .... 0x__   0x0000
       12: 0b        xxxx .x.. 0x__   0x0006
       13: 0b        xxxx xxxx 0x  __ 0x0006
       14: 0b        xxxx .... 0x__   0x0007
+      15: 0b        xxxx .x.x 0x  __ 0x0007
+      16: 0b        xxxx xxxx 0x__   0x0008
+      17: 0b        xxxx ...x 0x  __ 0x0008
+      18: 0b        xxxx .... 0x__   0x0009
+      19: 0b        xxxx xxxx 0x  __ 0x0009
+      20: 0b        xxxx x.xx 0x__   0x000A
+      21: 0b        xxxx xxxx 0x  __ 0x000A
+      22: 0b        xxxx .... 0x__   0x000B
+      23: 0b        xxxx .xx. 0x  __ 0x000B
+      24: 0b        xxxx x..x 0x__   0x000C
+      25: 0b        xxxx .xx. 0x  __ 0x000C
+      26: 0b        xxxx .... 0x__   0x000D
+      27: 0b        xxxx .xx. 0x  __ 0x000D
+      28: 0b        xxxx x..x 0x__   0x000E
+      29: 0b        xxxx .xx. 0x  __ 0x000E
+
+
 ```
 
 ```txt
