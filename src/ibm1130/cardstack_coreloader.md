@@ -2,7 +2,7 @@
 See Figure 12 page 62 of [Disk Monitor v1 Reference](http://media.ibm1130.org/1130-055-ocr.pdf) for what kind of cards are to be loaded.
 See [this](https://www.ibm1130.net/functional/index.html) on how to read cards and the restriction on the loader card.
 
-The restrictions on the loader card:
+The restrictions on the 1130 loader card:
 1. short instructions only
 2. all displacements in instructions are relative to Instruction Address except for Shift, BOSC and BSC instructions.
 
@@ -432,29 +432,30 @@ column 0: 0b000000000000 0x000 0x00AC
 ```
 
 ```
-A:   the native loader card format
+A:   the native 1130 loader card format
 B:
-     11
-     2101 2345 6789
-     AAAA AAAA 0000
-     BBBB BBBB 0000
+     11                    C
+     2101 2345 6789        A
+     AAAA AAAA 0000        R
+     BBBB BBBB 0000        D
 
-                 11 1111
-     0123 4567 8901 2345
-     AAAA AAAA BBBB BBBB
+                 11 1111   M
+     0123 4567 8901 2345   E
+     AAAA AAAA BBBB BBBB   M
 C:
-     11
-     2101 2345 6789
-     AAAA AAAA AAAA
-     BBBB BBBB BBBB
+     11                    C
+     2101 2345 6789        A
+     AAAA AAAA AAAA        R
+     BBBB BBBB BBBB        D
      CCCC CCCC CCCC
      DDDD DDDD DDDD
 
-                 11 1111
-     0123 4567 8901 2345
-     AAAA AAAA AAAA BBBB
-     BBBB BBBB CCCC CCCC
-     CCCC DDDD DDDD DDDD
+                 11 1111   M
+     0123 4567 8901 2345   E
+     AAAA AAAA AAAA BBBB   M
+     BBBB BBBB CCCC CCCC   O
+     CCCC DDDD DDDD DDDD   R
+                           Y
 
 D:  The UnitMachinesCompatible Assembler/memory-image format
     all columns in IBM card code
