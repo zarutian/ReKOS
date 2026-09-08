@@ -8,7 +8,7 @@ The restrictions on the 1130 loader card:
 
 ```txt
 
-Loader card 0 in format A:              op      ss displ 
+Loader card 0 in format A1:             op      ss displ 
            rows on card                 cell in core
             11    ______                     000==111111
             210123456789   dat   addr   0123456789012345
@@ -48,12 +48,12 @@ column 0: 0b110000000110 0xC06 0x0000 0b11000___00000110  LD_s  IA+6        # lo
       33: 0b110100001100 0xD0C 0x0021 0b11010___00001100  STO_s IA+12       # store it back
       34: 0b110100000100 0xD04 0x0022 0b11010___00000100  STO_s IA+4        # store it as the target address of LD_l downrange
       35: 0b100101100100 0x964 0x0023 0b10010___11100100  MINUS_s IA-29     # subtract one again from it ( 0d29 = 0d16 + 0d12 = 0x1C )
-      36: 0b110100000101 0xD05 0x0024 0b11010___00000101  STO_s IA+5        # store it as the target address of OR_l downrange
+      36: 0b110100000101 0xD05 0x0024 0b11010___00000101  STO_s IA+5        # store it as the target address of XOR_l downrange
       37: 0b110100000111 0xD07 0x0025 0b11010___00000110  STO_s IA+7        # store it as the target address of STO_l downrange
       38: 0b110000000000 0xC00 0x0026 0b11000___00000000  LD_l              # needs fixup!  load B
       39: 0b100100000000 0x900 0x0027 0b10010___00000000                    # 'A' gets replaced
       40: 0b000110001000 0x188 0x0028 0b00011___00001000  SRL_s 8           # shift B right 8 bit places
-      41: 0b111110000000 0xF80 0x0029 0b11111___00000000  XOR_l             # needs fixup!  or B with A
+      41: 0b111110000000 0xF80 0x0029 0b11111___00000000  XOR_l             # needs fixup!  xor B with A
       42: 0b100000100000 0x820 0x002A 0b10000___00100000                    # 'D' gets replaced
       43: 0b110100000000 0xD00 0x002B 0b11010___00000000  STO_l             # needs fixup!  overwrite A with the result
       44: 0b100000010000 0x810 0x002C 0b01100___00100000                    # 'E' gets replaced
@@ -432,23 +432,36 @@ column 0: 0b000000000000 0x000 0x00AC
 ```
 
 ```
-A:   the native 1130 loader card format
-B:
-     11                    C
-     2101 2345 6789        A
-     AAAA AAAA 0000        R
-     BBBB BBBB 0000        D
+A0:   the native 1130 loader card format
+A2:   the native 1800 loader card format (see IBM File 1800-1, page 148, figure 71, (#17871))
+     ROWS
+     11                    C  C
+     2101 2345 6789        A  O
+     BBBB BBBB xxxx        R  L
+     AAAA AAAA xxxx        D  S
 
                  11 1111   M
      0123 4567 8901 2345   E
      AAAA AAAA BBBB BBBB   M
-C:
+B:
      11                    C
      2101 2345 6789        A
-     AAAA AAAA AAAA        R
-     BBBB BBBB BBBB        D
-     CCCC CCCC CCCC
-     DDDD DDDD DDDD
+     AAAA AAAA CCCC        R
+     DDDD BBBB xxxx        D
+
+     E = C ⨁ D      This is due to space constraints on the first loader card
+
+                 11 1111   M
+     0123 4567 8901 2345   E
+     AAAA AAAA EEEE BBBB   M
+C:
+    ROWS
+     11                    C  C
+     2101 2345 6789        A  O
+     AAAA AAAA AAAA        R  L
+     BBBB BBBB BBBB        D  U
+     CCCC CCCC CCCC           M
+     DDDD DDDD DDDD           S
 
                  11 1111   M
      0123 4567 8901 2345   E
