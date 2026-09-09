@@ -983,6 +983,7 @@ column 0: 0b000000000000       0x000 0x00D3 0b00000000________
       45: 0b000000000000       0x000 0x00E9 0b________00000000
 ```
 
+```txt
       CDS card types, word 3, first byte:
       0b0000_0001  Mainline Header Card absolute
       0b0000_0010  Mainline Header Card relocatable
@@ -994,8 +995,17 @@ column 0: 0b000000000000       0x000 0x00D3 0b00000000________
       0b0000_1010  Data Card
       0b0000_1111  End Of Program Card
 
+      Data Card format:
+        word 1: Location (relative core load address)
+             2: Checksum
+             3: Type code (first 8 bits) 0x0A
+                Data word count (last 8 bits) 0x??
+           4-9: Relocation indicators, kept as all zeros for Zarutian's loader purposes.
+            10: Data word 1
+         11-54: Data words 2-45
+```
 
-``js
+```js
 
 const f = (item) => "".concat(parseInt(item.slice(0,6), 2).toString(16).padStart(2, "0"), parseInt(item.slice(6), 2).toString(16).padStart(2, "0"));
 const charmap = new Map([
