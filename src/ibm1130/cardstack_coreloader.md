@@ -1005,6 +1005,27 @@ column 0: 0b000000000000       0x000 0x00D3 0b00000000________
          11-54: Data words 2-45
 ```
 
+```txt
+      1627 plotter 'program' format:
+       word
+                111111
+      0123456789012345
+      0000000000000000 End of (sub-)'program'
+      000000ssssssssss enter Sub-'program' nr s
+      100001ssssssssss define Sub-'program' nr s
+      1000000000000000 Pen down
+      010000rrrrrrrrrr Drum down      (+x)
+      001000rrrrrrrrrr Drum up        (-x)
+      000100rrrrrrrrrr Carriage Right (-y)
+      000010rrrrrrrrrr Carriage Left  (+y)
+      010010rrrrrrrrrr Drum down & car left (+x+y)
+      010100rrrrrrrrrr Drum down & car right (+x-y)
+      001010rrrrrrrrrr Drum up & car left (-x+y)
+      001100rrrrrrrrrr Drum up & car right (-x-y)
+      0000010000000000 Pen up
+      r = nR of times to repeat the plot 'command'
+```
+
 ```js
 
 const f = (item) => "".concat(parseInt(item.slice(0,6), 2).toString(16).padStart(2, "0"), parseInt(item.slice(6), 2).toString(16).padStart(2, "0"));
