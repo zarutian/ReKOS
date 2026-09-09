@@ -131,7 +131,57 @@ column 0: 0b        xxxx .... 0x__   0x0000
       27: 0b        xxxx .xx. 0x  __ 0x000D
       28: 0b        xxxx x..x 0x__   0x000E
       29: 0b        xxxx .xx. 0x  __ 0x000E
-
+      30: 0b        xxxx .... 0x__   0x000F
+      31: 0b        xxxx .... 0x  __ 0x000F
+      32: 0b        xxxx .... 0x__   0x0010
+      33: 0b        xxxx .... 0x  __ 0x0010
+      34: 0b        xxxx .... 0x__   0x0011
+      35: 0b        xxxx .... 0x  __ 0x0011
+      36: 0b        xxxx .... 0x__   0x0012
+      37: 0b        xxxx .... 0x  __ 0x0012
+      38: 0b        xxxx .... 0x__   0x0013
+      39: 0b        xxxx .... 0x  __ 0x0013
+      40: 0b        xxxx .... 0x__   0x000D
+      41: 0b        xxxx .... 0x__   0x000D
+      42: 0b        xxxx .... 0x__   0x000D
+      43: 0b        xxxx .... 0x__   0x000D
+      44: 0b        xxxx .... 0x__   0x000D
+      45: 0b        xxxx .... 0x__   0x000D
+      46: 0b        xxxx .... 0x__   0x000D
+      47: 0b        xxxx .... 0x__   0x000D
+      48: 0b        xxxx .... 0x__   0x000D
+      49: 0b        xxxx .... 0x__   0x000D
+      50: 0b        xxxx .... 0x__   0x000D
+      51: 0b        xxxx .... 0x__   0x000D
+      52: 0b        xxxx .... 0x__   0x000D
+      53: 0b        xxxx .... 0x__   0x000D
+      54: 0b        xxxx .... 0x__   0x000D
+      55: 0b        xxxx .... 0x__   0x000D
+      56: 0b        xxxx .... 0x__   0x000D
+      57: 0b        xxxx .... 0x__   0x000D
+      58: 0b        xxxx .... 0x__   0x000D
+      59: 0b        xxxx .... 0x__   0x000D
+      60: 0b        xxxx .... 0x__   0x000D
+      61: 0b        xxxx .... 0x__   0x000D
+      62: 0b        xxxx .... 0x__   0x000D
+      63: 0b        xxxx .... 0x__   0x000D
+      64: 0b        xxxx .... 0x__   0x000D
+      65: 0b        xxxx .... 0x__   0x000D
+      66: 0b        xxxx .... 0x__   0x000D
+      67: 0b        xxxx .... 0x__   0x000D
+      68: 0b        xxxx .... 0x__   0x000D
+      69: 0b        xxxx .... 0x__   0x000D
+      70: 0b        xxxx .... 0x__   0x000D
+      71: 0b        xxxx .... 0x__   0x000D
+      72: 0b        xxxx .... 0x__   0x000D
+      73: 0b        xxxx .... 0x__   0x000D
+      74: 0b        xxxx .... 0x__   0x000D
+      75: 0b        xxxx .... 0x__   0x000D
+      76: 0b        xxxx .... 0x__   0x000D
+      77: 0b        xxxx .... 0x__   0x000D
+      78: 0b        xxxx .... 0x__   0x000D
+      79: 0b        xxxx .... 0x__   0x000D
+    END OF CARD
 
 ```
 
