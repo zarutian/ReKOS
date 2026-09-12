@@ -102,23 +102,23 @@ Loader card 0 in format A2:
             11                                          111111
             210123456789        data   addr   0123456789012345  code
 column 0: 0b        xxxx .... 0x__   0x0000
-       1: 0b        xxxx x..x 0x  __ 0x0000 0b                  XIO I+unmask_IOCC      # unmask external interrupts
+       1: 0b        xxxx x..x 0x  __ 0x0000 0b                  LD_s I+read_a_card_IOCC_const
        2: 0b        xxxx xxxx 0x__   0x0001
-       3: 0b        xxxx x..x 0x  __ 0x0001 
+       3: 0b        xxxx x..x 0x  __ 0x0001 0b                  STO_l
        4: 0b        xxxx .... 0x__   0x0002
        5: 0b        xxxx xxxx 0x  __ 0x0002 
        6: 0b        xxxx .x.x 0x__   0x0003
        7: 0b        xxxx ..x. 0x  __ 0x0003 
        8: 0b        xxxx .... 0x__   0x0004
-       9: 0b        xxxx xxxx 0x  __ 0x0004
+       9: 0b        xxxx xxxx 0x  __ 0x0004 0b                   XIO I+unmask_IOCC      # unmask external interrupts
       10: 0b        xxxx .x.. 0x__   0x0005
-      11: 0b        xxxx ..x. 0x  __ 0x0005 0b                  XIO I+read_a_card_IOCC # read a card
+      11: 0b        xxxx ..x. 0x  __ 0x0005 0b                   XIO I+read_a_card_IOCC # read a card
       12: 0b        xxxx .x.. 0x__00 0x0006
-      13: 0b        xxxx xxxx 0x30__ 0x0006 0b                  WAIT                   # wait for it
+      13: 0b        xxxx xxxx 0x30__ 0x0006 0b                   WAIT                   # wait for it
       14: 0b        xxxx .... 0x__35 0x0007
-      15: 0b        xxxx .x.x 0x60__ 0x0007 0b                  LDX_s IA = 0x35        # jump to 1st card, simulating an Card Read Interrupt
+      15: 0b        xxxx .x.x 0x60__ 0x0007 0b                   LDX_s IA = 0x35        # jump to 1st card, simulating an Card Read Interrupt
       16: 0b        xxxx xxxx 0x__   0x0008
-      17: 0b        xxxx ...x 0x  __ 0x0008 0b                  Interrupt vector (lvl 0)
+      17: 0b        xxxx ...x 0x  __ 0x0008 0b                   Interrupt vector (lvl 0)
       18: 0b        xxxx .... 0x__   0x0009
       19: 0b        xxxx xxxx 0x  __ 0x0009
       20: 0b        xxxx x.xx 0x__   0x000A
@@ -127,16 +127,16 @@ column 0: 0b        xxxx .... 0x__   0x0000
       23: 0b        xxxx .xx. 0x  __ 0x000B
       24: 0b        xxxx x..x 0x__   0x000C
       25: 0b        xxxx .xx. 0x  __ 0x000C 0b                  Interrupt vector (lvl 4) for 1442 (operation complete), that is card completely read
-      26: 0b        xxxx .... 0x__   0x000D                     # start of compacting routine
-      27: 0b        xxxx .xx. 0x  __ 0x000D 0b                  
+      26: 0b        xxxx .... 0x__   0x000D                                      # start of compacting routine
+      27: 0b        xxxx .xx. 0x  __ 0x000D 0b                  LDX_l XR1        # load Read A Card IOCC1, the address of the first column of the card, into XR1
       28: 0b        xxxx x..x 0x__   0x000E
-      29: 0b        xxxx .xx. 0x  __ 0x000E
+      29: 0b        xxxx .xx. 0x  __ 0x000E 0b                  read_a_card_IOCC
       30: 0b        xxxx .... 0x__   0x000F
-      31: 0b        xxxx .... 0x  __ 0x000F
+      31: 0b        xxxx .... 0x  __ 0x000F 0b                  LD_s XR1+0       # read the column into the accumulator
       32: 0b        xxxx .... 0x__   0x0010
-      33: 0b        xxxx .... 0x  __ 0x0010
+      33: 0b        xxxx .... 0x  __ 0x0010 0b                  AND_s I+const_bit12_set
       34: 0b        xxxx .... 0x__   0x0011
-      35: 0b        xxxx .... 0x  __ 0x0011
+      35: 0b        xxxx .... 0x  __ 0x0011 0b                  BSC
       36: 0b        xxxx .... 0x__   0x0012
       37: 0b        xxxx .... 0x  __ 0x0012
       38: 0b        xxxx .... 0x__   0x0013
