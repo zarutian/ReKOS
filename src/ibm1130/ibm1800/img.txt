@@ -884,6 +884,11 @@ ADDR DATA IBM1800
 04CF      LIT_3
 04D0 0001 +
 04D1 000F EXIT
+04D2      (VAR)       : TOD_clock   seconds since midnight 1st January 1970 UTC (64 bit number)
+04D3                                UU
+04D4                                UL
+04D5                                LU
+04D6                                LL
 : NEW-TASK ( userarea_ptr -- )
 
 
