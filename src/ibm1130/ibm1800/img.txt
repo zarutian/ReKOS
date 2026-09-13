@@ -889,6 +889,8 @@ ADDR DATA IBM1800
 04D4                                UL
 04D5                                LU
 04D6                                LL
+04D7
+04D8      g
 : NEW-TASK ( userarea_ptr -- )
 
 
