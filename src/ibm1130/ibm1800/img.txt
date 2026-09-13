@@ -5,7 +5,7 @@ ADDR DATA IBM1800
 0003      XR3
 0004      timer A  (timebase 1 millisecond)
 0005      timer B  (ditto)
-0006      timer C  (ditto)
+0006      timer C  (ditto)  fires every 100 milliseconds, drives the TOD clock and possibly preemptive multitask switching.
 0007      USER_PTR
 0008 0023 Internal          Interrupt Vector
 0009 0285 Trace             Interrupt Vector
@@ -186,11 +186,11 @@ ADDR DATA IBM1800
 00B8      CE (auxiliary) Storage Error
 00B9      TI  Timer Interrupt      assigned by customer engineer
 00BA      CI  Console Interrupt    assigned by customer engineer
-00BB      unassigned
-00BC      unassigned
-00BD      unassigned
-00BE      unassigned
-00BF      unassigned
+00BB      TI_A  Timer A 'Interrupt' (synthesized)
+00BC      TI_B  Timer B 'Interrupt' (synthesized)
+00BD      TI_C  Timer C 'Interrupt' (synthesized)
+00BE      TI_1s  Timer 'Interrupt' every 1 second (synthesized) user Timer C as 100 millisecond interval clock
+00BF      unassigned (tbd: TI_15s, TI_30s, TI_60s, TI_300s, TI_900s, TI_3600s)
 00C0      unassigned
 00C1      unassigned
 00C2      unassigned
