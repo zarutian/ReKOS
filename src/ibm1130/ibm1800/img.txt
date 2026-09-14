@@ -712,8 +712,8 @@ ADDR DATA IBM1800
 0423 D001 STO_s I+1
 0424 4C00 BSC_l any cond
 0425 xxxx
-0426      :patch2_L0
-0427      :patch2_L1
+0426 C100 LD_s XR1+0   :patch2_L0
+0427 E01A AND_s I+opmask  :patch2_L1
 0428      
 0429
 042A      USER_PTR@    : PAUSE ( -- )
@@ -721,187 +721,189 @@ ADDR DATA IBM1800
 042C      (LIT)
 042D 03F5 WAITED-ON-FIRED_L1
 042E 0007 !
-042F      (IBM1800)
-0430 C400 LD_l
-0431 0001 XR1 also const_1
-0432 80FE ADD_s I-const_1
-0433 D400 STO_l
-0434 0001 XR1
-0435 4C00 BSC_l any cond
-0436 03F6 WAITED-ON-FIRED_L0
-0437      (LIT)        : WAIT-ON ( interrupt_nr -- )
-0438      waiters_tbl
-0439 0001 +
-043A 0008 DUP
-043B      USER_PTR@
-043C 000A SWAP
-043D 0007 !
-043E 041E PAUSE        : WAIT-ON_L0
-043F 0008 DUP
-0440      (LIT)
-0441 03F5 WAITED-ON-FIRED_L1
-0442 0006 @
-0443      =
-0444      (BRZ)
-0445 0432 WAIT-ON_L0
-0446 0009 DROP
-0447 000F EXIT
-0448 000B SKZ           : ?: ( alt conseq cond -- alt | conseq )
-0449 000A SWAP
-044A 0009 DROP
-044B 000F EXIT
-044C 000D R>            : (BRZ) ( cond -- )
-044D 000A SWAP
-044E 000C >R
-044F 0008 DUP
-0450 0006 @
-0451 000A SWAP
-0452 0005 1+
-0453 000D R>
-0454      ?:
-0455 000C >R
-0456 000F EXIT
-0457 000D R>            : (NEXT) ( -- ) R:( counter ra -- )
-0458 000D R>
-0459 0008 DUP
-045A      (BRZ)
-045B      (NEXT)_L0
-045C      1-
-045D 000C >R
-045E 0006 @
+042F      PAUSE_L0     \ verður að vera
+0430 000F EXIT
+0431      (IBM1800)    : PAUSE_L0
+0432 C400 LD_l
+0433 0001 XR1 also const_1
+0434 80FE ADD_s I-const_1
+0435 D400 STO_l
+0436 0001 XR1
+0437 6400 LDX_l I
+0438 03F6 WAITED-ON-FIRED_L0
+0439      (LIT)        : WAIT-ON ( interrupt_nr -- )
+043A      waiters_tbl
+043B 0001 +
+043C 0008 DUP
+043D      USER_PTR@
+043E 000A SWAP
+043F 0007 !
+0440 041E PAUSE        : WAIT-ON_L0
+0441 0008 DUP
+0442      (LIT)
+0443 03F5 WAITED-ON-FIRED_L1
+0444 0006 @
+0445      =
+0446      (BRZ)
+0447 0432 WAIT-ON_L0
+0448 0009 DROP
+0449 000F EXIT
+044A 000B SKZ           : ?: ( alt conseq cond -- alt | conseq )
+044B 000A SWAP
+044C 0009 DROP
+044D 000F EXIT
+044E 000D R>            : (BRZ) ( cond -- )
+044F 000A SWAP
+0450 000C >R
+0451 0008 DUP
+0452 0006 @
+0453 000A SWAP
+0454 0005 1+
+0455 000D R>
+0456      ?:
+0457 000C >R
+0458 000F EXIT
+0459 000D R>            : (NEXT) ( -- ) R:( counter ra -- )
+045A 000D R>
+045B 0008 DUP
+045C      (BRZ)
+045D      (NEXT)_L0
+045E      1-
 045F 000C >R
-0460 000F EXIT
-0461 0009 DROP         : (NEXT)_L0
-0462 0005 1+
-0463 000C >R
-0464 000F EXIT
-0465 000D R>           : (LUT) ( idx -- val )
-0466      2DUP
-0467 0006 @
-0468      >
-0469 0440 (BRZ)
-046A      (LUT)_L0
-046B 0005 1+
-046C 0001 +
-046D 0006 @
-046E 000F EXIT
-046F 0008 DUP          : (LUT)_L0
-0470 0006 @
-0471 0005 1+
-0472 0001 +
-0473 000C >R
-0474 000F EXIT
-0475 0008 DUP          : (JMPTBL) ( idx -- )
-0476 000D R>
-0477      2DUP
-0478 0006 @
-0479      >
-047A      (BRZ)
-047B      (JMPTBL)_L0
-047C 0005 1+
-047D 0001 +
-047E 0006 @
-047F 000C >R
-0480 000F EXIT
-0481      NIP          : (JMPTBL)_L0
-0482 03C0 (JMP)
-0483      (LUT)_L0
-0484      (CONST)      : TRUE ( -- T )
-0485 FFFF
-0486      (CONST)      : FALSE ( -- F )  : ZERO ( -- 0 )
-0487 0000
-0488      (BRZ)        : CLEANBOOL ( dirty -- clean (
-0489      FALSE
-048A 03C0 (JMP)
-048B      TRUE
-048C      TRUE         : NOT ( bool -- ~bool )
-048D 0003 ⨁
-048E 000F EXIT
-048F 0003 ⨁           : ~= ( a b -- bool )
-0490 03C0 (JMP)
-0491      CLEANBOOL
-0492 000F EXIT
-0493      ~=          : = ( a b -- bool )
-0494 03C0 (JMP)
-0495      NOT
-0496      (CONST)     : LIT_0x8000 ( -- 0x8000 )
-0497 8000
-0498      LIT_0x8000  : 0< ( n -- bool )
-0499 0002 &
-049A 03C0 (JMP)
-049B      CLEANBOOL
-049C      -           : <  ( a b -- bool )
-049D      0<
-049E 000F EXIT
-049F 000A SWAP        : >
-04A0      <
-04A1 000F EXIT
-04A2      LIT_8       : BYTEXCHNG ( cell -- llce )
-04A3 03B1 <<>
-04A4 000F EXIT
-04A5      (CONST)     : LIT_8
-04A6 0008
-04A7      (CONST)     : LIT_0xFF
-04A8 00FF
-04A9      LIT_0xFF    : 0xFF&
-04AA 0002 &
-04AB 000F EXIT
-04AC 000A SWAP        : NIP ( a b -- b )
-04AD 0009 DROP
-04AE 000F EXIT
-04AF 000A SWAP        : TUCK ( a b -- b a b )
-04B0 03C4 OVER
-04B1 000F EXIT
-04B2 000D R>          : (CONST) ( -- a )
-04B3 0006 @
-04B4 000F EXIT
-04B5 000D R>          : (VAR) ( -- addr )
+0460 0006 @
+0461 000C >R
+0462 000F EXIT
+0463 0009 DROP         : (NEXT)_L0
+0464 0005 1+
+0465 000C >R
+0466 000F EXIT
+0467 000D R>           : (LUT) ( idx -- val )
+0468      2DUP
+0469 0006 @
+046A      >
+046B 0440 (BRZ)
+046C      (LUT)_L0
+046D 0005 1+
+046E 0001 +
+046F 0006 @
+0470 000F EXIT
+0471 0008 DUP          : (LUT)_L0
+0472 0006 @
+0473 0005 1+
+0474 0001 +
+0475 000C >R
+0476 000F EXIT
+0477 0008 DUP          : (JMPTBL) ( idx -- )
+0478 000D R>
+0479      2DUP
+047A 0006 @
+047B      >
+047C      (BRZ)
+047D      (JMPTBL)_L0
+047E 0005 1+
+047F 0001 +
+0480 0006 @
+0481 000C >R
+0482 000F EXIT
+0483      NIP          : (JMPTBL)_L0
+0484 03C0 (JMP)
+0485      (LUT)_L0
+0486      (CONST)      : TRUE ( -- T )
+0487 FFFF
+0488      (CONST)      : FALSE ( -- F )  : ZERO ( -- 0 )
+0489 0000
+048A      (BRZ)        : CLEANBOOL ( dirty -- clean (
+048B      FALSE
+048C 03C0 (JMP)
+048D      TRUE
+048E      TRUE         : NOT ( bool -- ~bool )
+048F 0003 ⨁
+0490 000F EXIT
+0491 0003 ⨁           : ~= ( a b -- bool )
+0492 03C0 (JMP)
+0493      CLEANBOOL
+0494 000F EXIT
+0495      ~=          : = ( a b -- bool )
+0496 03C0 (JMP)
+0497      NOT
+0498      (CONST)     : LIT_0x8000 ( -- 0x8000 )
+0499 8000
+049A      LIT_0x8000  : 0< ( n -- bool )
+049B 0002 &
+049C 03C0 (JMP)
+049D      CLEANBOOL
+049E      -           : <  ( a b -- bool )
+049F      0<
+04A0 000F EXIT
+04A1 000A SWAP        : >
+04A2      <
+04A3 000F EXIT
+04A4      LIT_8       : BYTEXCHNG ( cell -- llce )
+04A5 03B1 <<>
+04A6 000F EXIT
+04A7      (CONST)     : LIT_8
+04A8 0008
+04A9      (CONST)     : LIT_0xFF
+04AA 00FF
+04AB      LIT_0xFF    : 0xFF&
+04AC 0002 &
+04AD 000F EXIT
+04AE 000A SWAP        : NIP ( a b -- b )
+04AF 0009 DROP
+04B0 000F EXIT
+04B1 000A SWAP        : TUCK ( a b -- b a b )
+04B2 03C4 OVER
+04B3 000F EXIT
+04B4 000D R>          : (CONST) ( -- a )
+04B5 0006 @
 04B6 000F EXIT
-04B7 000D R>          : RDROP
-04B8 000D R>
-04B9 0009 DROP
-04BA 000C >R
-04BB 000F EXIT
-04BC 032B IBM1800_marker  : (IBM1800)  ( -- ) R:( code_addr -- )
-04BD 000E EXT
-04BE      (LIT)       : USER_PTR@
-04BF 0007 USER_PTR
-04C0 0006 @
-04C1 000F EXIT
-04C2      (LIT)       : USER_PTR!
-04C3 0007 USER_PTR
-04C4 0007 !
-04C5 000F EXIT
-04C6      USER_PTR@   : saved_FIP
-04C7      LIT_1
-04C8 0001 +
-04C9 000F EXIT
-04CA      USER_PTR@   : saved_DSP
-04CB      LIT_2
-04CC 0001 +
-04CD 000F EXIT
-04CE      USER_PTR@   : saved_RSP
-04CF      LIT_3
-04D0 0001 +
-04D1 000F EXIT
-04D2      (VAR)       : TOD_clock   seconds since midnight 1st January 1970 UTC (64 bit number)
-04D3                                UU
-04D4                                UL
-04D5                                LU
-04D6                                LL
-04D7
-04D8 6400 LDX_l I     : TImers_interrupt_handler_L0
-04D9      xxxx        : TImers_interrupt_handler
-04DA 0807 XIO_s I+sense_timer_device_IOCC
-04DB 1802 SRA 2
-04DC EC00 OR_l
-04DD 00B2 saved ISLW
-04DE D400 STO_l
+04B7 000D R>          : (VAR) ( -- addr )
+04B8 000F EXIT
+04B9 000D R>          : RDROP
+04BA 000D R>
+04BB 0009 DROP
+04BC 000C >R
+04BD 000F EXIT
+04BE 032B IBM1800_marker  : (IBM1800)  ( -- ) R:( code_addr -- )
+04BF 000E EXT
+04C0      (LIT)       : USER_PTR@
+04C1 0007 USER_PTR
+04C2 0006 @
+04C3 000F EXIT
+04C4      (LIT)       : USER_PTR!
+04C5 0007 USER_PTR
+04C6 0007 !
+04C7 000F EXIT
+04C8      USER_PTR@   : saved_FIP
+04C9      LIT_1
+04CA 0001 +
+04CB 000F EXIT
+04CC      USER_PTR@   : saved_DSP
+04CD      LIT_2
+04CE 0001 +
+04CF 000F EXIT
+04D0      USER_PTR@   : saved_RSP
+04D1      LIT_3
+04D2 0001 +
+04D3 000F EXIT
+04D4      (VAR)       : TOD_clock   seconds since midnight 1st January 1970 UTC (64 bit number)
+04D5                                UU
+04D6                                UL
+04D7                                LU
+04D8                                LL
+04D9
+04DA 6400 LDX_l I     : TImers_interrupt_handler_L0
+04DB      xxxx        : TImers_interrupt_handler
+04DC 0807 XIO_s I+sense_timer_device_IOCC
+04DD 1802 SRA 2
+04DE EC00 OR_l
 04DF 00B2 saved ISLW
-04E0 6400 LDX_l I     \ this is basically unconditional jump
-04E1      TImers_interrupt_handler_L0
-04E2 BABE             : sense_timer_device_IOCC
-04E3 0721
+04E0 D400 STO_l
+04E1 00B2 saved ISLW
+04E2 6400 LDX_l I     \ this is basically unconditional jump
+04E3      TImers_interrupt_handler_L0
+04E4 BABE             : sense_timer_device_IOCC
+04E5 0721
 
 
 : NEW-TASK ( userarea_ptr -- )
