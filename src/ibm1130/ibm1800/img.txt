@@ -190,10 +190,10 @@ ADDR DATA IBM1800
 00BC      CI  Console Interrupt    assigned by customer engineer
 00BD      TI_A  Timer A 'Interrupt' (synthesized)
 00BE      TI_B  Timer B 'Interrupt' (synthesized)
-00BF      TI_C  Timer C 'Interrupt' (synthesized)
-00C0      TI_1s  Timer 'Interrupt' every 1 second (synthesized) uses Timer C as 10 millisecond interval clock
-00C1      unassigned (tbd: TI_6s, TI_15s, TI_30s, TI_60s, TI_300s, TI_900s, TI_3600s)
-00C2      unassigned
+00BF      TI_C_timer_interrupt_handler  Timer C 'Interrupt' (synthesized)
+00C0      TI_C_user Timer C_user 'Interrupt' (synthesized)
+00C1      TI_1s  Timer 'Interrupt' every 1 second (synthesized) uses Timer C as 10 millisecond interval clock
+00C2      unassigned (tbd: TI_6s, TI_15s, TI_30s, TI_60s, TI_300s, TI_900s, TI_3600s)
 00C3      unassigned
 00C4      not used, free space    INT_TBL level 1
 00C5
@@ -809,9 +809,9 @@ ADDR DATA IBM1800
 0484 03C0 (JMP)
 0485      (LUT)_L0
 0486      (CONST)      : TRUE ( -- T )
-0487 FFFF
+0487 FFFF              : const_0xFFFF
 0488      (CONST)      : FALSE ( -- F )  : ZERO ( -- 0 )
-0489 0000
+0489 0000              : const_0
 048A      (BRZ)        : CLEANBOOL ( dirty -- clean (
 048B      FALSE
 048C 03C0 (JMP)
@@ -827,7 +827,7 @@ ADDR DATA IBM1800
 0496 03C0 (JMP)
 0497      NOT
 0498      (CONST)     : LIT_0x8000 ( -- 0x8000 )
-0499 8000
+0499 8000             : const_0x8000
 049A      LIT_0x8000  : 0< ( n -- bool )
 049B 0002 &
 049C 03C0 (JMP)
@@ -886,16 +886,16 @@ ADDR DATA IBM1800
 04D1      LIT_3
 04D2 0001 +
 04D3 000F EXIT
-04D4      (VAR)       : TOD_clock   seconds since midnight 1st January 1970 UTC (64 bit number)
-04D5                                UU
-04D6                                UL
-04D7                                LU
-04D8                                LL
-04D9
+04D4 xxxx             : 10ms_ticker
+04D5      (VAR)       : TOD_clock   seconds since midnight 1st January 1970 UTC (64 bit number)
+04D6                                UU
+04D7                                UL
+04D8                                LU
+04D9                                LL
 04DA 6400 LDX_l I     : TImers_interrupt_handler_L0
 04DB      xxxx        : TImers_interrupt_handler
 04DC 0807 XIO_s I+sense_timer_device_IOCC
-04DD 1802 SRA 2
+04DD 1801 SRA 1       \ this uses the neat trick of taking the DSW of the timers device and combine it into the saved ISLW
 04DE EC00 OR_l
 04DF 00B2 saved ISLW
 04E0 D400 STO_l
@@ -904,6 +904,42 @@ ADDR DATA IBM1800
 04E3      TImers_interrupt_handler_L0
 04E4 BABE             : sense_timer_device_IOCC
 04E5 0721
+04E6 6400 LDX_l I     : TI_C_interrupt_handler_L0
+04E7      xxxx        : TI_C_interrupt_handler
+04E8      LD_l
+04E9      10ms_ticker
+04EA      ADD_l
+04EB 0006 timer C
+04EC      ADD_s I+const_10
+04ED      STO_l
+04EE      10ms_ticker
+04EF 18D0 RTE 16      \ rotate right A and Q
+04F0      LD_l        \ zero out A
+04F1      const_0
+04F2 A8   DIV_s I+const_1000 \ divide by 1000
+04F3      LD_l        \ zero out A
+04F4      const_0
+04F5 18D0 RTE 16      \ rotate right A and Q
+04F6 4C20 BSC_l A<>0?
+04F7      TI_C_interrupt_handler_L1
+04F8      LD_s I+const_0x4000
+04F9 18D0 RTE 16      \ rotate right A and Q
+04FA 18D0 RTE 16      : TI_C_interrupt_handler_L1 \ rotate right A and Q
+04FB EC00 OR_l
+04FC      const_0x8000
+04FD EC00 OR_l        \ or 'fake' interrupts into the saved ISLW
+04FE 00B2 saved ISLW
+04FF D400 STO_l
+0500 00B2 saved ISLW
+0501      LD_s I+const_-10
+0502      ADD_l
+0503 0006 timer C
+0504      STO_l
+0505 0006 timer C
+0506 6400 LDX_l I
+0507      TI_C_interrupt_handler_L0
+
+
 
 
 : NEW-TASK ( userarea_ptr -- )
