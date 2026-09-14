@@ -5,7 +5,7 @@ ADDR DATA IBM1800
 0003      XR3
 0004      timer A  (timebase 1 millisecond)
 0005      timer B  (ditto)
-0006      timer C  (ditto)  fires every 100 milliseconds, drives the TOD clock and possibly preemptive multitask switching.
+0006      timer C  (ditto)  fires every 10 milliseconds, drives the TOD clock and possibly preemptive multitask switching.
 0007      USER_PTR
 0008 0023 Internal          Interrupt Vector
 0009 0285 Trace             Interrupt Vector
@@ -184,17 +184,17 @@ ADDR DATA IBM1800
 00B6      Storage Protect Violation
 00B7      CAR Check Error
 00B8      CE (auxiliary) Storage Error
-00B9      TI  Timer Interrupt      assigned by customer engineer
-00BA      CI  Console Interrupt    assigned by customer engineer
-00BB      TI_A  Timer A 'Interrupt' (synthesized)
-00BC      TI_B  Timer B 'Interrupt' (synthesized)
-00BD      TI_C  Timer C 'Interrupt' (synthesized)
-00BE      TI_1s  Timer 'Interrupt' every 1 second (synthesized) user Timer C as 100 millisecond interval clock
-00BF      unassigned (tbd: TI_15s, TI_30s, TI_60s, TI_300s, TI_900s, TI_3600s)
-00C0      unassigned
-00C1      unassigned
+00B9      1442 Read response  ( card read punch 1 )
+00BA      1442 Punch response ( card read punch 1 )
+00BB      TI  Timer Interrupt      assigned by customer engineer
+00BC      CI  Console Interrupt    assigned by customer engineer
+00BD      TI_A  Timer A 'Interrupt' (synthesized)
+00BE      TI_B  Timer B 'Interrupt' (synthesized)
+00BF      TI_C  Timer C 'Interrupt' (synthesized)
+00C0      TI_1s  Timer 'Interrupt' every 1 second (synthesized) uses Timer C as 10 millisecond interval clock
+00C1      unassigned (tbd: TI_6s, TI_15s, TI_30s, TI_60s, TI_300s, TI_900s, TI_3600s)
 00C2      unassigned
-00C3      unassigned      
+00C3      unassigned
 00C4      not used, free space    INT_TBL level 1
 00C5
 00C6
