@@ -136,7 +136,7 @@ ADDR DATA IBM1800
 0086 xxxx specific interrupt vector
 0087 6700 LDX_l XR3      \ restore XR3 to the remaining count
 0088 0080 ISR_L1
-0089 C400 LD_l           \ restore accumulator to saved ISLW
+0089 C400 LD_l           \ restore accumulator from saved ISLW
 008A 00B2 saved ISLW
 008B 4C20 BSC_l A=0?     \ have we exhausted all on bits in the ISLW ?
 008C 008F ISR_L2
@@ -890,7 +890,20 @@ ADDR DATA IBM1800
 04D5                                LU
 04D6                                LL
 04D7
-04D8      g
+04D8 6400 LDX_l I     : TImers_interrupt_handler_L0
+04D9      xxxx        : TImers_interrupt_handler
+04DA      XIO_s I+sense_timer_device_IOCC
+04DB 1802 SRA 2
+04DC      OR_l
+04DD 00B2 saved ISLW
+04DE D400 STO_l
+04DF 00B2 saved ISLW
+04E0 6400 LDX_l I     \ this is basically unconditional jump
+04E1      TImers_interrupt_handler_L0
+04E2                  : sense_timer_device_IOCC
+04E3
+
+
 : NEW-TASK ( userarea_ptr -- )
 
 
