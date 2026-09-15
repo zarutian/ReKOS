@@ -989,7 +989,27 @@ ADDR DATA IBM1800
 0539 000A SWAP
 053A 0007 !
 053B 000F EXIT
-
+053C      disable_preemptive_task_switch  : DELINK-TASK ( task_userarea_ptr -- )
+053D 0008 DUP             ( task task )
+053E 0006 @               ( task next )
+053F      OVER            ( task next task )
+0540      LIT_4           ( task next task 4 )
+0541 0001 +               ( task next task+4 )
+0542 0006 @               ( task next prev )
+0543      2DUP            ( task next prev next prev )
+0544 000A SWAP            ( task next prev prev next )
+0545      LIT_4           ( task next prev prev next 4 )
+0546 0001 +               ( task next prev prev next+4 )
+0547 0007 !               ( task next prev )
+0548 0007 !               ( task )
+0549 0008 DUP             ( task task )
+054A 0008 DUP             ( task task task )
+054B 0007 !               ( task )
+054C 0008 DUP             ( task task )
+054D      LIT_4           ( task task 4 )
+054E 0001 +               ( task task+4 )
+054F 0007 !               ( )
+0550 000F EXIT
 
 ------
 tbd: timer D, synthesized using timer C (timebase 1 second)
