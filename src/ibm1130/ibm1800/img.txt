@@ -648,7 +648,7 @@ ADDR DATA IBM1800
 03D5      waiters_tbl
 03D6 C500 LD_l X1+n
 03D7 xxxx
-03D8 D01A STO_s I+28  WAITED-ON-FIRED_L1 ( 28 = 16 + 12 = 0x1A )
+03D8 D01A STO_s I+28  WAITED-ON-FIRED_L1 ( 28 = 16 + 12 = 0x1A )  : WAITED-ON-FIRED_L2
 03D9 C016 LD_s I+patch1_L0  ( 22 = 16 + 6 = 0x16 )
 03DA D400 STO_l
 03DB 028E F_INNER
@@ -745,7 +745,7 @@ ADDR DATA IBM1800
 0435 D400 STO_l
 0436 0001 XR1
 0437 6400 LDX_l I
-0438 03F6 WAITED-ON-FIRED_L0
+0438      WAITED-ON-FIRED_L0
 0439      (LIT)        : WAIT-ON ( interrupt_nr -- )
 043A      waiters_tbl
 043B 0001 +
@@ -831,7 +831,7 @@ ADDR DATA IBM1800
 048B      FALSE
 048C 03C0 (JMP)
 048D      TRUE
-048E      TRUE         : NOT ( bool -- ~bool )
+048E      TRUE         : NOT ( bool -- ~bool )  aka INVERT
 048F 0003 ⨁
 0490 000F EXIT
 0491 0003 ⨁           : ~= ( a b -- bool )
@@ -1067,7 +1067,14 @@ ADDR DATA IBM1800
 0578      STO_s I+1
 0579      LD_l
 057A xxxx
-057B
+057B      XOR_l
+057C      const_1
+057D      BSC_l A<>0?
+057E      preemptive_task_switch_interrupt_L0
+057F      LD_l
+0580 0007 USER_PTR
+0581 6400 LDX_l I
+0582      WAITED-ON-FIRED_L2  \ this convoluted way is used to allow a Forth primitive or (IBM1800) code word to finish before PAUSEing
 
 
 ------
