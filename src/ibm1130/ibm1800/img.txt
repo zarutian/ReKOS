@@ -938,11 +938,36 @@ ADDR DATA IBM1800
 0505 0006 timer C
 0506 6400 LDX_l I
 0507      TI_C_interrupt_handler_L0
-
-
-
-
-: NEW-TASK ( userarea_ptr -- )
+0508      USER_PTR@   : next_task_ptr
+0509 000F EXIT
+050A      USER_PTR@   : prev_task_ptr
+050B      LIT_4
+050C 0001 +
+050D 000F EXIT
+050E      disable_preemptive_task_switch  : LINK-IN-TASK ( task_userarea_ptr -- )
+050F      next_task_ptr@  ( task_userarea_ptr next_task_ptr )
+0510      OVER            ( task_userarea_ptr next_task_ptr task_userarea_ptr )
+0511 0007 !               ( task_userarea_ptr )
+0512      next_task_ptr@  ( task_userarea_ptr next_task_ptr )
+0513      LIT_4           ( task_userarea_ptr next_task_ptr 4 )
+0515 0001 +               ( task_userarea_ptr next_task_ptr+4 )
+0516      OVER            ( task_userarea_ptr next_task_ptr+4 task_userarea_ptr )
+0517 000A SWAP            ( task_userarea_ptr task_userarea_ptr next_task_ptr+4 )
+0518 0007 !               ( task_userarea_ptr )
+0519      USER_PTR@       ( task_userarea_ptr curr_userarea_ptr )
+051A      OVER            ( task_userarea_ptr curr_userarea_ptr task_userarea_ptr )
+051B      LIT_4           ( task_userarea_ptr curr_userarea_ptr task_userarea_ptr 4 )
+051C 0001 +               ( task_userarea_ptr curr_userarea_ptr task_userarea_ptr+4 )
+051D 0007 !               ( task_userarea_ptr )
+051E      next_task_ptr!  ( )
+051F      enable_preemptive_task_switch
+0520 000F
+0521      next_task_ptr  : next_task_ptr@
+0522 0006 @
+0523 000F EXIT
+0524      next_task_ptr  : next_task_ptr!
+0525 0007 !
+0526 000F EXIT
 
 
 ------
