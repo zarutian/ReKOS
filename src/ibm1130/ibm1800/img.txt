@@ -1177,23 +1177,22 @@ ADDR DATA IBM1800
 05E4 0007 !           ( task_addr )
 05E5      LIT_0x0100  ( task_addr 0x0100 )
 05E4 000F EXIT
+05E5 000C >R          : CELLS_MOVE ( src dest length -- )
+05E6      (JMP)
+05E7      CELLS_MOVE_L1
+05E8      OVER        : CELLS_MOVE_L0
+05E9      @
+05EA      OVER
+05EB      !
+05EC      1+
+05ED      SWAP
+05EE      1+
+05EF      SWAP
+05F0      (NEXT)      : CELLS_MOVE_L1
+05F1      CELLS_MOVE_L0
+05F2      2DROP
+05F3      EXIT
 
-
-          >R          : CELLS_MOVE ( src dest length -- )
-          (JMP)
-          CELLS_MOVE_L1
-          OVER        : CELLS_MOVE_L0
-          @
-          OVER
-          !
-          1+
-          SWAP
-          1+
-          SWAP
-          (NEXT)      : CELLS_MOVE_L1
-          CELLS_MOVE_L0
-          2DROP
-          EXIT
 
 ------
 
@@ -1471,6 +1470,8 @@ ADDR DATA IBM1800
 0593      LIT_7  : CONSOLE_PRINTER8_EMIT
 0594      (JMP)
 0595      CONSOLE_PRINTER_EMIT_COMMON
+
+
 0596      R>     : (LUT_t2)  ( key -- value T | F )
 0597      DUP                ( key ra ra )
 0598      @                  ( key ra nrOfEntries )
