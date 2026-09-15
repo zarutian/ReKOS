@@ -1075,7 +1075,46 @@ ADDR DATA IBM1800
 0580 0007 USER_PTR
 0581 6400 LDX_l I
 0582      WAITED-ON-FIRED_L2  \ this convoluted way is used to allow a Forth primitive or (IBM1800) code word to finish before PAUSEing
-
+0583      (VAR)       : USER_0
+0584 xxxx \ next task
+0585      \ Forth Instruction Pointer saved
+0586      \ Datastack Pointer         saved
+0587      \ Returnstack Pointer       saved
+0588      \ prev task
+0589      \ various task flags: 0x0001 is on iff preemptive task switching is on (switch every 10ms)
+058A	    SPP   \ SP0
+058B      RPP   \ RP0
+058C      QRX		\ '?KEY
+058D      TXSTO \ 'EMIT
+058C      ACCEP \ 'EXPECT
+058D      KTAP  \ 'TAP
+058E      TXSTO \ 'ECHO
+058F      DOTOK \ 'PROMPT
+0590      BASEE	\ BASE
+0591 0000	      \ tmp
+0592 0000       \ SPAN
+0593 0000       \ >IN
+0594 0000       \ #TIB
+0595      TIBB  \ TIB  Text Input Buffer
+0596 0000       \ CSP
+0597      INTER \ 'EVAL
+0598      NUMBQ \ 'NUMBER
+0599 0000       \ HLD
+059A 0000       \ HANDLER
+059B 0000       \ CONTEXT pointer
+059C 0000       \ vocabulary stack, VOCSS or 8 levels deep
+059D 0000
+059E 0000
+059F 0000
+05A0 0000
+05A1 0000
+05A2 0000
+05A3 0000
+05A4 0000       \ CURRENT pointer
+05A5 0000       \ vocabulary link pointer
+05A6      CTOP  \ CP
+05A7      NTOP  \ NP
+05A8      LASTN \ LAST
 
 ------
 tbd: timer D, synthesized using timer C (timebase 1 second)
