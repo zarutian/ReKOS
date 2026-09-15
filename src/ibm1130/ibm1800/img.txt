@@ -1192,6 +1192,8 @@ ADDR DATA IBM1800
 05F1      CELLS_MOVE_L0
 05F2      2DROP
 05F3      EXIT
+05F4      (CONST)     : LIT_3
+05F5 0003             : const_3
 
 
 ------
