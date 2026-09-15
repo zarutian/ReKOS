@@ -1058,6 +1058,17 @@ ADDR DATA IBM1800
 056F 00B2 saved ISLW
 0570 6400 LDX_l I
 0571      TI_1s_timer_interrupt_handler_L0
+0572 6400 LDX_l I     : preemptive_task_switch_interrupt_L0
+0573 xxxx             : preemptive_task_switch_interrupt
+0574      LD_l
+0575 0007 USER_PTR
+0576      ADD_l
+0577      const_5
+0578      STO_s I+1
+0579      LD_l
+057A xxxx
+057B
+
 
 ------
 tbd: timer D, synthesized using timer C (timebase 1 second)
