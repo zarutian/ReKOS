@@ -962,12 +962,33 @@ ADDR DATA IBM1800
 051E      next_task_ptr!  ( )
 051F      enable_preemptive_task_switch
 0520 000F
-0521      next_task_ptr  : next_task_ptr@
+0521      next_task_ptr  : next_task_ptr@ ( -- next_task_userarea_ptr )
 0522 0006 @
 0523 000F EXIT
-0524      next_task_ptr  : next_task_ptr!
+0524      next_task_ptr  : next_task_ptr! ( next_task_userarea_ptr -- )
 0525 0007 !
 0526 000F EXIT
+0527      USER_PTR@      : enable_preemptive_task_switch ( -- )
+0528      LIT_5           ( userarea_ptr 5 )
+0529 0001 +               ( userarea_ptr+5 )
+052A 0008 DUP             ( userarea_ptr+5 userarea_ptr+5 )
+052B 0006 @               ( userarea_ptr+5 cell )
+052C      LIT_1           ( userarea_ptr+5 cell 1 )
+052D      OR              ( userarea_ptr+5 cell|1 )
+052E 000A SWAP            ( cell|1 userarea_ptr+5 )
+052F 0007 !               ( )
+0530 000F EXIT
+0531      LIT_1          : disable_preemptive_task_switch ( -- )
+0532      INVERT          ( 0xFFFE )
+0533      USER_PTR@       ( 0xFFFE userarea_ptr )
+0534      LIT_5           ( 0xFFFE userarea_ptr 5 )
+0535 0001 +
+0536      TUCK
+0537 0006 @
+0538 0002 AND             ( userarea_ptr+5 cell )
+0539 000A SWAP
+053A 0007 !
+053B 000F EXIT
 
 
 ------
