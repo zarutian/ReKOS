@@ -192,7 +192,7 @@ ADDR DATA IBM1800
 00BE      TI_B  Timer B 'Interrupt' (synthesized)
 00BF      TI_C_timer_interrupt_handler  Timer C 'Interrupt' (synthesized)
 00C0      TI_C_user Timer C_user 'Interrupt' (synthesized)
-00C1      TI_1s  Timer 'Interrupt' every 1 second (synthesized) uses Timer C as 10 millisecond interval clock
+00C1      TI_1s  Timer 'Interrupt' every 1 second (synthesized) uses Timer C as 10 millisecond interval clock  drives TOD_clock
 00C2      TI_1s_user
 00C3      unassigned (tbd: TI_6s, TI_15s, TI_30s, TI_60s, TI_300s, TI_900s, TI_3600s)
 00C4      not used, free space    INT_TBL level 1
