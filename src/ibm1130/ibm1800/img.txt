@@ -193,8 +193,8 @@ ADDR DATA IBM1800
 00BF      TI_C_timer_interrupt_handler  Timer C 'Interrupt' (synthesized)
 00C0      TI_C_user Timer C_user 'Interrupt' (synthesized)
 00C1      TI_1s  Timer 'Interrupt' every 1 second (synthesized) uses Timer C as 10 millisecond interval clock
-00C2      unassigned (tbd: TI_6s, TI_15s, TI_30s, TI_60s, TI_300s, TI_900s, TI_3600s)
-00C3      unassigned
+00C2      TI_1s_user
+00C3      unassigned (tbd: TI_6s, TI_15s, TI_30s, TI_60s, TI_300s, TI_900s, TI_3600s)
 00C4      not used, free space    INT_TBL level 1
 00C5
 00C6
@@ -292,7 +292,22 @@ ADDR DATA IBM1800
 0122
 0123
 0124      INT_TBL level 7
-
+0125
+0126
+0127
+0128
+0129
+012A
+012B
+012C
+012D
+012E
+012F
+0130
+0131
+0132
+0133
+0135     INT_TBL level 8
 
 
 0284 4C40 BOSC_l
@@ -887,11 +902,11 @@ ADDR DATA IBM1800
 04D2 0001 +
 04D3 000F EXIT
 04D4 xxxx             : 10ms_ticker
-04D5      (VAR)       : TOD_clock   seconds since midnight 1st January 1970 UTC (64 bit number)
-04D6                                UU
-04D7                                UL
-04D8                                LU
-04D9                                LL
+04D5      (VAR)       : TOD_clock    seconds since midnight 1st January 1970 UTC (64 bit number)
+04D6                  : TOD_clock_U  UU
+04D7                                 UL
+04D8                  : TOD_clock_L  LU
+04D9                                 LL
 04DA 6400 LDX_l I     : TImers_interrupt_handler_L0
 04DB      xxxx        : TImers_interrupt_handler
 04DC 0807 XIO_s I+sense_timer_device_IOCC
@@ -1009,7 +1024,40 @@ ADDR DATA IBM1800
 054D      LIT_4           ( task task 4 )
 054E 0001 +               ( task task+4 )
 054F 0007 !               ( )
-0550 000F EXIT
+0550      enable_preemptive_task_switch
+0551 000F EXIT
+0552 6400 LDX_l I       : TI_1s_timer_interrupt_handler_L0
+0553 xxxx               : TI_1s_timer_interrupt_handler
+0554 C400 LD_l
+0555      const_1
+0556 18D0 RTE 16      \ rotate right A and Q
+0557 C400 LD_l
+0558      const_0
+0559 8C00 ADDD_l      \ 32 bit add
+055A      TOD_clock_L
+055B DC00 STD_l       \ 32 bit store
+055C      TOD_clock_L
+055D 4802 BSC_l carry=0?
+055E      TI_1s_timer_interrupt_handler_L1
+055F 6400 LDX_l
+0560      TI_1s_timer_interrupt_handler_L2
+0561 C400 LD_l
+0562      const_1
+0563 18D0 RTE 16      \ rotate right A and Q
+0564 C400 LD_l
+0565      const_0
+0566 8C00 ADDD_l      \ 32 bit add
+0567      TOD_clock_U
+0568 DC00 STD         \ 32 bit store
+0569      TOD_clock_U
+056A C400 LD_l          : TI_1s_timer_interrupt_handler_L2
+056B      const_0x8000
+056C EC00 OR_l        \ or 'fake' interrupts into the saved ISLW
+056D 00B2 saved ISLW
+056E D400 STO_l
+056F 00B2 saved ISLW
+0570 6400 LDX_l I
+0571      TI_1s_timer_interrupt_handler_L0
 
 ------
 tbd: timer D, synthesized using timer C (timebase 1 second)
