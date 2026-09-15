@@ -1115,6 +1115,85 @@ ADDR DATA IBM1800
 05A6      CTOP  \ CP
 05A7      NTOP  \ NP
 05A8      LASTN \ LAST
+05A9      reserved
+05AA      reserved
+05AB      reserved
+05AC      reserved
+05AD      reserved
+05AE      reserved
+05AF      reserved
+05B0      reserved
+05B1      reserved
+05B2      reserved
+05B3      reserved
+05B4 0008 DUP         : NEW-TASK ( code_ptr task_addr -- task_addr 0x0100 )
+05B5      USER_0
+05B6      OVER
+05B7      LIT_64
+05B8      CELLS_MOVE
+05B9 0008 DUP         ( code_ptr task_addr task_addr )  \ ensure that next_task of the task points to the task itself
+05BA 0008 DUP         ( code_ptr task_addr task_addr task_addr )
+05BB 0007 !           ( code_ptr task_addr )
+05BC 0008 DUP         ( code_ptr task_addr task_addr )  \ same but with prev_task
+05BD 0008 DUP         ( code_ptr task_addr task_addr task_addr )
+05BE      LIT_4       ( code_ptr task_addr task_addr task_addr 4 )
+05BF 0001 +           ( code_ptr task_addr task_addr task_addr+4 )
+05C0 0007 !           ( code_ptr task_addr )
+05C1      TUCK        ( task_addr code_ptr task_addr )
+05C2      1+          ( task_addr code_ptr task_addr+1 )
+05C3 0007 !           ( task_addr )
+05C4 0008 DUP         ( task_addr task_addr )
+05C5      LIT_64      ( task_addr task_addr 64 )
+05C6 0001 +           ( task_addr SP0 )
+05C7      OVER        ( task_addr SP0 task_addr )
+05C8      2DUP        ( task_addr SP0 task_addr SP0 task_addr )
+05C9      2+          ( task_addr SPO task_addr SP0 task_addr+2 )
+05CA 0007 !           ( task_addr SP0 task_addr ) \ save Datastack Pointer
+05CB      LIT_6       ( task_addr SP0 task_addr 6 )
+05CC 0001 +           ( task_addr SP0 task_addr+6 )
+05CD      OVER
+05CE 000C >R          ( task_addr SP0 task_addr+6 ) R:( SP0 )
+05CF 0007 !           ( task_addr ) R:( SP0 ) \ save bottom of stack
+05D0 000D R>          ( task_addr SP0 ) R:( )
+05D1      LIT_64      ( task_addr SP0 64 )
+05D2 0001 +           ( task_addr RP0 )
+05D3 0008 DUP         ( task_addr RP0 RP0 )
+05D4 000C >R          ( task_addr RP0 ) R:( RP0 )
+05D5      OVER        ( task_addr RP0 task_addr ) R:( RP0 )
+05D6      LIT_3       ( task_addr RP0 task_addr 3 ) R:( RP0 )
+05D7 0001 +           ( task_addr RP0 task_addr+3 )
+05D8 0007 !           ( task_addr ) R:( RP0 )
+05D9      R@          ( task_addr RP0 ) R:( RP0 )
+05DA      OVER        ( task_addr RP0 task_addr ) R:( RP0 )
+05DB      LIT_7       ( task_addr RP0 task_addr 7 ) R:( RP0 )
+05DC 0001 +           ( task_addr RP0 task_addr+7 ) R:( RP0 )
+05DD 0007 !           ( task_addr ) R:( RP0 )
+05DE 000D R>          ( task_addr RP0 ) R:( )
+05DF      LIT_64      ( task_addr RP0 64 )
+05E0 0001 +           ( task_addr TIBB )
+05E1      OVER        ( task_addr TIBB task_addr )
+05E2      LIT_19      ( task_addr TIBB task_addr 19 )
+05E3 0001 +           ( task_addr TIBB task_addr+19 )
+05E4 0007 !           ( task_addr )
+05E5      LIT_0x0100  ( task_addr 0x0100 )
+05E4 000F EXIT
+
+
+          >R          : CELLS_MOVE ( src dest length -- )
+          (JMP)
+          CELLS_MOVE_L1
+          OVER        : CELLS_MOVE_L0
+          @
+          OVER
+          !
+          1+
+          SWAP
+          1+
+          SWAP
+          (NEXT)      : CELLS_MOVE_L1
+          CELLS_MOVE_L0
+          2DROP
+          EXIT
 
 ------
 
