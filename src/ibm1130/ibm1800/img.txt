@@ -1117,7 +1117,6 @@ ADDR DATA IBM1800
 05A8      LASTN \ LAST
 
 ------
-tbd: timer D, synthesized using timer C (timebase 1 second)
 
 04A0      0xFF&       : ASCII_2_CONSOLE_PRTRCODE ( ascii -- prtrcode )
 04A1            ASCII_2_EBDIC&CONSOLE_PTRTCODE_LUT
@@ -1204,7 +1203,7 @@ tbd: timer D, synthesized using timer C (timebase 1 second)
 04F7 __16 G
 04F8 __26 H
 04F9 __22 I
-04FA __7E J  var CE held að það hafi verið OCT villa
+04FA __7E J  var CE held að það hafi verið OCR villa
 04FB __5A K
 04FC __5E L
 04FD __72 M
@@ -1320,7 +1319,7 @@ tbd: timer D, synthesized using timer C (timebase 1 second)
 054B      R@
 054C      CONSOLE_PRINTERNR2IOSEL
 054D      (LIT)
-054E 0701 sense device reset indicators IOXC, partial
+054E 0701 sense device reset indicators IOCC, partial
 054F      OR
 0550      (XIO)
 0551 0008 DUP
@@ -1564,8 +1563,7 @@ tbd: timer D, synthesized using timer C (timebase 1 second)
 064E 0090
 064F 00   UC Upper Case  should be tied to when Caps Lock is turned on or when Shift is pressed.
 0650 8090
-0651 00   LC Lower Case  should be tied
-to when Caps Lock is turned off or when Shift is released.
+0651 00   LC Lower Case  should be tied to when Caps Lock is turned off or when Shift is released.
 
 
      0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON ( keyboardnr -- ascii T | F )
@@ -1578,7 +1576,7 @@ Devices
 
    Area Fun Mod
 0b00000          Console and internal
-0b00001          1816 Console Printer&Keyboards and 1053 Printers (first four)
+0b00001          1816 Console Printer&Keyboards and/or 1053 Printers (first four)
 0b00010          1442 Card Read Punch 1
 0b00011          1054 & 1055 PaperTape Reader & Punch
 0b00100          1810 Disk Storage Device/Drive 1
@@ -1592,7 +1590,7 @@ Devices
 0b01100          Digital & Analog Output
 0b01101          SYSTEM/360 Adapter  (note: the other end can be also 370 380 390 or Z )
 0b01110          2401 OR 2402 Magnetic Tape
-0b01111          1816 Console Printer&Keyboards and 1053 Printers (second four)
+0b01111          1816 Console Printer&Keyboards and/or 1053 Printers (second four)
 0b10000          ???
 0b10001          ???
 0b10010          SELECTOR CHANNEL
