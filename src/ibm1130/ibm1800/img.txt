@@ -1199,7 +1199,10 @@ ADDR DATA IBM1800
 05F8 000F EXIT
 05F9      (CONST)     : LIT_4
 05FA 0004             : const_4
-05FB
+05FB      (CONST)     : LIT_5
+05FC 0005             : const_5
+05FD      (CONST)     : LIT_6
+05FE 0006             : const_6
 ------
 
 04A0      0xFF&       : ASCII_2_CONSOLE_PRTRCODE ( ascii -- prtrcode )
