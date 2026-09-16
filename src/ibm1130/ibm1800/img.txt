@@ -1194,7 +1194,9 @@ ADDR DATA IBM1800
 05F3      EXIT
 05F4      (CONST)     : LIT_3
 05F5 0003             : const_3
-
+05F6      LIT_3       : 3&
+05F7 0002 &
+05F8 000F EXIT
 
 ------
 
@@ -1341,11 +1343,7 @@ ADDR DATA IBM1800
 0511      (LIT)
 0512 __FF
 0513 000F EXIT
-0514      (CONST)       : LIT_3
-0515 0003
-0516      LIT_3         : 3&
-0517 0002 &
-0518 000F EXIT
+
 0519      3&            : CONSOLE_PRINTERNR2IOSEL ( printernr -- iosel )
 051A      (LUT)
 051B 0008 8
