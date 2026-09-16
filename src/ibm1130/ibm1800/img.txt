@@ -1217,167 +1217,174 @@ ADDR DATA IBM1800
 060A 000C >R
 060B 0006 @
 060C 000F EXIT
-------
+060D      0xFF&       : ASCII_2_CONSOLE_PRTRCODE ( ascii -- prtrcode )
+060E      ASCII_2_EBDIC&CONSOLE_PTRTCODE_LUT
+060F      0xFF&
+0610      BYTEXCHNG
+0611 000F EXIT
+0612
+0613
+0614
+0615
+0616
+0617
+0618
+0619
+061A
+061B
+061C
+061D
+061E      (LUT)       : ASCII_2_EBDIC&CONSOLE_PTRTCODE_LUT ( idx -- val )
+061F 0080 128
+0620 __FF NUL
+0621 __FF SOH
+0622 __FF STX
+0623 __FF ETX
+0624 __FF EOT
+0625 __FF ENQ
+0626 __FF ACK
+0627 __FF BEL
+0628 __11 BS   backspace
+0629 __41 TAB  horizational tab
+062A __03 NL   new line
+062B __FF VT   vertical tab
+062C __FF FF   form feed (new page)
+062D __FF CR
+062E __05 SO   Shift Out (shift to black on console printer)
+062F __09 SI   Shift In  (shift to red on console printer)
+0630 __FF DLE
+0631 __FF DC1
+0632 __FF DC2
+0633 __FF DC3
+0634 __FF DC4
+0635 __FF NAK
+0636 __FF SYN
+0637 __FF ETB
+0638 __FF CAN
+0639 __FF EM
+063A __FF SUB
+063B __FF ESC
+063C __FF FS
+063D __FF GS
+063E __FF RS
+063F __FF US
+0640 __21 Space  
+0641 __42 !
+0642 __E2 "
+0643 __C0 #
+0644 __40 $
+0645 __06 %
+0646 __44 &
+0647 __E6 '
+0648 __FE (
+0649 __F6 )
+064A __D6 *
+064B __DA +
+064C __80 ,
+064D __84 -
+064E __00 .
+064F __BC /
+0650 __C4 0
+0651 __FC 1 
+0652 __D8 2 
+0653 __DC 3
+0654 __F0 4
+0655 __F4 5
+0656 __D0 6
+0657 __D4 7
+0658 __E4 8
+0659 __E0 9
+065A __82 :
+065B __D2 ;
+065C __DE <
+065D __C2 =
+065E __46 >
+065F __86 ?
+0660 __04 @
+0661 __3E A
+0662 __1A B
+0663 __1E C
+0664 __32 D
+0665 __36 E
+0666 __12 F
+0667 __16 G
+0668 __26 H
+0669 __22 I
+066A __7E J  var CE held að það hafi verið OCR villa
+066B __5A K
+066C __5E L
+066D __72 M
+066E __76 N
+066F __52 O
+0670 __56 P
+0671 __66 Q
+0672 __62 R
+0673 __9A S
+0674 __9E T
+0675 __B2 U
+0676 __B6 V
+0677 __92 W
+0678 __96 X
+0679 __A6 Y
+067A __A2 Z
+067B __FF [
+067C __FF \
+067D __FF ]
+067E __FF ^
+067F __BE _
+0680 __FF `
+0681 __3C a
+0682 __18 b
+0683 __1C c
+0684 __30 d
+0685 __34 e
+0686 __10 f
+0687 __14 g
+0688 __24 h
+0689 __20 i
+068A __7C j
+068B __58 k
+068C __5C l
+068D __70 m
+068E __74 n
+068F __50 0
+0690 __54 p
+0691 __64 q
+0692 __60 r
+0693 __98 s
+0694 __9C t
+0695 __B0 u
+0696 __B4 v
+0697 __90 w
+0698 __94 x
+0699 __A4 y
+069A __A0 z
+069B __FF {
+069C __C6 |
+069D __FF }
+069E __FF ~
+069F __FF DEL
+06A0 0009 DROP
+06A1      (LIT)
+06A2 __FF
+06A3 000F EXIT
 
-04A0      0xFF&       : ASCII_2_CONSOLE_PRTRCODE ( ascii -- prtrcode )
-04A1            ASCII_2_EBDIC&CONSOLE_PTRTCODE_LUT
-04A2      0xFF&
-04A3      BYTEXCHNG
-04A4 000F EXIT
+06A4      3&            : CONSOLE_PRINTERNR2IOSEL ( printernr -- iosel )
+06A5      (LUT)
+06A6 0008 8
+06A7 0802 printer 1
+06A8 0804 printer 2
+06A9 0808 printer 3
+06AA 0810 printer 4
+06AB 7802 printer 5
+06AC 7804 printer 6
+06AD 7808 printer 7
+06AE 7810 printer 8
+06AF 0009 DROP
+06B0      (LIT)
+06B1 0802 printer 1
+06B2 000F EXIT
 
-04AB
-04AC
-04AD
-04AE      (LUT)       : ASCII_2_EBDIC&CONSOLE_PTRTCODE_LUT ( idx -- val )
-04AF 0080 128
-04B0 __FF NUL
-04B1 __FF SOH
-04B2 __FF STX
-04B3 __FF ETX
-04B4 __FF EOT
-04B5 __FF ENQ
-04B6 __FF ACK
-04B7 __FF BEL
-04B8 __11 BS   backspace
-04B9 __41 TAB  horizational tab
-04BA __03 NL   new line
-04BB __FF VT   vertical tab
-04BC __FF FF   form feed (new page)
-04BD __FF CR
-04BE __05 SO   Shift Out (shift to black on console printer)
-04BF __09 SI   Shift In  (shift to red on console printer)
-04C0 __FF DLE
-04C1 __FF DC1
-04C2 __FF DC2
-04C3 __FF DC3
-04C4 __FF DC4
-04C5 __FF NAK
-04C6 __FF SYN
-04C7 __FF ETB
-04C8 __FF CAN
-04C9 __FF EM
-04CA __FF SUB
-04CB __FF ESC
-04CC __FF FS
-04CD __FF GS
-04CE __FF RS
-04CF __FF US
-04D0 __21 Space  
-04D1 __42 !
-04D2 __E2 "
-04D3 __C0 #
-04D4 __40 $
-04D5 __06 %
-04D6 __44 &
-04D7 __E6 '
-04D8 __FE (
-04D9 __F6 )
-04DA __D6 *
-04DB __DA +
-04DC __80 ,
-04DD __84 -
-04DE __00 .
-04DF __BC /
-04E0 __C4 0
-04E1 __FC 1 
-04E2 __D8 2 
-04E3 __DC 3
-04E4 __F0 4
-04E5 __F4 5
-04E6 __D0 6
-04E7 __D4 7
-04E8 __E4 8
-04E9 __E0 9
-04EA __82 :
-04EB __D2 ;
-04EC __DE <
-04ED __C2 =
-04EE __46 >
-04EF __86 ?
-04F0 __04 @
-04F1 __3E A
-04F2 __1A B
-04F3 __1E C
-04F4 __32 D
-04F5 __36 E
-04F6 __12 F
-04F7 __16 G
-04F8 __26 H
-04F9 __22 I
-04FA __7E J  var CE held að það hafi verið OCR villa
-04FB __5A K
-04FC __5E L
-04FD __72 M
-04FE __76 N
-04FF __52 O
-0500 __56 P
-0501 __66 Q
-0502 __62 R
-0503 __9A S
-0504 __9E T
-0505 __B2 U
-0506 __B6 V
-0507 __92 W
-0508 __96 X
-0509 __A6 Y
-050A __A2 Z
-050B __FF [
-050C __FF \
-050D __FF ]
-050E __FF ^
-050F __BE _
-0510 __FF `
-0511 __3C a
-0512 __18 b
-0513 __1C c
-0514 __30 d
-0515 __34 e
-0516 __10 f
-0517 __14 g
-0518 __24 h
-0519 __20 i
-051A __7C j
-051B __58 k
-051C __5C l
-051D __70 m
-051E __74 n
-051F __50 0
-0600 __54 p
-0501 __64 q
-0502 __60 r
-0503 __98 s
-0504 __9C t
-0505 __B0 u
-0506 __B4 v
-0507 __90 w
-0508 __94 x
-0509 __A4 y
-050A __A0 z
-050B __FF {
-050C __C6 |
-050D __FF }
-050E __FF ~
-050F __FF DEL
-0510 0009 DROP
-0511      (LIT)
-0512 __FF
-0513 000F EXIT
-
-0519      3&            : CONSOLE_PRINTERNR2IOSEL ( printernr -- iosel )
-051A      (LUT)
-051B 0008 8
-051C 0802 printer 1
-051D 0804 printer 2
-051E 0808 printer 3
-051F 0810 printer 4
-0520 7802 printer 5
-0521 7804 printer 6
-0522 7808 printer 7
-0523 7810 printer 8
-0524 0009 DROP
-0525      (LIT)
-0526 0802 printer 1
-0527 000F EXIT
 052E 0008 DUP          : CONSOLE_PRINTER_EMIT_COMMON ( ascii printernr -- )
 052F      CONSOLE_PRINTERNR2IOSEL
 0530      FALSE
