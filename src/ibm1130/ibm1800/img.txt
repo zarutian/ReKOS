@@ -1143,43 +1143,41 @@ ADDR DATA IBM1800
 05C2      1+          ( task_addr code_ptr task_addr+1 )
 05C3 0007 !           ( task_addr )
 05C4 0008 DUP         ( task_addr task_addr )
-05C5      LIT_64      ( task_addr task_addr 64 )
-05C6 0001 +           ( task_addr SP0 )
-05C7      OVER        ( task_addr SP0 task_addr )
-05C8      2DUP        ( task_addr SP0 task_addr SP0 task_addr )
-05C9      2+          ( task_addr SPO task_addr SP0 task_addr+2 )
-05CA 0007 !           ( task_addr SP0 task_addr ) \ save Datastack Pointer
-05CB      LIT_6       ( task_addr SP0 task_addr 6 )
-05CC 0001 +           ( task_addr SP0 task_addr+6 )
-05CD      OVER
-05CE 000C >R          ( task_addr SP0 task_addr+6 ) R:( SP0 )
-05CF 0007 !           ( task_addr ) R:( SP0 ) \ save bottom of stack
-05D0 000D R>          ( task_addr SP0 ) R:( )
-05D1      LIT_64      ( task_addr SP0 64 )
-05D2 0001 +           ( task_addr RP0 )
-05D3 0008 DUP         ( task_addr RP0 RP0 )
-05D4 000C >R          ( task_addr RP0 ) R:( RP0 )
-05D5      OVER        ( task_addr RP0 task_addr ) R:( RP0 )
-05D6      LIT_3       ( task_addr RP0 task_addr 3 ) R:( RP0 )
-05D7 0001 +           ( task_addr RP0 task_addr+3 )
-05D8 0007 !           ( task_addr ) R:( RP0 )
-05D9      R@          ( task_addr RP0 ) R:( RP0 )
-05DA      OVER        ( task_addr RP0 task_addr ) R:( RP0 )
-05DB      LIT_7       ( task_addr RP0 task_addr 7 ) R:( RP0 )
-05DC 0001 +           ( task_addr RP0 task_addr+7 ) R:( RP0 )
-05DD 0007 !           ( task_addr ) R:( RP0 )
-05DE 000D R>          ( task_addr RP0 ) R:( )
-05DF      LIT_64      ( task_addr RP0 64 )
-05E0 0001 +           ( task_addr TIBB )
-05E1      OVER        ( task_addr TIBB task_addr )
-05E2      LIT_19      ( task_addr TIBB task_addr 19 )
-05E3 0001 +           ( task_addr TIBB task_addr+19 )
-05E4 0007 !           ( task_addr )
-05E5      LIT_0x0100  ( task_addr 0x0100 )
-05E4 000F EXIT
-05E5 000C >R          : CELLS_MOVE ( src dest length -- )
-05E6      (JMP)
-05E7      CELLS_MOVE_L1
+05C5      64+         ( task_addr SP0 )
+05C6      OVER        ( task_addr SP0 task_addr )
+05C7      2DUP        ( task_addr SP0 task_addr SP0 task_addr )
+05C8      2+          ( task_addr SPO task_addr SP0 task_addr+2 )
+05C9 0007 !           ( task_addr SP0 task_addr ) \ save Datastack Pointer
+05CA      LIT_6       ( task_addr SP0 task_addr 6 )
+05CB 0001 +           ( task_addr SP0 task_addr+6 )
+05CC      OVER
+05CD 000C >R          ( task_addr SP0 task_addr+6 ) R:( SP0 )
+05CE 0007 !           ( task_addr ) R:( SP0 ) \ save bottom of stack
+05CF 000D R>          ( task_addr SP0 ) R:( )
+05D0      64+         ( task_addr RP0 )
+05D1 0008 DUP         ( task_addr RP0 RP0 )
+05D2 000C >R          ( task_addr RP0 ) R:( RP0 )
+05D3      OVER        ( task_addr RP0 task_addr ) R:( RP0 )
+05D4      LIT_3       ( task_addr RP0 task_addr 3 ) R:( RP0 )
+05D5 0001 +           ( task_addr RP0 task_addr+3 )
+05D6 0007 !           ( task_addr ) R:( RP0 )
+05D7      R@          ( task_addr RP0 ) R:( RP0 )
+05D8      OVER        ( task_addr RP0 task_addr ) R:( RP0 )
+05D9      LIT_7       ( task_addr RP0 task_addr 7 ) R:( RP0 )
+05DA 0001 +           ( task_addr RP0 task_addr+7 ) R:( RP0 )
+05DB 0007 !           ( task_addr ) R:( RP0 )
+05DC 000D R>          ( task_addr RP0 ) R:( )
+05DD      64+         ( task_addr TIBB )
+05DE      OVER        ( task_addr TIBB task_addr )
+05DF      LIT_19      ( task_addr TIBB task_addr 19 )
+05E0 0001 +           ( task_addr TIBB task_addr+19 )
+05E1 0007 !           ( task_addr )
+05E2      LIT_0x0100  ( task_addr 0x0100 )
+05E3 000F EXIT
+05E4 000C >R          : CELLS_MOVE ( src dest length -- )
+05E5      (JMP)
+05E6      CELLS_MOVE_L1
+=merkill=
 05E8      OVER        : CELLS_MOVE_L0
 05E9      @
 05EA      OVER
