@@ -1550,9 +1550,9 @@ ADDR DATA IBM1800
 05D2 2420
 05D3 00   ,
 05D4 0008
-05D5      EOF  End Of Field
+05D5      EOF  End Of Field  basically Enter/Return
 05D6 0004
-05D7      ER CHR  ERease CHaR
+05D7      ER CHR  ERease CHaR   Backspace
 05D8 0002 
 05D9      ER FLD  ERease FieLD
 05DA 00A0
