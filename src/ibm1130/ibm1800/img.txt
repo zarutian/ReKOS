@@ -1441,47 +1441,49 @@ ADDR DATA IBM1800
 06E8      R@                       ( prtrcode stackptr-1 write_IOCC_partial printernr ) R:( printernr )
 06E9      CONSOLE_PRINTERNR2IOSEL  ( prtrcode stackptr-1 write_IOCC_partial iosel ) R:( printernr )
 06EA      OR                       ( prtrcode stackptr-1 write_IOCC_full )
-0549      (XIO)                    ( prtrcode result )
-054A 0009 DROP
-054B      R@
-054C      CONSOLE_PRINTERNR2IOSEL
-054D      (LIT)
-054E 0701 sense device reset indicators IOCC, partial
-054F      OR
-0550      (XIO)
-0551 0008 DUP
-0552      (LIT)
-0553 8700
-0554 0002 &
-0555      (LIT)
-0556 8000
-0557 0003 ⨁
-0558      CLEANBOOL
-0559      INVERT
-055A      (BRZ)
-055B      CONSOLE_PRINTER_EMIT_COMMON_L1
-055C      R>
-055D      2DROP
-055E 000F EXIT
-055F 0008 DUP : CONSOLE_PRINTER_EMIT_COMMON_L1 ( dsw dsw ) R:( printernr )
-0560      (LIT)
-0561 4000
-0562 0003 ⨁
-0563      INVERT
-0564      OVER
-0565      (LIT)
-0566 2000
-0567 0003 ⨁
-0568      INVERT
-0568      OR
-0569      (BRZ)
-056A 056E CONSOLE_PRINTER_EMIT_COMMON_L2
-056B 000D R>
-056C      (JMP)
-056D
-056E      tbd : CONSOLE_PRINTER_EMIT_COMMON_L2
-056F      tbd
-
+06EB      (XIO)                    ( prtrcode result )
+06EC 0009 DROP                     ( prtrcode )
+06ED      R@            : CONSOLE_PRINTER_EMIT_COMMON_L4           ( prtrcode printernr ) R:( printernr )
+06EE      CONSOLE_PRINTERNR2IOSEL  ( prtrcode iosel )
+06EF      (LIT)                    ( prtrcode iosel sense_w/reset_IOCC_partial )
+06F0 0701 sense device reset indicators IOCC, partial
+06F1      OR                       ( prtrcode sense_w/resert_IOCC_full )
+06F2      (XIO)                    ( result )
+06F3 0008 DUP                      ( result result )
+06F4      (LIT)                    ( result result mask )
+06F5 8C00 printer response & printer busy & printer not ready
+06F6 0002 &                        ( result masked_result )
+06F7      (LIT)                    ( result masked_result 0x8000 )
+06F8 8000 printer response
+06F9 0003 ⨁                       ( result masked_flipped_result )
+06FA      CLEANBOOL                ( result got_response_&_printer_not_busy_&_printer_readdy?_bool )
+06FB      INVERT                   ( result ~bool )
+06FC      (BRZ)                    ( result )
+06FD      CONSOLE_PRINTER_EMIT_COMMON_L1
+06FE      R>             : CONSOLE_PRINTER_EMIT_COMMON_L2  ( result printernr ) R:( )
+06FF      2DROP                    ( )
+0700 000F EXIT                     \ aaand we are done printing that character )
+0701 0008 DUP : CONSOLE_PRINTER_EMIT_COMMON_L1 ( dsw dsw ) R:( printernr )
+0702      (LIT)
+0703 0800 printer busy
+0704      TUCK
+0705 0003 ⨁
+0706 0002 &
+0707      INVERT
+0708      OVER
+0709      (LIT)
+070A 0400 printer not ready
+070B      OVER
+070C 0003 ⨁
+070D 0002 &
+070E      INVERT
+070F      OR
+0710      INVERT
+0711      (BRZ)
+0712      CONSOLE_PRINTER_EMIT_COMMON_L2
+0713      LIT_0
+0714      (JMP)
+0715      CONSOLE_PRINTER_EMIT_COMMON_L4
 
 
 
