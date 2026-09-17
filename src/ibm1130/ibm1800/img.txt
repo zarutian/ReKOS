@@ -1382,35 +1382,66 @@ ADDR DATA IBM1800
 06B0      (LIT)
 06B1 0802 printer 1
 06B2 000F EXIT
+06B3      (LUT)          : CONSOLE_PRINTERNR2INTVECTNR
+06B4 0008 8
+06B5 0041 = 00F5 - 00B4
+06B6 0043 = 00F7 - 00B4
+06B7 0044 = 00F8 - 00B4
+06B8 0045 = 00F9 - 00B4
+06B9 0046 = 00FA - 00B4
+06BA 0047 = 00FB - 00B4
+06BB 0048 = 00FC - 00B4
+06BC 0049 = 00FD - 00B4
+06BD 0009 DROP
+06BE      (LIT)
+06BF 0041
+06C0 000F EXIT
+06C1      LIT_0  : CONSOLE_PRINTER1_EMIT
+06C2      CONSOLE_PRINTER_EMIT_COMMON
+06C3      LIT_1  : CONSOLE_PRINTER2_EMIT
+06C4      CONSOLE_PRINTER_EMIT_COMMON
+06C5      LIT_2  : CONSOLE_PRINTER3_EMIT
+06C6      CONSOLE_PRINTER_EMIT_COMMON
+06C7      LIT_3  : CONSOLE_PRINTER4_EMIT
+06C8      CONSOLE_PRINTER_EMIT_COMMON
+06C9      LIT_4  : CONSOLE_PRINTER5_EMIT
+06CA      CONSOLE_PRINTER_EMIT_COMMON
+06CB      LIT_5  : CONSOLE_PRINTER6_EMIT
+06CC      CONSOLE_PRINTER_EMIT_COMMON
+06CD      LIT_6  : CONSOLE_PRINTER7_EMIT
+06CE      CONSOLE_PRINTER_EMIT_COMMON
+06CF      LIT_7  : CONSOLE_PRINTER8_EMIT
+06D0      CONSOLE_PRINTER_EMIT_COMMON
 
-052E 0008 DUP          : CONSOLE_PRINTER_EMIT_COMMON ( ascii printernr -- )
-052F      CONSOLE_PRINTERNR2IOSEL
-0530      FALSE
-0531 000A SWAP
-0532      (LIT)
-0533 0700 sense device IOCC, partial
-0534      OR
-0535      (XIO)
-0536      (LIT)
-0537 1C00
-0538 0002 &
-0539      CLEANBOOL
-053A      (BRZ)
-053B 0541 CONSOLE_PRINTER_EMIT_COMMON_L0
-053C 0008 DUP
-053D      CONSOLE_PRINTERNR2INTVECTNR
-053E      WAIT-ON
-053F      (JMP)
-0540      CONSOLE_PRINTER_EMIT_COMMON
-0541 000C >R  : CONSOLE_PRINTER_EMIT_COMMON_L0
-0542      ASCII_2_CONSOLE_PRTRCODE
-0543      SP@-1
-0544      (LIT)
-0545 0100 write IOCC, partial
-0546      R@
-0547      CONSOLE_PRINTERNR2IOSEL
-0548      OR
-0549      (XIO)
+06D1      RDROP        : CONSOLE_PRINTER_EMIT_COMMON ( ascii printernr -- )
+06D2 0008 DUP          : CONSOLE_PRINTER_EMIT_COMMON_L3 ( ascii printernr printernr )
+06D3      CONSOLE_PRINTERNR2IOSEL  ( ascii printernr iosel )
+06D4      LIT_0                    ( ascii printernr iosel 0 )
+06D5 000A SWAP                     ( ascii printernr 0 iosel )
+06D5      (LIT)                    ( ascii printernr 0 iosel )
+06D5 0700 sense device IOCC, partial
+06D6      OR                       ( ascii printernr 0 IOCC_full )
+06D7      (XIO)                    ( ascii printernr DeviceStatusWord )
+06D8      (LIT)                    ( ascii printernr DeviceStatusWord 0x1C00 )
+06D9 0C00 Printer Busy & Printer Not Ready
+06DA 0002 &                        ( ascii printernr DeviceStatusResult )
+06DB      CLEANBOOL                ( ascii printernr busy_or_not_ready?_bool )
+06DC      (BRZ)                    ( ascii printernr )
+06DD      CONSOLE_PRINTER_EMIT_COMMON_L0
+06DE 0008 DUP                      ( ascii printernr printernr )
+06DF      CONSOLE_PRINTERNR2INTVECTNR  ( ascii printernr intvectnr )
+06E0      WAIT-ON                  ( ascii printernr ) \ printer busy, wait on it, that is PAUSE and allow other tasks to run. 
+06E1      (JMP)
+06E2      CONSOLE_PRINTER_EMIT_COMMON_L3
+06E3 000C >R            : CONSOLE_PRINTER_EMIT_COMMON_L0 ( ascii ) R:( printernr )
+06E4      ASCII_2_CONSOLE_PRTRCODE ( prtrcode )
+06E5      SP@-1                    ( prtrcode stackptr-1 )
+06E6      (LIT)                    ( prtrcode stackptr-1 write_IOCC_partial )
+06E7 0100 write IOCC, partial
+06E8      R@                       ( prtrcode stackptr-1 write_IOCC_partial printernr ) R:( printernr )
+06E9      CONSOLE_PRINTERNR2IOSEL  ( prtrcode stackptr-1 write_IOCC_partial iosel ) R:( printernr )
+06EA      OR                       ( prtrcode stackptr-1 write_IOCC_full )
+0549      (XIO)                    ( prtrcode result )
 054A 0009 DROP
 054B      R@
 054C      CONSOLE_PRINTERNR2IOSEL
@@ -1428,11 +1459,11 @@ ADDR DATA IBM1800
 0558      CLEANBOOL
 0559      INVERT
 055A      (BRZ)
-055B 055F
+055B      CONSOLE_PRINTER_EMIT_COMMON_L1
 055C      R>
 055D      2DROP
 055E 000F EXIT
-055F 0008 DUP  ( dsw dsw ) R:( printernr )
+055F 0008 DUP : CONSOLE_PRINTER_EMIT_COMMON_L1 ( dsw dsw ) R:( printernr )
 0560      (LIT)
 0561 4000
 0562 0003 ⨁
@@ -1444,50 +1475,14 @@ ADDR DATA IBM1800
 0568      INVERT
 0568      OR
 0569      (BRZ)
-056A 056E
+056A 056E CONSOLE_PRINTER_EMIT_COMMON_L2
 056B 000D R>
 056C      (JMP)
 056D
-056E      tbd
+056E      tbd : CONSOLE_PRINTER_EMIT_COMMON_L2
 056F      tbd
-0570      (LUT)          : CONSOLE_PRINTERNR2INTVECTNR
-0571 0008 8
-0572 0041 = 00F5 - 00B4
-0573 0043 = 00F7 - 00B4
-0574 0044 = 00F8 - 00B4
-0575 0045 = 00F9 - 00B4
-0576 0046 = 00FA - 00B4
-0577 0047 = 00FB - 00B4
-0578 0048 = 00FC - 00B4
-0579 0049 = 00FD - 00B4
-057A 0009 DROP
-057B      (LIT)
-057C 0041
-057D 000F EXIT
-057E      LIT_0  : CONSOLE_PRINTER1_EMIT
-057F      (JMP)
-0580      CONSOLE_PRINTER_EMIT_COMMON
-0581      LIT_1  : CONSOLE_PRINTER2_EMIT
-0582      (JMP)
-0583      CONSOLE_PRINTER_EMIT_COMMON
-0584      LIT_2  : CONSOLE_PRINTER3_EMIT
-0585      (JMP)
-0586      CONSOLE_PRINTER_EMIT_COMMON
-0587      LIT_3  : CONSOLE_PRINTER4_EMIT
-0588      (JMP)
-0589      CONSOLE_PRINTER_EMIT_COMMON
-058A      LIT_4  : CONSOLE_PRINTER5_EMIT
-058B      (JMP)
-058C      CONSOLE_PRINTER_EMIT_COMMON
-058D      LIT_5  : CONSOLE_PRINTER6_EMIT
-058E      (JMP)
-058F      CONSOLE_PRINTER_EMIT_COMMON
-0590      LIT_6  : CONSOLE_PRINTER7_EMIT
-0591      (JMP)
-0592      CONSOLE_PRINTER_EMIT_COMMON
-0593      LIT_7  : CONSOLE_PRINTER8_EMIT
-0594      (JMP)
-0595      CONSOLE_PRINTER_EMIT_COMMON
+
+
 
 
 0596      R>     : (LUT_t2)  ( key -- value T | F )
