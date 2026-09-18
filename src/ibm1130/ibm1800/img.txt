@@ -1502,10 +1502,10 @@ ADDR DATA IBM1800
 0724 0002 &                        ( kbnr dsw_masked kb_notready? )
 0725      (BRZ)                    ( kbnr dsw_masked )
 0726      CONSOLE_KEYBOARD_?KEY_COMMON_L0
-0727      2DROP
+0727      2DROP  : CONSOLE_KEYBOARD_?KEY_COMMON_L4
 0728      (JMP)
-0729      FALSE  : CONSOLE_KEYBOARD_?KEY_COMMON_L0
-072A 0008 DUP                      ( kbnr dsw_masked dsw_masked )
+0729      FALSE  
+072A 0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON_L0 ( kbnr dsw_masked dsw_masked )
 072B      (LIT)                    ( kbnr dsw_masked dsw_masked 0x2000 )
 072C 2000 kb request
 072D 0002 &                        ( kbnr dsw_masked kb_request? )
@@ -1545,6 +1545,33 @@ ADDR DATA IBM1800
 074F 0009 DROP   : CONSOLE_KEYBOARD_?KEY_COMMON_L3
 0750      (JMP)
 0751      FALSE
+0752 0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON2 ( keyboardnr -- ascii T | F )
+0753      CONSOLE_KEYBOARD_?KEY_COMMON           ( kbnr cardcode T | kbnr F )
+0754      (BRZ)
+0755      CONSOLE_KEYBOARD_?KEY_COMMON_L3
+0756 0008 DUP                                    ( kbnr cardcode cardcode )
+0757      (LIT)                                  ( kbnr cardcode cardcode UC )
+0758 0090 UC Upper Case  should be tied to when Caps Lock is turned on or when Shift is pressed.
+0759      =                                      ( kbnr cardcode bool )
+075A      (BRZ)                                  ( kbnr cardcode )
+075B      CONSOLE_KEYBOARD_?KEY_COMMON2_L0
+075C      USER_PTR@
+075D      LIT_5
+075E 0001 +
+075F      DUP
+0760 0006 @
+0761      (LIT)
+0762 0010
+0763      OR
+0764 000A SWAP
+0765 0007 !
+0766      (JMP)
+0767      CONSOLE_KEYBOARD_?KEY_COMMON_L4
+
+0650 8090
+0651 00   LC Lower Case  should be tied to when Caps Lock is turned off or when Shift is released.
+
+
 
 0596      R>     : (LUT_t2)  ( key -- value T | F )
 0597      DUP                ( key ra ra )
@@ -1714,10 +1741,6 @@ ADDR DATA IBM1800
 064B 00   0-8-2
 064C 4110
 064D 00   NL New Line  should be tied to the Return key
-064E 0090
-064F 00   UC Upper Case  should be tied to when Caps Lock is turned on or when Shift is pressed.
-0650 8090
-0651 00   LC Lower Case  should be tied to when Caps Lock is turned off or when Shift is released.
 
 
      
