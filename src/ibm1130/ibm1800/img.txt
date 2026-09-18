@@ -1081,7 +1081,7 @@ ADDR DATA IBM1800
 0586      \ Datastack Pointer         saved
 0587      \ Returnstack Pointer       saved
 0588      \ prev task
-0589      \ various task flags: 0x0001 is on iff preemptive task switching is on (switch every 10ms)
+0589      \ various task flags: 0x0001 is on iff preemptive task switching is on (switch every 10ms), 0x0010 is on for uppercase console keyboard, off for lowercase.
 058A	    SPP   \ SP0
 058B      RPP   \ RP0
 058C      QRX		\ '?KEY
@@ -1485,7 +1485,66 @@ ADDR DATA IBM1800
 0714      (JMP)
 0715      CONSOLE_PRINTER_EMIT_COMMON_L4
 
-
+0716 0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON ( keyboardnr -- cardcode T | F )
+0717      CONSOLE_PRINTERNR2IOSEL  ( kbnr iosel )
+0718      LIT_0                    ( kbnr iosel 0 )
+0719 000A SWAP                     ( kbnr 0 iosel )
+071A      (LIT)                    ( kbnr 0 iosel sense_device_IOCC_partial )
+071B 0701 sense device IOCC w/indicator reset, partial
+071C      OR                       ( kbnr 0 sense_device_IOCC )
+071D      (XIO)                    ( kbnr device_sense_word )
+071E      (LIT)                    ( kbnr device_sense_word mask )
+071F 6200 kb response, kb request, kb not ready     0b0110 0010 0000 0000
+0720 0002 &                        ( kbnr dsw_masked )
+0721 0008 DUP                      ( kbnr dsw_masked dsw_masked )
+0722      (LIT)                    ( kbnr dsw_masked dsw_masked kb_not_ready_bit )
+0723 0200 kb not ready
+0724 0002 &                        ( kbnr dsw_masked kb_notready? )
+0725      (BRZ)                    ( kbnr dsw_masked )
+0726      CONSOLE_KEYBOARD_?KEY_COMMON_L0
+0727      2DROP
+0728      (JMP)
+0729      FALSE  : CONSOLE_KEYBOARD_?KEY_COMMON_L0
+072A 0008 DUP                      ( kbnr dsw_masked dsw_masked )
+072B      (LIT)                    ( kbnr dsw_masked dsw_masked 0x2000 )
+072C 2000 kb request
+072D 0002 &                        ( kbnr dsw_masked kb_request? )
+072E      (BRZ)                    ( kbnr dsw_masked )
+072F      CONSOLE_KEYBOARD_?KEY_COMMON_L1
+0730 0009 DROP
+0731      LIT_1
+0732      (JMP)
+0733      CONSOLE_KEYBOARD_?KEY_COMMON_L2
+0734      (LIT)  : CONSOLE_KEYBOARD_?KEY_COMMON_L1
+0735 4000
+0736 0002 &                        ( kbnr kb_response? )
+0737      (BRZ)                    ( kbnr )
+0738      CONSOLE_KEYBOARD_?KEY_COMMON_L3
+0739 0008 DUP                      ( kbnr kbnr )
+073A      CONSOLE_PRINTERNR2IOSEL
+073B      LIT_0
+073C 000C >R                       ( kbnr 0 ) R:( iosel )
+073D      SP@-1                    ( kbnr 0 addr ) R:( iosel )
+073E 000D R>                       ( kbnr 0 addr iosel ) R:( iosel )
+073F      (LIT)                    ( kbnr 0 addr iosel read_IOCC_partial )
+0740 0200 read_IOCC_partial
+0741      OR                       ( kbnr 0 addr read_IOCC )
+0742      (XIO)                    ( kbnr cardcode junk )
+0743 0009 DROP                     ( kbnr cardcode )
+0744 000A SWAP   : CONSOLE_KEYBOARD_?KEY_COMMON_L2  ( cardcode kbnr )
+0745      CONSOLE_PRINTERNR2IOSEL  ( cardcode iosel )
+0746      LIT_0
+0747 000A SWAP
+0748      (LIT)
+0749 0400 ctrl_IOCC_partial
+074A      OR
+074B      (XIO)
+074C 0009 DROP
+074D      (JMP)
+074E      TRUE
+074F 0009 DROP   : CONSOLE_KEYBOARD_?KEY_COMMON_L3
+0750      (JMP)
+0751      FALSE
 
 0596      R>     : (LUT_t2)  ( key -- value T | F )
 0597      DUP                ( key ra ra )
@@ -1661,9 +1720,7 @@ ADDR DATA IBM1800
 0651 00   LC Lower Case  should be tied to when Caps Lock is turned off or when Shift is released.
 
 
-     0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON ( keyboardnr -- ascii T | F )
-          CONSOLE_PRINTERNR2IOSEL
- 
+     
 
 
 ####
