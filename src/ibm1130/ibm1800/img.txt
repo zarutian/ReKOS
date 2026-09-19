@@ -1567,9 +1567,12 @@ ADDR DATA IBM1800
 0765 0007 !
 0766      (JMP)
 0767      CONSOLE_KEYBOARD_?KEY_COMMON_L4
-
-0650 8090
-0651 00   LC Lower Case  should be tied to when Caps Lock is turned off or when Shift is released.
+0768 0008 DUP  : CONSOLE_KEYBOARD_?KEY_COMMON2_L0 ( kbnr cardcode cardcode )
+0769      (LIT)
+076A 8090 LC Lower Case  should be tied to when Caps Lock is turned off or when Shift is released.
+076B      =
+076C      (BRZ)
+076D
 
 
 
