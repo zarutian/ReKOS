@@ -1558,7 +1558,7 @@ ADDR DATA IBM1800
 075C      USER_PTR@
 075D      LIT_5
 075E 0001 +
-075F      DUP
+075F 0008 DUP
 0760 0006 @
 0761      (LIT)
 0762 0010
@@ -1572,8 +1572,20 @@ ADDR DATA IBM1800
 076A 8090 LC Lower Case  should be tied to when Caps Lock is turned off or when Shift is released.
 076B      =
 076C      (BRZ)
-076D
-
+076D      CONSOLE_KEYBOARD_?KEY_COMMON2_L1
+076E      USER_PTR@
+076F      LIT_5
+0770 0001 +
+0771 0008 DUP
+0772 0006 @
+0773      (LIT)
+0774 0010
+0775      INVERT
+0776 0002 &
+0777 000A SWAP
+0778 0007 !
+0779      (JMP)
+077A      CONSOLE_KEYBOARD_?KEY_COMMON_L4
 
 
 0596      R>     : (LUT_t2)  ( key -- value T | F )
