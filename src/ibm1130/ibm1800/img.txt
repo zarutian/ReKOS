@@ -1586,82 +1586,80 @@ ADDR DATA IBM1800
 0778 0007 !
 0779      (JMP)
 077A      CONSOLE_KEYBOARD_?KEY_COMMON_L4
-077B      NIP
+077B      NIP    : CONSOLE_KEYBOARD_?KEY_COMMON2_L1
 077C      (JMP)
 077D      CONSOLE_KEYBOARD_2_ASCII
+077E      R>     : (LUT_t2)  ( key -- value T | F )
+077F      DUP                ( key ra ra )
+0780      @                  ( key ra nrOfEntries )
+0781      >R                 ( key ra ) R:( nrOfEntries )
+0782      1+                 ( key ra+1 ) R:( nrOfEntries )
+0783      (JMP)
+0784      (LUT_t2)_L1
+0785      2DUP   : (LUT_t2)_L0
+0786      @                  ( key ra+n key candidate )
+0787      =                  ( key ra+n bool )
+0788      (BRZ)              ( key ra+n )
+0789      (LUT_t2)_L2
+078A      NIP                ( ra+n )
+078B      1+                 ( ra+n+1 )
+078C      @                  ( value ) R:( nrOfEntriesLeft )
+078D      RDROP              ( value ) R:( )
+078E      (JMP)
+078F      TRUE
+0790      2+     : (LUT_t2)_L2
+0791      (NEXT) : (LUT_t2)_L1
+0792      (LUT_t2)_L0
+0793      2DROP
+0794      (JMP)
+0795      FALSE
+0796      DROP   : 2DROP
+0797      DROP
+0798      EXIT
+0799      1+     : 2+
+079A      1+
+079B      EXIT
+079C      (LUT_t2) : CONSOLE_KEYBOARD_2_ASCII ( key -- ascii T | F )
+079D      <tbd>
+079E 4220
+079F 002A *
+07A0 3000
+07A1 002F /
+07A2 2000
+07A3 0030 0
+07A4 1000
+07A5 0031 1
+07A6 0800
+07A7 0032 2
+07A8 0400
+07A9 0033 3
+07AA 0200
+07AB 0034 4
+07AC 0100
+07AD 0035 5
+07AE 0080
+07AF 0036 6
+07B0 0040
+07B1 0037 7
+07B2 0020
+07B3 0038 8
+07B4 0010
+07B5 0039 9
+07B6 4420
+07B7 0024 $
+07B8 8420
+07B9 002E .
+07BA 2420
+07BB 002C ,
+07BC 0008
+07BD 000A NL     EOF  End Of Field  basically Enter/Return
+07BE 0004
+07BF 0008 BS     ER CHR  ERease CHaR   Backspace
+07C0 00A0
+07C1 003D =
+07C2 0120
+07C3 0027 '
 
-
-0596      R>     : (LUT_t2)  ( key -- value T | F )
-0597      DUP                ( key ra ra )
-0598      @                  ( key ra nrOfEntries )
-0599      >R                 ( key ra ) R:( nrOfEntries )
-059A      1+                 ( key ra+1 ) R:( nrOfEntries )
-059B      (JMP)
-059C      (LUT_t2)_L1
-059D      2DUP   : (LUT_t2)_L0
-059E      @                  ( key ra+n key candidate )
-059F      =                  ( key ra+n bool )
-05A0      (BRZ)              ( key ra+n )
-05A1      (LUT_t2)_L2
-05A2      NIP                ( ra+n )
-05A3      1+                 ( ra+n+1 )
-05A4      @                  ( value ) R:( nrOfEntriesLeft )
-05A5      RDROP              ( value ) R:( )
-05A6      (JMP)
-05A7      TRUE
-05A8      2+     : (LUT_t2)_L2
-05A9      (NEXT) : (LUT_t2)_L1
-05AA      (LUT_t2)_L0
-05AB      2DROP
-05AC      (JMP)
-05AD      FALSE
-05AE      DROP   : 2DROP
-05AF      DROP
-05B0      EXIT
-05B1      1+     : 2+
-05B2      1+
-05B3      EXIT
-05B4      (LUT_t2) : CONSOLE_KEYBOARD_2_ASCII ( key -- ascii T | F )
-05B5      <tbd>
-05B6 4220
-05B7 00   *
-05B8 3000
-05B9 00   /
-05BA 2000
-05BB 0030 0
-05BC 1000
-05BD 0031 1
-05BE 0800
-05BF 0032 2
-05C0 0400
-05C1 0033 3
-05C2 0200
-05C3 0034 4
-05C4 0100
-05C5 0035 5
-05C6 0080
-05C7 0036 6
-05C8 0040
-05C9 0037 7
-05CA 0020
-05CB 0038 8
-05CC 0010
-05CD 0039 9
-05CE 4420
-05CF 00   $
-05D0 8420
-05D1 002E .
-05D2 2420
-05D3 00   ,
-05D4 0008
-05D5      EOF  End Of Field  basically Enter/Return
-05D6 0004
-05D7      ER CHR  ERease CHaR   Backspace
-
-05DA 00A0
-05DB 00   =
-05DC 0120
-05DD 00   '
 05DE 8120
 05DF 00   (
 05E0 4120
