@@ -1177,7 +1177,7 @@ ADDR DATA IBM1800
 05E4 000C >R          : CELLS_MOVE ( src dest length -- )
 05E5      (JMP)
 05E6      CELLS_MOVE_L1
-=merkill=
+05E7      NOP
 05E8      OVER        : CELLS_MOVE_L0
 05E9      @
 05EA      OVER
@@ -1586,6 +1586,7 @@ ADDR DATA IBM1800
 0778 0007 !
 0779      (JMP)
 077A      CONSOLE_KEYBOARD_?KEY_COMMON_L4
+077B
 
 
 0596      R>     : (LUT_t2)  ( key -- value T | F )
@@ -1654,8 +1655,7 @@ ADDR DATA IBM1800
 05D5      EOF  End Of Field  basically Enter/Return
 05D6 0004
 05D7      ER CHR  ERease CHaR   Backspace
-05D8 0002 
-05D9      ER FLD  ERease FieLD
+
 05DA 00A0
 05DB 00   =
 05DC 0120
@@ -1722,8 +1722,7 @@ ADDR DATA IBM1800
 0619 00   Z
 061A 0000
 061B 0020 space
-061C 8820
-061D      cent symbol
+
 061E 8220
 061F 00   <
 0620 8060
@@ -1734,8 +1733,7 @@ ADDR DATA IBM1800
 0625 00   !
 0626 40A0
 0627 00   ;
-0628 4060
-0629 00   the not symbol
+
 062A 2220
 062B 00   %
 062C 2120
@@ -1752,6 +1750,14 @@ ADDR DATA IBM1800
 0637 00   @
 0638 0060
 0639 00   "
+
+
+061C 8820
+061D      cent symbol
+0628 4060
+0629 00   the not symbol
+05D8 0002 
+05D9      ER FLD  ERease FieLD
 063A 2820
 064B 00   0-8-2
 064C 4110
