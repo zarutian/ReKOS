@@ -1081,7 +1081,7 @@ ADDR DATA IBM1800
 0586      \ Datastack Pointer         saved
 0587      \ Returnstack Pointer       saved
 0588      \ prev task
-0589      \ various task flags: 0x0001 is on iff preemptive task switching is on (switch every 10ms), 0x0010 is on for uppercase console keyboard, off for lowercase.
+0589      \ various task flags: 0x0001 is on iff preemptive task switching is on (switch every 10ms), 0x0020 is on for uppercase console keyboard, off for lowercase.
 058A	    SPP   \ SP0
 058B      RPP   \ RP0
 058C      QRX		\ '?KEY
@@ -1561,7 +1561,7 @@ ADDR DATA IBM1800
 075F 0008 DUP
 0760 0006 @
 0761      (LIT)
-0762 0010
+0762 0020
 0763      OR
 0764 000A SWAP
 0765 0007 !
@@ -1579,7 +1579,7 @@ ADDR DATA IBM1800
 0771 0008 DUP
 0772 0006 @
 0773      (LIT)
-0774 0010
+0774 0020
 0775      INVERT
 0776 0002 &
 0777 000A SWAP
@@ -1589,6 +1589,7 @@ ADDR DATA IBM1800
 077B      NIP    : CONSOLE_KEYBOARD_?KEY_COMMON2_L1
 077C      (JMP)
 077D      CONSOLE_KEYBOARD_2_ASCII
+
 077E      R>     : (LUT_t2)  ( key -- value T | F )
 077F      DUP                ( key ra ra )
 0780      @                  ( key ra nrOfEntries )
@@ -1659,45 +1660,45 @@ ADDR DATA IBM1800
 07C1 003D =
 07C2 0120
 07C3 0027 '
+07C4 8120
+07C5 0028 (
+07C6 4120
+07C7 0029 )
+07C8 80A0
+07C9 002B +
+07CA 4000
+07CB 002D -
+07CC 9000
+07CD 0041 A
+07CE 8800
+07CF 0042 B
+07D0 8400
+07D1 0043 C
+07D2 8200
+07D3 0044 D
+07D4 8100
+07D5 0045 E
+07D6 8080
+07D7 0046 F
+07D8 8040
+07D9 0047 G
+07DA 8020
+07DB 0048 H
+07DC 8010
+07DD 0049 I
+07DE 5000
+07DF 004A J
+07E0 4800
+07E1 004B K
+07E2 4400
+07E3 004C L
+07E4 4200
+07E5 004D M
+07E6 4100
+07E7 004E N
+07E8 4080
+07E9 004F O
 
-05DE 8120
-05DF 00   (
-05E0 4120
-05E1 00   )
-05E2 80A0
-05E3 00   +
-05E4 4000
-05E5 00   -
-05E6 9000
-05E7 00   A
-05E8 8800
-05E9 00   B
-05EA 8400
-05EB 00   C
-05EC 8200
-05ED 00   D
-05EE 8100
-05EF 00   E
-05F0 8080
-05F1 00   F
-05F2 8040
-05F3 00   G
-05F4 8020
-05F5 00   H
-05F6 8010
-05F7 00   I
-05F8 5000
-05F9 00   J
-05FA 4800
-05FB 00   K
-05FC 4400
-05FD 00   L
-05FE 4200
-05FF 00   M
-0600 4100
-0601 00   N
-0602 4080
-0603 00   O
 0604 4040
 0605 00   P
 0606 4020
