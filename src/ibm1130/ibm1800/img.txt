@@ -1796,6 +1796,37 @@ ADDR DATA IBM1800
 0846 6F01 sense IOCC w/reset indicators
 0847      (XIO)
 0848 000F EXIT
+0849      (LIT)      : SYS360_commloop ( -- )
+084A      SYS360_adapter_interruptnr
+084B      WAIT-ON
+084C      SYS360_sense_device
+084D 0008 DUP        ( dsw dsw )
+084E      0xFF&      ( dsw cmd_byte )
+084F 0008 DUP
+0850      7&
+0851      LIT_7
+0852      =          ( dsw cmd_byte bool )
+0853      (BRZ)      \ its a Control
+0854      SYS360_commloop_L0
+0855      3>>
+0856 0008 DUP
+0857      LIT_2      \ peek
+0858      =
+0859      INVERT
+085A      (BRZ)
+085B      SYS360_commloop_peek
+085C 0008 DUP
+085D      LIT_4      \ poke
+085E      =
+085F      INVERT
+0860      (BRZ)
+0861      SYS360_commloop_poke
+0862 0008 DUP
+0863      LIT_6      \ exec
+0864      =
+0865      INVERT
+0866      (BRZ)
+0867      SYS360_commloop_exec
      
 
 
