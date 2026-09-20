@@ -1588,7 +1588,7 @@ ADDR DATA IBM1800
 077A      CONSOLE_KEYBOARD_?KEY_COMMON_L4
 077B      NIP    : CONSOLE_KEYBOARD_?KEY_COMMON2_L1
 077C      (JMP)
-077D      CONSOLE_KEYBOARD_2_ASCII
+077D      CONSOLE_KEYBOARD_?KEY_COMMON2_L2
 
 077E      R>     : (LUT_t2)  ( key -- value T | F )
 077F      DUP                ( key ra ra )
@@ -1621,7 +1621,7 @@ ADDR DATA IBM1800
 079A      1+
 079B      EXIT
 079C      (LUT_t2) : CONSOLE_KEYBOARD_2_ASCII ( key -- ascii T | F )
-079D      <tbd>
+079D 0040 64 entries
 079E 4220
 079F 002A *
 07A0 3000
@@ -1748,19 +1748,33 @@ ADDR DATA IBM1800
 0819 0040 @
 081A 0060
 081B 0022 "
+081C 4110
+081D 000A NL New Line  should be tied to the Return key
 
+081E 8820
+081F      cent symbol
+0820 4060
+0821 00   the not symbol
+0822 0002 
+0823      ER FLD  ERease FieLD
+0824 2820
+0825 00   0-8-2
 
-061C 8820
-061D      cent symbol
-0628 4060
-0629 00   the not symbol
-05D8 0002 
-05D9      ER FLD  ERease FieLD
-063A 2820
-064B 00   0-8-2
-064C 4110
-064D 00   NL New Line  should be tied to the Return key
-
+0826      OVER     : WITHIN ( test low high -- flag )
+0827      -
+0828 000C >R
+0829      -
+082A 000D R>
+082B      U<
+082C      EXIT
+082D 0008 DUP      : CONSOLE_KEYBOARD_?KEY_COMMON2_L2
+082E      (LIT)
+082F 0041 A
+0830      (LIT)
+0831 005B Z+1
+0832      WITHIN
+0833      (BRZ)
+0835      CONSOLE_KEYBOARD_?KEY_COMMON2_L3
 
      
 
