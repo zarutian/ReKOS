@@ -1791,6 +1791,11 @@ ADDR DATA IBM1800
 0842      (JMP)
 0843      TRUE
 
+0844      LIT_0      : SYS360_sense_device ( -- dsw )
+0845      (LIT)
+0846 6F01 sense IOCC w/reset indicators
+0847      (XIO)
+0848 000F EXIT
      
 
 
