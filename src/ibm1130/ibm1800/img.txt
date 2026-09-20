@@ -1827,7 +1827,38 @@ ADDR DATA IBM1800
 0865      INVERT
 0866      (BRZ)
 0867      SYS360_commloop_exec
-     
+0868 0008 DUP
+0869      LIT_8
+086A      =
+086B      (BRZ)
+086C      SYS360_commloop_enquery \ and data pending?
+086D      2DROP
+086E      (JMP)
+086F      SYS360_commloop
+               \ the below needs rework! not robust enough!
+0870      (CONST)     : SYS360_tmparea
+0871      《tbd》
+0872      OVER        : SYS360_init_read&wait_on_it ( tbl_addr length&chaning_ctrl -- )
+0873 0007 !
+0874      (LIT)
+0875      init_read_IOCC
+0876      (XIO)
+0877 0009 DROP
+0878      (LIT)
+0879      interrupt_nr for the SYS360 adapter
+087A      WAIT-ON
+087B 000F EXIT
+087C      OVER        : SYS360_init_write&wait_on_it ( tbl_addr length&chaning_ctrl -- )
+087D 0007 !
+087E      (LIT)
+087F      init_write_IOCC
+0880      (XIO)
+0881 0009 DROP
+0882      (LIT)
+0883      interrupt_nr for the SYS360 adapter
+0884      WAIT-ON
+0885 000F EXIT
+
 
 
 ####
