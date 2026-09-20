@@ -1858,7 +1858,10 @@ ADDR DATA IBM1800
 0883      interrupt_nr for the SYS360 adapter
 0884      WAIT-ON
 0885 000F EXIT
-
+0886      2DROP       : SYS360_commloop_peek ( dsw cmd_byte )
+0887      SYS360_tmparea ( addr )
+0888      LIT_2          ( addr 2 )
+0889      SYS360_init_read&wait_on_it
 
 
 ####
