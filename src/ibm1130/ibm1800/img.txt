@@ -1862,6 +1862,19 @@ ADDR DATA IBM1800
 0887      SYS360_tmparea ( addr )
 0888      LIT_2          ( addr 2 )
 0889      SYS360_init_read&wait_on_it
+088A      SYS360_tmparea ( addr )
+088B      1+             ( addr+1 )
+088C 0006 @              ( length )
+088D      0xFF&          ( length&0xFF )
+088E 0008 DUP            ( length&0xFF length&0xFF )
+088F      SYS360_tmparea ( length&0xFF length&0xFF addr )
+0890      LIT_2          ( length&0xFF length&0xFF addr 2 )
+0891 0001 +              ( length&0xFF length&0xFF addr+2 )
+0892 0007 !              ( length&0xFF )
+0893 000C >R             ( ) R:( count )
+0894      SYS360_tmparea ( addr )
+0895
+
 
 
 ####
