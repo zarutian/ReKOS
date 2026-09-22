@@ -1873,7 +1873,20 @@ ADDR DATA IBM1800
 0892 0007 !              ( length&0xFF )
 0893 000C >R             ( ) R:( count )
 0894      SYS360_tmparea ( addr )
-0895
+0895 0006 @              ( peek_addr )
+0896      SYS360_tmparea ( peek_addr addr )
+0897      LIT_3          ( peek_addr addr 3 )
+0898 0001 +              ( peek_addr addr+3 ) R:( count )
+0899 000D R>             ( peek_addr addr+3 count ) R:( )
+089A      CELLMOVE       ( )
+089B      SYS360_tmparea ( addr )
+089C      LIT_2          ( addr 2 )
+089D 0001 +              ( addr+2 )
+089E 0008 DUP            ( addr+2 addr+2 )
+089F 0006 @              ( addr+2 length )
+08A0      SYS360_init_write&wait_on_it
+08A1      (JMP)
+08A2      SYS360_commloop
 
 
 
