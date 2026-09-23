@@ -1910,7 +1910,15 @@ ADDR DATA IBM1800
 08B7      CELLMOVE       ( )
 08B8      (JMP)
 08B9      SYS360_commloop
-
+08BA      2DROP  : SYS360_commloop_exec ( dsw cmd_byte )
+08BB      SYS360_tmparea ( addr )
+08BC      LIT_1          ( addr 1 )
+08BD      SYS360_init_read&wait_on_it
+08BE      SYS360_tmparea ( addr )
+08BF 0006 @              ( exec_addr )
+08C0      EXEC           ( )
+08C1      (JMP)
+08C2      SYS360_commloop
 
 
 ####
