@@ -1865,12 +1865,12 @@ ADDR DATA IBM1800
 088A      SYS360_tmparea ( addr )
 088B      1+             ( addr+1 )
 088C 0006 @              ( length )
-088D      0xFF&          ( length&0xFF )
-088E 0008 DUP            ( length&0xFF length&0xFF )
-088F      SYS360_tmparea ( length&0xFF length&0xFF addr )
-0890      LIT_2          ( length&0xFF length&0xFF addr 2 )
-0891 0001 +              ( length&0xFF length&0xFF addr+2 )
-0892 0007 !              ( length&0xFF )
+088D      0xFFF&         ( length&0xFFF )
+088E 0008 DUP            ( length&0xFFF length&0xFFF )
+088F      SYS360_tmparea ( length&0xFFF length&0xFFF addr )
+0890      LIT_2          ( length&0xFFF length&0xFFF addr 2 )
+0891 0001 +              ( length&0xFFF length&0xFFF addr+2 )
+0892 0007 !              ( length&0xFFF )
 0893 000C >R             ( ) R:( count )
 0894      SYS360_tmparea ( addr )
 0895 0006 @              ( peek_addr )
@@ -1887,6 +1887,29 @@ ADDR DATA IBM1800
 08A0      SYS360_init_write&wait_on_it
 08A1      (JMP)
 08A2      SYS360_commloop
+08A3      2DROP  : SYS360_commloop_poke ( dsw cmd_byte )
+08A4      SYS360_tmparea ( addr )
+08A5      LIT_2          ( addr 2 )
+08A6      SYS360_init_read&wait_on_it
+08A7      SYS360_tmparea ( addr )
+08A8 0005 1+             ( addr+1 )
+08A9 0006 @              ( length )
+08AA      0xFFF&         ( length&0xFFF )
+08AB 0008 DUP            ( length&0xFFF length&0xFFF )
+08AC      SYS360_tmparea ( length&0xFFF addr )
+08AD      2+
+08AE 000A SWAP           ( length&0xFFF addr+2 length&0xFFF )
+08AF      SYS360_init_read&wait_on_it ( length&0xFFF )
+08B0      SYS360_tmparea ( length&0xFFF addr )
+08B1      LIT_3          ( length&0xFFF addr 3 )
+08B2 0001 +              ( length&0xFFF addr+3 )
+08B3 000A SWAP           ( addr+3 length&0xFFF )
+08B4      SYS360_tmparea ( addr+3 length&0xFFF addr )
+08B5 0006 @              ( addr+3 length&0xFFF poke_addr )
+08B6 000A SWAP           ( addr+3 poke_addr length&0xFFF )
+08B7      CELLMOVE       ( )
+08B8      (JMP)
+08B9      SYS360_commloop
 
 
 
