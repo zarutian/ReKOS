@@ -228,7 +228,7 @@ ADDR DATA IBM1800
 00E2
 00E3
 00E4      1627 Plotter (step 0.01mm)   INT_TBL level 3
-00E5
+00E5      System/360 adapter
 00E6
 00E7
 00E8
@@ -254,7 +254,7 @@ ADDR DATA IBM1800
 00FC      1816 Console Printer&Keyboard 7 (or 1053 Printer)
 00FD      1816 Console Printer&Keyboard 8 (or 1053 Printer)
 00FE      1442 Card Read Punch 2
-00FF
+00FF      
 0100
 0101
 0102
@@ -307,8 +307,22 @@ ADDR DATA IBM1800
 0131
 0132
 0133
-0135     INT_TBL level 8
-
+0134     INT_TBL level 8
+0135
+0136
+0137
+0138
+0139
+013A
+013B
+013C
+013D
+013E
+013F
+0140
+0141
+0142
+0143
 
 0284 4C40 BOSC_l
 0285 xxxx : INT_IGNORE
@@ -1919,13 +1933,20 @@ ADDR DATA IBM1800
 08C0      EXEC           ( )
 08C1      (JMP)
 08C2      SYS360_commloop
-
+08C3      : SYS360_commloop_enquery
 
 ####
 Devices
 
    Area Fun Mod
 0b00000          Console and internal
+          0b001  Interval timers
+          0b010  Processor-Controler Console  Data Entry Switches
+          0b011                               Sense, Program Select, and Customer Engineer Switches
+          0b100  Interrupt level masking
+          0b101  Programmed Interrupts
+          0b110  Console Interrupt
+          0b111  Operations Monitor (in MCU this is a watchdog timer)
 0b00001          1816 Console Printer&Keyboards and/or 1053 Printers (first four)
 0b00010          1442 Card Read Punch 1
 0b00011          1054 & 1055 PaperTape Reader & Punch
