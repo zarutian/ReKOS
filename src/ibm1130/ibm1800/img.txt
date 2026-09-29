@@ -324,6 +324,7 @@ ADDR DATA IBM1800
 0142
 0143
 0144      INT_TBL level 9
+0145
 
 0284 4C40 BOSC_l
 0285 xxxx : INT_IGNORE
@@ -773,7 +774,7 @@ ADDR DATA IBM1800
 0442 0607 (LIT)
 0443 03F5 WAITED-ON-FIRED_L1
 0444 0006 @
-0445      =
+0445 0495 =
 0446 044E (BRZ)
 0447 0432 WAIT-ON_L0
 0448 0009 DROP
@@ -811,7 +812,7 @@ ADDR DATA IBM1800
 0468      2DUP
 0469 0006 @
 046A      >
-046B 0440 (BRZ)
+046B 044E (BRZ)
 046C      (LUT)_L0
 046D 0005 1+
 046E 0001 +
@@ -828,7 +829,7 @@ ADDR DATA IBM1800
 0479      2DUP
 047A 0006 @
 047B      >
-047C      (BRZ)
+047C 044E (BRZ)
 047D      (JMPTBL)_L0
 047E 0005 1+
 047F 0001 +
@@ -842,20 +843,20 @@ ADDR DATA IBM1800
 0487 FFFF              : const_0xFFFF
 0488 04B4 (CONST)      : FALSE ( -- F )  : ZERO ( -- 0 )
 0489 0000              : const_0
-048A      (BRZ)        : CLEANBOOL ( dirty -- clean (
+048A 044E (BRZ)        : CLEANBOOL ( dirty -- clean (
 048B      FALSE
 048C 03C0 (JMP)
 048D      TRUE
-048E      TRUE         : NOT ( bool -- ~bool )  aka INVERT
+048E      TRUE         : NOT ( bool -- ~bool )  aka : INVERT
 048F 0003 ⨁
 0490 000F EXIT
 0491 0003 ⨁           : ~= ( a b -- bool )
 0492 03C0 (JMP)
 0493      CLEANBOOL
 0494 000F EXIT
-0495      ~=          : = ( a b -- bool )
+0495 0491 ~=          : = ( a b -- bool )
 0496 03C0 (JMP)
-0497      NOT
+0497 048E    NOT
 0498 04B4 (CONST)     : LIT_0x8000 ( -- 0x8000 )
 0499 8000             : const_0x8000
 049A      LIT_0x8000  : 0< ( n -- bool )
@@ -1441,7 +1442,7 @@ ADDR DATA IBM1800
 06D9 0C00 Printer Busy & Printer Not Ready
 06DA 0002 &                        ( ascii printernr DeviceStatusResult )
 06DB      CLEANBOOL                ( ascii printernr busy_or_not_ready?_bool )
-06DC      (BRZ)                    ( ascii printernr )
+06DC 044E (BRZ)                    ( ascii printernr )
 06DD      CONSOLE_PRINTER_EMIT_COMMON_L0
 06DE 0008 DUP                      ( ascii printernr printernr )
 06DF      CONSOLE_PRINTERNR2INTVECTNR  ( ascii printernr intvectnr )
@@ -1473,7 +1474,7 @@ ADDR DATA IBM1800
 06F9 0003 ⨁                       ( result masked_flipped_result )
 06FA      CLEANBOOL                ( result got_response_&_printer_not_busy_&_printer_readdy?_bool )
 06FB      INVERT                   ( result ~bool )
-06FC      (BRZ)                    ( result )
+06FC 044E (BRZ)                    ( result )
 06FD      CONSOLE_PRINTER_EMIT_COMMON_L1
 06FE      R>             : CONSOLE_PRINTER_EMIT_COMMON_L2  ( result printernr ) R:( )
 06FF      2DROP                    ( )
@@ -1494,7 +1495,7 @@ ADDR DATA IBM1800
 070E      INVERT
 070F      OR
 0710      INVERT
-0711      (BRZ)
+0711 044E (BRZ)
 0712      CONSOLE_PRINTER_EMIT_COMMON_L2
 0713      LIT_0
 0714      (JMP)
@@ -1515,7 +1516,7 @@ ADDR DATA IBM1800
 0722 0607 (LIT)                    ( kbnr dsw_masked dsw_masked kb_not_ready_bit )
 0723 0200 kb not ready
 0724 0002 &                        ( kbnr dsw_masked kb_notready? )
-0725      (BRZ)                    ( kbnr dsw_masked )
+0725 044E (BRZ)                    ( kbnr dsw_masked )
 0726      CONSOLE_KEYBOARD_?KEY_COMMON_L0
 0727      2DROP  : CONSOLE_KEYBOARD_?KEY_COMMON_L4
 0728      (JMP)
@@ -1524,7 +1525,7 @@ ADDR DATA IBM1800
 072B 0607 (LIT)                    ( kbnr dsw_masked dsw_masked 0x2000 )
 072C 2000 kb request
 072D 0002 &                        ( kbnr dsw_masked kb_request? )
-072E      (BRZ)                    ( kbnr dsw_masked )
+072E 044E (BRZ)                    ( kbnr dsw_masked )
 072F      CONSOLE_KEYBOARD_?KEY_COMMON_L1
 0730 0009 DROP
 0731      LIT_1
@@ -1533,7 +1534,7 @@ ADDR DATA IBM1800
 0734      (LIT)  : CONSOLE_KEYBOARD_?KEY_COMMON_L1
 0735 4000
 0736 0002 &                        ( kbnr kb_response? )
-0737      (BRZ)                    ( kbnr )
+0737 044E (BRZ)                    ( kbnr )
 0738      CONSOLE_KEYBOARD_?KEY_COMMON_L3
 0739 0008 DUP                      ( kbnr kbnr )
 073A      CONSOLE_PRINTERNR2IOSEL
@@ -1562,13 +1563,13 @@ ADDR DATA IBM1800
 0751      FALSE
 0752 0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON2 ( keyboardnr -- ascii T | F )
 0753      CONSOLE_KEYBOARD_?KEY_COMMON           ( kbnr cardcode T | kbnr F )
-0754      (BRZ)
+0754 044E (BRZ)
 0755      CONSOLE_KEYBOARD_?KEY_COMMON_L3
 0756 0008 DUP                                    ( kbnr cardcode cardcode )
 0757 0607 (LIT)                                  ( kbnr cardcode cardcode UC )
 0758 0090 UC Upper Case  should be tied to when Caps Lock is turned on or when Shift is pressed.
 0759      =                                      ( kbnr cardcode bool )
-075A      (BRZ)                                  ( kbnr cardcode )
+075A 044E (BRZ)                                  ( kbnr cardcode )
 075B      CONSOLE_KEYBOARD_?KEY_COMMON2_L0
 075C      USER_PTR@
 075D      LIT_5
@@ -1586,7 +1587,7 @@ ADDR DATA IBM1800
 0769 0607 (LIT)
 076A 8090 LC Lower Case  should be tied to when Caps Lock is turned off or when Shift is released.
 076B      =
-076C      (BRZ)
+076C 044E (BRZ)
 076D      CONSOLE_KEYBOARD_?KEY_COMMON2_L1
 076E      USER_PTR@
 076F      LIT_5
@@ -1615,7 +1616,7 @@ ADDR DATA IBM1800
 0785      2DUP   : (LUT_t2)_L0
 0786      @                  ( key ra+n key candidate )
 0787      =                  ( key ra+n bool )
-0788      (BRZ)              ( key ra+n )
+0788 044E (BRZ)              ( key ra+n )
 0789      (LUT_t2)_L2
 078A      NIP                ( ra+n )
 078B      1+                 ( ra+n+1 )
@@ -1783,7 +1784,7 @@ ADDR DATA IBM1800
 082B      U<
 082C      EXIT
 082D      CONSOLE_KEYBOARD_2_ASCII  : CONSOLE_KEYBOARD_?KEY_COMMON2_L2
-082E      (BRZ)
+082E 044E (BRZ)
 082F      FALSE
 0830 0008 DUP
 0831 0607 (LIT)
@@ -1791,7 +1792,7 @@ ADDR DATA IBM1800
 0833 0607 (LIT)
 0834 005B Z+1
 0835      WITHIN
-0836      (BRZ)
+0836 044E (BRZ)
 0837      TRUE
 0838      USER_PTR@
 0839      LIT_5
@@ -1821,31 +1822,31 @@ ADDR DATA IBM1800
 0850      7&
 0851      LIT_7
 0852      =          ( dsw cmd_byte bool )
-0853      (BRZ)      \ its a Control
+0853 044E (BRZ)      \ its a Control
 0854      SYS360_commloop_L0
 0855      3>>
 0856 0008 DUP
 0857      LIT_2      \ peek
 0858      =
 0859      INVERT
-085A      (BRZ)
+085A 044E (BRZ)
 085B      SYS360_commloop_peek
 085C 0008 DUP
 085D      LIT_4      \ poke
 085E      =
 085F      INVERT
-0860      (BRZ)
+0860 044E (BRZ)
 0861      SYS360_commloop_poke
 0862 0008 DUP
 0863      LIT_6      \ exec
 0864      =
 0865      INVERT
-0866      (BRZ)
+0866 044E (BRZ)
 0867      SYS360_commloop_exec
 0868 0008 DUP
 0869      LIT_8
 086A      =
-086B      (BRZ)
+086B 044E (BRZ)
 086C      SYS360_commloop_enquery \ and data pending?
 086D      2DROP
 086E      (JMP)
