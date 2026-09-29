@@ -362,9 +362,9 @@ ADDR DATA IBM1800
 02A8 0001 XR1
 02A9 6400 LDX_l I
 02AA xxxx                    : F_INNER_PRIM_L0
-02AB      (CONST)            : LIT_1
+02AB 04B4 (CONST)            : LIT_1
 02AC 0001
-02AD      (CONST)            : OPMASK
+02AD 04B4 (CONST)            : OPMASK
 02AE FFF0 opmask
 02AF      (VAR)
 02B0 028E NOP                :F_PRIM_TBL
@@ -487,7 +487,7 @@ ADDR DATA IBM1800
 0328 0001 XR1 also const_1
 0329 4C00 BSC_l any cond
 032A 031D F_PRIM_COMMON4
-032B      (CONST)      : IBM1800_marker
+032B 04B4 (CONST)      : IBM1800_marker
 032C 1800
 032D      (VAR)        :EXT_handler_vector
 032E      EXT_handler
@@ -688,7 +688,7 @@ ADDR DATA IBM1800
 03EF xxxx the patched in Load Status instruction
 03F0 4C00 BSC_l any cond  :patch1_L0
 03F1 xxxx
-03F2      (CONST)
+03F2 04B4 (CONST)    : LIT_2
 03F3 0002 2
 03F4 03F6 WAITED-ON-FIRED_L0  :patch1_L1
 03F5 xxxx            :WAITED-ON-FIRED_L1
@@ -837,9 +837,9 @@ ADDR DATA IBM1800
 0483      NIP          : (JMPTBL)_L0
 0484 03C0 (JMP)
 0485      (LUT)_L0
-0486      (CONST)      : TRUE ( -- T )
+0486 04B4 (CONST)      : TRUE ( -- T )
 0487 FFFF              : const_0xFFFF
-0488      (CONST)      : FALSE ( -- F )  : ZERO ( -- 0 )
+0488 04B4 (CONST)      : FALSE ( -- F )  : ZERO ( -- 0 )
 0489 0000              : const_0
 048A      (BRZ)        : CLEANBOOL ( dirty -- clean (
 048B      FALSE
@@ -855,7 +855,7 @@ ADDR DATA IBM1800
 0495      ~=          : = ( a b -- bool )
 0496 03C0 (JMP)
 0497      NOT
-0498      (CONST)     : LIT_0x8000 ( -- 0x8000 )
+0498 04B4 (CONST)     : LIT_0x8000 ( -- 0x8000 )
 0499 8000             : const_0x8000
 049A      LIT_0x8000  : 0< ( n -- bool )
 049B 0002 &
@@ -870,9 +870,9 @@ ADDR DATA IBM1800
 04A4      LIT_8       : BYTEXCHNG ( cell -- llce )
 04A5 03B1 <<>
 04A6 000F EXIT
-04A7      (CONST)     : LIT_8
+04A7 04B4 (CONST)     : LIT_8
 04A8 0008
-04A9      (CONST)     : LIT_0xFF
+04A9 04B4 (CONST)     : LIT_0xFF
 04AA 00FF
 04AB      LIT_0xFF    : 0xFF&
 04AC 0002 &
@@ -1204,24 +1204,24 @@ ADDR DATA IBM1800
 05F1      CELLS_MOVE_L0
 05F2      2DROP
 05F3      EXIT
-05F4      (CONST)     : LIT_3
+05F4 04B4 (CONST)     : LIT_3
 05F5 0003             : const_3
 05F6      LIT_3       : 3&
 05F7 0002 &
 05F8 000F EXIT
-05F9      (CONST)     : LIT_4
+05F9 04B4 (CONST)     : LIT_4
 05FA 0004             : const_4
-05FB      (CONST)     : LIT_5
+05FB 04B4 (CONST)     : LIT_5
 05FC 0005             : const_5
-05FD      (CONST)     : LIT_6
+05FD 04B4 (CONST)     : LIT_6
 05FE 0006             : const_6
-05FF      (CONST)     : LIT_7
+05FF 04B4 (CONST)     : LIT_7
 0600 0007             : const_7
-0601      (CONST)     : LIT_19
+0601 04B4 (CONST)     : LIT_19
 0602 0013             : const_19
-0603      (CONST)     : LIT_64
+0603 04B4 (CONST)     : LIT_64
 0604 0040             : const_64
-0605      (CONST)     : LIT_0x0100
+0605 04B4 (CONST)     : LIT_0x0100
 0606 0100
 0607 000D R>          : (LIT) ( -- cell )
 0608 0008 DUP
@@ -1850,7 +1850,7 @@ ADDR DATA IBM1800
 086E      (JMP)
 086F      SYS360_commloop
                \ the below needs rework! not robust enough!
-0870      (CONST)     : SYS360_tmparea
+0870 04B4 (CONST)     : SYS360_tmparea
 0871      《tbd》
 0872      OVER        : SYS360_init_read&wait_on_it ( tbl_addr length&chaning_ctrl -- )
 0873 0007 !
