@@ -799,7 +799,7 @@ ADDR DATA IBM1800
 045B 0008 DUP
 045C 044E (BRZ)
 045D 0463 (NEXT)_L0
-045E 0349     1-
+045E 0349 1-
 045F 000C >R
 0460 0006 @
 0461 000C >R
@@ -828,55 +828,55 @@ ADDR DATA IBM1800
 0478 000D R>
 0479      2DUP
 047A 0006 @
-047B      >
+047B 04A1 >
 047C 044E (BRZ)
-047D      (JMPTBL)_L0
+047D 0483 (JMPTBL)_L0
 047E 0005 1+
 047F 0001 +
 0480 0006 @
 0481 000C >R
 0482 000F EXIT
-0483      NIP          : (JMPTBL)_L0
+0483 04AE NIP          : (JMPTBL)_L0
 0484 03C0 (JMP)
-0485      (LUT)_L0
+0485 0471 (LUT)_L0
 0486 04B4 (CONST)      : TRUE ( -- T )
 0487 FFFF              : const_0xFFFF
 0488 04B4 (CONST)      : FALSE ( -- F )  : ZERO ( -- 0 )
 0489 0000              : const_0
 048A 044E (BRZ)        : CLEANBOOL ( dirty -- clean (
-048B      FALSE
+048B 0488 FALSE
 048C 03C0 (JMP)
-048D      TRUE
-048E      TRUE         : NOT ( bool -- ~bool )  aka : INVERT
+048D 0486 TRUE
+048E 0486 TRUE         : NOT ( bool -- ~bool )  aka : INVERT
 048F 0003 ⨁
 0490 000F EXIT
 0491 0003 ⨁           : ~= ( a b -- bool )
 0492 03C0 (JMP)
-0493      CLEANBOOL
+0493 048A CLEANBOOL
 0494 000F EXIT
 0495 0491 ~=          : = ( a b -- bool )
 0496 03C0 (JMP)
-0497 048E    NOT
+0497 048E NOT
 0498 04B4 (CONST)     : LIT_0x8000 ( -- 0x8000 )
 0499 8000             : const_0x8000
-049A      LIT_0x8000  : 0< ( n -- bool )
+049A 0498 LIT_0x8000  : 0< ( n -- bool )
 049B 0002 &
 049C 03C0 (JMP)
-049D      CLEANBOOL
+049D 048A CLEANBOOL
 049E      -           : <  ( a b -- bool )
-049F      0<
+049F 049A 0<
 04A0 000F EXIT
 04A1 000A SWAP        : >
-04A2      <
+04A2 049E <
 04A3 000F EXIT
-04A4      LIT_8       : BYTEXCHNG ( cell -- llce )
+04A4 04A7 LIT_8       : BYTEXCHNG ( cell -- llce )
 04A5 03B1 <<>
 04A6 000F EXIT
 04A7 04B4 (CONST)     : LIT_8
 04A8 0008
 04A9 04B4 (CONST)     : LIT_0xFF
 04AA 00FF
-04AB      LIT_0xFF    : 0xFF&
+04AB 04A9 LIT_0xFF    : 0xFF&
 04AC 0002 &
 04AD 000F EXIT
 04AE 000A SWAP        : NIP ( a b -- b )
@@ -905,26 +905,26 @@ ADDR DATA IBM1800
 04C5 0007 USER_PTR
 04C6 0007 !
 04C7 000F EXIT
-04C8      USER_PTR@   : saved_FIP
+04C8 04C0 USER_PTR@   : saved_FIP
 04C9      LIT_1
 04CA 0001 +
 04CB 000F EXIT
-04CC      USER_PTR@   : saved_DSP
+04CC 04C0 USER_PTR@   : saved_DSP
 04CD      LIT_2
 04CE 0001 +
 04CF 000F EXIT
-04D0      USER_PTR@   : saved_RSP
+04D0 04C0 USER_PTR@   : saved_RSP
 04D1      LIT_3
 04D2 0001 +
 04D3 000F EXIT
 04D4 xxxx             : 10ms_ticker
 04D5 04B7 (VAR)       : TOD_clock    seconds since midnight 1st January 1970 UTC (64 bit number)
-04D6                  : TOD_clock_U  UU
-04D7                                 UL
-04D8                  : TOD_clock_L  LU
-04D9                                 LL
+04D6 0000             : TOD_clock_U  UU
+04D7 0000                            UL
+04D8 0000             : TOD_clock_L  LU
+04D9 0000                            LL
 04DA 6400 LDX_l I     : TImers_interrupt_handler_L0
-04DB      xxxx        : TImers_interrupt_handler
+04DB xxxx             : TImers_interrupt_handler
 04DC 0807 XIO_s I+sense_timer_device_IOCC
 04DD 1801 SRA 1       \ this uses the neat trick of taking the DSW of the timers device and combine it into the saved ISLW
 04DE EC00 OR_l
@@ -932,7 +932,7 @@ ADDR DATA IBM1800
 04E0 D400 STO_l
 04E1 00B2 saved ISLW
 04E2 6400 LDX_l I     \ this is basically unconditional jump
-04E3      TImers_interrupt_handler_L0
+04E3 04DA TImers_interrupt_handler_L0
 04E4 BABE             : sense_timer_device_IOCC
 04E5 0721
 04E6 6400 LDX_l I     : TI_C_interrupt_handler_L0
@@ -969,9 +969,9 @@ ADDR DATA IBM1800
 0505 0006 timer C
 0506 6400 LDX_l I
 0507      TI_C_interrupt_handler_L0
-0508      USER_PTR@   : next_task_ptr
+0508 04C0 USER_PTR@   : next_task_ptr
 0509 000F EXIT
-050A      USER_PTR@   : prev_task_ptr
+050A 04C0 USER_PTR@   : prev_task_ptr
 050B      LIT_4
 050C 0001 +
 050D 000F EXIT
@@ -985,7 +985,7 @@ ADDR DATA IBM1800
 0516      OVER            ( task_userarea_ptr next_task_ptr+4 task_userarea_ptr )
 0517 000A SWAP            ( task_userarea_ptr task_userarea_ptr next_task_ptr+4 )
 0518 0007 !               ( task_userarea_ptr )
-0519      USER_PTR@       ( task_userarea_ptr curr_userarea_ptr )
+0519 04C0 USER_PTR@       ( task_userarea_ptr curr_userarea_ptr )
 051A      OVER            ( task_userarea_ptr curr_userarea_ptr task_userarea_ptr )
 051B      LIT_4           ( task_userarea_ptr curr_userarea_ptr task_userarea_ptr 4 )
 051C 0001 +               ( task_userarea_ptr curr_userarea_ptr task_userarea_ptr+4 )
@@ -999,7 +999,7 @@ ADDR DATA IBM1800
 0524      next_task_ptr  : next_task_ptr! ( next_task_userarea_ptr -- )
 0525 0007 !
 0526 000F EXIT
-0527      USER_PTR@      : enable_preemptive_task_switch ( -- )
+0527 04C0 USER_PTR@      : enable_preemptive_task_switch ( -- )
 0528      LIT_5           ( userarea_ptr 5 )
 0529 0001 +               ( userarea_ptr+5 )
 052A 0008 DUP             ( userarea_ptr+5 userarea_ptr+5 )
@@ -1011,7 +1011,7 @@ ADDR DATA IBM1800
 0530 000F EXIT
 0531      LIT_1          : disable_preemptive_task_switch ( -- )
 0532      INVERT          ( 0xFFFE )
-0533      USER_PTR@       ( 0xFFFE userarea_ptr )
+0533 04C0 USER_PTR@       ( 0xFFFE userarea_ptr )
 0534      LIT_5           ( 0xFFFE userarea_ptr 5 )
 0535 0001 +
 0536      TUCK
