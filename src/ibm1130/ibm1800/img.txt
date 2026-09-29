@@ -366,7 +366,7 @@ ADDR DATA IBM1800
 02AC 0001
 02AD 04B4 (CONST)            : OPMASK
 02AE FFF0 opmask
-02AF      (VAR)
+02AF 04B7 (VAR)
 02B0 028E NOP                :F_PRIM_TBL
 02B1 02C6 +
 02B2 02DD &
@@ -489,7 +489,7 @@ ADDR DATA IBM1800
 032A 031D F_PRIM_COMMON4
 032B 04B4 (CONST)      : IBM1800_marker
 032C 1800
-032D      (VAR)        :EXT_handler_vector
+032D 04B7 (VAR)        :EXT_handler_vector
 032E      EXT_handler
 032F C2FF LD_s XR2-1   :EXT
 0330 F0FB EOR_s I-5    \ is TopOfStack the IBM1800 marker?
@@ -916,7 +916,7 @@ ADDR DATA IBM1800
 04D2 0001 +
 04D3 000F EXIT
 04D4 xxxx             : 10ms_ticker
-04D5      (VAR)       : TOD_clock    seconds since midnight 1st January 1970 UTC (64 bit number)
+04D5 04B7 (VAR)       : TOD_clock    seconds since midnight 1st January 1970 UTC (64 bit number)
 04D6                  : TOD_clock_U  UU
 04D7                                 UL
 04D8                  : TOD_clock_L  LU
@@ -1089,7 +1089,7 @@ ADDR DATA IBM1800
 0580 0007 USER_PTR
 0581 6400 LDX_l I
 0582      WAITED-ON-FIRED_L2  \ this convoluted way is used to allow a Forth primitive or (IBM1800) code word to finish before PAUSEing
-0583      (VAR)       : USER_0
+0583 04B7 (VAR)       : USER_0
 0584 xxxx \ next task
 0585      \ Forth Instruction Pointer saved
 0586      \ Datastack Pointer         saved
