@@ -623,17 +623,17 @@ ADDR DATA IBM1800
 03AE 0002 XR2
 03AF 4C00 BSC_l any cond
 03B0 038E F_PRIM_COMMON5
-03B1 03CA 2DUP         :<<> ( a times -- a<<>times )
+03B1 03CA 2DUP         : <<> ( a times -- a<<>times )
 03B2 0358 <<
 03B3 000C >R
-03B4      (LIT)_16
+03B4 0612 LIT_16
 03B5 000A SWAP
 03B6 0353 -
 03B7 0372 >>
 03B8 000D R>
 03B9 034E OR
 03BA 000F EXIT
-03BB      (LIT)_16     :<>> ( a times -- a<>>times )
+03BB 0612 LIT_16       : <>> ( a times -- a<>>times )
 03BC 000A SWAP
 03BD 0353 -
 03BE 03C0 (JMP)
@@ -1234,8 +1234,8 @@ ADDR DATA IBM1800
 060F      0xFF&
 0610      BYTEXCHNG
 0611 000F EXIT
-0612
-0613
+0612 04B4 (CONST)     : LIT_16
+0613 0010
 0614
 0615
 0616
