@@ -747,7 +747,7 @@ ADDR DATA IBM1800
 0429
 042A      USER_PTR@    : PAUSE ( -- )
 042B 0006 @
-042C      (LIT)
+042C 0607 (LIT)
 042D 03F5 WAITED-ON-FIRED_L1
 042E 0007 !
 042F      PAUSE_L0     \ verður að vera
@@ -769,7 +769,7 @@ ADDR DATA IBM1800
 043F 0007 !
 0440 041E PAUSE        : WAIT-ON_L0
 0441 0008 DUP
-0442      (LIT)
+0442 0607 (LIT)
 0443 03F5 WAITED-ON-FIRED_L1
 0444 0006 @
 0445      =
@@ -895,11 +895,11 @@ ADDR DATA IBM1800
 04BD 000F EXIT
 04BE 032B IBM1800_marker  : (IBM1800)  ( -- ) R:( code_addr -- )
 04BF 000E EXT
-04C0      (LIT)       : USER_PTR@
+04C0 0607 (LIT)       : USER_PTR@
 04C1 0007 USER_PTR
 04C2 0006 @
 04C3 000F EXIT
-04C4      (LIT)       : USER_PTR!
+04C4 0607 (LIT)       : USER_PTR!
 04C5 0007 USER_PTR
 04C6 0007 !
 04C7 000F EXIT
@@ -1432,11 +1432,11 @@ ADDR DATA IBM1800
 06D3      CONSOLE_PRINTERNR2IOSEL  ( ascii printernr iosel )
 06D4      LIT_0                    ( ascii printernr iosel 0 )
 06D5 000A SWAP                     ( ascii printernr 0 iosel )
-06D5      (LIT)                    ( ascii printernr 0 iosel )
+06D5 0607 (LIT)                    ( ascii printernr 0 iosel )
 06D5 0700 sense device IOCC, partial
 06D6      OR                       ( ascii printernr 0 IOCC_full )
 06D7      (XIO)                    ( ascii printernr DeviceStatusWord )
-06D8      (LIT)                    ( ascii printernr DeviceStatusWord 0x1C00 )
+06D8 0607 (LIT)                    ( ascii printernr DeviceStatusWord 0x1C00 )
 06D9 0C00 Printer Busy & Printer Not Ready
 06DA 0002 &                        ( ascii printernr DeviceStatusResult )
 06DB      CLEANBOOL                ( ascii printernr busy_or_not_ready?_bool )
@@ -1450,7 +1450,7 @@ ADDR DATA IBM1800
 06E3 000C >R            : CONSOLE_PRINTER_EMIT_COMMON_L0 ( ascii ) R:( printernr )
 06E4      ASCII_2_CONSOLE_PRTRCODE ( prtrcode )
 06E5      SP@-1                    ( prtrcode stackptr-1 )
-06E6      (LIT)                    ( prtrcode stackptr-1 write_IOCC_partial )
+06E6 0607 (LIT)                    ( prtrcode stackptr-1 write_IOCC_partial )
 06E7 0100 write IOCC, partial
 06E8      R@                       ( prtrcode stackptr-1 write_IOCC_partial printernr ) R:( printernr )
 06E9      CONSOLE_PRINTERNR2IOSEL  ( prtrcode stackptr-1 write_IOCC_partial iosel ) R:( printernr )
@@ -1459,15 +1459,15 @@ ADDR DATA IBM1800
 06EC 0009 DROP                     ( prtrcode )
 06ED      R@            : CONSOLE_PRINTER_EMIT_COMMON_L4           ( prtrcode printernr ) R:( printernr )
 06EE      CONSOLE_PRINTERNR2IOSEL  ( prtrcode iosel )
-06EF      (LIT)                    ( prtrcode iosel sense_w/reset_IOCC_partial )
+06EF 0607 (LIT)                    ( prtrcode iosel sense_w/reset_IOCC_partial )
 06F0 0701 sense device reset indicators IOCC, partial
 06F1      OR                       ( prtrcode sense_w/resert_IOCC_full )
 06F2      (XIO)                    ( result )
 06F3 0008 DUP                      ( result result )
-06F4      (LIT)                    ( result result mask )
+06F4 0607 (LIT)                    ( result result mask )
 06F5 8C00 printer response & printer busy & printer not ready
 06F6 0002 &                        ( result masked_result )
-06F7      (LIT)                    ( result masked_result 0x8000 )
+06F7 0607 (LIT)                    ( result masked_result 0x8000 )
 06F8 8000 printer response
 06F9 0003 ⨁                       ( result masked_flipped_result )
 06FA      CLEANBOOL                ( result got_response_&_printer_not_busy_&_printer_readdy?_bool )
@@ -1478,14 +1478,14 @@ ADDR DATA IBM1800
 06FF      2DROP                    ( )
 0700 000F EXIT                     \ aaand we are done printing that character )
 0701 0008 DUP : CONSOLE_PRINTER_EMIT_COMMON_L1 ( dsw dsw ) R:( printernr )
-0702      (LIT)
+0702 0607 (LIT)
 0703 0800 printer busy
 0704      TUCK
 0705 0003 ⨁
 0706 0002 &
 0707      INVERT
 0708      OVER
-0709      (LIT)
+0709 0607 (LIT)
 070A 0400 printer not ready
 070B      OVER
 070C 0003 ⨁
@@ -1503,15 +1503,15 @@ ADDR DATA IBM1800
 0717      CONSOLE_PRINTERNR2IOSEL  ( kbnr iosel )
 0718      LIT_0                    ( kbnr iosel 0 )
 0719 000A SWAP                     ( kbnr 0 iosel )
-071A      (LIT)                    ( kbnr 0 iosel sense_device_IOCC_partial )
+071A 0607 (LIT)                    ( kbnr 0 iosel sense_device_IOCC_partial )
 071B 0701 sense device IOCC w/indicator reset, partial
 071C      OR                       ( kbnr 0 sense_device_IOCC )
 071D      (XIO)                    ( kbnr device_sense_word )
-071E      (LIT)                    ( kbnr device_sense_word mask )
+071E 0607 (LIT)                    ( kbnr device_sense_word mask )
 071F 6200 kb response, kb request, kb not ready     0b0110 0010 0000 0000
 0720 0002 &                        ( kbnr dsw_masked )
 0721 0008 DUP                      ( kbnr dsw_masked dsw_masked )
-0722      (LIT)                    ( kbnr dsw_masked dsw_masked kb_not_ready_bit )
+0722 0607 (LIT)                    ( kbnr dsw_masked dsw_masked kb_not_ready_bit )
 0723 0200 kb not ready
 0724 0002 &                        ( kbnr dsw_masked kb_notready? )
 0725      (BRZ)                    ( kbnr dsw_masked )
@@ -1520,7 +1520,7 @@ ADDR DATA IBM1800
 0728      (JMP)
 0729      FALSE  
 072A 0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON_L0 ( kbnr dsw_masked dsw_masked )
-072B      (LIT)                    ( kbnr dsw_masked dsw_masked 0x2000 )
+072B 0607 (LIT)                    ( kbnr dsw_masked dsw_masked 0x2000 )
 072C 2000 kb request
 072D 0002 &                        ( kbnr dsw_masked kb_request? )
 072E      (BRZ)                    ( kbnr dsw_masked )
@@ -1540,7 +1540,7 @@ ADDR DATA IBM1800
 073C 000C >R                       ( kbnr 0 ) R:( iosel )
 073D      SP@-1                    ( kbnr 0 addr ) R:( iosel )
 073E 000D R>                       ( kbnr 0 addr iosel ) R:( iosel )
-073F      (LIT)                    ( kbnr 0 addr iosel read_IOCC_partial )
+073F 0607 (LIT)                    ( kbnr 0 addr iosel read_IOCC_partial )
 0740 0200 read_IOCC_partial
 0741      OR                       ( kbnr 0 addr read_IOCC )
 0742      (XIO)                    ( kbnr cardcode junk )
@@ -1549,7 +1549,7 @@ ADDR DATA IBM1800
 0745      CONSOLE_PRINTERNR2IOSEL  ( cardcode iosel )
 0746      LIT_0
 0747 000A SWAP
-0748      (LIT)
+0748 0607 (LIT)
 0749 0400 ctrl_IOCC_partial
 074A      OR
 074B      (XIO)
@@ -1564,7 +1564,7 @@ ADDR DATA IBM1800
 0754      (BRZ)
 0755      CONSOLE_KEYBOARD_?KEY_COMMON_L3
 0756 0008 DUP                                    ( kbnr cardcode cardcode )
-0757      (LIT)                                  ( kbnr cardcode cardcode UC )
+0757 0607 (LIT)                                  ( kbnr cardcode cardcode UC )
 0758 0090 UC Upper Case  should be tied to when Caps Lock is turned on or when Shift is pressed.
 0759      =                                      ( kbnr cardcode bool )
 075A      (BRZ)                                  ( kbnr cardcode )
@@ -1574,7 +1574,7 @@ ADDR DATA IBM1800
 075E 0001 +
 075F 0008 DUP
 0760 0006 @
-0761      (LIT)
+0761 0607 (LIT)
 0762 0020
 0763      OR
 0764 000A SWAP
@@ -1582,7 +1582,7 @@ ADDR DATA IBM1800
 0766      (JMP)
 0767      CONSOLE_KEYBOARD_?KEY_COMMON_L4
 0768 0008 DUP  : CONSOLE_KEYBOARD_?KEY_COMMON2_L0 ( kbnr cardcode cardcode )
-0769      (LIT)
+0769 0607 (LIT)
 076A 8090 LC Lower Case  should be tied to when Caps Lock is turned off or when Shift is released.
 076B      =
 076C      (BRZ)
@@ -1592,7 +1592,7 @@ ADDR DATA IBM1800
 0770 0001 +
 0771 0008 DUP
 0772 0006 @
-0773      (LIT)
+0773 0607 (LIT)
 0774 0020
 0775      INVERT
 0776 0002 &
@@ -1785,9 +1785,9 @@ ADDR DATA IBM1800
 082E      (BRZ)
 082F      FALSE
 0830 0008 DUP
-0831      (LIT)
+0831 0607 (LIT)
 0832 0041 A
-0833      (LIT)
+0833 0607 (LIT)
 0834 005B Z+1
 0835      WITHIN
 0836      (BRZ)
@@ -1796,7 +1796,7 @@ ADDR DATA IBM1800
 0839      LIT_5
 083A 0001 +
 083B 0006 @
-083C      (LIT)
+083C 0607 (LIT)
 083D 0020
 083E      TUCK
 083F 0002 &
@@ -1806,11 +1806,11 @@ ADDR DATA IBM1800
 0843      TRUE
 
 0844      LIT_0      : SYS360_sense_device ( -- dsw )
-0845      (LIT)
+0845 0607 (LIT)
 0846 6F01 sense IOCC w/reset indicators
 0847      (XIO)
 0848 000F EXIT
-0849      (LIT)      : SYS360_commloop ( -- )
+0849 0607 (LIT)      : SYS360_commloop ( -- )
 084A      SYS360_adapter_interruptnr
 084B      WAIT-ON
 084C      SYS360_sense_device
@@ -1854,21 +1854,21 @@ ADDR DATA IBM1800
 0871      《tbd》
 0872      OVER        : SYS360_init_read&wait_on_it ( tbl_addr length&chaning_ctrl -- )
 0873 0007 !
-0874      (LIT)
+0874 0607 (LIT)
 0875      init_read_IOCC
 0876      (XIO)
 0877 0009 DROP
-0878      (LIT)
+0878 0607 (LIT)
 0879      interrupt_nr for the SYS360 adapter
 087A      WAIT-ON
 087B 000F EXIT
 087C      OVER        : SYS360_init_write&wait_on_it ( tbl_addr length&chaning_ctrl -- )
 087D 0007 !
-087E      (LIT)
+087E 0607 (LIT)
 087F      init_write_IOCC
 0880      (XIO)
 0881 0009 DROP
-0882      (LIT)
+0882 0607 (LIT)
 0883      interrupt_nr for the SYS360 adapter
 0884      WAIT-ON
 0885 000F EXIT
