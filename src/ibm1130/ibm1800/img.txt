@@ -325,6 +325,7 @@ ADDR DATA IBM1800
 0143
 0144      INT_TBL level 9
 0145
+0146
 
 0284 4C40 BOSC_l
 0285 xxxx : INT_IGNORE
@@ -811,9 +812,9 @@ ADDR DATA IBM1800
 0467 000D R>           : (LUT) ( idx -- val )
 0468      2DUP
 0469 0006 @
-046A      >
+046A 04A1 >
 046B 044E (BRZ)
-046C      (LUT)_L0
+046C 0471 (LUT)_L0
 046D 0005 1+
 046E 0001 +
 046F 0006 @
@@ -863,7 +864,7 @@ ADDR DATA IBM1800
 049B 0002 &
 049C 03C0 (JMP)
 049D 048A CLEANBOOL
-049E      -           : <  ( a b -- bool )
+049E 0353 -           : <  ( a b -- bool )
 049F 049A 0<
 04A0 000F EXIT
 04A1 000A SWAP        : >
