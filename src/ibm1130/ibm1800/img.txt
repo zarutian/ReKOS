@@ -227,7 +227,7 @@ ADDR DATA IBM1800
 00E1
 00E2
 00E3
-00E4      1627 Plotter (step 0.01mm)   INT_TBL level 3
+00E4      1627 Plotter (step 0.01mm pen 0.5mm)   INT_TBL level 3
 00E5      System/360 adapter
 00E6
 00E7
@@ -356,6 +356,10 @@ ADDR DATA IBM1800
 0162
 0163
 0164      INT_TBL level 11
+0165
+0166
+0167
+0168
 
 0284 4C40 BOSC_l
 0285 xxxx : INT_IGNORE
@@ -967,14 +971,14 @@ ADDR DATA IBM1800
 04E4 BABE             : sense_timer_device_IOCC
 04E5 0721
 04E6 6400 LDX_l I     : TI_C_interrupt_handler_L0
-04E7      xxxx        : TI_C_interrupt_handler
+04E7 xxxx             : TI_C_interrupt_handler
 04E8 C400 LD_l
-04E9      10ms_ticker
-04EA      ADD_l
+04E9 04D4 10ms_ticker
+04EA 8400 ADD_l
 04EB 0006 timer C
-04EC      ADD_s I+const_10
+04EC 80   ADD_s I+const_10
 04ED D400 STO_l
-04EE      10ms_ticker
+04EE 04D4 10ms_ticker
 04EF 18D0 RTE 16      \ rotate right A and Q
 04F0 C400 LD_l        \ zero out A
 04F1      const_0
@@ -996,7 +1000,7 @@ ADDR DATA IBM1800
 0501      LD_s I+const_-10
 0502      ADD_l
 0503 0006 timer C
-0504      STO_l
+0504 D400 STO_l
 0505 0006 timer C
 0506 6400 LDX_l I
 0507      TI_C_interrupt_handler_L0
@@ -1068,7 +1072,7 @@ ADDR DATA IBM1800
 054A 0008 DUP             ( task task task )
 054B 0007 !               ( task )
 054C 0008 DUP             ( task task )
-054D      LIT_4           ( task task 4 )
+054D 05F9 LIT_4           ( task task 4 )
 054E 0001 +               ( task task+4 )
 054F 0007 !               ( )
 0550      enable_preemptive_task_switch
