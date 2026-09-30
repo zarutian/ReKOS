@@ -340,6 +340,22 @@ ADDR DATA IBM1800
 0152
 0153
 0154      INT_TBL level 10
+0155
+0156
+0157
+0158
+0159
+015A
+015B
+015C
+015D
+015E
+015F
+0160
+0161
+0162
+0163
+0164      INT_TBL level 11
 
 0284 4C40 BOSC_l
 0285 xxxx : INT_IGNORE
@@ -856,7 +872,7 @@ ADDR DATA IBM1800
 0485 0471 (LUT)_L0
 0486 04B4 (CONST)      : TRUE ( -- T )
 0487 FFFF              : const_0xFFFF
-0488 04B4 (CONST)      : FALSE ( -- F )  : ZERO ( -- 0 )
+0488 04B4 (CONST)      : FALSE ( -- F )  : ZERO ( -- 0 ) : LIT_0
 0489 0000              : const_0
 048A 044E (BRZ)        : CLEANBOOL ( dirty -- clean (
 048B 0488 FALSE
@@ -1447,7 +1463,7 @@ ADDR DATA IBM1800
 06D1      RDROP        : CONSOLE_PRINTER_EMIT_COMMON ( ascii printernr -- )
 06D2 0008 DUP          : CONSOLE_PRINTER_EMIT_COMMON_L3 ( ascii printernr printernr )
 06D3      CONSOLE_PRINTERNR2IOSEL  ( ascii printernr iosel )
-06D4      LIT_0                    ( ascii printernr iosel 0 )
+06D4 0488 LIT_0                    ( ascii printernr iosel 0 )
 06D5 000A SWAP                     ( ascii printernr 0 iosel )
 06D5 0607 (LIT)                    ( ascii printernr 0 iosel )
 06D5 0700 sense device IOCC, partial
@@ -1462,7 +1478,7 @@ ADDR DATA IBM1800
 06DE 0008 DUP                      ( ascii printernr printernr )
 06DF      CONSOLE_PRINTERNR2INTVECTNR  ( ascii printernr intvectnr )
 06E0      WAIT-ON                  ( ascii printernr ) \ printer busy, wait on it, that is PAUSE and allow other tasks to run. 
-06E1      (JMP)
+06E1 03C0 (JMP)
 06E2      CONSOLE_PRINTER_EMIT_COMMON_L3
 06E3 000C >R            : CONSOLE_PRINTER_EMIT_COMMON_L0 ( ascii ) R:( printernr )
 06E4      ASCII_2_CONSOLE_PRTRCODE ( prtrcode )
@@ -1512,13 +1528,13 @@ ADDR DATA IBM1800
 0710      INVERT
 0711 044E (BRZ)
 0712      CONSOLE_PRINTER_EMIT_COMMON_L2
-0713      LIT_0
+0713 0488 LIT_0
 0714 03C0 (JMP)
 0715      CONSOLE_PRINTER_EMIT_COMMON_L4
 
 0716 0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON ( keyboardnr -- cardcode T | F )
 0717      CONSOLE_PRINTERNR2IOSEL  ( kbnr iosel )
-0718      LIT_0                    ( kbnr iosel 0 )
+0718 0488 LIT_0                    ( kbnr iosel 0 )
 0719 000A SWAP                     ( kbnr 0 iosel )
 071A 0607 (LIT)                    ( kbnr 0 iosel sense_device_IOCC_partial )
 071B 0701 sense device IOCC w/indicator reset, partial
@@ -1535,7 +1551,7 @@ ADDR DATA IBM1800
 0726      CONSOLE_KEYBOARD_?KEY_COMMON_L0
 0727 0796 2DROP  : CONSOLE_KEYBOARD_?KEY_COMMON_L4
 0728 03C0 (JMP)
-0729      FALSE  
+0729 0488 FALSE  
 072A 0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON_L0 ( kbnr dsw_masked dsw_masked )
 072B 0607 (LIT)                    ( kbnr dsw_masked dsw_masked 0x2000 )
 072C 2000 kb request
@@ -1544,7 +1560,7 @@ ADDR DATA IBM1800
 072F      CONSOLE_KEYBOARD_?KEY_COMMON_L1
 0730 0009 DROP
 0731 02AB LIT_1
-0732      (JMP)
+0732 03C0 (JMP)
 0733      CONSOLE_KEYBOARD_?KEY_COMMON_L2
 0734      (LIT)  : CONSOLE_KEYBOARD_?KEY_COMMON_L1
 0735 4000
@@ -1553,7 +1569,7 @@ ADDR DATA IBM1800
 0738      CONSOLE_KEYBOARD_?KEY_COMMON_L3
 0739 0008 DUP                      ( kbnr kbnr )
 073A      CONSOLE_PRINTERNR2IOSEL
-073B      LIT_0
+073B 0488 LIT_0
 073C 000C >R                       ( kbnr 0 ) R:( iosel )
 073D      SP@-1                    ( kbnr 0 addr ) R:( iosel )
 073E 000D R>                       ( kbnr 0 addr iosel ) R:( iosel )
@@ -1564,17 +1580,17 @@ ADDR DATA IBM1800
 0743 0009 DROP                     ( kbnr cardcode )
 0744 000A SWAP   : CONSOLE_KEYBOARD_?KEY_COMMON_L2  ( cardcode kbnr )
 0745      CONSOLE_PRINTERNR2IOSEL  ( cardcode iosel )
-0746      LIT_0
+0746 0488 LIT_0
 0747 000A SWAP
 0748 0607 (LIT)
 0749 0400 ctrl_IOCC_partial
 074A      OR
 074B      (XIO)
 074C 0009 DROP
-074D      (JMP)
+074D 03C0 (JMP)
 074E      TRUE
 074F 0009 DROP   : CONSOLE_KEYBOARD_?KEY_COMMON_L3
-0750      (JMP)
+0750 03C0 (JMP)
 0751      FALSE
 0752 0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON2 ( keyboardnr -- ascii T | F )
 0753      CONSOLE_KEYBOARD_?KEY_COMMON           ( kbnr cardcode T | kbnr F )
@@ -1644,7 +1660,7 @@ ADDR DATA IBM1800
 0792      (LUT_t2)_L0
 0793 0796 2DROP
 0794 03C0 (JMP)
-0795      FALSE
+0795 0488 FALSE
 0796 0009 DROP   : 2DROP
 0797 0009 DROP
 0798 000F EXIT
@@ -1800,7 +1816,7 @@ ADDR DATA IBM1800
 082C 000F EXIT
 082D      CONSOLE_KEYBOARD_2_ASCII  : CONSOLE_KEYBOARD_?KEY_COMMON2_L2
 082E 044E (BRZ)
-082F      FALSE
+082F 0488 FALSE
 0830 0008 DUP
 0831 0607 (LIT)
 0832 0041 A
@@ -1916,7 +1932,7 @@ ADDR DATA IBM1800
 089E 0008 DUP            ( addr+2 addr+2 )
 089F 0006 @              ( addr+2 length )
 08A0      SYS360_init_write&wait_on_it
-08A1      (JMP)
+08A1 03C0 (JMP)
 08A2      SYS360_commloop
 08A3 0796 2DROP  : SYS360_commloop_poke ( dsw cmd_byte )
 08A4      SYS360_tmparea ( addr )
@@ -1939,7 +1955,7 @@ ADDR DATA IBM1800
 08B5 0006 @              ( addr+3 length&0xFFF poke_addr )
 08B6 000A SWAP           ( addr+3 poke_addr length&0xFFF )
 08B7      CELLS_MOVE     ( )
-08B8      (JMP)
+08B8 03C0 (JMP)
 08B9      SYS360_commloop
 08BA 0796 2DROP  : SYS360_commloop_exec ( dsw cmd_byte )
 08BB      SYS360_tmparea ( addr )
