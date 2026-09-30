@@ -326,6 +326,20 @@ ADDR DATA IBM1800
 0144      INT_TBL level 9
 0145
 0146
+0147
+0148
+0149
+014A
+014B
+014C
+014D
+014E
+014F
+0150
+0151
+0152
+0153
+0154      INT_TBL level 10
 
 0284 4C40 BOSC_l
 0285 xxxx : INT_IGNORE
@@ -938,7 +952,7 @@ ADDR DATA IBM1800
 04E5 0721
 04E6 6400 LDX_l I     : TI_C_interrupt_handler_L0
 04E7      xxxx        : TI_C_interrupt_handler
-04E8      LD_l
+04E8 C400 LD_l
 04E9      10ms_ticker
 04EA      ADD_l
 04EB 0006 timer C
@@ -946,10 +960,10 @@ ADDR DATA IBM1800
 04ED      STO_l
 04EE      10ms_ticker
 04EF 18D0 RTE 16      \ rotate right A and Q
-04F0      LD_l        \ zero out A
+04F0 C400 LD_l        \ zero out A
 04F1      const_0
 04F2 A8   DIV_s I+const_1000 \ divide by 1000
-04F3      LD_l        \ zero out A
+04F3 C400 LD_l        \ zero out A
 04F4      const_0
 04F5 18D0 RTE 16      \ rotate right A and Q
 04F6 4C20 BSC_l A<>0?
@@ -978,16 +992,16 @@ ADDR DATA IBM1800
 050D 000F EXIT
 050E      disable_preemptive_task_switch  : LINK-IN-TASK ( task_userarea_ptr -- )
 050F      next_task_ptr@  ( task_userarea_ptr next_task_ptr )
-0510      OVER            ( task_userarea_ptr next_task_ptr task_userarea_ptr )
+0510 03C4 OVER            ( task_userarea_ptr next_task_ptr task_userarea_ptr )
 0511 0007 !               ( task_userarea_ptr )
 0512      next_task_ptr@  ( task_userarea_ptr next_task_ptr )
 0513      LIT_4           ( task_userarea_ptr next_task_ptr 4 )
 0515 0001 +               ( task_userarea_ptr next_task_ptr+4 )
-0516      OVER            ( task_userarea_ptr next_task_ptr+4 task_userarea_ptr )
+0516 03C4 OVER            ( task_userarea_ptr next_task_ptr+4 task_userarea_ptr )
 0517 000A SWAP            ( task_userarea_ptr task_userarea_ptr next_task_ptr+4 )
 0518 0007 !               ( task_userarea_ptr )
 0519 04C0 USER_PTR@       ( task_userarea_ptr curr_userarea_ptr )
-051A      OVER            ( task_userarea_ptr curr_userarea_ptr task_userarea_ptr )
+051A 03C4 OVER            ( task_userarea_ptr curr_userarea_ptr task_userarea_ptr )
 051B      LIT_4           ( task_userarea_ptr curr_userarea_ptr task_userarea_ptr 4 )
 051C 0001 +               ( task_userarea_ptr curr_userarea_ptr task_userarea_ptr+4 )
 051D 0007 !               ( task_userarea_ptr )
@@ -1024,11 +1038,11 @@ ADDR DATA IBM1800
 053C      disable_preemptive_task_switch  : DELINK-TASK ( task_userarea_ptr -- )
 053D 0008 DUP             ( task task )
 053E 0006 @               ( task next )
-053F      OVER            ( task next task )
+053F 03C4 OVER            ( task next task )
 0540      LIT_4           ( task next task 4 )
 0541 0001 +               ( task next task+4 )
 0542 0006 @               ( task next prev )
-0543      2DUP            ( task next prev next prev )
+0543 03CA 2DUP            ( task next prev next prev )
 0544 000A SWAP            ( task next prev prev next )
 0545      LIT_4           ( task next prev prev next 4 )
 0546 0001 +               ( task next prev prev next+4 )
@@ -1144,16 +1158,16 @@ ADDR DATA IBM1800
 05B2      reserved
 05B3      reserved
 05B4 0008 DUP         : NEW-TASK ( code_ptr task_addr -- task_addr 0x0100 )
-05B5      USER_0
-05B6      OVER
+05B5 0583 USER_0
+05B6 03C4 OVER
 05B7      LIT_64
-05B8      CELLS_MOVE
+05B8 05E4 CELLS_MOVE
 05B9 0008 DUP         ( code_ptr task_addr task_addr )  \ ensure that next_task of the task points to the task itself
 05BA 0008 DUP         ( code_ptr task_addr task_addr task_addr )
 05BB 0007 !           ( code_ptr task_addr )
 05BC 0008 DUP         ( code_ptr task_addr task_addr )  \ same but with prev_task
 05BD 0008 DUP         ( code_ptr task_addr task_addr task_addr )
-05BE      LIT_4       ( code_ptr task_addr task_addr task_addr 4 )
+05BE 05F9 LIT_4       ( code_ptr task_addr task_addr task_addr 4 )
 05BF 0001 +           ( code_ptr task_addr task_addr task_addr+4 )
 05C0 0007 !           ( code_ptr task_addr )
 05C1      TUCK        ( task_addr code_ptr task_addr )
@@ -1161,55 +1175,55 @@ ADDR DATA IBM1800
 05C3 0007 !           ( task_addr )
 05C4 0008 DUP         ( task_addr task_addr )
 05C5      64+         ( task_addr SP0 )
-05C6      OVER        ( task_addr SP0 task_addr )
-05C7      2DUP        ( task_addr SP0 task_addr SP0 task_addr )
+05C6 03C4 OVER        ( task_addr SP0 task_addr )
+05C7 03CA 2DUP        ( task_addr SP0 task_addr SP0 task_addr )
 05C8      2+          ( task_addr SPO task_addr SP0 task_addr+2 )
 05C9 0007 !           ( task_addr SP0 task_addr ) \ save Datastack Pointer
-05CA      LIT_6       ( task_addr SP0 task_addr 6 )
+05CA 05FD LIT_6       ( task_addr SP0 task_addr 6 )
 05CB 0001 +           ( task_addr SP0 task_addr+6 )
-05CC      OVER
+05CC 03C4 OVER
 05CD 000C >R          ( task_addr SP0 task_addr+6 ) R:( SP0 )
 05CE 0007 !           ( task_addr ) R:( SP0 ) \ save bottom of stack
 05CF 000D R>          ( task_addr SP0 ) R:( )
 05D0      64+         ( task_addr RP0 )
 05D1 0008 DUP         ( task_addr RP0 RP0 )
 05D2 000C >R          ( task_addr RP0 ) R:( RP0 )
-05D3      OVER        ( task_addr RP0 task_addr ) R:( RP0 )
-05D4      LIT_3       ( task_addr RP0 task_addr 3 ) R:( RP0 )
+05D3 03C4 OVER        ( task_addr RP0 task_addr ) R:( RP0 )
+05D4 05F4 LIT_3       ( task_addr RP0 task_addr 3 ) R:( RP0 )
 05D5 0001 +           ( task_addr RP0 task_addr+3 )
 05D6 0007 !           ( task_addr ) R:( RP0 )
 05D7      R@          ( task_addr RP0 ) R:( RP0 )
-05D8      OVER        ( task_addr RP0 task_addr ) R:( RP0 )
-05D9      LIT_7       ( task_addr RP0 task_addr 7 ) R:( RP0 )
+05D8 03C4 OVER        ( task_addr RP0 task_addr ) R:( RP0 )
+05D9 05FF LIT_7       ( task_addr RP0 task_addr 7 ) R:( RP0 )
 05DA 0001 +           ( task_addr RP0 task_addr+7 ) R:( RP0 )
 05DB 0007 !           ( task_addr ) R:( RP0 )
 05DC 000D R>          ( task_addr RP0 ) R:( )
 05DD      64+         ( task_addr TIBB )
-05DE      OVER        ( task_addr TIBB task_addr )
-05DF      LIT_19      ( task_addr TIBB task_addr 19 )
+05DE 03C4 OVER        ( task_addr TIBB task_addr )
+05DF 0601 LIT_19      ( task_addr TIBB task_addr 19 )
 05E0 0001 +           ( task_addr TIBB task_addr+19 )
 05E1 0007 !           ( task_addr )
-05E2      LIT_0x0100  ( task_addr 0x0100 )
+05E2 0605 LIT_0x0100  ( task_addr 0x0100 )
 05E3 000F EXIT
 05E4 000C >R          : CELLS_MOVE ( src dest length -- )
-05E5      (JMP)
-05E6      CELLS_MOVE_L1
-05E7      NOP
-05E8      OVER        : CELLS_MOVE_L0
-05E9      @
-05EA      OVER
-05EB      !
-05EC      1+
-05ED      SWAP
-05EE      1+
-05EF      SWAP
+05E5 03C0 (JMP)
+05E6 05F0 CELLS_MOVE_L1
+05E7 0000 NOP
+05E8 03C4 OVER        : CELLS_MOVE_L0
+05E9 0006 @
+05EA 03C4 OVER
+05EB 0007 !
+05EC 0005 1+
+05ED 000A SWAP
+05EE 0005 1+
+05EF 000A SWAP
 05F0      (NEXT)      : CELLS_MOVE_L1
-05F1      CELLS_MOVE_L0
+05F1 05E8 CELLS_MOVE_L0
 05F2      2DROP
-05F3      EXIT
+05F3 000F EXIT
 05F4 04B4 (CONST)     : LIT_3
 05F5 0003             : const_3
-05F6      LIT_3       : 3&
+05F6 05F4 LIT_3       : 3&
 05F7 0002 &
 05F8 000F EXIT
 05F9 04B4 (CONST)     : LIT_4
