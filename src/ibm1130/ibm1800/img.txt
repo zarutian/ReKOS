@@ -1219,7 +1219,7 @@ ADDR DATA IBM1800
 05EF 000A SWAP
 05F0      (NEXT)      : CELLS_MOVE_L1
 05F1 05E8 CELLS_MOVE_L0
-05F2      2DROP
+05F2 0796 2DROP
 05F3 000F EXIT
 05F4 04B4 (CONST)     : LIT_3
 05F5 0003             : const_3
@@ -1492,7 +1492,7 @@ ADDR DATA IBM1800
 06FC 044E (BRZ)                    ( result )
 06FD      CONSOLE_PRINTER_EMIT_COMMON_L1
 06FE      R>             : CONSOLE_PRINTER_EMIT_COMMON_L2  ( result printernr ) R:( )
-06FF      2DROP                    ( )
+06FF 0796 2DROP                    ( )
 0700 000F EXIT                     \ aaand we are done printing that character )
 0701 0008 DUP : CONSOLE_PRINTER_EMIT_COMMON_L1 ( dsw dsw ) R:( printernr )
 0702 0607 (LIT)
@@ -1501,10 +1501,10 @@ ADDR DATA IBM1800
 0705 0003 ⨁
 0706 0002 &
 0707      INVERT
-0708      OVER
+0708 03C4 OVER
 0709 0607 (LIT)
 070A 0400 printer not ready
-070B      OVER
+070B 03C4 OVER
 070C 0003 ⨁
 070D 0002 &
 070E      INVERT
@@ -1513,7 +1513,7 @@ ADDR DATA IBM1800
 0711 044E (BRZ)
 0712      CONSOLE_PRINTER_EMIT_COMMON_L2
 0713      LIT_0
-0714      (JMP)
+0714 03C0 (JMP)
 0715      CONSOLE_PRINTER_EMIT_COMMON_L4
 
 0716 0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON ( keyboardnr -- cardcode T | F )
@@ -1533,8 +1533,8 @@ ADDR DATA IBM1800
 0724 0002 &                        ( kbnr dsw_masked kb_notready? )
 0725 044E (BRZ)                    ( kbnr dsw_masked )
 0726      CONSOLE_KEYBOARD_?KEY_COMMON_L0
-0727      2DROP  : CONSOLE_KEYBOARD_?KEY_COMMON_L4
-0728      (JMP)
+0727 0796 2DROP  : CONSOLE_KEYBOARD_?KEY_COMMON_L4
+0728 03C0 (JMP)
 0729      FALSE  
 072A 0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON_L0 ( kbnr dsw_masked dsw_masked )
 072B 0607 (LIT)                    ( kbnr dsw_masked dsw_masked 0x2000 )
@@ -1615,10 +1615,10 @@ ADDR DATA IBM1800
 0776 0002 &
 0777 000A SWAP
 0778 0007 !
-0779      (JMP)
+0779 03C0 (JMP)
 077A      CONSOLE_KEYBOARD_?KEY_COMMON_L4
 077B      NIP    : CONSOLE_KEYBOARD_?KEY_COMMON2_L1
-077C      (JMP)
+077C 03C0 (JMP)
 077D      CONSOLE_KEYBOARD_?KEY_COMMON2_L2
 
 077E      R>     : (LUT_t2)  ( key -- value T | F )
@@ -1626,31 +1626,31 @@ ADDR DATA IBM1800
 0780      @                  ( key ra nrOfEntries )
 0781      >R                 ( key ra ) R:( nrOfEntries )
 0782      1+                 ( key ra+1 ) R:( nrOfEntries )
-0783      (JMP)
+0783 03C0 (JMP)
 0784      (LUT_t2)_L1
 0785      2DUP   : (LUT_t2)_L0
-0786      @                  ( key ra+n key candidate )
+0786 0006 @                  ( key ra+n key candidate )
 0787      =                  ( key ra+n bool )
 0788 044E (BRZ)              ( key ra+n )
 0789      (LUT_t2)_L2
 078A      NIP                ( ra+n )
-078B      1+                 ( ra+n+1 )
-078C      @                  ( value ) R:( nrOfEntriesLeft )
+078B 0005 1+                 ( ra+n+1 )
+078C 0006 @                  ( value ) R:( nrOfEntriesLeft )
 078D      RDROP              ( value ) R:( )
-078E      (JMP)
+078E 03C0 (JMP)
 078F      TRUE
 0790      2+     : (LUT_t2)_L2
 0791      (NEXT) : (LUT_t2)_L1
 0792      (LUT_t2)_L0
-0793      2DROP
-0794      (JMP)
+0793 0796 2DROP
+0794 03C0 (JMP)
 0795      FALSE
-0796      DROP   : 2DROP
-0797      DROP
-0798      EXIT
-0799      1+     : 2+
-079A      1+
-079B      EXIT
+0796 0009 DROP   : 2DROP
+0797 0009 DROP
+0798 000F EXIT
+0799 0005 1+     : 2+
+079A 0005 1+
+079B 000F EXIT
 079C      (LUT_t2) : CONSOLE_KEYBOARD_2_ASCII ( key -- ascii T | F )
 079D 0040 64 entries
 079E 4220
@@ -1791,13 +1791,13 @@ ADDR DATA IBM1800
 0824 2820
 0825 00   0-8-2
 
-0826      OVER     : WITHIN ( test low high -- flag )
+0826 03C4 OVER     : WITHIN ( test low high -- flag )
 0827      -
 0828 000C >R
 0829      -
 082A 000D R>
 082B      U<
-082C      EXIT
+082C 000F EXIT
 082D      CONSOLE_KEYBOARD_2_ASCII  : CONSOLE_KEYBOARD_?KEY_COMMON2_L2
 082E 044E (BRZ)
 082F      FALSE
@@ -1819,7 +1819,7 @@ ADDR DATA IBM1800
 083F 0002 &
 0840 0003 XOR
 0841 0003 XOR
-0842      (JMP)
+0842 03C0 (JMP)
 0843      TRUE
 
 0844      LIT_0      : SYS360_sense_device ( -- dsw )
@@ -1863,13 +1863,13 @@ ADDR DATA IBM1800
 086A      =
 086B 044E (BRZ)
 086C      SYS360_commloop_enquery \ and data pending?
-086D      2DROP
-086E      (JMP)
+086D 0796 2DROP
+086E 03C0 (JMP)
 086F      SYS360_commloop
                \ the below needs rework! not robust enough!
 0870 04B4 (CONST)     : SYS360_tmparea
 0871      《tbd》
-0872      OVER        : SYS360_init_read&wait_on_it ( tbl_addr length&chaning_ctrl -- )
+0872 03C4 OVER        : SYS360_init_read&wait_on_it ( tbl_addr length&chaning_ctrl -- )
 0873 0007 !
 0874 0607 (LIT)
 0875      init_read_IOCC
@@ -1879,7 +1879,7 @@ ADDR DATA IBM1800
 0879      interrupt_nr for the SYS360 adapter
 087A      WAIT-ON
 087B 000F EXIT
-087C      OVER        : SYS360_init_write&wait_on_it ( tbl_addr length&chaning_ctrl -- )
+087C 03C4 OVER        : SYS360_init_write&wait_on_it ( tbl_addr length&chaning_ctrl -- )
 087D 0007 !
 087E 0607 (LIT)
 087F      init_write_IOCC
@@ -1889,12 +1889,12 @@ ADDR DATA IBM1800
 0883      interrupt_nr for the SYS360 adapter
 0884      WAIT-ON
 0885 000F EXIT
-0886      2DROP       : SYS360_commloop_peek ( dsw cmd_byte )
+0886 0796 2DROP       : SYS360_commloop_peek ( dsw cmd_byte )
 0887      SYS360_tmparea ( addr )
 0888      LIT_2          ( addr 2 )
 0889      SYS360_init_read&wait_on_it
 088A      SYS360_tmparea ( addr )
-088B      1+             ( addr+1 )
+088B 0005 1+             ( addr+1 )
 088C 0006 @              ( length )
 088D      0xFFF&         ( length&0xFFF )
 088E 0008 DUP            ( length&0xFFF length&0xFFF )
@@ -1918,7 +1918,7 @@ ADDR DATA IBM1800
 08A0      SYS360_init_write&wait_on_it
 08A1      (JMP)
 08A2      SYS360_commloop
-08A3      2DROP  : SYS360_commloop_poke ( dsw cmd_byte )
+08A3 0796 2DROP  : SYS360_commloop_poke ( dsw cmd_byte )
 08A4      SYS360_tmparea ( addr )
 08A5      LIT_2          ( addr 2 )
 08A6      SYS360_init_read&wait_on_it
@@ -1941,14 +1941,14 @@ ADDR DATA IBM1800
 08B7      CELLMOVE       ( )
 08B8      (JMP)
 08B9      SYS360_commloop
-08BA      2DROP  : SYS360_commloop_exec ( dsw cmd_byte )
+08BA 0796 2DROP  : SYS360_commloop_exec ( dsw cmd_byte )
 08BB      SYS360_tmparea ( addr )
 08BC      LIT_1          ( addr 1 )
 08BD      SYS360_init_read&wait_on_it
 08BE      SYS360_tmparea ( addr )
 08BF 0006 @              ( exec_addr )
 08C0      EXEC           ( )
-08C1      (JMP)
+08C1 03C0 (JMP)
 08C2      SYS360_commloop
 08C3      : SYS360_commloop_enquery
 
