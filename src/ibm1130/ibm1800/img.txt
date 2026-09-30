@@ -1467,7 +1467,7 @@ ADDR DATA IBM1800
 06D5 000A SWAP                     ( ascii printernr 0 iosel )
 06D5 0607 (LIT)                    ( ascii printernr 0 iosel )
 06D5 0700 sense device IOCC, partial
-06D6      OR                       ( ascii printernr 0 IOCC_full )
+06D6 034E OR                       ( ascii printernr 0 IOCC_full )
 06D7      (XIO)                    ( ascii printernr DeviceStatusWord )
 06D8 0607 (LIT)                    ( ascii printernr DeviceStatusWord 0x1C00 )
 06D9 0C00 Printer Busy & Printer Not Ready
@@ -1487,14 +1487,14 @@ ADDR DATA IBM1800
 06E7 0100 write IOCC, partial
 06E8      R@                       ( prtrcode stackptr-1 write_IOCC_partial printernr ) R:( printernr )
 06E9      CONSOLE_PRINTERNR2IOSEL  ( prtrcode stackptr-1 write_IOCC_partial iosel ) R:( printernr )
-06EA      OR                       ( prtrcode stackptr-1 write_IOCC_full )
+06EA 034E OR                       ( prtrcode stackptr-1 write_IOCC_full )
 06EB      (XIO)                    ( prtrcode result )
 06EC 0009 DROP                     ( prtrcode )
 06ED      R@            : CONSOLE_PRINTER_EMIT_COMMON_L4           ( prtrcode printernr ) R:( printernr )
 06EE      CONSOLE_PRINTERNR2IOSEL  ( prtrcode iosel )
 06EF 0607 (LIT)                    ( prtrcode iosel sense_w/reset_IOCC_partial )
 06F0 0701 sense device reset indicators IOCC, partial
-06F1      OR                       ( prtrcode sense_w/resert_IOCC_full )
+06F1 034E OR                       ( prtrcode sense_w/resert_IOCC_full )
 06F2      (XIO)                    ( result )
 06F3 0008 DUP                      ( result result )
 06F4 0607 (LIT)                    ( result result mask )
@@ -1524,7 +1524,7 @@ ADDR DATA IBM1800
 070C 0003 ⨁
 070D 0002 &
 070E      INVERT
-070F      OR
+070F 034E OR
 0710      INVERT
 0711 044E (BRZ)
 0712      CONSOLE_PRINTER_EMIT_COMMON_L2
@@ -1538,7 +1538,7 @@ ADDR DATA IBM1800
 0719 000A SWAP                     ( kbnr 0 iosel )
 071A 0607 (LIT)                    ( kbnr 0 iosel sense_device_IOCC_partial )
 071B 0701 sense device IOCC w/indicator reset, partial
-071C      OR                       ( kbnr 0 sense_device_IOCC )
+071C 034E OR                       ( kbnr 0 sense_device_IOCC )
 071D      (XIO)                    ( kbnr device_sense_word )
 071E 0607 (LIT)                    ( kbnr device_sense_word mask )
 071F 6200 kb response, kb request, kb not ready     0b0110 0010 0000 0000
@@ -1575,7 +1575,7 @@ ADDR DATA IBM1800
 073E 000D R>                       ( kbnr 0 addr iosel ) R:( iosel )
 073F 0607 (LIT)                    ( kbnr 0 addr iosel read_IOCC_partial )
 0740 0200 read_IOCC_partial
-0741      OR                       ( kbnr 0 addr read_IOCC )
+0741 034E OR                       ( kbnr 0 addr read_IOCC )
 0742      (XIO)                    ( kbnr cardcode junk )
 0743 0009 DROP                     ( kbnr cardcode )
 0744 000A SWAP   : CONSOLE_KEYBOARD_?KEY_COMMON_L2  ( cardcode kbnr )
@@ -1584,14 +1584,14 @@ ADDR DATA IBM1800
 0747 000A SWAP
 0748 0607 (LIT)
 0749 0400 ctrl_IOCC_partial
-074A      OR
+074A 034E OR
 074B      (XIO)
 074C 0009 DROP
 074D 03C0 (JMP)
 074E      TRUE
 074F 0009 DROP   : CONSOLE_KEYBOARD_?KEY_COMMON_L3
 0750 03C0 (JMP)
-0751      FALSE
+0751 0488 FALSE
 0752 0008 DUP    : CONSOLE_KEYBOARD_?KEY_COMMON2 ( keyboardnr -- ascii T | F )
 0753      CONSOLE_KEYBOARD_?KEY_COMMON           ( kbnr cardcode T | kbnr F )
 0754 044E (BRZ)
@@ -1609,7 +1609,7 @@ ADDR DATA IBM1800
 0760 0006 @
 0761 0607 (LIT)
 0762 0020
-0763      OR
+0763 034E OR
 0764 000A SWAP
 0765 0007 !
 0766 03C0 (JMP)
