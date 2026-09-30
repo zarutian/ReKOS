@@ -670,10 +670,10 @@ ADDR DATA IBM1800
 03BC 000A SWAP
 03BD 0353 -
 03BE 03C0 (JMP)
-03BF 0358 <<
-03C0 000D R>           :(JMP) ( -- )
-03C1 0006 @            :@EXECUTE
-03C2 000C >R           :EXECUTE
+03BF 03B1 <<>
+03C0 000D R>           : (JMP)    ( -- )
+03C1 0006 @            : @EXECUTE ( maddr -- )
+03C2 000C >R           : EXECUTE  ( eaddr -- )
 03C3 000F EXIT
 03C4 000A SWAP         : OVER ( a b -- a b a )
 03C5 0008 DUP
@@ -681,7 +681,7 @@ ADDR DATA IBM1800
 03C7 000A SWAP
 03C8 000D R>
 03C9 000F EXIT
-03CA 03C4 OVER        : 2DUP ( a b -- a b a b )
+03CA 03C4 OVER         : 2DUP ( a b -- a b a b )
 03CB 03C4 OVER
 03CC 000F EXIT
 
@@ -973,7 +973,7 @@ ADDR DATA IBM1800
 04EA      ADD_l
 04EB 0006 timer C
 04EC      ADD_s I+const_10
-04ED      STO_l
+04ED D400 STO_l
 04EE      10ms_ticker
 04EF 18D0 RTE 16      \ rotate right A and Q
 04F0 C400 LD_l        \ zero out A
@@ -1003,7 +1003,7 @@ ADDR DATA IBM1800
 0508 04C0 USER_PTR@   : next_task_ptr
 0509 000F EXIT
 050A 04C0 USER_PTR@   : prev_task_ptr
-050B      LIT_4
+050B 05F9 LIT_4
 050C 0001 +
 050D 000F EXIT
 050E      disable_preemptive_task_switch  : LINK-IN-TASK ( task_userarea_ptr -- )
@@ -1011,14 +1011,14 @@ ADDR DATA IBM1800
 0510 03C4 OVER            ( task_userarea_ptr next_task_ptr task_userarea_ptr )
 0511 0007 !               ( task_userarea_ptr )
 0512      next_task_ptr@  ( task_userarea_ptr next_task_ptr )
-0513      LIT_4           ( task_userarea_ptr next_task_ptr 4 )
+0513 05F9 LIT_4           ( task_userarea_ptr next_task_ptr 4 )
 0515 0001 +               ( task_userarea_ptr next_task_ptr+4 )
 0516 03C4 OVER            ( task_userarea_ptr next_task_ptr+4 task_userarea_ptr )
 0517 000A SWAP            ( task_userarea_ptr task_userarea_ptr next_task_ptr+4 )
 0518 0007 !               ( task_userarea_ptr )
 0519 04C0 USER_PTR@       ( task_userarea_ptr curr_userarea_ptr )
 051A 03C4 OVER            ( task_userarea_ptr curr_userarea_ptr task_userarea_ptr )
-051B      LIT_4           ( task_userarea_ptr curr_userarea_ptr task_userarea_ptr 4 )
+051B 05F9 LIT_4           ( task_userarea_ptr curr_userarea_ptr task_userarea_ptr 4 )
 051C 0001 +               ( task_userarea_ptr curr_userarea_ptr task_userarea_ptr+4 )
 051D 0007 !               ( task_userarea_ptr )
 051E      next_task_ptr!  ( )
@@ -1055,12 +1055,12 @@ ADDR DATA IBM1800
 053D 0008 DUP             ( task task )
 053E 0006 @               ( task next )
 053F 03C4 OVER            ( task next task )
-0540      LIT_4           ( task next task 4 )
+0540 05F9 LIT_4           ( task next task 4 )
 0541 0001 +               ( task next task+4 )
 0542 0006 @               ( task next prev )
 0543 03CA 2DUP            ( task next prev next prev )
 0544 000A SWAP            ( task next prev prev next )
-0545      LIT_4           ( task next prev prev next 4 )
+0545 05F9 LIT_4           ( task next prev prev next 4 )
 0546 0001 +               ( task next prev prev next+4 )
 0547 0007 !               ( task next prev )
 0548 0007 !               ( task )
@@ -1176,7 +1176,7 @@ ADDR DATA IBM1800
 05B4 0008 DUP         : NEW-TASK ( code_ptr task_addr -- task_addr 0x0100 )
 05B5 0583 USER_0
 05B6 03C4 OVER
-05B7      LIT_64
+05B7 0603 LIT_64
 05B8 05E4 CELLS_MOVE
 05B9 0008 DUP         ( code_ptr task_addr task_addr )  \ ensure that next_task of the task points to the task itself
 05BA 0008 DUP         ( code_ptr task_addr task_addr task_addr )
@@ -1443,7 +1443,7 @@ ADDR DATA IBM1800
 06BE 0607 (LIT)  : LIT_0x41
 06BF 0041
 06C0 000F EXIT
-06C1      LIT_0  : CONSOLE_PRINTER1_EMIT
+06C1 0488 LIT_0  : CONSOLE_PRINTER1_EMIT
 06C2      CONSOLE_PRINTER_EMIT_COMMON
 06C3      LIT_1  : CONSOLE_PRINTER2_EMIT
 06C4      CONSOLE_PRINTER_EMIT_COMMON
@@ -1612,7 +1612,7 @@ ADDR DATA IBM1800
 0763      OR
 0764 000A SWAP
 0765 0007 !
-0766      (JMP)
+0766 03C0 (JMP)
 0767      CONSOLE_KEYBOARD_?KEY_COMMON_L4
 0768 0008 DUP  : CONSOLE_KEYBOARD_?KEY_COMMON2_L0 ( kbnr cardcode cardcode )
 0769 0607 (LIT)
