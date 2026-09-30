@@ -921,7 +921,7 @@ ADDR DATA IBM1800
 04C6 0007 !
 04C7 000F EXIT
 04C8 04C0 USER_PTR@   : saved_FIP
-04C9      LIT_1
+04C9 02AB LIT_1
 04CA 0001 +
 04CB 000F EXIT
 04CC 04C0 USER_PTR@   : saved_DSP
@@ -1019,12 +1019,12 @@ ADDR DATA IBM1800
 0529 0001 +               ( userarea_ptr+5 )
 052A 0008 DUP             ( userarea_ptr+5 userarea_ptr+5 )
 052B 0006 @               ( userarea_ptr+5 cell )
-052C      LIT_1           ( userarea_ptr+5 cell 1 )
+052C 02AB LIT_1           ( userarea_ptr+5 cell 1 )
 052D      OR              ( userarea_ptr+5 cell|1 )
 052E 000A SWAP            ( cell|1 userarea_ptr+5 )
 052F 0007 !               ( )
 0530 000F EXIT
-0531      LIT_1          : disable_preemptive_task_switch ( -- )
+0531 02AB LIT_1          : disable_preemptive_task_switch ( -- )
 0532      INVERT          ( 0xFFFE )
 0533 04C0 USER_PTR@       ( 0xFFFE userarea_ptr )
 0534      LIT_5           ( 0xFFFE userarea_ptr 5 )
@@ -1171,7 +1171,7 @@ ADDR DATA IBM1800
 05BF 0001 +           ( code_ptr task_addr task_addr task_addr+4 )
 05C0 0007 !           ( code_ptr task_addr )
 05C1      TUCK        ( task_addr code_ptr task_addr )
-05C2      1+          ( task_addr code_ptr task_addr+1 )
+05C2 0005 1+          ( task_addr code_ptr task_addr+1 )
 05C3 0007 !           ( task_addr )
 05C4 0008 DUP         ( task_addr task_addr )
 05C5      64+         ( task_addr SP0 )
@@ -1543,7 +1543,7 @@ ADDR DATA IBM1800
 072E 044E (BRZ)                    ( kbnr dsw_masked )
 072F      CONSOLE_KEYBOARD_?KEY_COMMON_L1
 0730 0009 DROP
-0731      LIT_1
+0731 02AB LIT_1
 0732      (JMP)
 0733      CONSOLE_KEYBOARD_?KEY_COMMON_L2
 0734      (LIT)  : CONSOLE_KEYBOARD_?KEY_COMMON_L1
@@ -1621,11 +1621,11 @@ ADDR DATA IBM1800
 077C 03C0 (JMP)
 077D      CONSOLE_KEYBOARD_?KEY_COMMON2_L2
 
-077E      R>     : (LUT_t2)  ( key -- value T | F )
-077F      DUP                ( key ra ra )
-0780      @                  ( key ra nrOfEntries )
-0781      >R                 ( key ra ) R:( nrOfEntries )
-0782      1+                 ( key ra+1 ) R:( nrOfEntries )
+077E 000D R>     : (LUT_t2)  ( key -- value T | F )
+077F 0008 DUP                ( key ra ra )
+0780 0006 @                  ( key ra nrOfEntries )
+0781 000C >R                 ( key ra ) R:( nrOfEntries )
+0782 0005 1+                 ( key ra+1 ) R:( nrOfEntries )
 0783 03C0 (JMP)
 0784      (LUT_t2)_L1
 0785      2DUP   : (LUT_t2)_L0
@@ -1909,7 +1909,7 @@ ADDR DATA IBM1800
 0897      LIT_3          ( peek_addr addr 3 )
 0898 0001 +              ( peek_addr addr+3 ) R:( count )
 0899 000D R>             ( peek_addr addr+3 count ) R:( )
-089A      CELLMOVE       ( )
+089A      CELLS_MOVE     ( )
 089B      SYS360_tmparea ( addr )
 089C      LIT_2          ( addr 2 )
 089D 0001 +              ( addr+2 )
@@ -1938,7 +1938,7 @@ ADDR DATA IBM1800
 08B4      SYS360_tmparea ( addr+3 length&0xFFF addr )
 08B5 0006 @              ( addr+3 length&0xFFF poke_addr )
 08B6 000A SWAP           ( addr+3 poke_addr length&0xFFF )
-08B7      CELLMOVE       ( )
+08B7      CELLS_MOVE     ( )
 08B8      (JMP)
 08B9      SYS360_commloop
 08BA 0796 2DROP  : SYS360_commloop_exec ( dsw cmd_byte )
