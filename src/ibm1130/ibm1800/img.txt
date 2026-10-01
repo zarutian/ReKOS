@@ -949,7 +949,7 @@ ADDR DATA IBM1800
 04CE 0001 +
 04CF 000F EXIT
 04D0 04C0 USER_PTR@   : saved_RSP
-04D1      LIT_3
+04D1 05F4 LIT_3
 04D2 0001 +
 04D3 000F EXIT
 04D4 xxxx             : 10ms_ticker
@@ -1453,7 +1453,7 @@ ADDR DATA IBM1800
 06C4      CONSOLE_PRINTER_EMIT_COMMON
 06C5 03F2 LIT_2  : CONSOLE_PRINTER3_EMIT
 06C6      CONSOLE_PRINTER_EMIT_COMMON
-06C7      LIT_3  : CONSOLE_PRINTER4_EMIT
+06C7 05F4 LIT_3  : CONSOLE_PRINTER4_EMIT
 06C8      CONSOLE_PRINTER_EMIT_COMMON
 06C9      LIT_4  : CONSOLE_PRINTER5_EMIT
 06CA      CONSOLE_PRINTER_EMIT_COMMON
@@ -1659,7 +1659,7 @@ ADDR DATA IBM1800
 078D      RDROP              ( value ) R:( )
 078E 03C0 (JMP)
 078F      TRUE
-0790      2+     : (LUT_t2)_L2
+0790 0799 2+     : (LUT_t2)_L2
 0791      (NEXT) : (LUT_t2)_L1
 0792      (LUT_t2)_L0
 0793 0796 2DROP
@@ -1926,7 +1926,7 @@ ADDR DATA IBM1800
 0894      SYS360_tmparea ( addr )
 0895 0006 @              ( peek_addr )
 0896      SYS360_tmparea ( peek_addr addr )
-0897      LIT_3          ( peek_addr addr 3 )
+0897 05F4 LIT_3          ( peek_addr addr 3 )
 0898 0001 +              ( peek_addr addr+3 ) R:( count )
 0899 000D R>             ( peek_addr addr+3 count ) R:( )
 089A      CELLS_MOVE     ( )
@@ -1952,7 +1952,7 @@ ADDR DATA IBM1800
 08AE 000A SWAP           ( length&0xFFF addr+2 length&0xFFF )
 08AF      SYS360_init_read&wait_on_it ( length&0xFFF )
 08B0      SYS360_tmparea ( length&0xFFF addr )
-08B1      LIT_3          ( length&0xFFF addr 3 )
+08B1 05F4 LIT_3          ( length&0xFFF addr 3 )
 08B2 0001 +              ( length&0xFFF addr+3 )
 08B3 000A SWAP           ( addr+3 length&0xFFF )
 08B4      SYS360_tmparea ( addr+3 length&0xFFF addr )
