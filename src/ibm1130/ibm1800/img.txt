@@ -878,7 +878,7 @@ ADDR DATA IBM1800
 0487 FFFF              : const_0xFFFF
 0488 04B4 (CONST)      : FALSE ( -- F )  : ZERO ( -- 0 ) : LIT_0
 0489 0000              : const_0
-048A 044E (BRZ)        : CLEANBOOL ( dirty -- clean (
+048A 044E (BRZ)        : CLEANBOOL ( dirty -- clean )
 048B 0488 FALSE
 048C 03C0 (JMP)
 048D 0486 TRUE
@@ -945,7 +945,7 @@ ADDR DATA IBM1800
 04CA 0001 +
 04CB 000F EXIT
 04CC 04C0 USER_PTR@   : saved_DSP
-04CD      LIT_2
+04CD 03F2 LIT_2
 04CE 0001 +
 04CF 000F EXIT
 04D0 04C0 USER_PTR@   : saved_RSP
@@ -1451,7 +1451,7 @@ ADDR DATA IBM1800
 06C2      CONSOLE_PRINTER_EMIT_COMMON
 06C3      LIT_1  : CONSOLE_PRINTER2_EMIT
 06C4      CONSOLE_PRINTER_EMIT_COMMON
-06C5      LIT_2  : CONSOLE_PRINTER3_EMIT
+06C5 03F2 LIT_2  : CONSOLE_PRINTER3_EMIT
 06C6      CONSOLE_PRINTER_EMIT_COMMON
 06C7      LIT_3  : CONSOLE_PRINTER4_EMIT
 06C8      CONSOLE_PRINTER_EMIT_COMMON
@@ -1861,7 +1861,7 @@ ADDR DATA IBM1800
 0854      SYS360_commloop_L0
 0855      3>>
 0856 0008 DUP
-0857      LIT_2      \ peek
+0857 03F2 LIT_2      \ peek
 0858      =
 0859      INVERT
 085A 044E (BRZ)
@@ -1911,7 +1911,7 @@ ADDR DATA IBM1800
 0885 000F EXIT
 0886 0796 2DROP       : SYS360_commloop_peek ( dsw cmd_byte )
 0887      SYS360_tmparea ( addr )
-0888      LIT_2          ( addr 2 )
+0888 03F2 LIT_2          ( addr 2 )
 0889      SYS360_init_read&wait_on_it
 088A      SYS360_tmparea ( addr )
 088B 0005 1+             ( addr+1 )
@@ -1919,7 +1919,7 @@ ADDR DATA IBM1800
 088D      0xFFF&         ( length&0xFFF )
 088E 0008 DUP            ( length&0xFFF length&0xFFF )
 088F      SYS360_tmparea ( length&0xFFF length&0xFFF addr )
-0890      LIT_2          ( length&0xFFF length&0xFFF addr 2 )
+0890 03F2 LIT_2          ( length&0xFFF length&0xFFF addr 2 )
 0891 0001 +              ( length&0xFFF length&0xFFF addr+2 )
 0892 0007 !              ( length&0xFFF )
 0893 000C >R             ( ) R:( count )
@@ -1931,7 +1931,7 @@ ADDR DATA IBM1800
 0899 000D R>             ( peek_addr addr+3 count ) R:( )
 089A      CELLS_MOVE     ( )
 089B      SYS360_tmparea ( addr )
-089C      LIT_2          ( addr 2 )
+089C 03F2 LIT_2          ( addr 2 )
 089D 0001 +              ( addr+2 )
 089E 0008 DUP            ( addr+2 addr+2 )
 089F 0006 @              ( addr+2 length )
@@ -1940,7 +1940,7 @@ ADDR DATA IBM1800
 08A2      SYS360_commloop
 08A3 0796 2DROP  : SYS360_commloop_poke ( dsw cmd_byte )
 08A4      SYS360_tmparea ( addr )
-08A5      LIT_2          ( addr 2 )
+08A5 03F2 LIT_2          ( addr 2 )
 08A6      SYS360_init_read&wait_on_it
 08A7      SYS360_tmparea ( addr )
 08A8 0005 1+             ( addr+1 )
@@ -1967,7 +1967,7 @@ ADDR DATA IBM1800
 08BD      SYS360_init_read&wait_on_it
 08BE      SYS360_tmparea ( addr )
 08BF 0006 @              ( exec_addr )
-08C0      EXEC           ( )
+08C0      EXECUTE        ( )
 08C1 03C0 (JMP)
 08C2      SYS360_commloop
 08C3      : SYS360_commloop_enquery
