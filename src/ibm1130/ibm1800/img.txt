@@ -969,7 +969,7 @@ ADDR DATA IBM1800
 04E3 04DA TImers_interrupt_handler_L0
 04E4 BABE             : sense_timer_device_IOCC
 04E5 0721
-04E6 6400 LDX_l I     : TI_C_interrupt_handler_L0
+04E6
 04E7 xxxx             : TI_C_interrupt_handler
 04E8 C400 LD_l
 04E9 04D4 10ms_ticker
@@ -980,10 +980,10 @@ ADDR DATA IBM1800
 04EE 04D4 10ms_ticker
 04EF 18D0 RTE 16      \ rotate right A and Q
 04F0 C400 LD_l        \ zero out A
-04F1      const_0
+04F1 0489 const_0
 04F2 A8   DIV_s I+const_1000 \ divide by 1000
 04F3 C400 LD_l        \ zero out A
-04F4      const_0
+04F4 0489 const_0
 04F5 18D0 RTE 16      \ rotate right A and Q
 04F6 4C20 BSC_l A<>0?
 04F7      TI_C_interrupt_handler_L1
@@ -997,12 +997,12 @@ ADDR DATA IBM1800
 04FF D400 STO_l
 0500 00B2 saved ISLW
 0501      LD_s I+const_-10
-0502      ADD_l
+0502 8400 ADD_l
 0503 0006 timer C
 0504 D400 STO_l
 0505 0006 timer C
-0506 6400 LDX_l I
-0507      TI_C_interrupt_handler_L0
+0506 4C80 BSC_l_IA any condition
+0507 04E7 TI_C_interrupt_handler
 0508 04C0 USER_PTR@   : next_task_ptr
 0509 000F EXIT
 050A 04C0 USER_PTR@   : prev_task_ptr
