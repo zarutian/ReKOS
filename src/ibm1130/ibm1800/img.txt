@@ -986,7 +986,7 @@ ADDR DATA IBM1800
 04F4 0489 const_0
 04F5 18D0 RTE 16      \ rotate right A and Q
 04F6 4C20 BSC_l A<>0?
-04F7      TI_C_interrupt_handler_L1
+04F7 04FA TI_C_interrupt_handler_L1
 04F8      LD_s I+const_0x4000
 04F9 18D0 RTE 16      \ rotate right A and Q
 04FA 18D0 RTE 16      : TI_C_interrupt_handler_L1 \ rotate right A and Q
@@ -1010,10 +1010,10 @@ ADDR DATA IBM1800
 050C 0001 +
 050D 000F EXIT
 050E      disable_preemptive_task_switch  : LINK-IN-TASK ( task_userarea_ptr -- )
-050F      next_task_ptr@  ( task_userarea_ptr next_task_ptr )
+050F 0521 next_task_ptr@  ( task_userarea_ptr next_task_ptr )
 0510 03C4 OVER            ( task_userarea_ptr next_task_ptr task_userarea_ptr )
 0511 0007 !               ( task_userarea_ptr )
-0512      next_task_ptr@  ( task_userarea_ptr next_task_ptr )
+0512 0521 next_task_ptr@  ( task_userarea_ptr next_task_ptr )
 0513 05F9 LIT_4           ( task_userarea_ptr next_task_ptr 4 )
 0515 0001 +               ( task_userarea_ptr next_task_ptr+4 )
 0516 03C4 OVER            ( task_userarea_ptr next_task_ptr+4 task_userarea_ptr )
@@ -1024,31 +1024,31 @@ ADDR DATA IBM1800
 051B 05F9 LIT_4           ( task_userarea_ptr curr_userarea_ptr task_userarea_ptr 4 )
 051C 0001 +               ( task_userarea_ptr curr_userarea_ptr task_userarea_ptr+4 )
 051D 0007 !               ( task_userarea_ptr )
-051E      next_task_ptr!  ( )
+051E 0521 next_task_ptr!  ( )
 051F      enable_preemptive_task_switch
 0520 000F
-0521      next_task_ptr  : next_task_ptr@ ( -- next_task_userarea_ptr )
+0521 0508 next_task_ptr  : next_task_ptr@ ( -- next_task_userarea_ptr )
 0522 0006 @
 0523 000F EXIT
-0524      next_task_ptr  : next_task_ptr! ( next_task_userarea_ptr -- )
+0524 0508 next_task_ptr  : next_task_ptr! ( next_task_userarea_ptr -- )
 0525 0007 !
 0526 000F EXIT
 0527 04C0 USER_PTR@      : enable_preemptive_task_switch ( -- )
-0528      LIT_5           ( userarea_ptr 5 )
+0528 05FB LIT_5           ( userarea_ptr 5 )
 0529 0001 +               ( userarea_ptr+5 )
 052A 0008 DUP             ( userarea_ptr+5 userarea_ptr+5 )
 052B 0006 @               ( userarea_ptr+5 cell )
 052C 02AB LIT_1           ( userarea_ptr+5 cell 1 )
-052D      OR              ( userarea_ptr+5 cell|1 )
+052D 034E OR              ( userarea_ptr+5 cell|1 )
 052E 000A SWAP            ( cell|1 userarea_ptr+5 )
 052F 0007 !               ( )
 0530 000F EXIT
 0531 02AB LIT_1          : disable_preemptive_task_switch ( -- )
-0532      INVERT          ( 0xFFFE )
+0532 048E INVERT          ( 0xFFFE )
 0533 04C0 USER_PTR@       ( 0xFFFE userarea_ptr )
-0534      LIT_5           ( 0xFFFE userarea_ptr 5 )
+0534 05FB LIT_5           ( 0xFFFE userarea_ptr 5 )
 0535 0001 +
-0536      TUCK
+0536 04B1 TUCK
 0537 0006 @
 0538 0002 AND             ( userarea_ptr+5 cell )
 0539 000A SWAP
@@ -1100,7 +1100,7 @@ ADDR DATA IBM1800
 0567      TOD_clock_U
 0568 DC00 STD         \ 32 bit store
 0569      TOD_clock_U
-056A C400 LD_l          : TI_1s_timer_interrupt_handler_L2
+056A C400 LD_l        : TI_1s_timer_interrupt_handler_L2
 056B      const_0x8000
 056C EC00 OR_l        \ or 'fake' interrupts into the saved ISLW
 056D 00B2 saved ISLW
@@ -1108,20 +1108,20 @@ ADDR DATA IBM1800
 056F 00B2 saved ISLW
 0570 6400 LDX_l I
 0571      TI_1s_timer_interrupt_handler_L0
-0572 6400 LDX_l I     : preemptive_task_switch_interrupt_L0
+0572
 0573 xxxx             : preemptive_task_switch_interrupt
-0574      LD_l
+0574 C400 LD_l
 0575 0007 USER_PTR
-0576      ADD_l
+0576 8400 ADD_l
 0577      const_5
-0578      STO_s I+1
-0579      LD_l
+0578 D001 STO_s I+1
+0579 C400 LD_l
 057A xxxx
-057B      XOR_l
+057B F400 XOR_l
 057C      const_1
-057D      BSC_l A<>0?
-057E      preemptive_task_switch_interrupt_L0
-057F      LD_l
+057D 4CA0 BSC_l_IA A<>0?
+057E 0573 preemptive_task_switch_interrupt
+057F C400 LD_l
 0580 0007 USER_PTR
 0581 6400 LDX_l I
 0582      WAITED-ON-FIRED_L2  \ this convoluted way is used to allow a Forth primitive or (IBM1800) code word to finish before PAUSEing
