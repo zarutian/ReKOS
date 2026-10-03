@@ -2036,4 +2036,6 @@ Zarutians bitmapped screen + alphanumeric keyboard (ISO) + 32 key function keypa
   Just there are possibility for extra notches.
   Four on each side of the eight possible notches on overlays meant for 2250 fkpds.
 
-
+Digital Outputs
+ Some are connected to 14 seven segment displays.
+ 2026-10-03 13:37:00
