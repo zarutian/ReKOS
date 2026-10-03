@@ -1076,38 +1076,38 @@ ADDR DATA IBM1800
 054F 0007 !               ( )
 0550      enable_preemptive_task_switch
 0551 000F EXIT
-0552 6400 LDX_l I       : TI_1s_timer_interrupt_handler_L0
+0552 
 0553 xxxx               : TI_1s_timer_interrupt_handler
 0554 C400 LD_l
-0555      const_1
+0555 02AC const_1
 0556 18D0 RTE 16      \ rotate right A and Q
 0557 C400 LD_l
-0558      const_0
+0558 0489 const_0
 0559 8C00 ADDD_l      \ 32 bit add
-055A      TOD_clock_L
+055A 04D8 TOD_clock_L
 055B DC00 STD_l       \ 32 bit store
-055C      TOD_clock_L
+055C 04D8 TOD_clock_L
 055D 4802 BSC_l carry=0?
-055E      TI_1s_timer_interrupt_handler_L1
+055E 0561 TI_1s_timer_interrupt_handler_L1
 055F 6400 LDX_l
-0560      TI_1s_timer_interrupt_handler_L2
-0561 C400 LD_l
-0562      const_1
+0560 056A TI_1s_timer_interrupt_handler_L2
+0561 C400 LD_l          : TI_1s_timer_interrupt_handler_L1
+0562 02AC const_1
 0563 18D0 RTE 16      \ rotate right A and Q
 0564 C400 LD_l
-0565      const_0
+0565 0489 const_0
 0566 8C00 ADDD_l      \ 32 bit add
-0567      TOD_clock_U
+0567 04D6 TOD_clock_U
 0568 DC00 STD         \ 32 bit store
-0569      TOD_clock_U
+0569 04D6 TOD_clock_U
 056A C400 LD_l        : TI_1s_timer_interrupt_handler_L2
 056B      const_0x8000
 056C EC00 OR_l        \ or 'fake' interrupts into the saved ISLW
 056D 00B2 saved ISLW
 056E D400 STO_l
 056F 00B2 saved ISLW
-0570 6400 LDX_l I
-0571      TI_1s_timer_interrupt_handler_L0
+0570 4C80 BSC_l_IA any condition
+0571 0553 TI_1s_timer_interrupt_handler
 0572
 0573 xxxx             : preemptive_task_switch_interrupt
 0574 C400 LD_l
