@@ -35,7 +35,7 @@ const src = `
   .def ilo_sl  0x19  # shift left. a << b
   .def ilo_sr  0x1A  # shift right. a >> b 
   .def ilo_cp  0x1B  # compare two memory regions 
-  .def ilo_cy  0x1C  # copy memory                               |
+  .def ilo_cy  0x1C  # copy memory
   .def ilo_io  0x1D  # perform i/o operation
 
   .def_calc ilo_licanono ilo_li ilo_ca 8 << ilo_no 16 << ilo_no 24 << | | |
@@ -53,6 +53,8 @@ const src = `
   .def_calc ilo_xonoliju ilo_xo ilo_no 8 << ilo_li 16 << ilo_ju 24 << | | |
   .def_calc ilo_dulislli ilo_du ilo_li 8 << ilo_sl 16 << ilo_li 24 << | | |
   .def_calc ilo_srorliju ilo_sr ilo_or 8 << ilo_li 16 << ilo_ju 24 << | | |
+  .def_calc ilo_liadliju ilo_li ilo_ad 8 << ilo_li 16 << ilo_ju 24 << | | |
+  .def_calc ilo_fenoliju ilo_fe ilo_no 8 << ilo_li 16 << ilo_ju 24 << | | |
 
   : FCPU32_ilo_dispatch
   # the $NEXT
