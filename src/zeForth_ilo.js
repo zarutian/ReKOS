@@ -48,7 +48,9 @@ const src = `
   .def_calc ilo_dufelica ilo_du 24 << ilo_fe 16 << ilo_li 8 << ilo_ca | | |
   .def_calc ilo_stlijuno ilo_st 24 << ilo_li 16 << ilo_ju 8 << ilo_no | | |
   .def_calc ilo_poliadre ilo_po 24 << ilo_li 16 << ilo_ad 8 << ilo_re | | |
-  
+  .def_calc ilo_adnoliju ilo_ad 24 << ilo_no 16 << ilo_li 8 << ilo_ju | | |
+  .def_calc ilo_annoliju ilo_an 24 << ilo_no 16 << ilo_li 8 << ilo_ju | | |
+  .def_calc ilo_xonoliju ilo_xo 24 << ilo_no 16 << ilo_li 8 << ilo_ju | | |
 
   : FCPU32_ilo_dispatch
   # the $NEXT
