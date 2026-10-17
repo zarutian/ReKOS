@@ -129,5 +129,11 @@ const src = `
   .dw_le FCPU32_ilo_dispatch
 
   : FCPU32_ilo_FETCH
-  
+  .dw_le ilo_fenoliju
+  .dw_le FCPU32_ilo_dispatch
+
+  : FCPU32_ilo_STORE
+  .dw_le ilo_stnoliju
+  .dw_le FCPU32_ilo_dispatch
+
 `;
