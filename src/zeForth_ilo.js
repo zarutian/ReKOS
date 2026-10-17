@@ -206,7 +206,8 @@ const src = `
   .dw_le FCPU32_ilo_EXT_?RX
   .dw_le ilo_licanono
   .dw_le FCPU32_ilo_EXT_handler_vector
-  .dw_le ilo_junonono
+  .dw_le ilo_felijuno
+  .dw_le FCPU32_ilo_call
 
   : FCPU32_ilo_EXT_handler_vector
   .dw_le ilo_licanono
