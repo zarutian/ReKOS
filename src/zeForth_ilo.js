@@ -38,21 +38,21 @@ const src = `
   .def ilo_cy  0x1C  # copy memory                               |
   .def ilo_io  0x1D  # perform i/o operation
 
-  .def_calc ilo_licanono ilo_li 24 << ilo_ca 16 << ilo_no 8 << ilo_no | | |
-  .def_calc ilo_fefenono ilo_fe 24 << ilo_fe 16 << ilo_no 8 << ilo_no | | |
-  .def_calc ilo_dufeliad ilo_du 24 << ilo_fe 16 << ilo_li 8 << ilo_ad | | |
-  .def_calc ilo_swstduli ilo_sw 24 << ilo_st 16 << ilo_du 8 << ilo_li | | |
-  .def_calc ilo_annolicj ilo_an 24 << ilo_no 16 << ilo_li 8 << ilo_cj | | |
-  .def_calc ilo_lianlica ilo_li 24 << ilo_an 16 << ilo_li 8 << ilo_ca | | |
-  .def_calc ilo_adfejuno ilo_ad 24 << ilo_fe 16 << ilo_ju 8 << ilo_no | | |
-  .def_calc ilo_dufelica ilo_du 24 << ilo_fe 16 << ilo_li 8 << ilo_ca | | |
-  .def_calc ilo_stlijuno ilo_st 24 << ilo_li 16 << ilo_ju 8 << ilo_no | | |
-  .def_calc ilo_poliadre ilo_po 24 << ilo_li 16 << ilo_ad 8 << ilo_re | | |
-  .def_calc ilo_adnoliju ilo_ad 24 << ilo_no 16 << ilo_li 8 << ilo_ju | | |
-  .def_calc ilo_annoliju ilo_an 24 << ilo_no 16 << ilo_li 8 << ilo_ju | | |
-  .def_calc ilo_xonoliju ilo_xo 24 << ilo_no 16 << ilo_li 8 << ilo_ju | | |
-  .def_calc ilo_dulislli ilo_du 24 << ilo_li 16 << ilo_sl 8 << ilo_li | | |
-  .def_calc ilo_srorliju ilo_sr 24 << ilo_or 16 << ilo_li 8 << ilo_ju | | |
+  .def_calc ilo_licanono ilo_li ilo_ca 8 << ilo_no 16 << ilo_no 24 << | | |
+  .def_calc ilo_fefenono ilo_fe ilo_fe 8 << ilo_no 16 << ilo_no 24 << | | |
+  .def_calc ilo_dufeliad ilo_du ilo_fe 8 << ilo_li 16 << ilo_ad 24 << | | |
+  .def_calc ilo_swstduli ilo_sw ilo_st 8 << ilo_du 16 << ilo_li 24 << | | |
+  .def_calc ilo_annolicj ilo_an ilo_no 8 << ilo_li 16 << ilo_cj 24 << | | |
+  .def_calc ilo_lianlica ilo_li ilo_an 8 << ilo_li 16 << ilo_ca 24 << | | |
+  .def_calc ilo_adfejuno ilo_ad ilo_fe 8 << ilo_ju 16 << ilo_no 24 << | | |
+  .def_calc ilo_dufelica ilo_du ilo_fe 8 << ilo_li 16 << ilo_ca 24 << | | |
+  .def_calc ilo_stlijuno ilo_st ilo_li 8 << ilo_ju 16 << ilo_no 24 << | | |
+  .def_calc ilo_poliadre ilo_po ilo_li 8 << ilo_ad 16 << ilo_re 24 << | | |
+  .def_calc ilo_adnoliju ilo_ad ilo_no 8 << ilo_li 16 << ilo_ju 24 << | | |
+  .def_calc ilo_annoliju ilo_an ilo_no 8 << ilo_li 16 << ilo_ju 24 << | | |
+  .def_calc ilo_xonoliju ilo_xo ilo_no 8 << ilo_li 16 << ilo_ju 24 << | | |
+  .def_calc ilo_dulislli ilo_du ilo_li 8 << ilo_sl 16 << ilo_li 24 << | | |
+  .def_calc ilo_srorliju ilo_sr ilo_or 8 << ilo_li 16 << ilo_ju 24 << | | |
 
   : FCPU32_ilo_dispatch
   # the $NEXT
