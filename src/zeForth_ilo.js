@@ -65,6 +65,8 @@ const src = `
   .def_calc ilo_ponoliju ilo_po ilo_no 8 << ilo_li 16 << ilo_ju 24 << | | |
   .def_calc ilo_poliadfe ilo_po ilo_li 8 << ilo_ad 16 << ilo_fe 24 << | | |
   .def_calc ilo_renonono ilo_re ilo_no 8 << ilo_no 16 << ilo_no 24 << | | |
+  .def_calc ilo_dulieqno ilo_du ilo_li 8 << ilo_eq 16 << ilo_no 24 << | | |
+  .def_calc ilo_licjnono ilo_li ilo_cj 8 << ilo_no 16 << ilo_no 24 << | | |
 
   : FCPU32_ilo_dispatch
   # the $NEXT
@@ -181,4 +183,28 @@ const src = `
   : FCPU32_ilo_R_FROM
   .dw_le ilo_ponoliju
   .dw_le FCPU32_ilo_dispatch
+
+  : FCPU32_ilo_(ILO)_marker
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_(CONST)
+  .utf8 "ILO "
+  
+  : FCPU32_ilo_EXT
+  # ( ... extnr -- ... )
+  .dw_le ilo_dulieqno
+  .utf8 "ILO "
+  .dw_le ilo_licjnono
+  .dw_le FCPU32_ilo_EXT_jump_into_ilo_code
+  .dw_le ilo_dulieqno
+  .dw_le 0x00000001
+  .dw_le ilo_licjnono
+  .dw_le FCPU32_ilo_EXT_TX!
+  .dw_le ilo_dulieqno
+  .dw_le 0x00000002
+  .dw_le ilo_licjnono
+  .dw_le FCPU32_ilo_EXT_?RX
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_EXT_handler_vector
+  .dw_le ilo_junonono
+  
 `;
