@@ -7,7 +7,7 @@
 //     2 bytes length (big endian)
 //
 const src = `
-  .def ilo_nop 0x00
+  .def ilo_no  0x00
   .def ilo_li  0x01  # literal
   .def ilo_du  0x02  # duplicate
   .def ilo_dr  0x03  # drop
@@ -38,4 +38,39 @@ const src = `
   .def ilo_cy  0x1C  # copy memory                               |
   .def ilo_io  0x1D  # perform i/o operation
 
+  .def_calc ilo_licanono ilo_ca 8 << ilo_li |
+  .def_calc ilo_fefenono ilo_fe 8 << ilo_fe |
+  .def_calc ilo_dufeliad ilo_du 24 << ilo_fe 16 << ilo_li << 8 ilo_ad | | |
+  .def_calc ilo_swstduli ilo_sw 24 << ilo_st 16 << ilo_du << 8 ilo_li | | |
+  .def_calc ilo_annolicj ilo_an 24 << ilo_no 16 << ilo_li << 8 ilo_cj | | |
+  .def_calc ilo_lianlica ilo_li 24 << ilo_an 16 << ilo_li << 8 ilo_ca | | |
+  .def_calc ilo_adfejuno ilo_ad 24 << ilo_fe 16 << ilo_ju << 8 ilo_no | | |
+  .def_calc ilo_dufelica ilo_du 24 << ilo_fe 16 << ilo_li << 8 ilo_ca | | |
+  .def_calc ilo_stlijuno ilo_st 24 << ilo_li 16 << ilo_ju << 8 ilo_no | | |
+
+  : FCPU32_ilo_dispatch
+  # the $NEXT
+  .dw_le ilo_licanono 
+  .dw_le FCPU32_ilo_IP  # ( addr )
+  .dw_le ilo_fefenono   # ( fcpu32_instr )
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_IP  # ( fcpu32_instr addr )
+  .dw_le ilo_dufeliad   # ( fcpu32_instr addr IP+1 )
+  .dw_le 0x00000001
+  .dw_le ilo_swstduli   # ( fcpu32_instr fcpu32_instr 0xFFFFFFF0 )
+  .dw_le 0xFFFFFFF0
+  .dw_le ilo_annolicj   # ( fcpu32_instr )
+  .dw_le FCPU32_ilo_call
+  .dw_le ilo_lianlica
+  .dw_le 0x0000000F
+  .dw_le FCPU32_ilo_dispatch_table
+  .dw_le ilo_adfejuno   # ( )
+  : FCPU32_ilo_call
+  # ( fcpu32_instr )
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_IP
+  .dw_le ilo_dufelica
+  .dw_le FCPU32_ilo_PUSH2RS
+  .dw_le ilo_stlijuno
+  .dw_le FCPU32_ilo_dispatch
 `;
