@@ -68,6 +68,9 @@ const src = `
   .def_calc ilo_dulieqno ilo_du ilo_li 8 << ilo_eq 16 << ilo_no 24 << | | |
   .def_calc ilo_licjnono ilo_li ilo_cj 8 << ilo_no 16 << ilo_no 24 << | | |
   .def_calc ilo_junonono ilo_ju ilo_no 8 << ilo_no 16 << ilo_no 24 << | | |
+  .def_calc ilo_drliiono ilo_dr ilo_li 8 << ilo_io 16 << ilo_no 24 << | | |
+  .def_calc ilo_lijunono ilo_li ilo_ju 8 << ilo_no 16 << ilo_no 24 << | | |
+  .def_calc ilo_lilijuno ilo_li ilo_li 8 << ilo_ju 16 << ilo_no 24 << | | |
 
   : FCPU32_ilo_dispatch
   # the $NEXT
@@ -208,6 +211,21 @@ const src = `
   .dw_le FCPU32_ilo_EXT_handler_vector
   .dw_le ilo_felijuno
   .dw_le FCPU32_ilo_call
+
+  : FCPU32_ilo_EXT_TX!
+  # ( byte ext -- )
+  .dw_le ilo_drliiono
+  .dw_le 0x00000000
+  .dw_le ilo_lijunono
+  .dw_le FCPU32_ilo_dispatch
+
+  : FCPU32_ilo_EXT_?RX
+  # ( ext -- byte true )
+  .dw_le ilo_drliiono
+  .dw_le 0x00000001
+  .dw_le ilo_lilijuno
+  .dw_le 0xFFFFFFFF
+  .dw_le FCPU32_ilo_dispatch
 
   : FCPU32_ilo_EXT_handler_vector
   .dw_le ilo_licanono
