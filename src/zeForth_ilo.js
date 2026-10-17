@@ -63,6 +63,8 @@ const src = `
   .def_calc ilo_swstliju ilo_sw ilo_st 8 << ilo_li 16 << ilo_ju 24 << | | |
   .def_calc ilo_punoliju ilo_pu ilo_no 8 << ilo_li 16 << ilo_ju 24 << | | |
   .def_calc ilo_ponoliju ilo_po ilo_no 8 << ilo_li 16 << ilo_ju 24 << | | |
+  .def_calc ilo_poliadfe ilo_po ilo_li 8 << ilo_ad 16 << ilo_fe 24 << | | |
+  .def_calc ilo_renonono ilo_re ilo_no 8 << ilo_no 16 << ilo_no 24 << | | |
 
   : FCPU32_ilo_dispatch
   # the $NEXT
@@ -93,6 +95,11 @@ const src = `
   : FCPU32_ilo_(VAR)
   .dw_le ilo_poliadre   # ( -- vaddr )
   .dw_le 0x00000001
+
+  : FCPU32_ilo_(CONST)
+  .dw_le ilo_poliadfe
+  .dw_le 0x00000001
+  .dw_le ilo_renonono
 
   : FCPU32_ilo_dispatch_table
   .dw_le ilo_licanono
