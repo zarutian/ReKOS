@@ -51,6 +51,8 @@ const src = `
   .def_calc ilo_adnoliju ilo_ad 24 << ilo_no 16 << ilo_li 8 << ilo_ju | | |
   .def_calc ilo_annoliju ilo_an 24 << ilo_no 16 << ilo_li 8 << ilo_ju | | |
   .def_calc ilo_xonoliju ilo_xo 24 << ilo_no 16 << ilo_li 8 << ilo_ju | | |
+  .def_calc ilo_dulislli ilo_du 24 << ilo_li 16 << ilo_sl 8 << ilo_li | | |
+  .def_calc ilo_srorliju ilo_sr 24 << ilo_or 16 << ilo_li 8 << ilo_ju | | |
 
   : FCPU32_ilo_dispatch
   # the $NEXT
@@ -121,5 +123,11 @@ const src = `
   .dw_le ilo_srorliju
   .dw_le FCPU32_ilo_dispatch
 
+  : FCPU32_ilo_INCR
+  .dw_le ilo_liadliju
+  .dw_le 0x0000001
+  .dw_le FCPU32_ilo_dispatch
 
+  : FCPU32_ilo_FETCH
+  
 `;
