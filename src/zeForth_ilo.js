@@ -61,6 +61,8 @@ const src = `
   .def_calc ilo_swnoliju ilo_sw ilo_no 8 << ilo_li 16 << ilo_ju 24 << | | |
   .def_calc ilo_licjnono ilo_li ilo_cj 8 << ilo_no 16 << ilo_no 24 << | | |
   .def_calc ilo_swstliju ilo_sw ilo_st 8 << ilo_li 16 << ilo_ju 24 << | | |
+  .def_calc ilo_punoliju ilo_pu ilo_no 8 << ilo_li 16 << ilo_ju 24 << | | |
+  .def_calc ilo_ponoliju ilo_po ilo_no 8 << ilo_li 16 << ilo_ju 24 << | | |
 
   : FCPU32_ilo_dispatch
   # the $NEXT
@@ -164,5 +166,12 @@ const src = `
   .dw_le 0x00000001
   .dw_le ilo_swstliju
   .dw_le FCPU32_ilo_dispatch
-  
+
+  : FCPU32_ilo_TO_R
+  .dw_le ilo_punoliju
+  .dw_le FCPU32_ilo_dispatch
+
+  : FCPU32_ilo_R_FROM
+  .dw_le ilo_ponoliju
+  .dw_le FCPU32_ilo_dispatch
 `;
