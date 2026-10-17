@@ -38,8 +38,8 @@ const src = `
   .def ilo_cy  0x1C  # copy memory                               |
   .def ilo_io  0x1D  # perform i/o operation
 
-  .def_calc ilo_licanono ilo_ca 8 << ilo_li |
-  .def_calc ilo_fefenono ilo_fe 8 << ilo_fe |
+  .def_calc ilo_licanono ilo_li 24 << ilo_ca 16 << ilo_no 8 << ilo_no | | |
+  .def_calc ilo_fefenono ilo_fe 24 << ilo_fe 16 << ilo_no 8 << ilo_no | | |
   .def_calc ilo_dufeliad ilo_du 24 << ilo_fe 16 << ilo_li 8 << ilo_ad | | |
   .def_calc ilo_swstduli ilo_sw 24 << ilo_st 16 << ilo_du 8 << ilo_li | | |
   .def_calc ilo_annolicj ilo_an 24 << ilo_no 16 << ilo_li 8 << ilo_cj | | |
@@ -112,6 +112,13 @@ const src = `
 
   : FCPU32_ilo_XOR
   .dw_le ilo_xonoliju
+  .dw_le FCPU32_ilo_dispatch
+
+  : FCPU32_ilo_ONELBR
+  .dw_le ilo_dulislli
+  .dw_le 0x00000001
+  .dw_le 0x0000001F
+  .dw_le ilo_srorliju
   .dw_le FCPU32_ilo_dispatch
 
 
