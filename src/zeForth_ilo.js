@@ -5,7 +5,7 @@
 //   9p tcp and udp portnr 564
 //   https://github.com/zzJinux/simpletun/blob/master/simpletun.c
 //     2 bytes length (big endian)
-//
+//     length bytes raw IP packet
 const src = `
   .def ilo_no  0x00
   .def ilo_li  0x01  # literal
@@ -73,4 +73,24 @@ const src = `
   .dw_le FCPU32_ilo_PUSH2RS
   .dw_le ilo_stlijuno
   .dw_le FCPU32_ilo_dispatch
+
+  : FCPU32_ilo_dispatch_table
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_(VAR)
+  .dw_le FCPU32_ilo_dispatch  # NOP
+  .dw_le FCPU32_ilo_PLUS
+  .dw_le FCPU32_ilo_AND
+  .dw_le FCPU32_ilo_XOR
+  .dw_le FCPU32_ilo_ONELBR
+  .dw_le FCPU32_ilo_INCR
+  .dw_le FCPU32_ilo_FETCH
+  .dw_le FCPU32_ilo_STORE
+  .dw_le FCPU32_ilo_DUP
+  .dw_le FCPU32_ilo_DROP
+  .dw_le FCPU32_ilo_SWAP
+  .dw_le FCPU32_ilo_SKZ
+  .dw_le FCPU32_ilo_TO_R
+  .dw_le FCPU32_ilo_R_FROM
+  .dw_le FCPU32_ilo_EXT
+  .dw_le FCPU32_ilo_EXIT
 `;
