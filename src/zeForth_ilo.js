@@ -40,13 +40,15 @@ const src = `
 
   .def_calc ilo_licanono ilo_ca 8 << ilo_li |
   .def_calc ilo_fefenono ilo_fe 8 << ilo_fe |
-  .def_calc ilo_dufeliad ilo_du 24 << ilo_fe 16 << ilo_li << 8 ilo_ad | | |
-  .def_calc ilo_swstduli ilo_sw 24 << ilo_st 16 << ilo_du << 8 ilo_li | | |
-  .def_calc ilo_annolicj ilo_an 24 << ilo_no 16 << ilo_li << 8 ilo_cj | | |
-  .def_calc ilo_lianlica ilo_li 24 << ilo_an 16 << ilo_li << 8 ilo_ca | | |
-  .def_calc ilo_adfejuno ilo_ad 24 << ilo_fe 16 << ilo_ju << 8 ilo_no | | |
-  .def_calc ilo_dufelica ilo_du 24 << ilo_fe 16 << ilo_li << 8 ilo_ca | | |
-  .def_calc ilo_stlijuno ilo_st 24 << ilo_li 16 << ilo_ju << 8 ilo_no | | |
+  .def_calc ilo_dufeliad ilo_du 24 << ilo_fe 16 << ilo_li 8 << ilo_ad | | |
+  .def_calc ilo_swstduli ilo_sw 24 << ilo_st 16 << ilo_du 8 << ilo_li | | |
+  .def_calc ilo_annolicj ilo_an 24 << ilo_no 16 << ilo_li 8 << ilo_cj | | |
+  .def_calc ilo_lianlica ilo_li 24 << ilo_an 16 << ilo_li 8 << ilo_ca | | |
+  .def_calc ilo_adfejuno ilo_ad 24 << ilo_fe 16 << ilo_ju 8 << ilo_no | | |
+  .def_calc ilo_dufelica ilo_du 24 << ilo_fe 16 << ilo_li 8 << ilo_ca | | |
+  .def_calc ilo_stlijuno ilo_st 24 << ilo_li 16 << ilo_ju 8 << ilo_no | | |
+  .def_calc ilo_poliadre ilo_po 24 << ilo_li 16 << ilo_ad 8 << ilo_re | | |
+  
 
   : FCPU32_ilo_dispatch
   # the $NEXT
@@ -73,6 +75,10 @@ const src = `
   .dw_le FCPU32_ilo_PUSH2RS
   .dw_le ilo_stlijuno
   .dw_le FCPU32_ilo_dispatch
+
+  : FCPU32_ilo_(VAR)
+  .dw_le ilo_poliadre   # ( -- vaddr )
+  .dw_le 0x00000001
 
   : FCPU32_ilo_dispatch_table
   .dw_le ilo_licanono
