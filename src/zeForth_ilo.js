@@ -67,6 +67,7 @@ const src = `
   .def_calc ilo_renonono ilo_re ilo_no 8 << ilo_no 16 << ilo_no 24 << | | |
   .def_calc ilo_dulieqno ilo_du ilo_li 8 << ilo_eq 16 << ilo_no 24 << | | |
   .def_calc ilo_licjnono ilo_li ilo_cj 8 << ilo_no 16 << ilo_no 24 << | | |
+  .def_calc ilo_junonono ilo_ju ilo_no 8 << ilo_no 16 << ilo_no 24 << | | |
 
   : FCPU32_ilo_dispatch
   # the $NEXT
