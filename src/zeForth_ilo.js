@@ -207,5 +207,9 @@ const src = `
   .dw_le ilo_licanono
   .dw_le FCPU32_ilo_EXT_handler_vector
   .dw_le ilo_junonono
-  
+
+  : FCPU32_ilo_EXT_handler_vector
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_(CONST)
+  .dw_le FCPU32_ilo_EXT_handler_vector_addr
 `;
