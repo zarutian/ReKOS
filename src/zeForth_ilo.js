@@ -99,4 +99,18 @@ const src = `
   .dw_le FCPU32_ilo_R_FROM
   .dw_le FCPU32_ilo_EXT
   .dw_le FCPU32_ilo_EXIT
+
+  : FCPU32_ilo_PLUS
+  .dw_le ilo_adnoliju
+  .dw_le FCPU32_ilo_dispatch
+
+  : FCPU32_ilo_AND
+  .dw_le ilo_annoliju
+  .dw_le FCPU32_ilo_dispatch
+
+  : FCPU32_ilo_XOR
+  .dw_le ilo_xonoliju
+  .dw_le FCPU32_ilo_dispatch
+
+
 `;
