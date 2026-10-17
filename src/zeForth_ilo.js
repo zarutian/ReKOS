@@ -55,6 +55,10 @@ const src = `
   .def_calc ilo_srorliju ilo_sr ilo_or 8 << ilo_li 16 << ilo_ju 24 << | | |
   .def_calc ilo_liadliju ilo_li ilo_ad 8 << ilo_li 16 << ilo_ju 24 << | | |
   .def_calc ilo_fenoliju ilo_fe ilo_no 8 << ilo_li 16 << ilo_ju 24 << | | |
+  .def_calc ilo_stnoliju ilo_st ilo_no 8 << ilo_li 16 << ilo_ju 24 << | | |
+  .def_calc ilo_dunoliju ilo_du ilo_no 8 << ilo_li 16 << ilo_ju 24 << | | |
+  .def_calc ilo_drnoliju ilo_dr ilo_no 8 << ilo_li 16 << ilo_ju 24 << | | |
+  .def_calc ilo_swnoliju ilo_sw ilo_no 8 << ilo_li 16 << ilo_ju 24 << | | |
 
   : FCPU32_ilo_dispatch
   # the $NEXT
@@ -136,6 +140,18 @@ const src = `
 
   : FCPU32_ilo_STORE
   .dw_le ilo_stnoliju
+  .dw_le FCPU32_ilo_dispatch
+
+  : FCPU32_ilo_DUP
+  .dw_le ilo_dunoliju
+  .dw_le FCPU32_ilo_dispatch
+
+  : FCPU32_ilo_DROP
+  .dw_le ilo_drnoliju
+  .dw_le FCPU32_ilo_dispatch
+
+  : FCPU32_ilo_SWAP
+  .dw_le ilo_swnoliju
   .dw_le FCPU32_ilo_dispatch
 
 `;
