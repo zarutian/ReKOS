@@ -107,6 +107,29 @@ const src = `
   .dw_le 0x00000001
   .dw_le ilo_renonono
 
+  : FCPU32_ilo_OVER
+  # ( a b -- a b a )
+  # SWAP ( b a )
+  # DUP  ( b a a )
+  # >R   ( b a ) R:( a )
+  # SWAP ( a b ) R:( a )
+  # R>   ( a b a ) R:( )
+  # EXIT
+  .dw_le ilo_swdupusw
+  .dw_le ilo_porenono
+
+  : FCPU32_ilo_2DUP
+  # ( a b -- a b a b )
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_OVER
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_OVER
+  .dw_le ilo_renonono
+
+  : FCPU32_ilo_NIP
+  # ( a b -- b )
+  .dw_le ilo_swdrnore
+
   : FCPU32_ilo_dispatch_table
   .dw_le ilo_licanono
   .dw_le FCPU32_ilo_(VAR)
