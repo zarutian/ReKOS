@@ -161,6 +161,11 @@ const src = `
   .dw_le ilo_drliadpu        # ( ) R:( ra+1 )
   .dw_le 0x00000002
 
+  : FCPU32_ilo_-ROT
+  # ( a b c -- c a b )
+  .dw_le ilo_swpuswpo        # ( c a b )
+  .dw_le ilo_renonono
+
   : FCPU32_ilo_dispatch_table
   .dw_le ilo_licanono
   .dw_le FCPU32_ilo_(VAR)
@@ -308,7 +313,9 @@ const src = `
   .dw_le ilo_licanono  #
   .dw_le FCPU32_ilo_(NEXT)
   .dw_le FCPU32_ilo_save_stacks_L0
-  .dw_le ilo_polisuno  # ( addr+n rs_depth-1 ) R:( ... )
+  .dw_le ilo_polisupo  # ( addr+n rs_depth-1 ra ) R:( ... )
   .dw_le 0x00000001
+  .dw_le ilo_licanono  # ( ra addr+n rs_depth-1 ) R:( ... )
+  .dw_le FCPU32_ilo_-ROT
   
 `;
