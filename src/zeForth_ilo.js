@@ -76,7 +76,8 @@ const src = `
   # the $NEXT
   .dw_le ilo_licanono 
   .dw_le FCPU32_ilo_IP  # ( addr )
-  .dw_le ilo_fefenono   # ( fcpu32_instr )
+  .dw_le ilo_fenolica   # ( fcpu32_instr )
+  .dw_le FCPU32_ilo_fetch_instr
   .dw_le ilo_licanono
   .dw_le FCPU32_ilo_IP  # ( fcpu32_instr addr )
   .dw_le ilo_dufeliad   # ( fcpu32_instr addr IP+1 )
@@ -97,6 +98,9 @@ const src = `
   .dw_le FCPU32_ilo_PUSH2RS
   .dw_le ilo_stlijuno
   .dw_le FCPU32_ilo_dispatch
+
+  : FCPU32_ilo_fetch_instr
+  .dw_le ilo_fenonore
 
   : FCPU32_ilo_(VAR)
   .dw_le ilo_poliadre   # ( -- vaddr )
@@ -354,4 +358,27 @@ const src = `
   .dw_le 0x00000008    # 8
   .dw_le ilo_lisrorre  # ( dcba )
   .dw_le 0x00000008
+
+  : FCPU32_ilo_applyFunc_to_block
+  # ( src dest len func -- )
+  .dw_le ilo_pupuliju  # ( src dest ) R:( func len )
+  .dw_le FCPU32_ilo_applyFunc_to_block_L1
+  : FCPU32_ilo_applyFunc_to_block_L0
+  .dw_le ilo_licanono  # ( src dest src ) R:( func len )
+  .dw_le FCPU32_ilo_OVER
+  .dw_le ilo_felicano  # ( src dest item func ) R:( func len )
+  .dw_le FCPU32_ilo_R2nd@
+  .dw_le ilo_canonono  # ( src dest item' ) R:( func len )
+  .dw_le ilo_licanono  # ( src dest item' dest ) R:( func len )
+  .dw_le FCPU32_ilo_OVER
+  .dw_le ilo_stliadsw  # ( dest+1 src ) R:( func len )
+  .dw_le 0x00000001
+  .dw_le ilo_liadswno  # ( src+1 dest+1 ) R:( func len )
+  .dw_le 0x00000001
+  : FCPU32_ilo_applyFunc_to_block_L1
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_(NEXT)
+  .dw_le FCPU32_ilo_applyFunc_to_block_L0
+  .dw_le ilo_drdrpodr  # ( ) R:( )
+  .dw_le ilo_renonono
 `;
