@@ -227,6 +227,30 @@ const src = `
   .dw_le ilo_stnoliju
   .dw_le FCPU32_ilo_dispatch
 
+  : FCPU32_ilo_MEMLRU_access
+  # ( dirty? blocknr -- base_addr )
+  .dw_le ilo_licanono  # ( dirty? blocknr vaddr )
+  .dw_le FCPU32_ilo_MEMLRU_head
+  : FCPU32_ilo_MEMLRU_access_L0
+  .dw_le ilo_feswlica  # ( dirty? ptr2blockEntry blocknr ptr2blockEntry )
+  .dw_le FCPU32_ilo_OVER
+  .dw_le ilo_licanono  # ( dirty? ptr2blockEntry blocknr entry.key )
+  .dw_le FCPU32_ilo_MEMLRU_getKeyOfEntry
+  .dw_le ilo_licanono  # ( dirty? ptr2blockEntry blocknr entry.key blocknr )
+  .dw_le FCPU32_ilo_OVER
+  .dw_le ilo_eqlicjno  # ( dirty? ptr2blockEntry blocknr )
+  .dw_le FCPU32_ilo_MEMLRU_access_L1
+  # this entry isnt it.
+  .dw_le ilo_swnolica  # ( dirty? blocknr next )
+  .dw_le FCPU32_ilo_MEMLRU_getNextOfEntry
+  .dw_le ilo_swnolica  # ( dirty? next blocknr next )
+  .dw_le FCPU32_ilo_OVER
+  .dw_le ilo_linelicj  #
+  .dw_le 0x00000000
+  .dw_le FCPU32_ilo_MEMLRU_access_L0
+  # entry not found for blocknr
+  merkill
+
   : FCPU32_ilo_DUP
   .dw_le ilo_dunoliju
   .dw_le FCPU32_ilo_dispatch
@@ -417,4 +441,5 @@ const src = `
   .dw_le FCPU32_ilo_applyFunc_to_block_L0
   .dw_le ilo_drdrpodr  # ( ) R:( )
   .dw_le ilo_renonono
+
 `;
