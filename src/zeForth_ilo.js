@@ -334,4 +334,24 @@ const src = `
   .dw_le FCPU32_ilo_save_stacks_L2
   : FCPU32_ilo_save_stacks_L3
   .dw_le ilo_drswpure
+
+  : FCPU32_ilo_swap_endianess
+  # that is betwixt little and big endian ( not a word about middle endian )
+  # ( abcd -- dcba )
+  .dw_le ilo_dulislsw  # ( dxxx abcd )
+  .dw_le 0x00000018    # 24
+  .dw_le ilo_lisrswno  # ( xabc dxxx )
+  .dw_le 0x00000008    # 8
+  .dw_le ilo_licanono  # ( xabc dxxx xabc )
+  .dw_le FCPU32_ilo_OVER
+  .dw_le ilo_lislorsw  # ( dcxx xabc )
+  .dw_le 0x00000010    # 16
+  .dw_le ilo_lisrswno  # ( xxab dcxx )
+  .dw_le 0x00000008    # 8
+  .dw_le ilo_licanono  # ( xxab dcxx xxab )
+  .dw_le FCPU32_ilo_OVER
+  .dw_le ilo_lislorsw  # ( dcbx xxab )
+  .dw_le 0x00000008    # 8
+  .dw_le ilo_lisrorre  # ( dcba )
+  .dw_le 0x00000008
 `;
