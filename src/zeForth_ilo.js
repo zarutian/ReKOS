@@ -317,5 +317,21 @@ const src = `
   .dw_le 0x00000001
   .dw_le ilo_licanono  # ( ra addr+n rs_depth-1 ) R:( ... )
   .dw_le FCPU32_ilo_-ROT
-  
+  .dw_le ilo_swlicano  # ( ra rs_depth-1 addr+n rs_depth-1 addr+n ) R:( ... )
+  .dw_le FCPU32_ilo_2DUP
+  : FCPU32_ilo_save_stacks_L2
+  .dw_le ilo_stliadsw  # ( ra addr+n+1 rs_depth-1 ) R:( ... )
+  .dw_le 0x00000001
+  .dw_le ilo_dulieqno  # ( ra addr+n+1 rs_depth-1 bool ) R:( ... )
+  .dw_le 0x00000000
+  .dw_le ilo_licjnono  # ( ra addr+n+1 rs_depth-1 ) R:( ... item )
+  .dw_le FCPU32_ilo_save_stacks_L3
+  .dw_le ilo_lisuswpo  # ( ra rs_depth-2 addr+n+1 item ) R:( ... )
+  .dw_le 0x00000001
+  .dw_le ilo_licanono  # ( ra rs_depth-2 addr+n+1 item addr+n+1 ) R:( ... )
+  .dw_le FCPU32_ilo_OVER
+  .dw_le ilo_lijunono
+  .dw_le FCPU32_ilo_save_stacks_L2
+  : FCPU32_ilo_save_stacks_L3
+  .dw_le ilo_drswpure
 `;
