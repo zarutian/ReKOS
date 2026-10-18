@@ -344,6 +344,37 @@ const src = `
   : FCPU32_ilo_save_stacks_L3
   .dw_le ilo_drswpure
 
+  : FCPU32_ilo_restore_stacks
+  # ( addr -- ... addr+n ) R:( ra -- ... ra )
+  .dw_le ilo_dufepuno  # ( addr ) R:( ra ds_depth )
+  .dw_le ilo_liadliju
+  .dw_le 0x00000001
+  .dw_le FCPU32_ilo_restore_stacks_L1
+  : FCPU32_ilo_restore_stacks_L0
+  .dw_le ilo_dufeswli  # ( item addr 1 ) R:( ra count )
+  .dw_le 0x00000001
+  .dw_le ilo_adnonono  # ( item addr+1 ) R:( ra count )
+  : FCPU32_ilo_restore_stacks_L1
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_(NEXT)
+  .dw_le FCPU32_ilo_restore_stacks_L0
+  .dw_le ilo_poswdufe  # ( ... ra addr+1 rs_depth ) R:( )
+  .dw_le ilo_swliadsw  # ( ... ra addr+2 rs_depth ) R:( )
+  .dw_le 0x00000001
+  : FCPU32_ilo_restore_stacks_L2
+  .dw_le ilo_dulieqno  # ( ... ra addr+n rs_depth bool ) R:( )
+  .dw_le 0x00000000
+  .dw_le ilo_licjnono  # ( ... ra addr+n rs_depth ) R:( )
+  .dw_le FCPU32_ilo_restore_stacks_L3
+  .dw_le ilo_lisuswdu  # ( ... ra rs_depth-1 addr+n addr+n ) R:( )
+  .dw_le 0x00000001
+  .dw_le ilo_fepuliad  # ( ... ra rs_depth-1 addr+n+1 ) R:( item )
+  .dw_le 0x00000001
+  .dw_le ilo_swnoliju  # ( ... ra addr+n+1 rs_depth-1 ) R:( item )
+  .dw_le FCPU32_ilo_restore_stacks_L2
+  : FCPU32_ilo_restore_stacks_L3
+  .dw_le ilo_drswpure
+
   : FCPU32_ilo_swap_endianess
   # that is betwixt little and big endian ( not a word about middle endian )
   # ( abcd -- dcba )
