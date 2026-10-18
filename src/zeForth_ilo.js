@@ -231,4 +231,29 @@ const src = `
   .dw_le ilo_licanono
   .dw_le FCPU32_ilo_(CONST)
   .dw_le FCPU32_ilo_EXT_handler_vector_addr
+
+  : FCPU32_ilo_save_stacks
+  # ( ... addr -- ) R:( ... -- )
+  # saves data stack then return stack
+  .dw_le ilo_liiopuli  # ( ... addr ds_depth 1 ) R:( ... rs_depth )
+  .dw_le 0x00000007
+  .dw_le 0x00000001
+  .dw_le ilo_sudupuno  # ( ... addr ds_depth-1 ) R:( ... rs_depth ds_depth-1 )
+  .dw_le ilo_licanono  # ( ... addr ds_depth-1 addr ) R:( ... rs_depth ds_depth-1 )
+  .dw_le FCPU32_ilo_OVER
+  .dw_le ilo_stliadno  # ( ... addr+1 ) R:( ... rs_depth ds_depth-1 )
+  .dw_le ilo_lijunono
+  .dw_le FCPU32_ilo_save_stacks_L1
+  : FCPU32_ilo_save_stacks_L0
+  .dw_le ilo_licanono  # ( ... item addr item addr ) R:( ... rs_depth count )
+  .dw_le FCPU32_ilo_2DUP
+  .dw_le ilo_stliadno  # ( ... item addr+1 ) R:( ... rs_depth count )
+  .dw_le ilo_licanono  # ( ... addr+1 ) R:( ... rs_depth count )
+  .dw_le FCPU32_ilo_NIP
+  : FCPU32_ilo_save_stacks_L1
+  .dw_le ilo_licanono  #
+  .dw_le FCPU32_ilo_(NEXT)
+  .dw_le FCPU32_ilo_save_stacks_L0
+  merkill
+  
 `;
