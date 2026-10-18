@@ -130,6 +130,37 @@ const src = `
   # ( a b -- b )
   .dw_le ilo_swdrnore
 
+  : FCPU32_ilo_(NEXT)
+  # ( -- ) R:( count ra )
+  # R>     ( ra )
+  # R>     ( ra count )
+  # DUP    ( ra count count )
+  # BRZ    ( ra count )
+  # (NEXT)_L0
+  # 1-     ( ra count-1 )
+  # >R     ( ra ) R:( count-1 )
+  # @      ( dest )
+  # >R     ( ) R:( count-1 dest )
+  # EXIT
+  # : (NEXT)_L0
+  # DROP   ( ra )
+  # 1+     ( ra+1 )
+  # >R
+  # EXIT
+  .dw_le ilo_popoduno         # ( ra-1 count count )
+  .dw_le ilo_lieqlicj         # ( ra-1 count )
+  .dw_le 0x00000000
+  .dw_le FCPU32_ilo_(NEXT)_L0
+  .dw_le ilo_lisupuno         # ( ra-1 ) R:( count-1 )
+  .dw_le 0x00000001
+  .dw_le ilo_liadfeli         # ( dest 1 )
+  .dw_le 0x00000001
+  .dw_le 0x00000001
+  .dw_le ilo_supureno
+  : FCPU32_ilo_(NEXT)_L0
+  .dw_le ilo_drliadpu        # ( ) R:( ra+1 )
+  .dw_le 0x00000002
+
   : FCPU32_ilo_dispatch_table
   .dw_le ilo_licanono
   .dw_le FCPU32_ilo_(VAR)
@@ -256,7 +287,7 @@ const src = `
   .dw_le FCPU32_ilo_EXT_handler_vector_addr
 
   : FCPU32_ilo_save_stacks
-  # ( ... addr -- ) R:( ... -- )
+  # ( ... addr -- addr+n ) R:( ... -- )
   # saves data stack then return stack
   .dw_le ilo_liiopuli  # ( ... addr ds_depth 1 ) R:( ... rs_depth )
   .dw_le 0x00000007
@@ -277,6 +308,7 @@ const src = `
   .dw_le ilo_licanono  #
   .dw_le FCPU32_ilo_(NEXT)
   .dw_le FCPU32_ilo_save_stacks_L0
-  merkill
+  .dw_le ilo_polisuno  # ( addr+n rs_depth-1 ) R:( ... )
+  .dw_le 0x00000001
   
 `;
