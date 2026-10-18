@@ -134,6 +134,11 @@ const src = `
   # ( a b -- b )
   .dw_le ilo_swdrnore
 
+  : FCPU32_ilo_R2nd@
+  # ( -- a ) R:( a b ra -- a b )
+  .dw_le ilo_popopodu  # ( ra b a a )
+  .dw_le ilo_puswpusw  # ( ra a ) R:( a b )
+
   : FCPU32_ilo_(NEXT)
   # ( -- ) R:( count ra )
   # R>     ( ra )
