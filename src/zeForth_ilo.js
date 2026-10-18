@@ -99,9 +99,6 @@ const src = `
   .dw_le ilo_stlijuno
   .dw_le FCPU32_ilo_dispatch
 
-  : FCPU32_ilo_fetch_instr
-  .dw_le ilo_fenonore
-
   : FCPU32_ilo_(VAR)
   .dw_le ilo_poliadre   # ( -- vaddr )
   .dw_le 0x00000001
@@ -218,6 +215,9 @@ const src = `
   .dw_le ilo_liadliju
   .dw_le 0x0000001
   .dw_le FCPU32_ilo_dispatch
+
+  : FCPU32_ilo_fetch_instr
+  .dw_le ilo_fenonore
 
   : FCPU32_ilo_FETCH
   .dw_le ilo_fenoliju
