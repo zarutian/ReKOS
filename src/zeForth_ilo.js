@@ -279,24 +279,39 @@ const src = `
   .dw_le ilo_licanono  # ( dirty? blocknr vaddr )
   .dw_le FCPU32_ilo_MEMLRU_head
   : FCPU32_ilo_MEMLRU_access_L0
-  .dw_le ilo_feswlica  # ( dirty? ptr2blockEntry blocknr ptr2blockEntry )
+  .dw_le ilo_feswnono
+  .dw_le ilo_licanono  # ( dirty? ptr2blockEntry blocknr ptr2blockEntry )
   .dw_le FCPU32_ilo_OVER
   .dw_le ilo_licanono  # ( dirty? ptr2blockEntry blocknr entry.key )
   .dw_le FCPU32_ilo_MEMLRU_getKeyOfEntry
   .dw_le ilo_licanono  # ( dirty? ptr2blockEntry blocknr entry.key blocknr )
   .dw_le FCPU32_ilo_OVER
   .dw_le ilo_eqlicjno  # ( dirty? ptr2blockEntry blocknr )
-  .dw_le FCPU32_ilo_MEMLRU_access_L1
+  .dw_le FCPU32_ilo_MEMLRU_access_L2
   # this entry isnt it.
-  .dw_le ilo_swnolica  # ( dirty? blocknr next )
+  .dw_le ilo_swdulica  # ( dirty? blocknr ptr next )
   .dw_le FCPU32_ilo_MEMLRU_getNextOfEntry
-  .dw_le ilo_swnolica  # ( dirty? next blocknr next )
-  .dw_le FCPU32_ilo_OVER
-  .dw_le ilo_linelicj  #
+  .dw_le ilo_dulieqno  # ( dirty? blocknr ptr next bool )
   .dw_le 0x00000000
+  .dw_le ilo_licjnono  # ( dirty? blocknr ptr next )
+  .dw_le FCPU32_ilo_MEMLRU_access_L1
+  .dw_le ilo_swdrswno
+  .dw_le ilo_lijunono
   .dw_le FCPU32_ilo_MEMLRU_access_L0
+  : FCPU32_ilo_MEMLRU_access_L1
   # entry not found for blocknr
-  merkill
+  .dw_le ilo_drdulica  # ( dirty? blocknr ptr entry.dirty )
+  .dw_le FCPU32_ilo_MEMLRU_getDirtyOfEntry
+  .dw_le ilo_lieqlicj  # ( dirty? blocknr ptr )
+  .dw_le 0x00000000
+  .dw_le FCPU32_ilo_MEMLRU_access_L1_0
+  .dw_le ilo_dulicano  # ( dirty? blocknr ptr )
+  .dw_le FCPU32_ilo_MEMLRU_clean_entry
+  : FCPU32_ilo_MEMLRU_access_L1_0
+  
+  : FCPU32_ilo_MEMLRU_access_L2
+  # entry     found for blocknr
+
 
   : FCPU32_ilo_DUP
   .dw_le ilo_dunoliju
