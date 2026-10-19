@@ -227,6 +227,39 @@ const src = `
   .dw_le ilo_stnoliju
   .dw_le FCPU32_ilo_dispatch
 
+  # Entry:
+  #    3         2         1
+  #   10987654321098765432109876543210
+  # 1 D             xxxxxx      xxxxxx
+  #   I               P   xxxxxx  N
+  #   R               A     P     E
+  #   T               G     R     X
+  #   Y               E     E     T
+  #                         V
+  # 2 blocknr
+  : FCPU32_ilo_MEMLRU_getKeyOfEntry
+  # ( ptr -- entry.key )
+  .dw_le ilo_liadfere
+  .dw_le 0x0000001
+
+  : FCPU32_ilo_MEMLRU_getNextOfEntry
+  # ( ptr -- next_ptr )
+  .dw_le ilo_felianno
+  .dw_le 0x0000003F
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_MEMLRU_base_addr
+  .dw_le ilo_adrenono
+
+  : FCPU32_ilo_MEMLRU_getPrevOfEntry
+  # ( ptr -- prev_ptr )
+  .dw_le ilo_felisrno
+  .dw_le 0x00000006
+  .dw_le ilo_liannono
+  .dw_le 0x0000003F
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_MEMLRU_base_addr
+  .dw_le ilo_adrenono
+
   : FCPU32_ilo_MEMLRU_access
   # ( dirty? blocknr -- base_addr )
   .dw_le ilo_licanono  # ( dirty? blocknr vaddr )
