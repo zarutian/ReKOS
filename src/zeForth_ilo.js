@@ -312,6 +312,24 @@ const src = `
   : FCPU32_ilo_MEMLRU_access_L2
   # entry     found for blocknr
 
+  : FCPU32_ilo_MEMLRU_clean_entry
+  # ( ptr -- )
+  .dw_le ilo_dulicano  # ( ptr page )
+  .dw_le FCPU32_ilo_MEMLRU_getPageOfEntry
+  .dw_le ilo_lislduli  # ( ptr src dest 1024 )
+  .dw_le 0x0000000A    # 10
+  .dw_le 0x00000400    # 1024
+  .dw_le ilo_lilicano  # ( ptr )
+  .dw_le FCPU32_ilo_swap_endianess
+  .dw_le FCPU32_ilo_applyFunc_to_block
+  .dw_le ilo_dulicano  # ( ptr page )
+  .dw_le FCPU32_ilo_MEMLRU_getPageOfEntry
+  .dw_le ilo_lislswno  # ( addr ptr )
+  .dw_le 0x0000000A
+  .dw_le ilo_licanono  # ( addr blocknr )
+  .dw_le FCPU32_ilo_MEMLRU_getKeyOfEntry
+  .dw_le ilo_swliiore  # ( )
+  .dw_le 0x00000003
 
   : FCPU32_ilo_DUP
   .dw_le ilo_dunoliju
