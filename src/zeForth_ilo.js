@@ -260,6 +260,20 @@ const src = `
   .dw_le FCPU32_ilo_MEMLRU_base_addr
   .dw_le ilo_adrenono
 
+  : FCPU32_ilo_MEMLRU_getPageOfEntry
+  # ( ptr -- pagenr )
+  .dw_le ilo_felisrno
+  .dw_le 0x0000000C    # 12
+  .dw_le ilo_liadreno
+  .dw_le 0x0000003F
+
+  : FCPU32_ilo_MEMLRU_getDirtyOfEntry
+  # ( ptr -- dirty )
+  .dw_le ilo_felisrno
+  .dw_le 0x0000001F
+  .dw_le ilo_liadreno
+  .dw_le 0x00000001
+
   : FCPU32_ilo_MEMLRU_access
   # ( dirty? blocknr -- base_addr )
   .dw_le ilo_licanono  # ( dirty? blocknr vaddr )
