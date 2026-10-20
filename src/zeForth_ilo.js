@@ -167,6 +167,11 @@ const src = `
   .dw_le ilo_drliadpu        # ( ) R:( ra+1 )
   .dw_le 0x00000002
 
+  : FCPU32_ilo_ROT
+  # ( a b c -- c b a )
+  .dw_le ilo_puswposw
+  .dw_le ilo_renonono
+
   : FCPU32_ilo_-ROT
   # ( a b c -- c a b )
   .dw_le ilo_swpuswpo        # ( c a b )
