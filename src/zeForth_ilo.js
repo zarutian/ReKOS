@@ -177,6 +177,22 @@ const src = `
   .dw_le ilo_swpuswpo        # ( c a b )
   .dw_le ilo_renonono
 
+  : FCPU32_ilo_TRUE
+  # ( -- TRUE )
+  .dw_le ilo_lirenono
+  .dw_le 0xFFFFFFFF
+
+  : FCOU32_ilo_FALSE
+  .dw_le ilo_lirenono
+  .dw_le 0x00000000
+
+  : FCPU32_ilo_CLEANBOOL
+  # ( value -- bool )
+  .dw_le ilo_lieqlicj
+  .dw_le FCPU32_ilo_FALSE
+  .dw_le ilo_lijunono
+  .dw_le FCPU32_ilo_TRUE
+
   : FCPU32_ilo_dispatch_table
   .dw_le ilo_licanono
   .dw_le FCPU32_ilo_(VAR)
