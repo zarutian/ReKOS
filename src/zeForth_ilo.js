@@ -344,10 +344,23 @@ const src = `
   .dw_le ilo_dulicano  # ( dirty? blocknr ptr )
   .dw_le FCPU32_ilo_MEMLRU_clean_entry
   : FCPU32_ilo_MEMLRU_access_L1_0
-  .dw_le 
-  
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_2DUP
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_MEMLRU_putKeyOfEntry
+  .dw_le ilo_swnonono
   : FCPU32_ilo_MEMLRU_access_L2
+  # ( dirty? ptr blocknr )
   # entry     found for blocknr
+  .dw_le ilo_drdupuno
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_MEMLRU_putDirtyOfEntry
+  .dw_le ilo_podulica
+  .dw_le FCPU32_ilo_MEMLRU_getPageOfEntry
+  .dw_le ilo_lislswno
+  .dw_le 0x0000000A    # 10
+  .dw_le ilo_lijunono
+  .dw_le FCPU32_ilo_MEMLRU_move_to_head
 
   : FCPU32_ilo_MEMLRU_clean_entry
   # ( ptr -- )
@@ -367,6 +380,9 @@ const src = `
   .dw_le FCPU32_ilo_MEMLRU_getKeyOfEntry
   .dw_le ilo_swliiore  # ( )
   .dw_le 0x00000003
+
+  : FCPU32_ilo_MEMLRU_move_to_head
+  # ( ptr -- )
 
   : FCPU32_ilo_DUP
   .dw_le ilo_dunoliju
