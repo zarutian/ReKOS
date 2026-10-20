@@ -242,6 +242,11 @@ const src = `
   .dw_le ilo_liadfere
   .dw_le 0x0000001
 
+  : FCPU32_ilo_MEMLRU_putKeyOfEntry
+  # ( key ptr -- )
+  .dw_le ilo_liadstre
+  .dw_le 0x00000001
+
   : FCPU32_ilo_MEMLRU_getNextOfEntry
   # ( ptr -- next_ptr )
   .dw_le ilo_felianno
@@ -273,6 +278,16 @@ const src = `
   .dw_le 0x0000001F
   .dw_le ilo_liadreno
   .dw_le 0x00000001
+
+  : FCPU32_ilo_MEMLRU_putDirtyOfEntry
+  # ( bool ptr -- )
+  .dw_le ilo_swlicano
+  .dw_le FCPU32_ilo_CLEANBOOL
+  .dw_le ilo_lianswdu
+  .dw_le 0x80000000
+  .dw_le ilo_felicano
+  .dw_le FCPU32_ilo_ROT
+  .dw_le ilo_orswstre
 
   : FCPU32_ilo_MEMLRU_access
   # ( dirty? blocknr -- base_addr )
@@ -308,6 +323,7 @@ const src = `
   .dw_le ilo_dulicano  # ( dirty? blocknr ptr )
   .dw_le FCPU32_ilo_MEMLRU_clean_entry
   : FCPU32_ilo_MEMLRU_access_L1_0
+  .dw_le 
   
   : FCPU32_ilo_MEMLRU_access_L2
   # entry     found for blocknr
