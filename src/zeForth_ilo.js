@@ -337,6 +337,30 @@ const src = `
   .dw_le FCPU32_ilo_ROT
   .dw_le ilo_orswstre
 
+  : FCPU32_ilo_MEMLRU_fetch_or_store
+  # ( ( item T | F ) addr -- | item )
+  .dw_le ilo_swdupusw  # ( ( item ) dirty? addr ) R:( store? )
+  .dw_le ilo_licanono  # ( ( item ) dirty? blocknr offset ) R:( store? )
+  .dw_le FCPU32_ilo_MEMLRU_addr2blocknr&offset
+  .dw_le ilo_pulicano  # ( ( item ) base_addr ) R:( store? offset )
+  .dw_le FCPU32_ilo_MEMLRU_access
+  .dw_le ilo_poadpono  # ( ( item ) calced_addr store? ) R:( )
+  .dw_le ilo_licjnono
+  .dw_le FCPU32_ilo_MEMLRU_fetch_or_store_L0
+  .dw_le ilo_ferenono
+  : FCPU32_ilo_MEMLRU_fetch_or_store_L0
+  .dw_le ilo_strenono
+
+  : FCPU32_ilo_MEMLRU_addr2blocknr&offset
+  # ( addr -- blocknr offset )
+  .dw_le ilo_dulisrnon # ( addr upper )
+  .dw_le 0x0000000A
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_MEMLRU_blockoffset
+  .dw_le ilo_adswlian
+  .dw_le 0x000003FF
+  .dw_le ilo_renonono
+
   : FCPU32_ilo_MEMLRU_access
   # ( dirty? blocknr -- base_addr )
   .dw_le ilo_licanono  # ( dirty? blocknr vaddr )
