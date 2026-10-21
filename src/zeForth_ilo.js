@@ -743,4 +743,4 @@ const usage = `
 
 `;
 // self-note: re simpletun: spurn um að skrifa einfaldan router í tcl sem skilur simpletun protocol?
-
+// self-note: socks5 proxy to simpletun protocol
