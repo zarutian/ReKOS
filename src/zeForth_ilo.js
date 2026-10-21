@@ -298,6 +298,21 @@ const src = `
   .dw_le FCPU32_ilo_MEMLRU_base_addr
   .dw_le ilo_adrenono
 
+  : FCPU32_ilo_MEMLRU_putPrevOfEntry
+  # ( prev ptr -- )
+  .dw_le ilo_swlicano
+  .dw_le FCPU32_ilo_MEMLRU_base_addr
+  .dw_le ilo_sulianno
+  .dw_le 0x0000003F
+  .dw_le ilo_lisllica
+  .dw_le FCPU32_ilo_OVER
+  .dw_le ilo_felianor
+  .dw_le 0xFFFFF03F
+  # 0000 0000  0000 0000  0000 0000  0011 1111
+  # 0000 0000  0000 0000  0000 1111  1100 0000
+  # 1111 1111  1111 1111  1111 0000  0011 1111
+  .dw_le ilo_swstreno
+
   : FCPU32_ilo_MEMLRU_getPageOfEntry
   # ( ptr -- pagenr )
   .dw_le ilo_felisrno
