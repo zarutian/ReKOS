@@ -238,14 +238,30 @@ const src = `
   .dw_le FCPU32_ilo_dispatch
 
   : FCPU32_ilo_fetch_instr
-  .dw_le ilo_fenonore
+  # .dw_le ilo_fenonore
+  # ( addr -- instr )
+  .dw_le ilo_liswliju
+  .dw_le 0x0000000
+  .dw_le FCPU32_ilo_MEMLRU_fetch_or_store
 
   : FCPU32_ilo_FETCH
-  .dw_le ilo_fenoliju
+  # .dw_le ilo_fenoliju
+  # .dw_le FCPU32_ilo_dispatch
+  # ( addr -- item )
+  .dw_le ilo_liswlica
+  .dw_le 0x00000000
+  .dw_le FCPU32_ilo_MEMLRU_fetch_or_store
+  .dw_le ilo_lijunono
   .dw_le FCPU32_ilo_dispatch
 
   : FCPU32_ilo_STORE
-  .dw_le ilo_stnoliju
+  # .dw_le ilo_stnoliju
+  # .dw_le FCPU32_ilo_dispatch
+  # ( item addr -- )
+  .dw_le ilo_liswlica
+  .dw_le 0xFFFFFFFF
+  .dw_le FCPU32_ilo_MEMLRU_fetch_or_store
+  .dw_le ilo_lijunono
   .dw_le FCPU32_ilo_dispatch
 
   # Entry:
