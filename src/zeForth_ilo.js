@@ -419,18 +419,23 @@ const src = `
   .dw_le FCPU32_ilo_2DUP
   .dw_le ilo_licanono
   .dw_le FCPU32_ilo_MEMLRU_putKeyOfEntry
+  .dw_le ilo_dulicano
+  .dw_le FCPU32_ilo_MEMLRU_load_entry
   .dw_le ilo_swnonono
   : FCPU32_ilo_MEMLRU_access_L2
   # ( dirty? ptr blocknr )
   # entry     found for blocknr
-  .dw_le ilo_drdupuno
-  .dw_le ilo_licanono
+  .dw_le ilo_drdupuno  # ( dirty? ptr ptr ) R:( ptr )
+  .dw_le ilo_licanono  # ( dirty? old_dirty? ) R:( ptr )
+  .dw_le FCPU32_ilo_MEMLRU_getDirtyOfEntry
+  .dw_le ilo_orpodupu  # ( dirty?' ptr ) R:( ptr )
+  .dw_le ilo_licanono  # ( )
   .dw_le FCPU32_ilo_MEMLRU_putDirtyOfEntry
-  .dw_le ilo_podulica
+  .dw_le ilo_podulica  # ( ptr page ) R:( )
   .dw_le FCPU32_ilo_MEMLRU_getPageOfEntry
-  .dw_le ilo_lislswno
+  .dw_le ilo_lislswno  # ( base_addr ptr )
   .dw_le 0x0000000A    # 10
-  .dw_le ilo_lijunono
+  .dw_le ilo_lijunono  # ( base_addr ptr )
   .dw_le FCPU32_ilo_MEMLRU_move_to_head
 
   : FCPU32_ilo_MEMLRU_save_entry
@@ -467,6 +472,25 @@ const src = `
   .dw_le ilo_licjnono
   .dw_le FCPU32_ilo_MEMLRU_save_all_entries_L0
   .dw_le ilo_drrenono
+
+  : FCPU32_ilo_MEMLRU_load_entry
+  # ( ptr -- )
+  .dw_le ilo_dulicano  # ( ptr page )
+  .dw_le FCPU32_ilo_MEMLRU_getPageOfEntry
+  .dw_le ilo_lisllica  # ( ptr src ptr )
+  .dw_le 0x0000000A    # 10
+  .dw_le FCPU32_ilo_OVER
+  .dw_le ilo_licanono  # ( ptr src blocknr )
+  .dw_le FCPU32_ilo_MEMLRU_getKeyOfEntry
+  .dw_le ilo_liiolica  # ( page )
+  .dw_le 0x00000002    # 2
+  .dw_le FCPU32_ilo_MEMLRU_getPageOfEntry
+  .dw_le ilo_lislduli  # ( src dest 1024 )
+  .dw_le 0x0000000A    # 10
+  .dw_le 0x00000400    # 1024
+  .dw_le ilo_lilijuno  # ( )
+  .dw_le FCPU32_ilo_swap_endianess
+  .dw_le FCPU32_ilo_applyFunc_to_block 
 
   : FCPU32_ilo_MEMLRU_move_to_head
   # ( ptr -- )
