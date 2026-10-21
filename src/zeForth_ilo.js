@@ -408,6 +408,22 @@ const src = `
   .dw_le ilo_swliiore  # ( )
   .dw_le 0x00000003
 
+  : FCPU32_ilo_MEMLRU_save_all_entries
+  # ( -- )
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_MEMLRU_head
+  .dw_le ilo_fenonono
+  : FCPU32_ilo_MEMLRU_save_all_entries_L0
+  .dw_le ilo_dulicano
+  .dw_le FCPU32_ilo_MEMLRU_getNextOfEntry
+  .dw_le ilo_swlicano
+  .dw_le FCPU32_ilo_MEMLRU_save_entry
+  .dw_le ilo_dulineno
+  .dw_le FCPU32_ilo_MEMLRU_nil
+  .dw_le ilo_licjnono
+  .dw_le FCPU32_ilo_MEMLRU_save_all_entries_L0
+  .dw_le ilo_drrenono
+
   : FCPU32_ilo_MEMLRU_move_to_head
   # ( ptr -- )
   .dw_le ilo_dulicano
