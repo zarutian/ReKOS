@@ -269,12 +269,12 @@ const src = `
   # Entry:
   #    3         2         1
   #   10987654321098765432109876543210
-  # 1 D             xxxxxx      xxxxxx
-  #   I               P   xxxxxx  N
-  #   R               A     P     E
-  #   T               G     R     X
-  #   Y               E     E     T
-  #                         V
+  # 1 D         xxxxxx        xxxxxxxx
+  #   I           P   xxxxxxxx  N
+  #   R           A     P       E
+  #   T           G     R       X
+  #   Y           E     E       T
+  #                     V
   # 2 blocknr
   : FCPU32_ilo_MEMLRU_getKeyOfEntry
   # ( ptr -- entry.key )
@@ -289,7 +289,7 @@ const src = `
   : FCPU32_ilo_MEMLRU_getNextOfEntry
   # ( ptr -- next_ptr )
   .dw_le ilo_felianno
-  .dw_le 0x0000003F
+  .dw_le 0x000000FF
   .dw_le ilo_licanono
   .dw_le FCPU32_ilo_MEMLRU_base_addr
   .dw_le ilo_adrenono
@@ -299,19 +299,19 @@ const src = `
   .dw_le ilo_swlicano
   .dw_le FCPU32_ilo_MEMLRU_base_addr
   .dw_le ilo_sulianno
-  .dw_le 0x0000003F
+  .dw_le 0x000000FF
   .dw_le ilo_licanono
   .dw_le FCPU32_ilo_OVER
   .dw_le ilo_felianor
-  .dw_le 0xFFFFFF40
+  .dw_le 0xFFFFFF00
   .dw_le ilo_swstreno
 
   : FCPU32_ilo_MEMLRU_getPrevOfEntry
   # ( ptr -- prev_ptr )
   .dw_le ilo_felisrno
-  .dw_le 0x00000006
+  .dw_le 0x00000008
   .dw_le ilo_liannono
-  .dw_le 0x0000003F
+  .dw_le 0x000000FF
   .dw_le ilo_licanono
   .dw_le FCPU32_ilo_MEMLRU_base_addr
   .dw_le ilo_adrenono
@@ -321,20 +321,18 @@ const src = `
   .dw_le ilo_swlicano
   .dw_le FCPU32_ilo_MEMLRU_base_addr
   .dw_le ilo_sulianno
-  .dw_le 0x0000003F
+  .dw_le 0x000000FF
   .dw_le ilo_lisllica
+  .dw_le 0x00000008
   .dw_le FCPU32_ilo_OVER
   .dw_le ilo_felianor
-  .dw_le 0xFFFFF03F
-  # 0000 0000  0000 0000  0000 0000  0011 1111
-  # 0000 0000  0000 0000  0000 1111  1100 0000
-  # 1111 1111  1111 1111  1111 0000  0011 1111
+  .dw_le 0xFFFF00FF
   .dw_le ilo_swstreno
 
   : FCPU32_ilo_MEMLRU_getPageOfEntry
   # ( ptr -- pagenr )
   .dw_le ilo_felisrno
-  .dw_le 0x0000000C    # 12
+  .dw_le 0x00000010    # 16
   .dw_le ilo_liadreno
   .dw_le 0x0000003F
 
@@ -378,6 +376,10 @@ const src = `
   .dw_le ilo_adswlian
   .dw_le 0x000003FF
   .dw_le ilo_renonono
+
+  : FCPU32_ilo_MEMLRU_blockoffset
+  .dw_le ilo_lirenono
+  .dw_le 0x00000002
 
   : FCPU32_ilo_MEMLRU_access
   # ( dirty? blocknr -- base_addr )
@@ -707,6 +709,13 @@ const src = `
   .dw_le FCPU32_ilo_applyFunc_to_block_L0
   .dw_le ilo_drdrpodr  # ( ) R:( )
   .dw_le ilo_renonono
+
+  : FCPU32_ilo_MEMLRU_base_addr
+  .dw_le ilo_lirenono
+  .dw_le 0x00000F00
+
+  .org 0x00000F00
+  .dw_le 0b0000_0000
 
 `;
 const usage = `
