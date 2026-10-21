@@ -7,6 +7,7 @@
 //     2 bytes length (big endian)
 //     length bytes raw IP packet
 //   https://archive.md/7HnzB is archival of http://backreference.org/2010/03/26/tuntap-interface-tutorial/
+//     a copy is in /docs/archival in this repository
 const src = `
   .def ilo_no  0x00
   .def ilo_li  0x01  # literal
@@ -710,10 +711,14 @@ const src = `
 `;
 const usage = `
    # To hook up this FCPU32 image that is running via ilo:
-   # note that the tuntap interface in question must exist before use here
+   # note that the tuntap interface in question must exist and configured with IP address 10.0.0.42 before use here
    ./simpletun -i tun42 -s -p 48084 -u &
    rm -f tmp_fifo ; mkfifo tmp_fifo
    cat tmp_fifo | ilo fcpu32_ilo_rom fcpu32_img_blocks | nc localhost 48084 > tmp_fifo &
-   
+   ping 10.0.0.42 2>&1 > /dev/null &
+   # a plan9 (9p) mountable filesystem in available on tcp port 564
+   # a vnc server, without any authentication, is available on tcp port 5900
+
 `;
+// self-note: re simpletun: spurn um að skrifa einfaldan router í tcl sem skilur simpletun protocol?
 
