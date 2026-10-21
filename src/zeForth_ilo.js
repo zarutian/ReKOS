@@ -712,11 +712,24 @@ const src = `
 
   : FCPU32_ilo_MEMLRU_base_addr
   .dw_le ilo_lirenono
-  .dw_le 0x00000F00
+  .dw_le 0x00000F02
 
-  .org 0x00000F00
-  .dw_le 0b0000_0000
-
+  .org 0x00000F02
+  #        d          aaaaaa pppppppp nnnnnnnn
+  .dw_le 0b00000000_00000000_00000000_00000100
+  .dw_le 0x00000000
+  .dw_le 0b00000000_00000001_00000010_00000110
+  .dw_le 0x00000001
+  .dw_le 0b00000000_00000010_00000100_00001000
+  .dw_le 0x00000002
+  .dw_le 0b00000000_00000011_00000110_00001010
+  .dw_le 0x00000003
+  .dw_le 0b00000000_00000100_00001000_00001100
+  .dw_le 0x00000004
+  .dw_le 0b00000000_00000101_00001010_00001110
+  .dw_le 0x00000005
+  .dw_le 0b00000000_00000110_00001100_00000000
+  .dw_le 0x00000006
 `;
 const usage = `
    # To hook up this FCPU32 image that is running via ilo:
