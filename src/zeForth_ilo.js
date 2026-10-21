@@ -6,6 +6,7 @@
 //   https://github.com/zzJinux/simpletun/blob/master/simpletun.c
 //     2 bytes length (big endian)
 //     length bytes raw IP packet
+//   https://archive.md/7HnzB is archival of http://backreference.org/2010/03/26/tuntap-interface-tutorial/
 const src = `
   .def ilo_no  0x00
   .def ilo_li  0x01  # literal
@@ -707,3 +708,12 @@ const src = `
   .dw_le ilo_renonono
 
 `;
+const usage = `
+   # To hook up this FCPU32 image that is running via ilo:
+   # note that the tuntap interface in question must exist before use here
+   ./simpletun -i tun42 -s -p 48084 -u &
+   rm -f tmp_fifo ; mkfifo tmp_fifo
+   cat tmp_fifo | ilo fcpu32_ilo_rom fcpu32_img_blocks | nc localhost 48084 > tmp_fifo &
+   
+`;
+
