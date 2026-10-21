@@ -342,7 +342,7 @@ const src = `
   .dw_le 0x00000000
   .dw_le FCPU32_ilo_MEMLRU_access_L1_0
   .dw_le ilo_dulicano  # ( dirty? blocknr ptr )
-  .dw_le FCPU32_ilo_MEMLRU_clean_entry
+  .dw_le FCPU32_ilo_MEMLRU_save_entry
   : FCPU32_ilo_MEMLRU_access_L1_0
   .dw_le ilo_licanono
   .dw_le FCPU32_ilo_2DUP
@@ -362,7 +362,7 @@ const src = `
   .dw_le ilo_lijunono
   .dw_le FCPU32_ilo_MEMLRU_move_to_head
 
-  : FCPU32_ilo_MEMLRU_clean_entry
+  : FCPU32_ilo_MEMLRU_save_entry
   # ( ptr -- )
   .dw_le ilo_dulicano  # ( ptr page )
   .dw_le FCPU32_ilo_MEMLRU_getPageOfEntry
@@ -418,10 +418,19 @@ const src = `
   .dw_le ilo_drnonono
   : FCPU32_ilo_MEMLRU_move_to_head_L3
   # the entry pointed at ptr has been removed from the doubly linked list
-  # ( ptr )
-  
-  .dw_le ilo_licanono
+  .dw_le ilo_licanono  # ( ptr vaddr )
   .dw_le FCPU32_ilo_MEMLRU_head
+  .dw_le ilo_felicano  # ( ptr old_head ptr old_head )
+  .dw_le FCPU32_ilo_2DUP
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_MEMLRU_putPrevOfEntry
+  .dw_le ilo_swdulisw  # ( old_head ptr nil ptr )
+  .dw_le ilo_licanono  # ( old_head ptr )
+  .dw_le FCPU32_ilo_MEMLRU_putPrevOfEntry
+  .dw_le ilo_dulicano  # ( old_head ptr ptr vaddr )
+  .dw_le FCPU32_ilo_MEMLRU_head
+  .dw_le ilo_stlijuno  # ( )
+  .dw_le FCPU32_ilo_MEMLRU_putNextOfEntry
 
   : FCPU32_ilo_DUP
   .dw_le ilo_dunoliju
