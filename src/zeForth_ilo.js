@@ -101,21 +101,6 @@ const src = `
   .dw_le ilo_stlijuno
   .dw_le FCPU32_ilo_dispatch
 
-  : FCPU32_ilo_IP
-  .dw_le ilo_licanono
-  .dw_le FCPU32_ilo_(VAR)
-  .dw_le 0x00000100
-
-  : FCPU32_ilo_DSPTR
-  .dw_le ilo_licanono
-  .dw_le FCPU32_ilo_(VAR)
-  .dw_le 0x00000D00
-
-  : FCPU32_ilo_RSPTR
-  .dw_le ilo_licanono
-  .dw_le FCPU32_ilo_(VAR)
-  .dw_le 0x00000E00
-
   : FCPU32_ilo_(VAR)
   .dw_le ilo_poliadre   # ( -- vaddr )
   .dw_le 0x00000001
@@ -871,6 +856,22 @@ const src = `
   : FCPU32_ilo_MEMLRU_base_addr
   .dw_le ilo_lirenono
   .dw_le 0x00000F02
+
+  .org 0x00000CF7
+  : FCPU32_ilo_IP
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_(VAR)
+  .dw_le 0x00000100
+
+  : FCPU32_ilo_DSPTR
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_(VAR)
+  .dw_le 0x00000D00
+
+  : FCPU32_ilo_RSPTR
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_(VAR)
+  .dw_le 0x00000E00
 
   .org 0x00000F02
   #        d          aaaaaa pppppppp nnnnnnnn
