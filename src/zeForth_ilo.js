@@ -741,6 +741,15 @@ const src = `
   .dw_le FCPU32_ilo_(CONST)
   .dw_le FCPU32_ilo_EXT_handler_vector_addr
 
+  : FCPU32_ilo_EXIT
+  # ( -- ) R:( raddr -- )
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_RPOP
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_IP
+  .dw_le ilo_stlijuno
+  .dw_le FCPU32_ilo_dispatch
+
   : FCPU32_ilo_save_stacks
   # ( ... addr -- addr+n ) R:( ... -- )
   # saves data stack then return stack
