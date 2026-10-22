@@ -101,6 +101,21 @@ const src = `
   .dw_le ilo_stlijuno
   .dw_le FCPU32_ilo_dispatch
 
+  : FCPU32_ilo_IP
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_(VAR)
+  .dw_le 0x00000100
+
+  : FCPU32_ilo_DSPTR
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_(VAR)
+  .dw_le 0x00000D00
+
+  : FCPU32_ilo_RSPTR
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_(VAR)
+  .dw_le 0x00000E00
+
   : FCPU32_ilo_(VAR)
   .dw_le ilo_poliadre   # ( -- vaddr )
   .dw_le 0x00000001
@@ -215,28 +230,89 @@ const src = `
   .dw_le FCPU32_ilo_EXT
   .dw_le FCPU32_ilo_EXIT
 
+  : FCPU32_ilo_DPOP
+  # ilo:( -- item ) fcpu:( item -- )
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DSPTR
+  : FCPU32_ilo_POP_common
+  .dw_le ilo_dufefesw  # ilo:( item dsptr_addr )
+  .dw_le ilo_dufelisu  # ilo:( item dsptr_addr dsptr-1 )
+  .dw_le 0x00000001
+  .dw_le ilo_swstreno
+
+  : FCPU32_ilo_DPUSH
+  # ilo:( item -- ) fcpu:( -- item )
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DSPTR
+  : FCPU32_ilo_PUSH_common
+  .dw_le ilo_dupufest  # ilo:(  ) R:( dsptr_addr )
+  .dw_le ilo_podufeli  # ilo:( dsptr_addr dsptr 1 )
+  .dw_le 0x00000001
+  .dw_le ilo_adswstre
+
+  : FCPU32_ilo_RPOP
+  # ilo:( -- item ) fcpu:( item -- )
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_RSPTR
+  .dw_le ilo_lijunono
+  .dw_le FCPU32_ilo_POP_common
+
+  : FCPU32_ilo_RPUSH
+  # ilo:( item -- ) fcpu:( -- item )
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_RSPTR
+  .dw_le ilo_lijunono
+  .dw_le FCPU32_ilo_PUSH_common
+   
+
   : FCPU32_ilo_PLUS
-  .dw_le ilo_adnoliju
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DPOP
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DPOP
+  .dw_le ilo_adlicano
+  .dw_le FCPU32_ilo_DPUSH
+  .dw_le ilo_lijunono
   .dw_le FCPU32_ilo_dispatch
 
   : FCPU32_ilo_AND
-  .dw_le ilo_annoliju
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DPOP
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DPOP
+  .dw_le ilo_anlicano
+  .dw_le FCPU32_ilo_DPUSH
+  .dw_le ilo_lijunono
   .dw_le FCPU32_ilo_dispatch
 
   : FCPU32_ilo_XOR
-  .dw_le ilo_xonoliju
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DPOP
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DPOP
+  .dw_le ilo_xolicano
+  .dw_le FCPU32_ilo_DPUSH
+  .dw_le ilo_lijunono
   .dw_le FCPU32_ilo_dispatch
 
   : FCPU32_ilo_ONELBR
+  .dw_le ilo_licsnono
+  .dw_le FCPU32_ilo_DPOP
   .dw_le ilo_dulislli
   .dw_le 0x00000001
   .dw_le 0x0000001F
-  .dw_le ilo_srorliju
+  .dw_le ilo_srorlica
+  .dw_le FCPU32_ilo_DPUSH
+  .dw_le ilo_lijunono
   .dw_le FCPU32_ilo_dispatch
 
   : FCPU32_ilo_INCR
-  .dw_le ilo_liadliju
+  .dw_le ilo_licsnono
+  .dw_le FCPU32_ilo_DPOP
+  .dw_le ilo_liadlica
   .dw_le 0x0000001
+  .dw_le FCPU32_ilo_DPUSH
+  .dw_le ilo_lijunono
   .dw_le FCPU32_ilo_dispatch
 
   : FCPU32_ilo_fetch_instr
@@ -247,12 +323,13 @@ const src = `
   .dw_le FCPU32_ilo_MEMLRU_fetch_or_store
 
   : FCPU32_ilo_FETCH
-  # .dw_le ilo_fenoliju
-  # .dw_le FCPU32_ilo_dispatch
   # ( addr -- item )
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DPOP
   .dw_le ilo_liswlica
   .dw_le 0x00000000
   .dw_le FCPU32_ilo_MEMLRU_fetch_or_store
+  .dw_le FCPU32_ilo_DPUSH
   .dw_le ilo_lijunono
   .dw_le FCPU32_ilo_dispatch
 
@@ -260,6 +337,11 @@ const src = `
   # .dw_le ilo_stnoliju
   # .dw_le FCPU32_ilo_dispatch
   # ( item addr -- )
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DPOP
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DPOP
+  .dw_le ilo_swnonono
   .dw_le ilo_liswlica
   .dw_le 0xFFFFFFFF
   .dw_le FCPU32_ilo_MEMLRU_fetch_or_store
@@ -560,18 +642,34 @@ const src = `
   .dw_le FCPU32_ilo_MEMLRU_putNextOfEntry
 
   : FCPU32_ilo_DUP
-  .dw_le ilo_dunoliju
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DPOP
+  .dw_le ilo_dulicano
+  .dw_le FCPU32_ilo_DPUSH
+  .dw_le ilo_lijunono
   .dw_le FCPU32_ilo_dispatch
 
   : FCPU32_ilo_DROP
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DPOP
   .dw_le ilo_drnoliju
   .dw_le FCPU32_ilo_dispatch
 
   : FCPU32_ilo_SWAP
-  .dw_le ilo_swnoliju
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DPOP
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DPOP
+  .dw_le ilo_swnolica
+  .dw_le FCPU32_ilo_DPUSH
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DPUSH
+  .dw_le ilo_lijunono
   .dw_le FCPU32_ilo_dispatch
 
   : FCPU32_ilo_SKZ
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DPOP
   .dw_le ilo_licjnono
   .dw_le FCPU32_ilo_dispatch
   .dw_le FCPU32_ilo_IP  #
@@ -581,11 +679,19 @@ const src = `
   .dw_le FCPU32_ilo_dispatch
 
   : FCPU32_ilo_TO_R
-  .dw_le ilo_punoliju
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DPOP
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_RPUSH
+  .dw_le ilo_lijunono
   .dw_le FCPU32_ilo_dispatch
 
   : FCPU32_ilo_R_FROM
-  .dw_le ilo_ponoliju
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_RPOP
+  .dw_le ilo_licsnono
+  .dw_le FCPU32_ilo_DPUSH
+  .dw_le ilo_lijunono
   .dw_le FCPU32_ilo_dispatch
 
   : FCPU32_ilo_(ILO)_marker
@@ -595,6 +701,8 @@ const src = `
   
   : FCPU32_ilo_EXT
   # ( ... extnr -- ... )
+  .dw_le ilo_licanono
+  .dw_le FCPU32_ilo_DPOP
   .dw_le ilo_dulieqno
   .utf8 "ILO "
   .dw_le ilo_licjnono
@@ -614,16 +722,17 @@ const src = `
 
   : FCPU32_ilo_EXT_TX!
   # ( byte ext -- )
-  .dw_le ilo_drliiono
+  .dw_le ilo_drlicanono
+  .dw_le FCPU32_ilo_DPOP
+  .dw_le ilo_liioliju
   .dw_le 0x00000000
-  .dw_le ilo_lijunono
   .dw_le FCPU32_ilo_dispatch
 
   : FCPU32_ilo_EXT_?RX
   # ( ext -- byte true )
   .dw_le ilo_drliiono
   .dw_le 0x00000001
-  .dw_le ilo_lilijuno
+  .dw_le ilo_lilicano
   .dw_le 0xFFFFFFFF
   .dw_le FCPU32_ilo_dispatch
 
