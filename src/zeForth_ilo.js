@@ -74,6 +74,13 @@ const src = `
   .def_calc ilo_lijunono ilo_li ilo_ju 8 << ilo_no 16 << ilo_no 24 << | | |
   .def_calc ilo_lilijuno ilo_li ilo_li 8 << ilo_ju 16 << ilo_no 24 << | | |
 
+  .org 0x00000000
+  : ilo_startup
+  .dw_le ilo_lidrlica
+  .dw_le 0xDEADBEEF
+  .dw_le FCPU32_ilo_restore
+  # fallthrough
+
   : FCPU32_ilo_dispatch
   # the $NEXT
   .dw_le ilo_licanono 
@@ -857,21 +864,39 @@ const src = `
   .dw_le ilo_lirenono
   .dw_le 0x00000F02
 
-  .org 0x00000CF7
+  : FCPU32_ilo_restore
+  # ( -- )
+  .dw_le ilo_lililiio
+  .dw_le 0x00000001
+  .dw_le 0x00000C00
+  .dw_le 0x00000002
+  .dw_le ilo_lidulino  # ( src dest len )
+  .dw_le 0x00000C00
+  .dw_le 0x00000400
+  .dw_le ilo_lilicano  # ( )
+  .dw_le FCPU32_ilo_swap_endianess
+  .dw_le FCPU32_ilo_applyFunc_to_block
+  .dw_le ilo_lijunono
+  .dw_le FCPU32_ilo_MEMLRU_load_all_entries
+
+
   : FCPU32_ilo_IP
-  .dw_le ilo_licanono
-  .dw_le FCPU32_ilo_(VAR)
-  .dw_le 0x00000100
+  .dw_le ilo_lirenono
+  .dw_le 0x00000C00
 
   : FCPU32_ilo_DSPTR
-  .dw_le ilo_licanono
-  .dw_le FCPU32_ilo_(VAR)
-  .dw_le 0x00000D00
+  .dw_le ilo_lirenono
+  .dw_le 0x00000C01
 
   : FCPU32_ilo_RSPTR
-  .dw_le ilo_licanono
-  .dw_le FCPU32_ilo_(VAR)
-  .dw_le 0x00000E00
+  .dw_le ilo_lirenono
+  .dw_le 0x00000C02
+
+  .org 0x00000C00
+  .dw_le 0x00000100 # IP
+  .dw_le 0x00000D00 # Datastack ptr
+  .dw_le 0x00000E00 # Returnstack ptr
+
 
   .org 0x00000F02
   #        d          aaaaaa pppppppp nnnnnnnn
