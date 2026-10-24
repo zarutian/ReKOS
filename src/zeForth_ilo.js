@@ -892,10 +892,15 @@ const src = `
   .dw_le ilo_lirenono
   .dw_le 0x00000C02
 
+  : FCPU32_ilo_EXT_handler_vector
+  .dw_le ilo_lirenono
+  .dw_le 0x00000C03
+
   .org 0x00000C00
   .dw_le 0x00000100 # IP
   .dw_le 0x00000D00 # Datastack ptr
   .dw_le 0x00000E00 # Returnstack ptr
+  .dw_le 0x________ # EXT handler vector
 
 
   .org 0x00000F02
@@ -912,8 +917,18 @@ const src = `
   .dw_le 0x00000004
   .dw_le 0b00000000_00000101_00001010_00001110
   .dw_le 0x00000005
-  .dw_le 0b00000000_00000110_00001100_00000000
+  .dw_le 0b00000000_00000110_00001100_00010000
   .dw_le 0x00000006
+  .dw_le 0b00000000_00000111_00001110_00010010
+  .dw_le 0x00000007
+  .dw_le 0b00000000_00001000_00010000_00010100
+  .dw_le 0x00000008
+  .dw_le 0b00000000_00001001_00010010_00010110
+  .dw_le 0x00000009
+  .dw_le 0b00000000_00001010_00010100_00011000
+  .dw_le 0x0000000A
+  .dw_le 0b00000000_00001011_00010110_00000000
+  .dw_le 0x0000000B
 `;
 const usage = `
    # To hook up this FCPU32 image that is running via ilo:
