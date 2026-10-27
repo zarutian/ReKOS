@@ -101,7 +101,7 @@ I suspect that this 'B' number is to facilitate device key revocation upon resta
 * http://ibm1130.org/sim/downloads/
 * [SAC OEM](https://archive.org/details/ibm-file-1130-19-ga-26-3645-5/page/1/mode/1up)
 
-
+* [Tymshare Base-Host Protocols]( https://github.com/TYMCOM-X/169281.tape/blob/61a4c1fcd77c19952506cd141ca9bb9dd0adfd4c/fremontdoc/tbase.doc)
 
 
 
