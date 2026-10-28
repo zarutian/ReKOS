@@ -102,8 +102,7 @@ I suspect that this 'B' number is to facilitate device key revocation upon resta
 * [SAC OEM](https://archive.org/details/ibm-file-1130-19-ga-26-3645-5/page/1/mode/1up)
 
 * [Tymshare Base-Host Protocols]( https://github.com/TYMCOM-X/169281.tape/blob/61a4c1fcd77c19952506cd141ca9bb9dd0adfd4c/fremontdoc/tbase.doc)
-
-
-
+* [DDT cheatsheet](https://web.mit.edu/afs/net/project/cgw/src/ddt.68/ddt.cmds)
+* [DDT manual](https://archive.org/details/bitsavers_tymshareSD_4088885/mode/1up)
 
 
