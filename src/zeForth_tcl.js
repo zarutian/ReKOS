@@ -283,6 +283,26 @@ const src = utf8_src.concat(`
   .dhw (JMP) Tcl_simple_foreach_L0
   : Tcl_simple_foreach_L1
   .dhw (JMP) 4DROP
+
+  :f Tcl_const_str_!
+  # ( -- addr len )
+  .dhw ($|")
+  .utf8_hwc "!"
+  .dhw EXIT
+
+  :f Tcl_picol_!
+  # ( cmd_addr cmd_len -- addr' len' )
+  .dhw 2DUP                # ( ca cl ca cl )
+  .dhw LIT_0               # ( ca cl ca cl 0 )
+  .dhw Tcl_list_index      # ( ca cl 0st_a 0st_l )
+  .dhw Tcl_const_str_!     # ( ca cl 0st_a 0st_l "!"_a "!"_l )
+  .dhw BYTES=              # ( ca cl bool )
+  .dhw (BRNZ)              # ( ca cl )
+  .dhw Tcl_picol_!_L0
+  .dhw ABORT"
+  .utf8_hwc "picol cmd isnt !"
+  : Tcl_picol_!
+  
 `);
 // https://wiki.tcl-lang.org/page/Zarutian
 export { src };
