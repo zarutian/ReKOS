@@ -283,6 +283,6 @@ const src = utf8_src.concat(`
   .dhw (JMP) Tcl_simple_foreach_L0
   : Tcl_simple_foreach_L1
   .dhw (JMP) 4DROP
-  
 `);
+// https://wiki.tcl-lang.org/page/Zarutian
 export { src };
