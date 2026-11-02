@@ -63,6 +63,19 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           set d8 [string index $packet 8]
           set packet [string range $packet 9 end]
         }
+        "\x05" {
+          # Supervisor Takeover
+        }
+        "\x06" {
+          # Externally-Initiated New Circuit
+          set p [string index $packet 0]
+          set packet [string range $packet 1 end]
+        }
+        "\x07" {
+          # Internally-Initiated New Circuit
+          set p [string index $packet 0]
+          set packet [string range $packet 1 end]
+        }
       }
     }
   }
