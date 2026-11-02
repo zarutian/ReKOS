@@ -48,6 +48,21 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           set d8 [string index $packet 8]
           set packet [string range $packet 9 end]
         }
+        "\x04" {
+          # Reset Acknowledge
+          if {![string equal "\x00" [string index $packet 0]]} {
+            error ""
+          }
+          set d1 [string index $packet 1]
+          set d2 [string index $packet 2]
+          set d3 [string index $packet 3]
+          set d4 [string index $packet 4]
+          set d5 [string index $packet 5]
+          set d6 [string index $packet 6]
+          set d7 [string index $packet 7]
+          set d8 [string index $packet 8]
+          set packet [string range $packet 9 end]
+        }
       }
     }
   }
