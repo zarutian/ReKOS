@@ -24,6 +24,7 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
   thingy $tna
   $tna variable sbp [set send_base_a_packet]
   $tna variable recieptionist $recieptionist
+  $tna variable circuits [dict new]
   $tna proc recieve_a_packet_from_base {packet} {
     set packet_header   [string range $packet 0 1]
     set packet_checksum [string range $packet 2 3]
