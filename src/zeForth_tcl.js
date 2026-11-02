@@ -1,4 +1,5 @@
 import { src as utf8_src } from "./zeForth_utf8.js";
+import { src as objs_src } from "./zeForth_objs.js";
 const src = utf8_src.concat(`
   # a bit unrelated but wanted to save this from a handwritten note.
 
@@ -283,12 +284,16 @@ const src = utf8_src.concat(`
   .dhw (JMP) Tcl_simple_foreach_L0
   : Tcl_simple_foreach_L1
   .dhw (JMP) 4DROP
-
+`);
+const src.concat(objs_src, `
   :f Tcl_const_str_!
   # ( -- addr len )
   .dhw ($|")
   .utf8_hwc "!"
   .dhw EXIT
+
+  :f Tcl_make_picol_interp
+  # ( -- obj_ref )
 
   :f Tcl_picol_!
   # ( cmd_addr cmd_len -- addr' len' )
@@ -305,4 +310,4 @@ const src = utf8_src.concat(`
   
 `);
 // https://wiki.tcl-lang.org/page/Zarutian
-export { src };
+export { src, picol_src };
