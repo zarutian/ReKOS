@@ -108,6 +108,38 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           set packet [string range $packet 1 end]
         }
         "\x0E" {
+          # Green Ball
+          set p [string index $packet 0]
+          set packet [string range $packet 1 end]
+        }
+        "\x0F" {
+          # Red Ball
+          set p [string index $packet 0]
+          set packet [string range $packet 1 end]
+        }
+        "\x10" {
+          # Yellow Ball
+          set p [string index $packet 0]
+          set packet [string range $packet 1 end]
+        }
+        "\x11" {
+          # Orange Ball
+          set p [string index $packet 0]
+          set packet [string range $packet 1 end]
+        }
+        "\x15" {
+          # Gray and Black Balls
+          set p [string index $packet 0]
+          set colour [string index $packet 1]
+          # 0x00 Gray
+          # 0xFF Black
+          set packet [string range $packet 2 end]
+        }
+        "\x16" {
+          # Supervisor Response
+          set q [string index $packet 0]
+          set e [string index $packet 1]
+          set packet [string range $packet 2 end]
         }
       }
     }
