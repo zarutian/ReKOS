@@ -86,6 +86,11 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           set p [string index $packet 0]
           set packet [string range $packet 1 end]
         }
+        "\x0A" {
+          # Character Gobbler
+          set p [string index $packet 0]
+          set packet [string range $packet 1 end]
+        }
       }
     }
   }
