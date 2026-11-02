@@ -285,7 +285,7 @@ const src = utf8_src.concat(`
   : Tcl_simple_foreach_L1
   .dhw (JMP) 4DROP
 `);
-const src.concat(objs_src, `
+const picol_src = src.concat(objs_src, `
   :f Tcl_const_str_!
   # ( -- addr len )
   .dhw ($|")
@@ -293,7 +293,36 @@ const src.concat(objs_src, `
   .dhw EXIT
 
   :f Tcl_make_picol_interp
-  # ( -- obj_ref )
+  # ( variables_ref commands_ref callframestack_ref -- obj_ref )
+  .dhw zobj_HERE           # ( vr cr cfsr va )
+  .dhw @                   # ( vr cr cfsr obj_ref )
+  .dhw DUP                 # ( vr cr cfsr obj_ref obj_ref )
+  .dhw >R                  # ( vr cr cfsr obj_ref )      R:( obj_ref )
+  .dhw LIT_3               # ( vr cr cfsr obj_ref 3 )    R:( obj_ref )
+  .dhw LIT_0               # ( vr cr cfsr obj_ref 3 0 )  R:( obj_ref )
+  .dhw zobj_makeObjectHDR  # ( vr cr cfsr obj_ref hdr )  R:( obj_ref )
+  .dhw SWAP                # ( vr cr cfsr hdr obj_ref )  R:( obj_ref )
+  .dhw zobj_header!        # ( vr cr cfsr )              R:( obj_ref )
+  .dhw R@                  # ( vr cr cfsr obj_ref )      R:( obj_ref )
+  .dhw zobj_size@          # ( vr cr cfsr nrOfCells )    R:( obj_ref )
+  .dhw zobj_HERE           # ( vr cr cfsr nrOfCells va ) R:( obj_ref )
+  .dhw zobj_ptr+!          # ( vr cr cfsr )              R:( obj_ref )
+  .dhw R@                  # ( vr cr cfsr obj_ref )      R:( obj_ref )
+  .dhw LIT_0               # ( vr cr cfsr obj_ref 0 )    R:( obj_ref )
+  .dhw zobj_ref!           # ( vr cr )                   R:( obj_ref )
+  .dhw R@                  # ( vr cr obj_ref )           R:( obj_ref )
+  .dhw LIT_2               # ( vr cr obj_ref 2 )         R:( obj_ref )
+  .dhw zobj_ref!           # ( vr )                      R:( obj_ref )
+  .dhw R@                  # ( vr obj_ref )              R:( obj_ref )
+  .dhw LIT_1               # ( vr obj_ref 1 )            R:( obj_ref )
+  .dhw zobj_ref!           # ( )                         R:( obj_ref )
+  .dhw (LIT)               # ( xt )                      R:( obj_ref )
+  .dhw Tcl_picol_interp_invoke
+  .dhw R@                  # ( xt obj_ref )              R:( obj_ref )
+  .dhw zobj_invocation_handler!  # ( )                   R:( obj_ref )
+  .dhw R>                  # ( obj_ref )                 R:( )
+  .dhw EXIT
+  
 
   :f Tcl_picol_!
   # ( cmd_addr cmd_len -- addr' len' )
