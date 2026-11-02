@@ -322,6 +322,15 @@ const picol_src = src.concat(objs_src, `
   .dhw zobj_invocation_handler!  # ( )                   R:( obj_ref )
   .dhw R>                  # ( obj_ref )                 R:( )
   .dhw EXIT
+
+  : Tcl_picol_interp_invoke
+  # ( ... arg(s) argc verb target_optr -- ... result(s) resultc )
+  .dhw OVER                # ( ... argc verb target verb )
+  .dhw Tcl_picol_verb_advance
+  .dhw =                   # ( ... argc verb target bool )
+  .dhw (BRNZ)
+  .dhw Tcl_picol_interp_advance_method
+
   
 
   :f Tcl_picol_!
