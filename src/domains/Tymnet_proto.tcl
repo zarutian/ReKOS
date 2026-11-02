@@ -91,6 +91,23 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           set p [string index $packet 0]
           set packet [string range $packet 1 end]
         }
+        "\x0B" {
+          # Circuit Zapper
+          set p [string index $packet 0]
+          set packet [string range $packet 1 end]
+        }
+        "\x0C" {
+          # Enter Deferred Echo Mode
+          set p [string index $packet 0]
+          set packet [string range $packet 1 end]
+        }
+        "\x0D" {
+          # Leave Deferred Echo Mode
+          set p [string index $packet 0]
+          set packet [string range $packet 1 end]
+        }
+        "\x0E" {
+        }
       }
     }
   }
