@@ -152,6 +152,14 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           set d4 [string index $packet 4]
           set packet [string range $packet 5 end]
         }
+        "\x20" {
+          # Terminal Characteristics Response
+          set p   [string index $packet 0]
+          set tc  [string index $packet 1]
+          set val [string index $packet 2]
+          set packet [string range $packet 3 end]
+        }
+          
       }
     }
   }
