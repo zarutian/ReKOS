@@ -76,6 +76,16 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           set p [string index $packet 0]
           set packet [string range $packet 1 end]
         }
+        "\x08" {
+          # Backpressure On
+          set p [string index $packet 0]
+          set packet [string range $packet 1 end]
+        }
+        "\x09" {
+          # Backpressure Off
+          set p [string index $packet 0]
+          set packet [string range $packet 1 end]
+        }
       }
     }
   }
