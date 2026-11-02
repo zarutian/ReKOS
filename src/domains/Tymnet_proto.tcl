@@ -135,11 +135,22 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           # 0xFF Black
           set packet [string range $packet 2 end]
         }
-        "\x16" {
+        "\x17" {
           # Supervisor Response
           set q [string index $packet 0]
           set e [string index $packet 1]
           set packet [string range $packet 2 end]
+        }
+        "\x1A" {
+          # Test Pattern Response
+          if {![string equal "\x00" [string index $packet 0]]} {
+            error ""
+          }
+          set d1 [string index $packet 1]
+          set d2 [string index $packet 2]
+          set d3 [string index $packet 3]
+          set d4 [string index $packet 4]
+          set packet [string range $packet 5 end]
         }
       }
     }
