@@ -212,7 +212,16 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
             set Kernel_host_number       [string range $env_data 10 11]
           }
         }
-        
+        # 80+n, p, n bytes of data       Data Bytes
+        default {
+          binary scan $message_type H* n
+          if {($n & 0x80) == 0x00} {
+            error ""
+          }
+          set p [string index $packet 0]
+          set data [string range $packet 1 [expr {(0x$n & 0x7F)}]]
+          set packet [string range $packet [expr {(0x$n & 0x7F) + 1}] end]
+        }
       }
     }
   }
