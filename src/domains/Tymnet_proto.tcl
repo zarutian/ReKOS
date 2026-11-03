@@ -182,6 +182,37 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           # CR Delay and Input Baud Rate
           set packet [string range $packet 2 end]
         }
+        "\x37" {
+          # Negative Acknowledgement
+          set p [string index $packet 0]
+          set packet [string range $packet 1 end]
+        }
+        "\x38" {
+          # Environmental Data
+          binary scan  [string index $packet 0] H* len
+          set env_data [string range $packet 1 [expr 0x$len]]
+          set packet   [string range $packet [expr 0x$len + 1]]
+          set ver [string index $env_data 0]
+          # ver is either 0x00 or 0x01
+          set reset_cause [string index $env_data 1]
+          # reset_cause is
+          #   0x00 - Reset message from host
+          #   0x01 - Base slot code crashed and restarted
+          #   0x02 - Base timed out host
+          #   0x03 - message format error in message from host
+          #   0x04 - sequence error in packet from host
+          #   0x05 - checksum error in packet from host
+          #   0x06 - invalid message type in message from host
+          #   0x07 - base slot code has been reloaded
+          if {[string equal "\x01" $ver]} {
+            set slot_code_version_number [string range $env_data 2 3]
+            set slot_number              [string range $env_data 4 5]
+            set ISIS_version_number      [string range $env_data 6 7]
+            set Node_number              [string range $env_data 8 9]
+            set Kernel_host_number       [string range $env_data 10 11]
+          }
+        }
+        
       }
     }
   }
