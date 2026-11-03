@@ -159,7 +159,17 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           set val [string index $packet 2]
           set packet [string range $packet 3 end]
         }
-          
+        "\x23" {
+          # Supervisor Clock Data
+          if {![string equal "\x00" [string index $packet 0]]} {
+            error ""
+          }
+          set t1 [string index $packet 1]
+          set t2 [string index $packet 2]
+          set t3 [string index $packet 3]
+          set t4 [string index $packet 4]
+          set packet [string range $packet 5 end]
+        }
       }
     }
   }
