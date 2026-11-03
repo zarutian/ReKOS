@@ -170,6 +170,18 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           set t4 [string index $packet 4]
           set packet [string range $packet 5 end]
         }
+        "\x2F" {
+          # Break Character
+          set p [string index $packet 0]
+          set packet [string range $packet 1 end]
+        }
+        "\x30" {
+          # Special Port Condition
+          set p [string index $packet 0]
+          set v [string index $packet 1]
+          # CR Delay and Input Baud Rate
+          set packet [string range $packet 2 end]
+        }
       }
     }
   }
