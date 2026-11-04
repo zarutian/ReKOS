@@ -26,9 +26,13 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
   $tna variable recieptionist $recieptionist
   $tna variable circuits [dict new]
   $tna proc recieve_a_packet_from_base {packet} {
-    set packet_header   [string range $packet 0 1]
+    if {![string equal "\x00\xFF" [string range $packet 0 1]]} {
+      error ""
+    }
     set packet_checksum [string range $packet 2 3]
-    set packet [string range $packet 4 end]
+    set packet_seqnum   [string index $packet 4]
+    set packet_halfwordcount [string index $packet 5]
+    set packet [string range $packet 6 end]
     while {[string length $packet] > 0} {
       set message_type [string index $packet 0]
       set packet [string range $packet 1 end]
@@ -224,5 +228,7 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
         }
       }
     }
+  }
+  $tna proc Reset_Interface {} {
   }
 }
