@@ -30,6 +30,9 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
       error ""
     }
     set packet_checksum [string range $packet 2 3]
+    if {![string equal [Tymnet_calculate_lemcom_checksum [string range $packet 4]] $packet_checksum]} {
+      # checksum errir
+    }
     set packet_seqnum   [string index $packet 4]
     set packet_halfwordcount [string index $packet 5]
     set packet [string range $packet 6 end]
@@ -231,4 +234,32 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
   }
   $tna proc Reset_Interface {} {
   }
+}
+
+proc Tymnet_calculate_lemcom_checksum {halfwords} {
+  set sum "\x00\x00"
+  set i 0
+  set l [string length $halfwords]
+  while {$i < $l} {
+    set halfword [string range $halfwords $i [expr { $i + 1 }]]
+    set sum [XOR $sum $halfword]
+    incr i 2
+  }
+  return $sum
+}
+
+proc XOR {a b} {
+  binary scan $a B* operand_a
+  binary scan $b B* operand_b
+  if {[string length $operand_a] != [string length $operand_b]} {
+    error "operand A and B must be of same size"
+  }
+  set c ""
+  set i 0
+  set l [string length $operand_a]
+  while {$i < $l} {
+    append c [string replace {00 0 01 1 10 1 11 0} "[string index $operand_a $i][string index $operand_b $i]"]
+    incr i
+  }
+  return [binary format B* $c]
 }
