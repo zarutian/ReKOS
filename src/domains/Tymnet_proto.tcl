@@ -25,6 +25,7 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
   $tna variable sbp [set send_base_a_packet]
   $tna variable recieptionist $recieptionist
   $tna variable circuits [dict new]
+  $tna variable queries2supervisor [dict new]
   $tna variable hostnr ""
   $tna variable is_shut yes
   $tna proc recieve_a_packet_from_base {packet} {
@@ -262,10 +263,33 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
     append msgs "\xDE\xAD\xCA\xFE\xBE\xEF\xFE\xED"; # the eight d bytes
        set is_shut yes
     append msgs "\x21"; # message type is Set Host Number
-    append msgs "\xFE"; # 254 ports
+    append msgs "\xFF"; # 255 ports
     append msgs [string range [binary format H* [format "%04x" $hostnr]] 0 1]
     append msgs "\x01"; # message type is Host is Open
        set is_shut no
+    append msgs "\x22"; # message type is Supervisor Clock Request
+    packet_to_base $msgs
+  }
+  $tna proc build_Aux_Circuit {login_string} {
+    if {![string equal "\r" [string index $login_string end]] &&
+        ![string equal ";"  [string index $login_string end]]} {
+        error "login string must end with either Carrage Return or Semicolon"
+    }
+    if {[string first ":" $login_string] == -1} {
+      error "login string is missing a colon"
+    }
+    set host_number [string range $login_string [expr {[string last ":" $login_string] + 1}] end-1]
+    variable queries2supervisor
+       set q #tbd
+       set msgs ""
+    append msgs "\x16"; # message type is Supervisor Request
+    append msgs $q    ; # query port in question
+    append msgs "\x00"; # constant zero byte
+    foreach char [split $login_string ""] {
+      append msgs "\x18"; # message type is Supervisor Login Character
+      append msgs $q
+      append msgs $char
+    }
     packet_to_base $msgs
   }
 }
