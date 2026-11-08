@@ -25,6 +25,8 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
   $tna variable sbp [set send_base_a_packet]
   $tna variable recieptionist $recieptionist
   $tna variable circuits [dict new]
+  $tna variable hostnr ""
+  $tna variable is_shut yes
   $tna proc recieve_a_packet_from_base {packet} {
     if {![string equal "\x00\xFF" [string range $packet 0 1]]} {
       error ""
@@ -34,7 +36,11 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
       # checksum errir
     }
     set packet_seqnum   [string index $packet 4]
-    set packet_halfwordcount [string index $packet 5]
+    binary scan [string index $packet 5] H* packet_halfwordcount
+    if {((0x$packet_halfwordcount - 1) * 2) != [string length $packet]} {
+      # tbd: ætti þetta að vera villa eða ætti að sneiða raunpakkan framanaf $packet ?
+      error ""
+    }
     set packet [string range $packet 6 end]
     while {[string length $packet] > 0} {
       set message_type [string index $packet 0]
@@ -232,7 +238,20 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
       }
     }
   }
+  $tna proc packet_to_base {messages} {
+    variable sbp
+    variable packet_seqno
+    set payload    [binary format H* [format "%02x" [expr {$packet_seqno & 0xFF}]]]
+    append payload [binary format H* [format "%02x" [expr {(([string length $messages] + 6) / 2) & 0xFF}]]]
+    append payload $messages
+    set packet "\x00\xFF"
+    append packet [Tymnet_calculate_lemcom_checksum $payload]
+    append packet $payload
+    $sbp $packet
+  }
   $tna proc Reset_Interface {} {
+    variable hostnr
+    variable is_shut
   }
 }
 
