@@ -239,6 +239,9 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
     }
   }
   $tna proc packet_to_base {messages} {
+    if {([string length $messaged] % 2) != 0} {
+      append messages "\x00"
+    }
     variable sbp
     variable packet_seqno
     set payload    [binary format H* [format "%02x" [expr {$packet_seqno & 0xFF}]]]
@@ -248,10 +251,22 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
     append packet [Tymnet_calculate_lemcom_checksum $payload]
     append packet $payload
     $sbp $packet
+    incr packet_seqno
   }
   $tna proc Reset_Interface {} {
     variable hostnr
     variable is_shut
+       set msgs ""
+    append msgs "\x03"; # message type is Reset Interface
+    append msgs "\x00"; # filler byte
+    append msgs "\xDE\xAD\xCA\xFE\xBE\xEF\xFE\xED"; # the eight d bytes
+       set is_shut yes
+    append msgs "\x21"; # message type is Set Host Number
+    append msgs "\xFE"; # 254 ports
+    append msgs [string range [binary format H* [format "%04x" $hostnr]] 0 1]
+    append msgs "\x01"; # message type is Host is Open
+       set is_shut no
+    packet_to_base $msgs
   }
 }
 
