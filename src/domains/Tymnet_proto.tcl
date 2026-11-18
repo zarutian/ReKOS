@@ -139,11 +139,11 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           # Externally-Initiated New Circuit
           set p [string index $packet 0]
           set packet [string range $packet 1 end]
-          dict set circuits $p callback identity
+          variable recieptionist
+          dict set circuits $p callback $recieptionist
           dict set circuits $p outgoing backpressure off
           dict set circuits $p incoming backpressure off
-          variable recieptionist
-          {*}[set recieptionist] $p
+          {*}[set recieptionist] incoming_circuit $p
         }
         "\x07" {
           # Internally-Initiated New Circuit
@@ -156,64 +156,64 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           set p [string index $packet 0]
           set packet [string range $packet 1 end]
           dict set circuits $p outgoing backpressure on
-          {*}[dict get circuits $p callback] backpressure on $p
+          {*}[dict get $circuits $p callback] backpressure on $p
         }
         "\x09" {
           # Backpressure Off
           set p [string index $packet 0]
           set packet [string range $packet 1 end]
           dict set circuits $p outgoing backpressure off
-          {*}[dict get circuits $p callback] backpressure off $p
+          {*}[dict get $circuits $p callback] backpressure off $p
         }
         "\x0A" {
           # Character Gobbler
           set p [string index $packet 0]
           set packet [string range $packet 1 end]
-          {*}[dict get circuits $p callback] gobbler $p
+          {*}[dict get $circuits $p callback] gobbler $p
         }
         "\x0B" {
           # Circuit Zapper
           set p [string index $packet 0]
           set packet [string range $packet 1 end]
-          {*}[dict get circuits $p callback] zapper $p
+          {*}[dict get $circuits $p callback] zapper $p
         }
         "\x0C" {
           # Enter Deferred Echo Mode
           set p [string index $packet 0]
           set packet [string range $packet 1 end]
           dict set circuits $p outgoing echo off
-          {*}[dict get circuits $p callback] echo off $p
+          {*}[dict get $circuits $p callback] echo off $p
         }
         "\x0D" {
           # Leave Deferred Echo Mode
           set p [string index $packet 0]
           set packet [string range $packet 1 end]
           dict set circuits $p outgoing echo on
-          {*}[dict get circuits $p callback] echo on $p
+          {*}[dict get $circuits $p callback] echo on $p
         }
         "\x0E" {
           # Green Ball
           set p [string index $packet 0]
           set packet [string range $packet 1 end]
-          {*}[dict get circuits $p callback] ball green $p
+          {*}[dict get $circuits $p callback] ball green $p
         }
         "\x0F" {
           # Red Ball
           set p [string index $packet 0]
           set packet [string range $packet 1 end]
-          {*}[dict get circuits $p callback] ball red $p
+          {*}[dict get $circuits $p callback] ball red $p
         }
         "\x10" {
           # Yellow Ball
           set p [string index $packet 0]
           set packet [string range $packet 1 end]
-          {*}[dict get circuits $p callback] ball yellow $p
+          {*}[dict get $circuits $p callback] ball yellow $p
         }
         "\x11" {
           # Orange Ball
           set p [string index $packet 0]
           set packet [string range $packet 1 end]
-          {*}[dict get circuits $p callback] ball orange $p
+          {*}[dict get $circuits $p callback] ball orange $p
         }
         "\x15" {
           # Gray and Black Balls
@@ -222,7 +222,7 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           # 0x00 Gray
           # 0xFF Black
           set packet [string range $packet 2 end]
-          {*}[dict get circuits $p callback] ball [string map {\x00 gray \xFF black} $colour] $p
+          {*}[dict get $circuits $p callback] ball [string map {\x00 gray \xFF black} $colour] $p
         }
         "\x17" {
           # Supervisor Response
@@ -258,7 +258,7 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           set tc  [string index $packet 1]
           set val [string index $packet 2]
           set packet [string range $packet 3 end]
-          {*}[dict get circuits $p callback] terminal_characteristics $tc $val $p
+          {*}[dict get $circuits $p callback] terminal_characteristics $tc $val $p
         }
         "\x23" {
           # Supervisor Clock Data
@@ -275,7 +275,7 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           # Break Character
           set p [string index $packet 0]
           set packet [string range $packet 1 end]
-          {*}[dict get circuits $p callback] break_character $p
+          {*}[dict get $circuits $p callback] break_character $p
         }
         "\x30" {
           # Special Port Condition
@@ -283,13 +283,13 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           set v [string index $packet 1]
           # CR Delay and Input Baud Rate
           set packet [string range $packet 2 end]
-          {*}[dict get circuits $p callback] special_port_condition $v $p
+          {*}[dict get $circuits $p callback] special_port_condition $v $p
         }
         "\x37" {
           # Negative Acknowledgement
-          set p [string index $packet 0]
+          set z [string index $packet 0]
           set packet [string range $packet 1 end]
-          {*}[dict get circuits $p callback] nack $p
+          # xxx: resend last packet?
         }
         "\x38" {
           # Environmental Data
@@ -325,7 +325,7 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           set p [string index $packet 0]
           set data [string range $packet 1 [expr {(0x$n & 0x7F)}]]
           set packet [string range $packet [expr {(0x$n & 0x7F) + 1}] end]
-          {*}[dict get circuits $p callback] data $data $p
+          {*}[dict get $circuits $p callback] data $data $p
         }
       }
     }
