@@ -345,6 +345,7 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
       append msgs $char
     }
     dict set queries2supervisor $qi state 1 ; # Supervisor asked to build the circuit
+    dict set queries2supervisor $qi login_string $login_string
     packet_to_base $msgs
   }
 }
