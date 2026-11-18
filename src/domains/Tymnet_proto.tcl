@@ -207,6 +207,13 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           set q [string index $packet 0]
           set e [string index $packet 1]
           set packet [string range $packet 2 end]
+          binary scan $q H* qi
+          scan $qi "02x" qi
+          variable queries2supervisor
+          switch [dict get $queries2supervisor $qi step] {
+            0 { build_Aux_Circuit_step2 $q $qi $e }
+            1 { build_Aux_Circuit_step3 $q $qi $e }
+          }
         }
         "\x1A" {
           # Test Pattern Response
@@ -323,7 +330,7 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
     append msgs "\x22"; # message type is Supervisor Clock Request
     packet_to_base $msgs
   }
-  $tna proc build_Aux_Circuit {login_string} {
+  $tna proc build_Aux_Circuit {login_string callback} {
     if {![string equal "\r" [string index $login_string end]] &&
         ![string equal ";"  [string index $login_string end]]} {
         error "login string must end with either Carrage Return or Semicolon"
@@ -339,13 +346,25 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
     append msgs "\x16"; # message type is Supervisor Request
     append msgs $q    ; # query port in question
     append msgs "\x00"; # constant zero byte
+    dict set queries2supervisor $qi step 0 ; # Supervisor asked for if it can build a circuit
+    dict set queries2supervisor $qi login_string $login_string
+    dict set queries2supervisor $qi callback $callback
+    packet_to_base $msgs
+    return $qi
+  }
+  $tna proc build_Aux_Circuit_step2 {q qi e} {
+    variable queries2supervisor
+    if {[dict get $queries2supervisor $qi step] != 0} {
+      error "query to tymnet supervisor is not at step 0"
+    }
+    set login_string [dict get $queries2supervisor $qi login_string]
+    set msgs ""
     foreach char [split $login_string ""] {
       append msgs "\x18"; # message type is Supervisor Login Character
       append msgs $q
       append msgs $char
     }
-    dict set queries2supervisor $qi state 1 ; # Supervisor asked to build the circuit
-    dict set queries2supervisor $qi login_string $login_string
+    dict set queries2supervisor $qi step 1
     packet_to_base $msgs
   }
 }
