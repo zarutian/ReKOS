@@ -280,7 +280,7 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
     }
     set host_number [string range $login_string [expr {[string last ":" $login_string] + 1}] end-1]
     variable queries2supervisor
-       set q #tbd
+       set q    [lindex [ldifference [lseq 0x00 to 0xFF by 0x01] [dict keys $queries2supervisor]]
        set msgs ""
     append msgs "\x16"; # message type is Supervisor Request
     append msgs $q    ; # query port in question
