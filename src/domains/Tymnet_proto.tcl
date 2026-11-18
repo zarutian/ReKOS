@@ -178,6 +178,7 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           set p [string index $packet 0]
           set packet [string range $packet 1 end]
           {*}[dict get $circuits $p callback] zapper $p
+          dict unset circuits $p
         }
         "\x0C" {
           # Enter Deferred Echo Mode
