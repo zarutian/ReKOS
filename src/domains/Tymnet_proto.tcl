@@ -18,6 +18,34 @@ proc thingy {name} {
   proc $name args "namespace eval ::things::[set name] dispatch \$args"
 }
 
+# "backported" from Tcl 9.0
+proc lseq {args} {
+  set arg_idx 0
+  set start [lindex $args $arg_idx]
+  incr arg_idx 1
+  if {[string equal "to" [lindex $args $arg_idx]]} {
+    incr arg_idx 1
+  }
+  set end [lindex $args $arg_idx]
+  incr arg_idx 1
+  if {[string equal "by" [lindex $args $arg_idx]]} {
+    incr arg_idx 1
+  }
+  set step [lindex $args $arg_idx]
+  if {[string equal "" $step]} {
+    set step 1
+  }
+  incr arg_idx 1
+  set result [list]
+  set item $start
+  do {
+    lappend result $item
+    set item [expr { $item + $step }]
+  } until {$item == $end}
+  return $result
+}
+
+
 # see https://github.com/TYMCOM-X/169281.tape/blob/61a4c1fcd77c19952506cd141ca9bb9dd0adfd4c/fremontdoc/tbase.doc
 # for Lemcom '83
 proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
