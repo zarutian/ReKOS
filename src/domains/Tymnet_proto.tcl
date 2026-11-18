@@ -333,7 +333,8 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
     }
     set host_number [string range $login_string [expr {[string last ":" $login_string] + 1}] end-1]
     variable queries2supervisor
-       set q    [lindex [ldifference [lseq 0x00 to 0xFF by 0x01] [dict keys $queries2supervisor]]
+       set qi   [lindex [ldifference [lseq 0x00 to 0xFF by 0x01] [dict keys $queries2supervisor]] 0]
+       set q    [binary format H* [format "02x" $qi]]
        set msgs ""
     append msgs "\x16"; # message type is Supervisor Request
     append msgs $q    ; # query port in question
@@ -343,6 +344,7 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
       append msgs $q
       append msgs $char
     }
+    dict set queries2supervisor $qi state 1 ; # Supervisor asked to build the circuit
     packet_to_base $msgs
   }
 }
