@@ -44,6 +44,22 @@ proc lseq {args} {
   } until {$item == $end}
   return $result
 }
+proc do {args} {
+  set body      [lindex $args 0]
+  set keyword   [lindex $args 1]
+  set condition [lindex $args 2]
+  if {![string equal "while" $keyword] &&
+      ![string equal "until" $keyword]} {
+    error "keyword after the body must be either 'while' or 'until'"
+  }
+  if {[string equal "until" $keyword]} {
+    set condition "!([set condition])"
+  }
+  uplevel 1 $body
+  while {[uplevel 1 expr $condition]} {
+    uplevel 1 $body
+  }
+}
 
 
 # see https://github.com/TYMCOM-X/169281.tape/blob/61a4c1fcd77c19952506cd141ca9bb9dd0adfd4c/fremontdoc/tbase.doc
