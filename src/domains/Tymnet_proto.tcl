@@ -143,6 +143,7 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           # Internally-Initiated New Circuit
           set p [string index $packet 0]
           set packet [string range $packet 1 end]
+          variable last_inited_aux_circuit $p
         }
         "\x08" {
           # Backpressure On
@@ -211,8 +212,12 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           scan $qi "02x" qi
           variable queries2supervisor
           switch [dict get $queries2supervisor $qi step] {
-            0 { build_Aux_Circuit_step2 $q $qi $e }
-            1 { build_Aux_Circuit_step3 $q $qi $e }
+            0 {
+              build_Aux_Circuit_step2 $q $qi $e
+            }
+            1 {
+              build_Aux_Circuit_step3 $q $qi $e
+            }
           }
         }
         "\x1A" {
@@ -354,6 +359,10 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
   }
   $tna proc build_Aux_Circuit_step2 {q qi e} {
     variable queries2supervisor
+    if {![string equal "\x00" $e]} {
+      {*}[dict get $queries2supervisor $qi callback] err $e 0
+      dict unset queries2supervisor $qi
+    }
     if {[dict get $queries2supervisor $qi step] != 0} {
       error "query to tymnet supervisor is not at step 0"
     }
@@ -367,6 +376,25 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
     dict set queries2supervisor $qi step 1
     packet_to_base $msgs
   }
+  $tna proc build_Aux_Circuit_step3 {q qi e} {
+    variable queries2supervisor
+    if {![string equal "\x00" $e]} {
+      {*}[dict get $queries2supervisor $qi callback] err $e 1
+      dict unset queries2supervisor $qi
+    }
+    if {[dict get $queries2supervisor $qi step] != 1} {
+      error "query to tymnet supervisor is not at step 1"
+    }
+    variable last_inited_aux_circuit
+    set c $last_inited_aux_circuit
+    variable circuits
+    dict set circuits $c callback [dict get $queries2supervisor $qi callback]
+    dict set circuits $c outgoing backpressure off
+    dict set circuits $c incoming backpressure off
+    {*}[dict get $queries2supervisor $qi callback] connected $c
+    dict unset queries2supervisor $qi
+  }
+
 }
 
 proc Tymnet_calculate_lemcom_checksum {halfwords} {
