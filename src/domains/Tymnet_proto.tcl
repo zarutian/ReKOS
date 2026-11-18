@@ -134,6 +134,8 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
         }
         "\x05" {
           # Supervisor Takeover
+          variable recieptionist
+          {*}[set recieptionist] supervisor takeover
         }
         "\x06" {
           # Externally-Initiated New Circuit
@@ -270,6 +272,8 @@ proc make_tymnet_adapter {tna send_base_a_packet recieptionist} {
           set t3 [string index $packet 3]
           set t4 [string index $packet 4]
           set packet [string range $packet 5 end]
+          variable recieptionist
+          {*}[set recieptionist] supervisor clock [set t1][set t2][set t3][set t4]
         }
         "\x2F" {
           # Break Character
