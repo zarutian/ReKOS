@@ -60,6 +60,15 @@ proc do {args} {
     uplevel 1 $body
   }
 }
+proc ldifference {list_a list_b} {
+  set result [list]
+  foreach item_a $list_a {
+    if {[lsearch -exact $list_b $item_a] == -1} {
+      lappend result $item_a
+    }
+  }
+  return $result
+}
 
 
 # see https://github.com/TYMCOM-X/169281.tape/blob/61a4c1fcd77c19952506cd141ca9bb9dd0adfd4c/fremontdoc/tbase.doc
