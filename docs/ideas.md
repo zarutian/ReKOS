@@ -1,6 +1,6 @@
 
 One idea is to have in the Tymnet equiv Recieptionist LocalUserDirectory
-the username ANONYMOUS or ZOFT whose LUD key is to a domain
+the username ZOFT whose LUD key is to a domain
 that builds another domain that responds with (when login string terminator is CR):
 
 ```txt
