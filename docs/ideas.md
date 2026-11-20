@@ -70,6 +70,7 @@ The 'establish' option responds with:
       (ZOFT uses a 'ZOFT-SUPVIS:*;' circuit to ask Tymnet supervisor if the password is correct)
       Possible charging formula: 1 ZRU per byte over the circuit
   * BOARD (0;key==>c,(16:board-UUID);cancel_key) (1,(16:board-UUID);==>c;key)
+  * RECEPT is very similar that Tymnet LUD holds for ZOFT. Used mainly on same host wants to interface with it, being it a muxer or other such.
 
   1 TymnetResourceUnit buys 1k ZRU.
 
