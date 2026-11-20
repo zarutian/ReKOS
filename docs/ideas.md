@@ -43,16 +43,31 @@ The 'establish' option responds with:
 
 ```txt
   To establish a ZOFT account you are require to give a valid paymir cheque/coupon
-  of at least 250 T(ymshare/ilda)/Z(oft/arutia's)ResourceUnits for randomly-genetated UID.
+  of at least 250k Z(oft)ResourceUnits for randomly-genetated UID.
   Such account lasts at least 96 hours.
-  To pick your an UID of your choice 250 ZRUs (pronounced shrews) extra is required.
+  To pick your an UID of your choice 250k ZRUs (pronounced shrews) extra is required.
 ```
-  In the DIRECTORY that is given to the newly established users Context Switcher and Command Systems will be the following keys:
+  In the DIRECTORY that is given to the newly established users Context Switcher will be the following keys:
     PUB per usual
     ACCOUNT (branded ZRU)
     SPACEBANK that buys pages and nodes from a ZOFT spacebank billing aforesaid ACCOUNT
     METER that bills to same ACCOUNT
-    Change ZLUD key that works the same as Tymnet receiptionst LUD change but for ZOFT only
+    Change_ZLUD key that works the same as Tymnet receiptionst LUD change but for ZOFT only
+
+  In the PUB.ZOFT directory will be:
+    PAYMIR (see above)
+    ZRU_account that is always empty, rejects transfers to it, and is only useful for sprouting of new empty accounts with no other parent.
+    SPACEBANKFAC that takes an ZRU account
+      Possible charging formula: 4096 ZRU per page or node per day/week.
+      When a page or node is sold back 3072 ZRU get returned to the account, maybe (tbd)
+    METERFAC that takes an ZRU account.
+      Possible charging formula: 1 ZRU per IBM 370/390/z instruction operation retired (tbd)
+    GETCIRCUITFAC that takes an ZRU account
+      Requires a Tymnet username and password.
+      (ZOFT uses a 'ZOFT-SUPVIS:*;' circuit to ask Tymnet supervisor if the password is correct)
+      Possible charging formula: 1 ZRU per byte over the circuit
+
+  1 TymnetResourceUnit buys 1k ZRU.
 
 (For rehistory: This would have lived on Tymnet hostnr 2686)
 
