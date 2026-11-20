@@ -66,6 +66,7 @@ The 'establish' option responds with:
       Requires a Tymnet username and password.
       (ZOFT uses a 'ZOFT-SUPVIS:*;' circuit to ask Tymnet supervisor if the password is correct)
       Possible charging formula: 1 ZRU per byte over the circuit
+  * BOARD (0;key==>c,(16:board-UUID);cancel_key) (1,(16:board-UUID);==>c;key)
 
   1 TymnetResourceUnit buys 1k ZRU.
 
