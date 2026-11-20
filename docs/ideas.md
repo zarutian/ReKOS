@@ -5,7 +5,7 @@ that builds another domain that responds with (when login string terminator is C
 
 ```txt
 YYYY-MM-DDThh:mm:ssZ Welcome to ZOFT services. LOGIN timeout is 120 seconds.
-type 'm' 'menu' (without quotes) and carrage return to get menu.
+type 'm' or 'menu' (without quotes) and carrage return to get menu.
 >
 ```
 
@@ -13,10 +13,13 @@ And the menu:
 ```txt
 >menu
   'login <UID>' logs in under User/Unique/Utility-IDentifier account
+  'l <UID>'     ditto
   'establish'   establish such an account
   'paymir'      gives you access to paymir cheques/coupon services
+  'p'           ditto
   'logout'      disconnects the circuit
   'logoff'      ditto
+  'o'           ditto
 ```
 
 The paymir (a slight pun on the old now discontinued russian paymer service)
