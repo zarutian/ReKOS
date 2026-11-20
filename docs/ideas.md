@@ -71,3 +71,4 @@ The 'establish' option responds with:
 
 (For rehistory: This would have lived on Tymnet hostnr 2686)
 
+T(ymshare/ilda)/Z(oft/arutia's)ResourceUnits
