@@ -56,7 +56,8 @@ The 'establish' option responds with:
   * PUB per usual
   * ACCOUNT (branded ZRU)
   * SPACEBANK that buys pages and nodes from a ZOFT spacebank billing aforesaid ACCOUNT
-  * METER that bills to same ACCOUNT
+  * METER that bills to same ACCOUNT (is at lowest tier, 20 Hz or so betwixt timeslices or such)
+  * WAIT object that also gives the Time Of Day or timestamp
   * Change_ZLUD key that works the same as Tymnet receiptionst LUD change but for ZOFT only
 
   In the PUB.ZOFT directory will be:
