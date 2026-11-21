@@ -97,8 +97,11 @@ The first nybble of the header tells which 'branch' the following payload bytes 
 the second nybble gives how many payload bytes 1-15 inclusive. The second nybble, if zero
 indicates that the bytestream producer for that 'branch' has EOF'ed.
 
-The Hexmux backpressure and EOF indication protocol uses one byte per signaling branch.
+The Hexmux backpressure and EOF indication protocol uses one header byte per signaling branch.
 The first nybble of the byte tells which 'branch' is signaling. The second nybble is split into
-four bits: 0x1 indicated backpressure, 0x2 indicates that the downstream bytestream consumer of
-that branch had EOF'ed.
+four bits: Least Significant Bit (0b___1) indicates that the downstream bytestream consumer of
+that branch had EOF'ed, next bit back (0b__1_) indicates backpressure on (1) or off (1).
+Next bit back after that (0b_1__) indicates a two byte bigendian short follow, giving the 'limit'
+per the bytestream cogate calling convention.
+
 
