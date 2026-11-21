@@ -84,7 +84,21 @@ T(ymshare/ilda)/Z(oft/arutia's)ResourceUnits
 
 HEXMUXF is a HEXMUX and HEXDEMUX factory.
 
-HEXMUXF(0; SB, M ==> c; N, BSOK, BPS) creates node N that is filled with Bytestream Consumers, their index in the node indicates which 'branch' they are.
-Sixteen brances at most. BSOK is a Bytestream producer whose bytestream follows the Hexmux multiplexing protocol. BPS is a Bytestream producer whose
+HEXMUXF(0; SB, M ==> c; N, BSOK, BPC) creates node N that is filled with Bytestream Consumers, their index in the node indicates which 'branch' they are.
+Sixteen brances at most. BSOK is a Bytestream producer whose bytestream follows the Hexmux multiplexing protocol. BPS is a Bytestream consumer whose
 bytestream follows the Hexmux backpressure and EOF indication protocol.
+
+HEXMUXF(1; SB, M ==> c; N, BSIK, BPP) creates node N that is filled with Bytestream Producers, their index in the node indicates which 'branch' they are.
+BSIK is a Bytestream producer whose bytestream is expected to be the Hexmux multiplexing protocol. BPP is a Bytestream producer whose bytestream follows
+the Hexmux backpressure and EOF indication protocol.
+
+The Hexmux multiplexing protocol uses one header byte per packet followed by payload bytes.
+The first nybble of the header tells which 'branch' the following payload bytes belong to, 
+the second nybble gives how many payload bytes 1-15 inclusive. The second nybble, if zero
+indicates that the bytestream producer for that 'branch' has EOF'ed.
+
+The Hexmux backpressure and EOF indication protocol uses one byte per signaling branch.
+The first nybble of the byte tells which 'branch' is signaling. The second nybble is split into
+four bits: 0x1 indicated backpressure, 0x2 indicates that the downstream bytestream consumer of
+that branch had EOF'ed.
 
