@@ -1,4 +1,6 @@
 
+# ZOFT
+
 One idea is to have in the Tymnet equiv Recieptionist LocalUserDirectory
 the username ZOFT whose LUD key is to a domain
 that builds another domain that responds with (when login string terminator is CR):
@@ -77,3 +79,12 @@ The 'establish' option responds with:
 (For rehistory: This would have lived on Tymnet hostnr 2686)
 
 T(ymshare/ilda)/Z(oft/arutia's)ResourceUnits
+
+# HEXMUX
+
+HEXMUXF is a HEXMUX and HEXDEMUX factory.
+
+HEXMUXF(0; SB, M ==> c; N, BSOK, BPS) creates node N that is filled with Bytestream Consumers, their index in the node indicates which 'branch' they are.
+Sixteen brances at most. BSOK is a Bytestream producer whose bytestream follows the Hexmux multiplexing protocol. BPS is a Bytestream producer whose
+bytestream follows the Hexmux backpressure and EOF indication protocol.
+
