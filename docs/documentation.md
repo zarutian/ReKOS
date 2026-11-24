@@ -15,7 +15,7 @@ I have decided on the following key type byte enumeration (subject to change and
   0b___00010  Page key (read only)
   0b___00011  Page key (read/write)
   0b___00100  Device key
-  0b___00101  -tbd-
+  0b___00101  BWAIT key
   0b___00110  Page Range Key
   0b___00111  Node Range Key
   0b___01000  Node key
