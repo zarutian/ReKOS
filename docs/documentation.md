@@ -26,7 +26,33 @@ I have decided on the following key type byte enumeration (subject to change and
   0b___01101  Resume key to a domain (also a node key)
   0b___01110  -tbd-
   0b___01111  -tbd-
-  0b___10000  -tbd-
+  0b___10000  'Special' key
+              Next ?nybble/byte? in the key tells which special key
+              0x0  Domain Tool
+              0x1  Key Bits
+              0x2  Migrator
+              0x3  Journalizer
+              0x4  Checkpointer
+              0x5  -tbd-
+              0x6  -tbd-
+              0x7  -tbd-
+              0x8  -tbd-
+              0x9  -tbd-
+              0xF  Page2Nodes transmogrifier
+                   This takes a page key and returns 16 Nodes.
+                   The keys to the 16 Nodes are put in the 16
+                   keyslots of the first node so not to
+                   require the extended jump protocol.
+                   The bytes of the page are AES-256 (GCM?)
+                   encrypted with installation spefic secret key
+                   and the plaintext contains the keybits of the
+                   keyslots of the sixteen nodes, a IBM 370
+                   time of day value of last modification, the
+                   tod of last checkpoint, installation
+                   identifier and implementation version number.
+                   The idea is to allow for off machine userspace
+                   swap implementation for nodes and not just
+                   pages.
   0b___10001  -tbd-
   0b___10010  -tbd-
   0b___10011  -tbd-
