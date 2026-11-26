@@ -105,4 +105,12 @@ that branch had EOF'ed, next bit back (0b__1_) indicates backpressure on (1) or 
 Next bit back after that (0b_1__) indicates a two byte bigendian short follow, giving the 'limit'
 per the bytestream cogate calling convention.
 
+# Command System
 
+Basically a picol or tcl.js esque interpreter running ontop of a zeForth instance. A tcl command added: \[forth <string to evaled by the zeForth underneath>\]. The newer KeyKOS Command System syntax interpreter is then implemented ontop.
+
+a zeForth instance is actually three domains: main one that runs zeForth, one that handles input from a SIK, one that handles output to a SOK.
+
+the latter two each share a buffer page with the main one and have a code page (different depending on their kind).
+
+The reason for this is the words ?RX and TX! can be nonblocking and it is easier to use shared buffers.
