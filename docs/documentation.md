@@ -33,7 +33,7 @@ I have decided on the following key type byte enumeration (subject to change and
               0x2  Migrator
               0x3  Journalizer
               0x4  Checkpointer
-              0x5  -tbd-
+              0x5  Datakey maker (tbd if datakeys can be called to make new ones)
               0x6  -tbd-
               0x7  -tbd-
               0x8  -tbd-
